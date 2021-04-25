@@ -1,16 +1,8 @@
 <template>
   <div id="app">
-    <header>
-      <div class="title">
-        <h1> Covid Rastreador Chile</h1>
-      </div>
-    <div id="nav">
-      <router-link to="/">Chile</router-link> |
-      <router-link to="/regions">Por region</router-link> |
-      <router-link to="/uci">UCI por edad</router-link> |
-      <router-link to="/about">A propósito</router-link>
-    </div>
-  </header>
+
+  <nav-bar v-if='!mobileMode'></nav-bar>
+  <nav-bar-mobile v-if='mobileMode'> </nav-bar-mobile>
 
 <div class="vues">
   <router-view/>
@@ -21,8 +13,6 @@
 
 <style>
 #app {
-
-
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -33,49 +23,38 @@
 body{
   margin:0px;
   padding:0px;
-}
-
-h1{
-  margin:0px;
-}
-
-header{
-  border-bottom:solid;
-  padding:0px 20px 0px 20px;
-  display:flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #FFFACD;
-}
-#nav {
-  padding: 0px;
-}
-
-#nav a {
-  font-weight: bold;
-  font-size:25px;
-  color: #2c3e50;
-}
-
-a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  /* color: #42b983; */
-  color: #B22222;
-
-}
-
-body{
   background-color:  #fcfbef;
+
 }
+
+.vues{
+  padding-top:20px;
+}
+
 </style>
 <script>
+import NavBar from './components/NavBar'
+import NavBarMobile from './components/NavBarMobile'
 
   export default{
-
+    components:{'nav-bar':NavBar, 'nav-bar-mobile':NavBarMobile},
+    data:()=>{
+      return{
+        mobileMode:false
+      }
+    },
+    methods:{
+      setMobileMode(){
+      this.mobileMode = window.innerWidth <= 960
+    }
+    },
+    mounted() {
+      window.addEventListener('resize', () => {
+        this.mobileMode = window.innerWidth <= 960
+      })
+    },
+    created(){
+      this.setMobileMode();
+    }
   }
 </script>

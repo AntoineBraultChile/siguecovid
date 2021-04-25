@@ -28,7 +28,6 @@
 }
 .graphUci{
   width:50%;
-  height:1000px;
 }
 
 #block_graph{
@@ -36,6 +35,22 @@
   display:flex;
   flex-direction:row;
   justify-content: center;
+}
+
+@media all and (max-width: 960px) {
+
+ #block_graph{
+   flex-direction:column;
+ }
+
+ .graphUci{
+   width:100%;
+ }
+ .optionsGraph{
+   display:flex;
+   flex-direction:column;
+   justify-content: center;
+ }
 }
 </style>
 

@@ -18,10 +18,17 @@ export default {
 .about{
   display:flex;
   justify-content: center;
+  margin-top:20px;
+  padding:0px 10px 0px 10px;
 }
 .about p{
-  width:900px;
+  width:800px;
   text-align:justify;
   font-size:20px;
+}
+@media all and (max-width: 960px) {
+ .about p{
+   font-size:15px;
+ }
 }
 </style>

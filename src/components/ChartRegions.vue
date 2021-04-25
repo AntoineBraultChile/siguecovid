@@ -51,6 +51,22 @@
     flex-wrap: wrap;
     justify-content: space-around;
   }
+
+  @media all and (max-width: 960px) {
+
+   #block_graph{
+     flex-direction:column;
+   }
+
+   .graph{
+     width:100%;
+   }
+   .optionsGraph{
+     display:flex;
+     flex-direction:column;
+     justify-content: center;
+   }
+  }
   </style>
 
   <script>

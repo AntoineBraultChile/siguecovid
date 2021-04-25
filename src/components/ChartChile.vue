@@ -6,7 +6,7 @@
 </p>
         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
       </div>
-      <div id='block_graph' v-if="dataCovidChile.labelsUci.length > 0">
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-around' v-if="dataCovidChile.labelsUci.length > 0">
 
         <div class='graph'>
           <bar-chart  :chartData="getRegionValues('Cases')" :options="getRegionOptions('Cases')"> </bar-chart>
@@ -26,7 +26,7 @@
     </div>
   </template>
 
-  <style>
+<style>
   #slogan{
     font-weight: bold;
   }
@@ -45,11 +45,25 @@
 
   #block_graph{
     width:100%;
-    display:flex;
-    flex-direction:row;
-    flex-wrap: wrap;
-    justify-content: space-around;
   }
+
+
+@media all and (max-width: 960px) {
+
+ #block_graph{
+ }
+
+ .graph{
+   width:100%;
+ }
+ .optionsGraph{
+   display:flex;
+   flex-direction:column;
+   justify-content: center;
+   font-size:15px;
+
+ }
+}
   </style>
 
   <script>
@@ -185,14 +199,6 @@
           }
         }
       }
-     //  // function to generate list of months
-     //  let generateListOfMonths  =  () => {
-     //   let currentDate = moment('05-2020', 'MM-YYYY')
-     //   while(currentDate < moment(this.dataCovidChile.labelsUci[this.dataCovidChile.labelsUci.length-1],'YYYY-MM-DD')){
-     //     this.listOfMonths.push(currentDate.format('MMMM YYYY'))
-     //     currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
-     //   }
-     // }
 
       // this.regionName.push('Chile') // add Chile to the name of region
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true)
