@@ -6,7 +6,7 @@
     </div>
     <div id='block_graph' v-if="uciChile.labels.length > 0">
 
-      <div class='graph'>
+      <div class='graphUci'>
         <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
       </div>
     </div>
@@ -15,6 +15,8 @@
 </template>
 
 <style scoped>
+
+
 .optionsGraph{
   display:flex;
   flex-direction:row;
@@ -24,12 +26,13 @@
 .optionsGraph p{
   padding: 0px 20px 0px 20px;
 }
-.graph{
-  width:45%;
+.graphUci{
+  width:50%;
+  height:1000px;
 }
 
 #block_graph{
-  width:100%;
+
   display:flex;
   flex-direction:row;
   justify-content: center;
@@ -59,12 +62,14 @@ export default {
         '60-69':[],
         '>=70':[]
       },
-      fromDate: "2020-08-01",
+      fromDate: "2021-01-01",
       listOfMonths:[],
       optionsLineUciChile:{
         title:{
           display:true,
-          text:'Unidad de cuidados intensivos Chile'
+          text:'Unidad de cuidados intensivos por edad en Chile',
+          fontSize:20
+
         },
         lineTension: 1,
         responsive:true,

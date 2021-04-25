@@ -1,7 +1,7 @@
 <template >
   <div class="about">
     <p>
-      Aquí encontrará visualizaciones claras y comprensibles de los datos de Covid-19 en Chile. Los datos proceden del
+      Covid Rastreador Chile permite una visualización sencilla y clara de los datos de Covid-19 en Chile. Los datos proceden del
       <a href='https://www.minciencia.gob.cl/covid19/'> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
   Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
     </p>
@@ -22,6 +22,6 @@ export default {
 .about p{
   width:900px;
   text-align:justify;
-  font-size:20px; 
+  font-size:20px;
 }
 </style>

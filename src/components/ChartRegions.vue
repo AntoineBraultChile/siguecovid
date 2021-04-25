@@ -13,16 +13,16 @@
       <div id='block_graph' v-if="dataCovid.labelsUci.length > 0">
 
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues(currentRegion,'Cases')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues(currentRegion,'Cases')" :options="getRegionOptions(currentRegion,'Cases')"> </bar-chart>
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues(currentRegion,'Pcr')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues(currentRegion,'Pcr')" :options="getRegionOptions(currentRegion,'Pcr')"> </bar-chart>
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues(currentRegion,'Uci')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues(currentRegion,'Uci')" :options="getRegionOptions(currentRegion,'Uci')"> </bar-chart>
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues(currentRegion,'Deaths')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues(currentRegion,'Deaths')" :options="getRegionOptions(currentRegion,'Deaths')"> </bar-chart>
         </div>
 
       </div>
@@ -80,16 +80,21 @@
           MetropolitanaCases:[],
           MetropolitanaDeaths:[]
         },
-        fromDate: "2020-08-01",
+        fromDate: "2021-01-01",
         listOfMonths:[],
         options:{
+          title:{
+            display:true,
+            text:''
+          },
           responsive:true,
           maintainAspectRatio:false,
           // to delete the box aside title
           legend: {
-            labels: {
-              boxWidth: 0,
-            }
+            display:false,
+            // labels: {
+            //   boxWidth: 0,
+            // }
           }
         }
       }
@@ -111,6 +116,30 @@
           {label:title[type]+ ' en '+ name, backgroundColor:backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
         }
       },
+      getRegionOptions(name,type){
+        let title ={'Uci':'Unidad de cuidados intensivos',
+        'Pcr':'Pcr',
+        'Cases':'Casos',
+        'Deaths': 'Fallecidos por COVID-19'
+      }
+      return{
+        title:{
+          display:true,
+          text:title[type]+ ' en ' + name,
+          fontSize:20
+
+        },
+        legend: {
+          display:false,
+          // labels: {
+          //   boxWidth: 0,
+          // }
+        },
+        responsive:true,
+      maintainAspectRatio:false
+    }
+      // this.options.title.text = title[type]+ ' en '+ name
+    },
       changeCurrentRegion(event){
         this.currentRegion = event.target.value;
       },

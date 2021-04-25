@@ -1,14 +1,17 @@
 <template>
   <div id="app">
     <header>
-      <h1> Covid Ratreador Chile</h1>
+      <div class="title">
+        <h1> Covid Rastreador Chile</h1>
+      </div>
     <div id="nav">
       <router-link to="/">Chile</router-link> |
-      <router-link to="/regions">Por regions</router-link> |
+      <router-link to="/regions">Por region</router-link> |
       <router-link to="/uci">UCI por edad</router-link> |
       <router-link to="/about">A propósito</router-link>
     </div>
   </header>
+
 <div class="vues">
   <router-view/>
 
@@ -37,7 +40,7 @@ h1{
 }
 
 header{
-  border:solid;
+  border-bottom:solid;
   padding:0px 20px 0px 20px;
   display:flex;
   flex-direction: row;
@@ -55,9 +58,14 @@ header{
   color: #2c3e50;
 }
 
+a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
 #nav a.router-link-exact-active {
   /* color: #42b983; */
-  color: black;
+  color: #B22222;
 
 }
 

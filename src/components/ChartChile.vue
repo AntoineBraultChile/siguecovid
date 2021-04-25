@@ -2,21 +2,23 @@
   <div class="ActivityGraph">
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
+      <p id='slogan'>        Visualiza fácilmente los datos de Covid-19 en Chile y en regiones.
+</p>
         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
       </div>
       <div id='block_graph' v-if="dataCovidChile.labelsUci.length > 0">
 
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues('Cases')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues('Cases')" :options="getRegionOptions('Cases')"> </bar-chart>
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues('Pcr')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues('Pcr')" :options="getRegionOptions('Pcr')"> </bar-chart>
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues('Uci')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues('Uci')" :options="getRegionOptions('Uci')"> </bar-chart>
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues('Deaths')" :options='options'> </bar-chart>
+          <bar-chart  :chartData="getRegionValues('Deaths')" :options="getRegionOptions('Deaths')"> </bar-chart>
         </div>
 
       </div>
@@ -25,6 +27,9 @@
   </template>
 
   <style>
+  #slogan{
+    font-weight: bold;
+  }
   .optionsGraph{
     display:flex;
     flex-direction:row;
@@ -51,6 +56,7 @@
   import BarChart from './BarChart'
   import * as d3 from 'd3-fetch'
   import moment from 'moment';
+  moment.locale('es');
 
   import ChooseDate from './ChooseDate'
 
@@ -72,18 +78,8 @@
           ChileCases:[],
           ChileDeaths:[]
         },
-        fromDate: "2020-08-01",
+        fromDate: "2021-01-01",
         listOfMonths:[],
-        options:{
-          responsive:true,
-          maintainAspectRatio:false,
-          // to delete the box aside title
-          legend: {
-            labels: {
-              boxWidth: 0,
-            }
-          }
-        }
       }
     },
     methods:{
@@ -103,7 +99,28 @@
           {label:title[type]+ ' en Chile', backgroundColor:backgroundColor[type],fill: false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}]
         }
       },
-
+      getRegionOptions(type){
+        let title ={'Uci':'Unidad de cuidados intensivos',
+        'Pcr':'Pcr',
+        'Cases':'Casos',
+        'Deaths': 'Fallecidos por COVID-19'
+      }
+      return{
+        title:{
+          display:true,
+          text:title[type]+ ' en Chile',
+          fontSize:20
+        },
+        legend: {
+          display:false,
+          // labels: {
+          //   boxWidth: 0,
+          // }
+        },
+        responsive:true,
+      maintainAspectRatio:false
+    }
+  },
       changeFromDate(event){
         this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('YYYY-MM-01')
       }
