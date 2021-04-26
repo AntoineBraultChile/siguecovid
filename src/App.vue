@@ -66,6 +66,7 @@ import NavBarMobile from './components/NavBarMobile'
     },
     created(){
       this.setMobileMode();
+    
     }
   }
 </script>

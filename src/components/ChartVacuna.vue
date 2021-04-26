@@ -6,8 +6,11 @@
     </div>
     <div id='block_graph' v-if="vacunaChile.labels.length > 0">
 
-      <div class='graphUci'>
+      <div class='graphVac'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
+      </div>
+      <div class='graphVac'>
+        <bar-chart  :chartData="renderChartVacunaPorDia()" :options='optionsPorDia'> </bar-chart>
       </div>
     </div>
 
@@ -26,41 +29,45 @@
 .optionsGraph p{
   padding: 0px 20px 0px 20px;
 }
-.graphUci{
+.graphVac{
   width:50%;
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   box-shadow: 0px 3px 8px #e8e8e8;
   border-radius:45px;
   background-color: white;
   padding:10px 10px 10px 10px;
+  margin-top:5px;
+  margin-bottom:5px;
+
 }
 
 #block_graph{
-
   display:flex;
   flex-direction:row;
   justify-content: center;
+  align-items: center;
 }
 
 @media all and (max-width: 960px) {
 
- #block_graph{
-   flex-direction:column;
- }
+  #block_graph{
+    flex-direction:column;
+  }
 
- .graphUci{
-   width:100%;
+  .graphVac{
+    width:100%;
 
- }
- .optionsGraph{
-   display:flex;
-   flex-direction:column;
-   justify-content: center;
- }
+  }
+  .optionsGraph{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+  }
 }
 </style>
 
 <script>
+import BarChart from './BarChart'
 import LineChart from './LineChart'
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
@@ -70,7 +77,8 @@ import moment from 'moment';
 export default {
   name:'ChartVacuna',
   components:{
-    'line-chart': LineChart
+    'line-chart': LineChart,
+    'bar-chart': BarChart
     // 'choose-date': ChooseDate
   },
   data () {
@@ -78,17 +86,38 @@ export default {
       vacunaChile:{
         labels:[],
         'primera dosis':[],
-        'segunda dosis':[]
+        'segunda dosis':[],
+        'primera dosis por dia':[],
+        'segunda dosis por dia':[]
       },
       fromDate: "2021-02-01",
       listOfMonths:[],
       options:{
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: function(tick) {
+                return tick.toString() + '%';
+              }
+            }
+          }]
+        },
         title:{
           display:true,
           text:'Proporción de la población chilena vacunada',
           fontSize:20
         },
         lineTension: 1,
+        responsive:true,
+        maintainAspectRatio:false
+      },
+
+      optionsPorDia:{
+        title:{
+          display:true,
+          text:'Número de personas vacunadas cada dia',
+          fontSize:20
+        },
         responsive:true,
         maintainAspectRatio:false
       }
@@ -115,7 +144,25 @@ export default {
             fill: false,
             data: this.vacunaChile["segunda dosis"].slice(indexDate)
           }
-          ]
+        ]
+      }
+    },
+    renderChartVacunaPorDia(){
+      let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
+      return {
+        labels:this.vacunaChile.labels.filter((x) => { return x >= this.fromDate }),
+        datasets: [
+          {
+            label: "con primera dosis",
+            backgroundColor: '#82CFFD',
+            data: this.vacunaChile["primera dosis por dia"].slice(indexDate)
+          },
+          {
+            label: "con segunda dosis",
+            backgroundColor: '#eba434',
+            data: this.vacunaChile["segunda dosis por dia"].slice(indexDate)
+          }
+        ]
       }
     }
   },
@@ -126,33 +173,22 @@ export default {
   },
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
+      this.vacunaChile.labels = Object.keys(data[0]).slice(2);
+      Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(d/190000)})
+      Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(d/190000)})
+      derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})
+      derivate(Object.values(data[1]).slice(2).map(i => Number(i))).forEach((d)=>{ this.vacunaChile['segunda dosis por dia'].push(d)})
 
-       this.vacunaChile.labels = Object.keys(data[0]).slice(2);
-       // this.vacunaChile['primera dosis'] = Object.values(data[0]).slice(2).map(i => Number(i))
-      // this.vacunaChile['segunda dosis'] = Object.values(data[1]).slice(2).map(i => Number(i))
-
-       Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(d/190000)} )
-       Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(d/190000)})
-
-
-      // for (let index in data){
-      //   if(index != "columns"){
-      //     let age = Object.values(data[index])[0]
-      //     let valuesUci = Object.values(data[index]).slice(1).map(i => Number(i))
-      //     this.$set(this.vacunaChile, age, valuesUci);
-      //   }
-      // }
-      // generate list of months
-      // generateListOfMonths()
+      console.log(this.vacunaChile['primera dosis por dia'])
     })
-    //  function to generate list of months
-    // let generateListOfMonths  =  () => {
-    //   let currentDate = moment('05-2020', 'MM-YYYY')
-    //   while(currentDate < moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1],'YYYY-MM-DD')){
-    //     this.listOfMonths.push(currentDate.format('MMMM YYYY'))
-    //     currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
-    //   }
-    // }
+    // return the derivative of an array
+    function derivate(cumulativeValues){
+      let derivative = []
+      for ( let i=0; i < cumulativeValues.length-1;i++){
+        derivative.push(cumulativeValues[i+1]-cumulativeValues[i])
+      }
+      return derivative;
+    }
   }
 }
 </script>
