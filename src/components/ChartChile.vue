@@ -158,6 +158,20 @@ select{
       }
     },
     async created(){
+      d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
+        // console.log(data[16])
+        this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+        // let currentDate = moment('05-2020', 'MM-YYYY')
+        // while(currentDate < moment(this.dataCovidChile['labelsCases'][this.dataCovidChile['labelsCases'].length-1],'YYYY-MM-DD')){
+        //   this.listOfMonths.push(currentDate.format('MMMM YYYY'))
+        //   currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+        // }
+      let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
+      this.$set(this.dataCovidChile, 'ChileCases', dayCases);
+      // console.log(this.dataCovidChile['ChileCases'])
+      // console.log(Object.values(data[16]).slice(3+1))
+      })
+
       const getDataCsv = (path, type, derivative,  initializeMonths = false) => {
         d3.csv(path).then(data => {
           if (derivative==true){
@@ -213,8 +227,8 @@ select{
         }
       }
 
-      // this.regionName.push('Chile') // add Chile to the name of region
-      getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true)
+      // // this.regionName.push('Chile') // add Chile to the name of region
+      // getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true)
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false);
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv', 'Deaths', true)
