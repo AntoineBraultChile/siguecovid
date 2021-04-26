@@ -62,6 +62,11 @@ select{
   width:100%;
 }
 
+label{
+  margin-right:10px;
+}
+
+
 
 @media all and (max-width: 960px) {
 

@@ -1,7 +1,8 @@
 <template >
   <div class="about">
     <p>
-      Datos Covid Chile permite una visualización sencilla y clara de los datos de Covid-19 en Chile. Los datos proceden del
+      Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
+      y el progreso de la vacunación en Chile. Los datos proceden del
       <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
   Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
     </p>
