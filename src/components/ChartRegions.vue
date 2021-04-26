@@ -31,6 +31,10 @@
   </template>
 
   <style>
+
+  select{
+    margin-left:10px;
+  }
   .optionsGraph{
     display:flex;
     flex-direction:row;

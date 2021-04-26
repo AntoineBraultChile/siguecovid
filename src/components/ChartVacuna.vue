@@ -1,0 +1,158 @@
+<template>
+  <div class="ChartVacuna">
+    <div class="optionsGraph">
+      <p> Última actualización : {{update}}</p>
+      <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
+    </div>
+    <div id='block_graph' v-if="vacunaChile.labels.length > 0">
+
+      <div class='graphUci'>
+        <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<style scoped>
+
+
+.optionsGraph{
+  display:flex;
+  flex-direction:row;
+  justify-content: center;
+}
+
+.optionsGraph p{
+  padding: 0px 20px 0px 20px;
+}
+.graphUci{
+  width:50%;
+  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
+  box-shadow: 0px 3px 8px #e8e8e8;
+  border-radius:45px;
+  background-color: white;
+  padding:10px 10px 10px 10px;
+}
+
+#block_graph{
+
+  display:flex;
+  flex-direction:row;
+  justify-content: center;
+}
+
+@media all and (max-width: 960px) {
+
+ #block_graph{
+   flex-direction:column;
+ }
+
+ .graphUci{
+   width:100%;
+
+ }
+ .optionsGraph{
+   display:flex;
+   flex-direction:column;
+   justify-content: center;
+ }
+}
+</style>
+
+<script>
+import LineChart from './LineChart'
+import * as d3 from 'd3-fetch'
+import moment from 'moment';
+
+// import ChooseDate from './ChooseDate'
+
+export default {
+  name:'ChartVacuna',
+  components:{
+    'line-chart': LineChart
+    // 'choose-date': ChooseDate
+  },
+  data () {
+    return{
+      vacunaChile:{
+        labels:[],
+        'primera dosis':[],
+        'segunda dosis':[]
+      },
+      fromDate: "2021-02-01",
+      listOfMonths:[],
+      options:{
+        title:{
+          display:true,
+          text:'Proporción de la población chilena vacunada',
+          fontSize:20
+        },
+        lineTension: 1,
+        responsive:true,
+        maintainAspectRatio:false
+      }
+    }
+  },
+  methods:{
+    changeFromDate(event){
+      this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('YYYY-MM-01')
+    },
+    renderChartVacuna(){
+      let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
+      return {
+        labels:this.vacunaChile.labels.filter((x) => { return x >= this.fromDate }),
+        datasets: [
+          {
+            label: "primera dosis",
+            borderColor: '#82CFFD',
+            fill: false,
+            data: this.vacunaChile["primera dosis"].slice(indexDate)
+          },
+          {
+            label: "segunda dosis",
+            borderColor: '#eba434',
+            fill: false,
+            data: this.vacunaChile["segunda dosis"].slice(indexDate)
+          }
+          ]
+      }
+    }
+  },
+  computed:{
+    update: function(){
+      return moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+    }
+  },
+  async created(){
+    d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
+
+       this.vacunaChile.labels = Object.keys(data[0]).slice(2);
+       // this.vacunaChile['primera dosis'] = Object.values(data[0]).slice(2).map(i => Number(i))
+      // this.vacunaChile['segunda dosis'] = Object.values(data[1]).slice(2).map(i => Number(i))
+
+       Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(d/190000)} )
+       Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(d/190000)})
+
+
+      // for (let index in data){
+      //   if(index != "columns"){
+      //     let age = Object.values(data[index])[0]
+      //     let valuesUci = Object.values(data[index]).slice(1).map(i => Number(i))
+      //     this.$set(this.vacunaChile, age, valuesUci);
+      //   }
+      // }
+      // generate list of months
+      // generateListOfMonths()
+    })
+    //  function to generate list of months
+    // let generateListOfMonths  =  () => {
+    //   let currentDate = moment('05-2020', 'MM-YYYY')
+    //   while(currentDate < moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1],'YYYY-MM-DD')){
+    //     this.listOfMonths.push(currentDate.format('MMMM YYYY'))
+    //     currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+    //   }
+    // }
+  }
+}
+</script>

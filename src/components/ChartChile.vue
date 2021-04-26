@@ -2,7 +2,7 @@
   <div class="ActivityGraph">
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
-      <p id='slogan'>        Visualiza fácilmente los datos de Covid-19 en Chile y en regiones.
+      <p id='slogan'>        Visualiza fácilmente en tiempo real los datos de Covid-19 en Chile y en regiones.
 </p>
         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
       </div>
@@ -27,6 +27,9 @@
   </template>
 
 <style>
+select{
+  margin-left:10px;
+}
   #slogan{
     font-weight: bold;
   }
@@ -41,6 +44,16 @@
   }
   .graph{
     width:45%;
+    /* border: solid 2px; */
+    margin-bottom:10px;
+    /* border-color: #e8e8e8; */
+    /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
+    box-shadow: 0px 3px 8px #e8e8e8;
+
+    border-radius: 25px;
+    background-color: white;
+    padding:10px 10px 10px 10px;
+
   }
 
   #block_graph{

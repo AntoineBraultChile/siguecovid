@@ -16,7 +16,6 @@
 
 <style scoped>
 
-
 .optionsGraph{
   display:flex;
   flex-direction:row;
@@ -28,6 +27,12 @@
 }
 .graphUci{
   width:50%;
+  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
+  box-shadow: 0px 3px 8px #e8e8e8;
+
+  border-radius:45px;
+  background-color: white;
+  padding:10px;
 }
 
 #block_graph{
@@ -82,7 +87,7 @@ export default {
       optionsLineUciChile:{
         title:{
           display:true,
-          text:'Unidad de cuidados intensivos por edad en Chile',
+          text:'Unidad de cuidados intensivos por edad',
           fontSize:20
 
         },
