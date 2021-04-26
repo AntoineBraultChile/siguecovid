@@ -39,6 +39,9 @@ export default {
 
 <style lang="css" scoped>
 header{
+  position: fixed;
+  width:100%;
+  top:0px;
   /* border-bottom:solid 0.5px;
   border-color: gray; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
@@ -62,7 +65,9 @@ header{
   display:flex;
   flex-direction:column;
   align-items:center;
-  background-color:#f9f9f9;
+  background-color: white;
+
+  /* background-color:#f9f9f9; */
   /* background-color: #FFFACD; */
 }
 .title{

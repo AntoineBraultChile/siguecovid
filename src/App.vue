@@ -31,10 +31,18 @@
 
 
 .vues{
-  padding-top:20px;
+  margin-top:100px;
+  /* padding-top:20px; */
 }
 
+@media all and (max-width: 960px) {
+  .vues{
+
+  margin-top:60px;
+}
+}
 </style>
+
 <script>
 import NavBar from './components/NavBar'
 import NavBarMobile from './components/NavBarMobile'

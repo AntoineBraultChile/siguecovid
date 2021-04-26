@@ -11,6 +11,7 @@
 
  Sigue Covid en Chile </router-link>
     </div>
+    
   <div id="nav">
     <router-link to="/">Chile</router-link>
     <router-link to="/regions">Por region</router-link>
@@ -34,6 +35,9 @@ export default {
 <style lang="css" scoped>
 
 header{
+  position: fixed;
+  top:0px;
+  width:100%;
   /* border-bottom:solid 0.5px; */
   /* border-color: white; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
