@@ -135,12 +135,14 @@ export default {
           {
             label: "primera dosis",
             borderColor: '#82CFFD',
+            backgroundColor: '#82CFFD',
             fill: false,
             data: this.vacunaChile["primera dosis"].slice(indexDate)
           },
           {
             label: "segunda dosis",
             borderColor: '#eba434',
+            backgroundColor:'#eba434',
             fill: false,
             data: this.vacunaChile["segunda dosis"].slice(indexDate)
           }

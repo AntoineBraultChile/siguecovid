@@ -13,10 +13,14 @@
       <div id='block_graph' v-if="dataCovid.labelsUci.length > 0">
 
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues(currentRegion,'Cases')" :options="getRegionOptions(currentRegion,'Cases')"> </bar-chart>
+          <!-- <bar-chart  :chartData="getRegionValues(currentRegion,'Cases')" :options="getRegionOptions(currentRegion,'Cases')"> </bar-chart> -->
+          <bar-chart  :chartData="getChartWithMean(currentRegion,'Cases')" :options="getOptionsChartWithMean(currentRegion,'Cases')"> </bar-chart>
+
         </div>
         <div class='graph'>
-          <bar-chart  :chartData="getRegionValues(currentRegion,'Pcr')" :options="getRegionOptions(currentRegion,'Pcr')"> </bar-chart>
+          <!-- <bar-chart  :chartData="getRegionValues(currentRegion,'Pcr')" :options="getRegionOptions(currentRegion,'Pcr')"> </bar-chart> -->
+          <bar-chart  :chartData="getChartPosPcr(currentRegion)" :options="getOptionsChartPosPcr(currentRegion)"> </bar-chart>
+
         </div>
         <div class='graph'>
           <bar-chart  :chartData="getRegionValues(currentRegion,'Uci')" :options="getRegionOptions(currentRegion,'Uci')"> </bar-chart>
@@ -98,8 +102,15 @@
           MetropolitanaUci:[],
           MetropolitanaPcr:[],
           MetropolitanaCases:[],
-          MetropolitanaDeaths:[]
+          MetropolitanaDeaths:[],
+          MetropolitanaMeanCases:[]
         },
+        title:{'Uci':'Unidad de cuidados intensivos',
+        'Pcr':'Pcr',
+        'Cases':'Casos',
+        'Deaths': 'Fallecidos por COVID-19'
+      },
+      backgroundColor:{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
         fromDate: "2021-01-01",
         listOfMonths:[],
         options:{
@@ -121,44 +132,101 @@
     },
     methods:{
       getRegionValues(name,type){
-        let backgroundColor ={'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'}
-        let title ={'Uci':'Unidad de cuidados intensivos',
-        'Pcr':'Pcr',
-        'Cases':'Casos',
-        'Deaths': 'Fallecidos por COVID-19'
-      }
       let fromDate = this.fromDate
       // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
       let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
       return {
         labels:this.dataCovid['labels'+type].filter((x) => { return x >= fromDate }),
         datasets:[
-          {label:title[type]+ ' en '+ name, backgroundColor:backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
+          {label:this.title[type]+ ' en '+ name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
         }
       },
       getRegionOptions(name,type){
-        let title ={'Uci':'Unidad de cuidados intensivos',
-        'Pcr':'Pcr',
-        'Cases':'Casos',
-        'Deaths': 'Fallecidos por COVID-19'
-      }
       return{
         title:{
           display:true,
-          text:title[type]+ ' en ' + name,
+          text:this.title[type]+ ' en ' + name,
           fontSize:20
 
         },
         legend: {
           display:false,
-          // labels: {
-          //   boxWidth: 0,
-          // }
         },
         responsive:true,
-      maintainAspectRatio:false
+        maintainAspectRatio:false
     }
-      // this.options.title.text = title[type]+ ' en '+ name
+    },
+    getChartWithMean(name,type){
+      let fromDate = this.fromDate
+      let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
+      // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
+      return{
+        labels:this.dataCovid['labels'+type].filter((x) => { return x >= fromDate }),
+        datasets:[
+          {type:'line', label:'Media de ' + this.title[type]+' en '+name, borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
+
+          {type:'bar',label:this.title[type]+ ' en '+name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
+        ]
+      }
+    },
+    getOptionsChartWithMean(name, type){
+      return{
+        title:{
+          display:true,
+          text:this.title[type]+ ' en '+name,
+          fontSize:20
+        },
+        responsive:true,
+        maintainAspectRatio:false
+      }
+    },
+    getChartPosPcr(name){
+      // compute the positivity
+      let Pcr= this.dataCovid[name+'Pcr']
+      let Cases = this.dataCovid[name+'Cases']
+      let Pos=[]
+      for (let i=0;i<Pcr.length;i++){
+        Pos.push(Math.floor(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*1000)/10)
+      }
+      Pos = meanWeek(Pos.reverse());
+      let fromDate = this.fromDate
+      let indexDate = this.dataCovid['labelsPcr'].indexOf(fromDate)
+      // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
+      return{
+        labels:this.dataCovid['labelsPcr'].filter((x) => { return x >= fromDate }),
+        datasets:[
+          {type:'line', label:'Positividad media', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
+          {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)}
+        ]
+      }
+    },
+    getOptionsChartPosPcr(name){
+      return{
+        scales: {
+          yAxes: [{
+            id: 'Pos',
+            type: 'linear',
+            position: 'left',
+            ticks: {
+              callback: function(tick) {
+                return tick.toString() + '%';
+              }
+            }
+          }, {
+            id: 'Pcr',
+            type: 'linear',
+            position: 'right',
+
+          }]
+        },
+        title:{
+          display:true,
+          text:'Positividad y Pcr en '+ name,
+          fontSize:20
+        },
+        responsive:true,
+        maintainAspectRatio:false
+      }
     },
       changeCurrentRegion(event){
         this.currentRegion = event.target.value;
@@ -173,7 +241,7 @@
       }
     },
     async created(){
-      const getDataCsv = (path, type, derivative, initializeRegionName = false, initializeMonths = false) => {
+      const getDataCsv = (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
         d3.csv(path).then(data => {
           if (derivative==true){
             this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
@@ -181,12 +249,13 @@
             this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
           }
 
+
           if(initializeMonths == true){
             generateListOfMonths();
           }
 
           let chileValues = []; // the sum of the regional time series
-          for (let index=0; index <data.length; index++){
+          for (let index=0; index < data.length; index++){
             if (initializeRegionName == true && data[index].Region!=undefined){
               this.regionName.push(data[index].Region)
             }
@@ -196,13 +265,15 @@
               let dayCases = derivate(Object.values(data[index]).slice(3).map(i => Number(i)))
               this.$set(this.dataCovid, data[index].Region+type, dayCases);
               chileValues = sumArray(chileValues,dayCases)
+              if(mean==true){
+              this.$set(this.dataCovid, data[index].Region+'Mean'+type, meanWeek(dayCases))
+            }
             }else{
               this.$set(this.dataCovid, data[index].Region+type, Object.values(data[index]).slice(3).map(i => Number(i)));
               chileValues = sumArray(chileValues,Object.values(data[index]).slice(3).map(i => Number(i)))
             }
           }
           this.$set(this.dataCovid, 'Chile'+type, chileValues);
-
 
         })
 
@@ -238,12 +309,31 @@
        }
      }
 
+     // compute the rolling week average
+     function meanWeek(tabValues){
+       let weekAverage=[];
+       for (let i=0;i<tabValues.length-7; i++){
+         weekAverage.push(Math.floor((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7))
+       }
+       return weekAverage;
+     }
+
       // this.regionName.push('Chile') // add Chile to the name of region
-      getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true, false)
+      // (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false)
+      getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true, false,false, true)
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false);
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false,true,true);
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv', 'Deaths', true)
 
   }
+}
+
+// compute rolling mean on a week window
+function meanWeek(tabValues){
+  let weekAverage=[];
+  for (let i=0;i<tabValues.length-7; i++){
+    weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
+  }
+  return weekAverage;
 }
 </script>

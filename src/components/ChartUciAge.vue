@@ -109,30 +109,35 @@ export default {
           {
             label: "<=39",
             borderColor: '#82CFFD',
+            backgroundColor:'#82CFFD',
             fill: false,
             data: this.uciChile["<=39"].slice(indexDate)
           },
           {
             label: '40-49',
             borderColor: '#eba434',
+            backgroundColor:'#eba434',
             fill: false,
             data: this.uciChile['40-49'].slice(indexDate)
           },
           {
             label: '50-59',
             borderColor: '#93DB70',
+            backgroundColor: '#93DB70',
             fill: false,
             data: this.uciChile['50-59'].slice(indexDate)
           },
           {
             label: '60-69',
             borderColor: '#232b2b',
+            backgroundColor:  '#232b2b',
             fill: false,
             data: this.uciChile['60-69'].slice(indexDate)
           },
           {
             label:  ">=70",
             borderColor: '#f87979',
+            backgroundColor: '#f87979',
             fill: false,
             data: this.uciChile[">=70"].slice(indexDate)
           }
