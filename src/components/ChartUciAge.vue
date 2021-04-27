@@ -85,11 +85,17 @@ export default {
       fromDate: "2021-01-01",
       listOfMonths:[],
       optionsLineUciChile:{
+        scales: {
+          yAxes: [{
+            ticks: {
+               beginAtZero: true
+            }
+          }]
+        },
         title:{
           display:true,
           text:'Unidad de cuidados intensivos por edad',
           fontSize:20
-
         },
         lineTension: 1,
         responsive:true,
