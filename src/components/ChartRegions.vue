@@ -2,7 +2,7 @@
   <div class="ActivityGraph">
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
-    
+
         <p>
           <label for="region">Elija su región </label>
           <select name="region" id="region" v-on:change="changeCurrentRegion($event)">
@@ -169,7 +169,6 @@
         labels:this.dataCovid['labels'+type].filter((x) => { return x >= fromDate }),
         datasets:[
           {type:'line', label:'Media de 7 dias', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
-
           {type:'bar',label:this.title[type]+ ' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
         ]
       }
@@ -185,7 +184,7 @@
         },
         title:{
           display:true,
-          text:this.title[type]+ ' en '+name,
+          text:this.title[type]+ ' en '+ this.currentRegion,
           fontSize:20
         },
         responsive:true,
@@ -214,6 +213,11 @@
     },
     getOptionsChartPosPcr(name){
       return{
+        title:{
+          display:true,
+          text:'Positividad y PCR en '+ name,
+          fontSize:20
+        },
         scales: {
           yAxes: [{
             id: 'Pos',
@@ -231,11 +235,7 @@
 
           }]
         },
-        title:{
-          display:true,
-          text:'Positividad y PCR en '+ name,
-          fontSize:20
-        },
+
         responsive:true,
         maintainAspectRatio:false
       }
