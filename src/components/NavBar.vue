@@ -6,12 +6,13 @@
         crossorigin="anonymous">
     <header>
     <div class="d-flex justify-content-between">
+        <router-link to="/">
     <div class="title">
-        <router-link to="/"> <i class="fas fa-user-secret"></i>
+       <i class="fas fa-user-secret"></i>
 
- Sigue Covid en Chile </router-link>
+ Sigue Covid en Chile
     </div>
-    
+</router-link>
   <div id="nav">
     <router-link to="/">Chile</router-link>
     <router-link to="/regions">Por region</router-link>
@@ -41,7 +42,7 @@ header{
   /* border-bottom:solid 0.5px; */
   /* border-color: white; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
-  padding:10px 20px 10px 20px;
+  padding:0px 20px  0px 20px;
   /* background-color: #FFFACD; */
   /* background-color:#f9f9f9; */
   background-color: white;
@@ -55,11 +56,15 @@ header{
   font-size:35px;
 }
 
-.title a, .title a:hover{
+a .title , header a:hover{
   text-decoration:none;
-   color: #2c3e50;
+  color: #2c3e50;
 }
 #nav a {
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  height:100%;
   /* border: solid 0.5px ;
    border-radius: 25px;
    border-color:white; */
