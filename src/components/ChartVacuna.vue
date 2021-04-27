@@ -176,8 +176,8 @@ export default {
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
       this.vacunaChile.labels = Object.keys(data[0]).slice(2);
-      Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(d/190000)})
-      Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(d/190000)})
+      Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(Math.round(d/19000)/10)})
+      Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19000)/10)})
       derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})
       derivate(Object.values(data[1]).slice(2).map(i => Number(i))).forEach((d)=>{ this.vacunaChile['segunda dosis por dia'].push(d)})
 

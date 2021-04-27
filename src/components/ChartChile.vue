@@ -138,6 +138,13 @@ methods:{
     },
     getRegionOptions(type){
       return{
+        scales: {
+          yAxes: [{
+            ticks: {
+               beginAtZero: true
+            }
+          }]
+        },
         title:{
           display:true,
           text:this.title[type]+ ' en Chile',
@@ -163,27 +170,11 @@ methods:{
         }
       },
       getChartPosPcr(){
-        // // compute the rolling week average
-        // function meanWeek(tabValues){
-        //   let weekAverage=[];
-        //   for (let i=0;i<tabValues.length-7; i++){
-        //     weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
-        //   }
-        //   return weekAverage;
-        // }
-
         // compute the positivity
         let Pcr= this.dataCovidChile['ChilePcr']
         let Cases = this.dataCovidChile['ChileCases']
         let Pos=[]
         for (let i=0;i<Pcr.length;i++){
-          // let pos = Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1];
-          // if(pos>1){
-          //   console.log(pos)
-          //   console.log(this.dataCovidChile['labelsPcr'][Pcr.length-i-1])
-          //   console.log(Cases[Cases.length-i-1])
-          //   console.log(Pcr[Pcr.length-i-1])
-          // }
           Pos.push(Math.floor(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*1000)/10)
         }
         Pos = meanWeek(Pos.reverse());
@@ -200,6 +191,13 @@ methods:{
       },
       getOptionsChartWithMean(type){
         return{
+          scales: {
+            yAxes: [{
+              ticks: {
+                 beginAtZero: true
+              }
+            }]
+          },
           title:{
             display:true,
             text:this.title[type]+ ' en Chile',
@@ -217,7 +215,8 @@ methods:{
               type: 'linear',
               position: 'left',
               ticks: {
-                callback: function(tick) {
+                 beginAtZero: true,
+                 callback: function(tick) {
                   return tick.toString() + '%';
                 }
               }

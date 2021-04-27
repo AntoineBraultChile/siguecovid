@@ -140,6 +140,13 @@
       },
       getRegionOptions(name,type){
       return{
+        scales: {
+          yAxes: [{
+            ticks: {
+               beginAtZero: true
+            }
+          }]
+        },
         title:{
           display:true,
           text:this.title[type]+ ' en ' + name,
@@ -168,6 +175,13 @@
     },
     getOptionsChartWithMean(name, type){
       return{
+        scales: {
+          yAxes: [{
+            ticks: {
+               beginAtZero: true
+            }
+          }]
+        },
         title:{
           display:true,
           text:this.title[type]+ ' en '+name,
@@ -204,7 +218,7 @@
             id: 'Pos',
             type: 'linear',
             position: 'left',
-            ticks: {
+            ticks: {   beginAtZero: true,
               callback: function(tick) {
                 return tick.toString() + '%';
               }
