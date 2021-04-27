@@ -197,9 +197,9 @@
       let Cases = this.dataCovid[name+'Cases']
       let Pos=[]
       for (let i=0;i<Pcr.length;i++){
-        Pos.push(Math.floor(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*1000)/10)
+        Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
       }
-      Pos = meanWeek(Pos.reverse());
+      Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
       let fromDate = this.fromDate
       let indexDate = this.dataCovid['labelsPcr'].indexOf(fromDate)
       // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
