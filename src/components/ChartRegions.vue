@@ -2,6 +2,7 @@
   <div class="ActivityGraph">
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
+    
         <p>
           <label for="region">Elija su región </label>
           <select name="region" id="region" v-on:change="changeCurrentRegion($event)">

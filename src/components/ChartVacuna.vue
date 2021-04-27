@@ -10,8 +10,8 @@
         <div class='dosis2'> {{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis</div>
       </div>
       <div class="optionDosis">
-        <span class='dosis1' > {{(this.vacunaChile['primera dosis'].slice(-1)[0]*190000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span class='dosis2'> {{(this.vacunaChile['segunda dosis'].slice(-1)[0]*190000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  </span>
+        <span class='dosis1' > {{(Math.round(this.vacunaChile['primera dosis'].slice(-1)[0]*190000)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span class='dosis2'> {{(Math.round(this.vacunaChile['segunda dosis'].slice(-1)[0]*190000)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  </span>
       </div>
       <div class='graphVac'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
