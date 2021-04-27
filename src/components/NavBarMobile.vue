@@ -7,19 +7,20 @@
     <header>
     <div class="d-flex  justify-content-between">
     <div class="title">
-        <router-link to="/"> <i class="fas fa-user-secret"></i> Sigue Covid Chile</router-link>
+        <router-link to="/" v-on:click.native='navBar=false'> <i class="fas fa-user-secret"></i> Sigue Covid Chile</router-link>
+        <hr>
     </div>
-    <div>
-    <i class='fas fa-bars' v-on:click='navBar=!navBar' v-if='!navBar'></i>
-    <i class='fas fa-times' v-on:click='navBar=!navBar' v-if='navBar'></i>
+    <div id='icons'>
+    <i class='fas fa-bars' v-on:click='navBar=true' v-if='!navBar'></i>
+    <i class='fas fa-times' v-on:click='navBar=false' v-if='navBar'></i>
   </div>
     <div id="nav" v-if='navBar'>
-    <router-link to="/"> <span  v-on:click='navBar=!navBar'>Chile</span></router-link>
-    <router-link to="/regions"><span  v-on:click='navBar=!navBar'>Por region</span></router-link>
-    <router-link to="/uci"><span  v-on:click='navBar=!navBar'>UCI por edad</span></router-link>
-    <router-link to="/vacuna"><span  v-on:click='navBar=!navBar'>Vacunación</span></router-link>
+    <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
+    <router-link to="/regions" v-on:click.native='navBar=false'>Por region</router-link>
+    <router-link to="/uci" v-on:click.native='navBar=false'>UCI por edad</router-link>
+    <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
 
-    <router-link to="/about"><span  v-on:click='navBar=!navBar'>A propósito</span></router-link>
+    <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
   </div>
 </div>
 </header>
@@ -38,6 +39,15 @@ export default {
 </script>
 
 <style lang="css" scoped>
+#icons{
+  display:flex;
+  text-align:center;
+  align-items: center;
+  justify-content: center;
+}
+div i{
+  font-size:25px;
+}
 header{
   position: fixed;
   width:100%;
@@ -62,9 +72,10 @@ header{
   position:absolute;
   right:0px;
   top:50px;
+  height:150px;
   display:flex;
   flex-direction:column;
-  align-items:center;
+  justify-content: space-between;
   background-color: white;
 
   /* background-color:#f9f9f9; */
@@ -81,6 +92,10 @@ header{
   color: #2c3e50;
 }
 #nav a {
+  height:100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
   text-decoration:none;
   font-weight: bold;
   font-size:15px;
@@ -95,7 +110,9 @@ a {
 
 #nav a.router-link-exact-active, #nav a:hover{
   /* color: #42b983; */
-  color:#4285F4;
+  /* color:#4285F4; */
+  color:white;
+  background-color:#2c3e50;
 
 }
 </style>
