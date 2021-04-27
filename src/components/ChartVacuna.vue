@@ -5,7 +5,14 @@
       <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
     </div>
     <div id='block_graph' v-if="vacunaChile.labels.length > 0">
-
+      <div class="optionDosis">
+        <div class='dosis1'> {{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class='dosis2'> {{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis</div>
+      </div>
+      <div class="optionDosis">
+        <span class='dosis1' > {{(this.vacunaChile['primera dosis'].slice(-1)[0]*190000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span class='dosis2'> {{(this.vacunaChile['segunda dosis'].slice(-1)[0]*190000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  </span>
+      </div>
       <div class='graphVac'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
       </div>
@@ -17,13 +24,50 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 
+
+.dosis1{
+  /* border:solid black 2px; */
+  font-weight: bold;
+  color:#2c3e50;
+  /* color:white; */
+  box-shadow: 0px 3px 8px #e8e8e8;
+  border-radius:45px;
+  background-color: #82CFFD;
+  padding:10px 10px 10px 10px;
+  margin-top:5px;
+  margin-bottom:5px;
+}
+.dosis2{
+  font-weight: bold;
+  color:#2c3e50;
+  /* color:white; */
+  box-shadow: 0px 3px 8px #e8e8e8;
+  border-radius:45px;
+  background-color:#eba434;
+  /* background-color: #dd4b39; */
+  padding:10px 10px 10px 10px;
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
+
+.optionDosis{
+  width:45%;
+  display:flex;
+  flex-direction:row;
+  justify-content: space-around;
+  align-items: space-around ;
+
+}
 
 .optionsGraph{
   display:flex;
   flex-direction:row;
+
   justify-content: center;
+
 }
 
 .optionsGraph p{
@@ -31,6 +75,7 @@
 }
 .graphVac{
   width:45%;
+
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   box-shadow: 0px 3px 8px #e8e8e8;
   border-radius:45px;
@@ -46,12 +91,25 @@
   flex-direction:row;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
+
 }
 
 @media all and (max-width: 960px) {
 
+
+  .optionDosis{
+    width:100%;
+    flex-direction:column;
+
+
+  }
+
+
   #block_graph{
     flex-direction:column;
+    font-size:15px;
+
   }
 
   .graphVac{
@@ -134,6 +192,8 @@ export default {
         datasets: [
           {
             label: "primera dosis",
+             // borderColor: '#93DB70',
+             // backgroundColor: '#93DB70',
             borderColor: '#82CFFD',
             backgroundColor: '#82CFFD',
             fill: false,
@@ -141,6 +201,8 @@ export default {
           },
           {
             label: "segunda dosis",
+            // borderColor: '#dd4b39',
+            // backgroundColor:'#dd4b39',
             borderColor: '#eba434',
             backgroundColor:'#eba434',
             fill: false,
@@ -180,8 +242,6 @@ export default {
       Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19000)/10)})
       derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})
       derivate(Object.values(data[1]).slice(2).map(i => Number(i))).forEach((d)=>{ this.vacunaChile['segunda dosis por dia'].push(d)})
-
-      console.log(this.vacunaChile['primera dosis por dia'])
     })
     // return the derivative of an array
     function derivate(cumulativeValues){

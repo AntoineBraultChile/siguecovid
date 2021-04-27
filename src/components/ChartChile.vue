@@ -70,9 +70,6 @@ label{
 
 @media all and (max-width: 960px) {
 
-  #block_graph{
-  }
-
   .graph{
     width:100%;
   }
@@ -118,8 +115,8 @@ export default {
       fromDate: "2021-01-01",
       listOfMonths:[],
       backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
-      title:{'Uci':'Unidad de cuidados intensivos',
-      'Pcr':'Pcr',
+      title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
+      'Pcr':'PCR',
       'Cases':'Casos',
       'Deaths': 'Fallecidos por COVID-19'
     }
@@ -164,8 +161,8 @@ methods:{
         return{
           labels:this.dataCovidChile['labels'+type].filter((x) => { return x >= fromDate }),
           datasets:[
-            {type:'line', label:'Media de ' + this.title[type],borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovidChile['ChileMean'+type].slice(indexDate-7)},
-            {type:'bar',label:this.title[type], backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}
+            {type:'line', label:'Media de 7 dias',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovidChile['ChileMean'+type].slice(indexDate-7)},
+            {type:'bar',label:this.title[type]+' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}
           ]
         }
       },
@@ -184,7 +181,7 @@ methods:{
         return{
           labels:this.dataCovidChile['labelsPcr'].filter((x) => { return x >= fromDate }),
           datasets:[
-            {type:'line', label:'Positividad media', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
+            {type:'line', label:'Positividad (media de 7 dias)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
             {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovidChile['ChilePcr'].slice(indexDate)}
           ]
         }
@@ -232,7 +229,7 @@ methods:{
           },
           title:{
             display:true,
-            text:'Positividad y Pcr en Chile',
+            text:'Positividad y PCR en Chile',
             fontSize:20
           },
           responsive:true,

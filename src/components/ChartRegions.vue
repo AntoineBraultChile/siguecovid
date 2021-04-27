@@ -102,8 +102,8 @@
           MetropolitanaDeaths:[],
           MetropolitanaMeanCases:[]
         },
-        title:{'Uci':'Unidad de cuidados intensivos',
-        'Pcr':'Pcr',
+        title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
+        'Pcr':'PCR',
         'Cases':'Casos',
         'Deaths': 'Fallecidos por COVID-19'
       },
@@ -167,9 +167,9 @@
       return{
         labels:this.dataCovid['labels'+type].filter((x) => { return x >= fromDate }),
         datasets:[
-          {type:'line', label:'Media de ' + this.title[type]+' en '+name, borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
+          {type:'line', label:'Media de 7 dias', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
 
-          {type:'bar',label:this.title[type]+ ' en '+name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
+          {type:'bar',label:this.title[type]+ ' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
         ]
       }
     },
@@ -206,7 +206,7 @@
       return{
         labels:this.dataCovid['labelsPcr'].filter((x) => { return x >= fromDate }),
         datasets:[
-          {type:'line', label:'Positividad media', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
+          {type:'line', label:'Positividad (media de 7 dias)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
           {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)}
         ]
       }
@@ -232,7 +232,7 @@
         },
         title:{
           display:true,
-          text:'Positividad y Pcr en '+ name,
+          text:'Positividad y PCR en '+ name,
           fontSize:20
         },
         responsive:true,

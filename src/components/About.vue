@@ -1,15 +1,18 @@
 <template >
   <div class="about">
-    <p>
-      Me llamo Antoine Brault y soy investigador en mathemáticas aplicadas en Chile.
-      Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
-    </p>
+    <div class="aboutMe">
+      <p>
+        Me llamo Antoine Brault y soy investigador en mathemáticas aplicadas en Chile.
+        Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
+      </p>
 
-    <p>
-      Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
-      y el progreso de la vacunación en Chile. Los datos proceden del
-      <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
-    </p>
+      <p>
+        Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
+        y el progreso de la vacunación en Chile. Los datos proceden del
+        <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
+      </p>
+    </div>
+
 
   </div>
 </template>
@@ -22,23 +25,27 @@ export default {
 <style lang="css" scoped>
 .about{
   display:flex;
-  flex-direction:column;
+  flex-direction:row;
   justify-content: center;
-  align-items: center;
-  margin-top:20px;
-  padding:0px 10px 0px 10px;
+ height:100%;
 
 }
-.about p{
+.aboutMe{
   max-width:800px;
-  text-align:justify;
-  font-size:20px;
+  height:100%;
+  margin-top:20px;
+  /* padding:0px 10px 0px 10px; */
   padding:10px 20px 10px 20px;
+  border-radius:45px;
+
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   box-shadow: 0px 3px 8px #e8e8e8;
-
-  border-radius:45px;
   background-color: white;
+}
+
+ .about p{
+  text-align:justify;
+  font-size:20px;
 
 }
 @media all and (max-width: 960px) {

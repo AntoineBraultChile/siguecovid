@@ -94,7 +94,7 @@ export default {
         },
         title:{
           display:true,
-          text:'Unidad de cuidados intensivos por edad',
+          text:'Personas en unidad de cuidados intensivos por Covid-19 por edad',
           fontSize:20
         },
         lineTension: 1,
