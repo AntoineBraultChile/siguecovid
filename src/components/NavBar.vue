@@ -14,7 +14,7 @@
 </router-link>
   <div id="nav">
     <router-link to="/">Chile</router-link>
-    <router-link to="/regions">Por region</router-link>
+    <router-link to="/regions">Por región</router-link>
     <router-link to="/uci">UCI por edad</router-link>
     <router-link to="/vacuna">Vacunación</router-link>
     <router-link to="/about">A propósito</router-link>

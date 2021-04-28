@@ -94,6 +94,14 @@ export default {
     'line-chart': LineChart,
     'choose-date': ChooseDate
   },
+  metaInfo() {
+       return {
+           title: "Numero de personas en unidad de cuidados intensivos por Covid-19 y por edad en Chile",
+           meta: [
+               { name: 'description', content: `Grafico del numero de personas en unidad de cuidados intensivos por Covid-19 y por edad en Chile`},
+               {name: 'robots', content: 'index,follow'}
+           ]
+       }},
   data () {
     return{
       uciChile:{

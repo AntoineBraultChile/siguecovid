@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/',
     name: 'ChartChile',
-    component: ChartChile
+    component: ChartChile,
   },
   {
     path: '/regions',
@@ -45,9 +45,12 @@ const routes = [
   }
 ]
 
+
+
 const router = new VueRouter({
   mode: 'history',
   routes
 })
+
 
 export default router

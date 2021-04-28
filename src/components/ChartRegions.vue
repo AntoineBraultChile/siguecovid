@@ -119,6 +119,16 @@
       'bar-chart': BarChart,
       'choose-date': ChooseDate
     },
+    metaInfo() {
+         return {
+             title: "Evolución de  la epidemia de Covid-19 en las regiones de Chile",
+             meta: [
+                 { name: 'description',
+                  content:  `Graficos de los casos nuevos, positividad, numero de test Pcr, numero de personas actualmente en unidad de cuidados intensivos,
+                  fallecidos en las regiones de Chile `},
+                 {name: 'robots', content: 'index,follow'}
+             ]
+         }},
     data () {
       return{
         currentRegion:'Metropolitana',

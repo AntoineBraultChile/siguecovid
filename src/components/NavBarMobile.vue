@@ -5,11 +5,10 @@
     <div class="d-flex  justify-content-between">
     <div class="title">
         <router-link to="/" v-on:click.native='navBar=false'>
-
           <!-- <i class="fas fa-user-secret"></i> Sigue Covid Chile -->
           <h1><i class="fas fa-user-secret" style="color:black"></i>  <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue</span>
             <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
-            <span style='color:black;font-weight:350;font-size:15px;'>   en Chile</span></h1>
+            <span style='color:black;font-weight:350;font-size:20px;'>   en Chile</span></h1>
         </router-link>
         <!-- <hr> -->
     </div>
@@ -19,7 +18,7 @@
   </div>
     <div id="nav" v-if='navBar'>
     <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
-    <router-link to="/regions" v-on:click.native='navBar=false'>Por region</router-link>
+    <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
     <router-link to="/uci" v-on:click.native='navBar=false'>UCI por edad</router-link>
     <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
 
@@ -41,8 +40,14 @@ export default {
 }
 </script>
 
+
 <style lang="css" scoped>
+#icons i{
+    font-size:30px;
+    padding-left:20px;
+}
   i{
+    font-size:30px;
   padding:10px 0px 10px 0px;
 }
 /* div i{
@@ -83,7 +88,7 @@ header{
 }
 h1, i{
 
-  font-size:20px;
+  font-size:30px;
   margin-bottom:0px;
 }
 

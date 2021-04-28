@@ -113,6 +113,17 @@ export default {
     'bar-chart': BarChart,
     'choose-date': ChooseDate
   },
+  metaInfo() {
+       return {
+           title: "Sigue Covid en Chile - Siga  la epidemia de covid-19 y el proceso de vacunación en chile y en regiones",
+           meta: [
+               { name: 'description',
+                content:  `Sigue Covid facilita la visualización de datos sobre la epidemia de covid-19 en Chile
+                y en las regiones del país. Encontrará información actualizada diariamente sobre el número de nuevos casos, pruebas de PCR,
+                personas en  unidad de cuidados intensivos y fallecidos. También podrá consultar el progreso de la campaña de vacunación.`},
+               {name: 'robots', content: 'index,follow'}
+           ]
+       }},
   data () {
     return{
       dataCovidChile:{

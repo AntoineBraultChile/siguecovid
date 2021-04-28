@@ -19,6 +19,14 @@
 
 <script>
 export default {
+  metaInfo() {
+       return {
+           title: "A propósito de Sigue Covid",
+           meta: [
+               { name: 'description', content: `Sigue Covid  permite una visualización del estado de la pandemia de Covid-19 en Chile`},
+               {name: 'robots', content: 'index,follow'}
+           ]
+       }},
 }
 </script>
 

@@ -7,12 +7,12 @@
     </div>
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="vacunaChile.labels.length > 0">
       <div class="optionDosis">
-        <div class='dosis1'> {{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div class='dosis2'> {{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis</div>
+        <div class='dosis1'> {{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis (+ {{Math.round((this.vacunaChile['primera dosis'].slice(-1)[0]-this.vacunaChile['primera dosis'].slice(-2)[0])*10)/10}}%) </div>
+        <div class='dosis2'> {{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis  (+ {{Math.round((this.vacunaChile['segunda dosis'].slice(-1)[0]-this.vacunaChile['segunda dosis'].slice(-2)[0])*10)/10}}%)</div>
       </div>
       <div class="optionDosis">
-        <span class='dosis1' > {{(Math.round(this.vacunaChile['primera dosis'].slice(-1)[0]*190000)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span class='dosis2'> {{(Math.round(this.vacunaChile['segunda dosis'].slice(-1)[0]*190000)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  </span>
+        <span class='dosis1' > {{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis (+{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} )  </span>
+        <span class='dosis2'> {{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  (+{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} )</span>
       </div>
       <div class='wrapper'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
@@ -51,7 +51,7 @@
 
   border-radius:7px;
   background-color: #82CFFD;
-  padding:10px 10px 10px 10px;
+  padding:10px 3px 10px 3px;
   margin-top:5px;
   margin-bottom:5px;
 }
@@ -65,7 +65,7 @@
   border-radius:5px;
   background-color:#eba434;
   /* background-color: #dd4b39; */
-  padding:10px 10px 10px 10px;
+  padding:10px 3px 10px 3px;
   margin-top:5px;
   margin-bottom:5px;
 }
@@ -100,7 +100,7 @@
   /* padding:10px 10px 10px 10px; */
   /* margin:5px 5px 5px 5px; */
   padding:10px 10px 10px 10px;
-  margin:5px 15px 5px 5px;
+  margin:5px 5px 5px 5px;
 
 }
 
@@ -161,6 +161,15 @@ export default {
     'bar-chart': BarChart
     // 'choose-date': ChooseDate
   },
+  metaInfo() {
+       return {
+           title: "Campaña de vacunación en Chile",
+           meta: [
+               { name: 'description', content: `Avances de la campaña de vacunación en Chile: proporción de la población chilena
+               vacunada con una o dos dosis, numero de primera dosis y segunda sosis administrada cada dia y en total.`},
+               {name: 'robots', content: 'index,follow'}
+           ]
+       }},
   data () {
     return{
       vacunaChile:{
@@ -168,7 +177,9 @@ export default {
         'primera dosis':[],
         'segunda dosis':[],
         'primera dosis por dia':[],
-        'segunda dosis por dia':[]
+        'segunda dosis por dia':[],
+        'total primera dosis':'',
+        'total segunda dosis':''
       },
       fromDate: "01-02-2021",
       listOfMonths:[],
@@ -270,9 +281,12 @@ export default {
   },
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
-      this.vacunaChile.labels = Object.keys(data[0]).slice(2).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
-      Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(Math.round(d/19000)/10)})
-      Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19000)/10)})
+      this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
+      Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/19000)/10)})
+      this.vacunaChile['total primera dosis'] = Object.values(data[0]).slice(1).slice(-2).map(d=>{return Math.round(d)})
+      Object.values(data[1]).slice(2).map(i => Number(i)).forEach(d =>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19000)/10)})
+      this.vacunaChile['total segunda dosis'] = Object.values(data[1]).slice(1).slice(-2).map(d=>{return Math.round(d)})
+
       derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})
       derivate(Object.values(data[1]).slice(2).map(i => Number(i))).forEach((d)=>{ this.vacunaChile['segunda dosis por dia'].push(d)})
     })
