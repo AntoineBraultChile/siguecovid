@@ -6,7 +6,7 @@
       <p> Última actualización : {{update}}</p>
       <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
     </div>
-    <div id='block_graph' v-if="uciChile.labels.length > 0">
+    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="uciChile.labels.length > 0">
 
       <div class='graphUci'>
         <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
@@ -29,7 +29,7 @@
   text-align:justify;
   font-size:20px;
   font-weight: bold;
-  padding:0px 5px 0px 5px;
+  padding:0px 10px 0px 10px;
 }
 .optionsGraph{
   display:flex;
@@ -48,7 +48,7 @@
 
   border-radius:7px;
   background-color: white;
-  padding:10px;
+
 }
 
 #block_graph{
@@ -70,6 +70,8 @@
 
  .graphUci{
    width:100%;
+   margin:10px 10px 10px 10px;
+
  }
  .optionsGraph{
    display:flex;
@@ -175,7 +177,7 @@ export default {
     update: function(){
       let now = new Date();
       now = moment(now).format("DD-MM-YYYY");
-      let lastUpdate = moment(this.uciChile.labels[this.uciChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+      let lastUpdate = moment(this.uciChile.labels[this.uciChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
       if(now == lastUpdate){
         return 'hoy'
       }

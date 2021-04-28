@@ -14,7 +14,7 @@
         </p>
         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
       </div>
-      <div id='block_graph' v-if="dataCovid.labelsUci.length > 0">
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="dataCovid.labelsUci.length > 0">
 
         <div class='graph'>
           <!-- <bar-chart  :chartData="getRegionValues(currentRegion,'Cases')" :options="getRegionOptions(currentRegion,'Cases')"> </bar-chart> -->
@@ -46,6 +46,7 @@
     justify-content: center;
     flex-direction:column;
   }
+
   #slogan{
     max-width:800px;
     text-align:justify;
@@ -61,8 +62,12 @@
   .optionsGraph p{
     padding: 0px 20px 0px 20px;
   }
+
   .graph{
     width:45%;
+    padding:10px 10px 10px 10px;
+    margin:5px 5px 5px 5px;
+
   }
 
   #block_graph{
@@ -71,6 +76,7 @@
     flex-direction:row;
     flex-wrap: wrap;
     justify-content: center;
+    align-items:center;
   }
 
   @media all and (max-width: 1100px) {
@@ -84,6 +90,10 @@
 
    .graph{
      width:100%;
+     margin:10px 10px 10px 10px;
+     /* margin:5px 15px 5px 5px; */
+
+
    }
    .optionsGraph{
      display:flex;
@@ -100,6 +110,8 @@
   import moment from 'moment';
 
   import ChooseDate from './ChooseDate'
+  import  {meanWeek, derivate} from '@/assets/mathFunctions'
+
 
   export default {
     name:'ChartRegions',
@@ -296,7 +308,7 @@
             generateListOfMonths();
           }
 
-          let chileValues = []; // the sum of the regional time series
+          // let chileValues = []; // the sum of the regional time series
           for (let index=0; index < data.length; index++){
             if (initializeRegionName == true && data[index].Region!=undefined){
               this.regionName.push(data[index].Region)
@@ -306,42 +318,42 @@
             if(derivative==true){
               let dayCases = derivate(Object.values(data[index]).slice(3).map(i => Number(i)))
               this.$set(this.dataCovid, data[index].Region+type, dayCases);
-              chileValues = sumArray(chileValues,dayCases)
+              // chileValues = sumArray(chileValues,dayCases)
               if(mean==true){
-              this.$set(this.dataCovid, data[index].Region+'Mean'+type, meanWeek(dayCases))
+              this.$set(this.dataCovid, data[index].Region+'Mean'+type, meanWeek(dayCases).map((d)=>{return Math.round(d)}))
             }
             }else{
               this.$set(this.dataCovid, data[index].Region+type, Object.values(data[index]).slice(3).map(i => Number(i)));
-              chileValues = sumArray(chileValues,Object.values(data[index]).slice(3).map(i => Number(i)))
+              // chileValues = sumArray(chileValues,Object.values(data[index]).slice(3).map(i => Number(i)))
             }
           }
-          this.$set(this.dataCovid, 'Chile'+type, chileValues);
+          // this.$set(this.dataCovid, 'Chile'+type, chileValues);
 
         })
 
       }
 
-      // return the derivative of an array
-      function derivate(cumulativeValues){
-        let derivative = []
-        for ( let i=0; i < cumulativeValues.length-1;i++){
-          derivative.push(cumulativeValues[i+1]-cumulativeValues[i])
-        }
-        return derivative;
-      }
+      // // return the derivative of an array
+      // function derivate(cumulativeValues){
+      //   let derivative = []
+      //   for ( let i=0; i < cumulativeValues.length-1;i++){
+      //     derivative.push(cumulativeValues[i+1]-cumulativeValues[i])
+      //   }
+      //   return derivative;
+      // }
 
-      // return the sum of the two array, if the first array is empty it returns the second Array
-      function sumArray(firstArray, secondArray){
-        if (firstArray.length == 0){
-          return secondArray;
-        }else{
-          if (firstArray.length != secondArray.length){
-            console.log('ERROR: the two arrays need to have the same length or the first array need to be empty !');
-          }else{
-            return firstArray.map((el,indx) => {return el + secondArray[indx]});
-          }
-        }
-      }
+      // // return the sum of the two array, if the first array is empty it returns the second Array
+      // function sumArray(firstArray, secondArray){
+      //   if (firstArray.length == 0){
+      //     return secondArray;
+      //   }else{
+      //     if (firstArray.length != secondArray.length){
+      //       console.log('ERROR: the two arrays need to have the same length or the first array need to be empty !');
+      //     }else{
+      //       return firstArray.map((el,indx) => {return el + secondArray[indx]});
+      //     }
+      //   }
+      // }
       // function to generate list of months
       let generateListOfMonths  =  () => {
        let currentDate = moment('05-2020', 'MM-YYYY')
@@ -351,14 +363,14 @@
        }
      }
 
-     // compute the rolling week average
-     function meanWeek(tabValues){
-       let weekAverage=[];
-       for (let i=0;i<tabValues.length-7; i++){
-         weekAverage.push(Math.floor((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7))
-       }
-       return weekAverage;
-     }
+     // // compute the rolling week average
+     // function meanWeek(tabValues){
+     //   let weekAverage=[];
+     //   for (let i=0;i<tabValues.length-7; i++){
+     //     weekAverage.push(Math.floor((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7))
+     //   }
+     //   return weekAverage;
+     // }
 
       // this.regionName.push('Chile') // add Chile to the name of region
       // (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false)
@@ -370,12 +382,12 @@
   }
 }
 
-// compute rolling mean on a week window
-function meanWeek(tabValues){
-  let weekAverage=[];
-  for (let i=0;i<tabValues.length-7; i++){
-    weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
-  }
-  return weekAverage;
-}
+// // compute rolling mean on a week window
+// function meanWeek(tabValues){
+//   let weekAverage=[];
+//   for (let i=0;i<tabValues.length-7; i++){
+//     weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
+//   }
+//   return weekAverage;
+// }
 </script>

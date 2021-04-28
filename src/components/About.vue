@@ -27,7 +27,8 @@ export default {
   display:flex;
   flex-direction:row;
   justify-content: center;
- height:100%;
+  height:100%;
+  padding:0px 10px 0px 10px;
 
 }
 .aboutMe{

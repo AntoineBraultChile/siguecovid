@@ -1,9 +1,6 @@
 <template >
   <div class="NavBarMobile">
-    <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-        crossorigin="anonymous">
+
     <header>
     <div class="d-flex  justify-content-between">
     <div class="title">
@@ -45,11 +42,8 @@ export default {
 </script>
 
 <style lang="css" scoped>
-#icons{
-  display:flex;
-  text-align:center;
-  align-items: center;
-  justify-content: center;
+  i{
+  padding:10px 0px 10px 0px;
 }
 /* div i{
   font-size:25px;
@@ -62,7 +56,7 @@ header{
   border-color: gray; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
 
-    padding:10px 20px 10px 20px;
+  padding:0px 10px 0px 10px;
   /* background-color: #FFFACD; */
   background-color:white;
 }

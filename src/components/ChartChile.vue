@@ -30,9 +30,10 @@
 </template>
 
 <style>
-select{
+
+/* select{
   margin-left:10px;
-}
+} */
 .ChartChile{
   display:flex;
   align-items: center;
@@ -54,6 +55,7 @@ select{
 .optionsGraph p{
   padding: 0px 20px 0px 20px;
 }
+
 .graph{
   width:45%;
   /* border: solid 2px; */
@@ -71,16 +73,16 @@ select{
 #block_graph{
   width:100%;
 }
-
+/*
 label{
   margin-right:10px;
-}
+} */
 
 
 
 @media all and (max-width: 1100px) {
   #slogan{
-        font-size:20px;
+        font-size:15px;
   }
   .graph{
     width:100%;
@@ -103,6 +105,7 @@ import moment from 'moment';
 moment.locale('es');
 
 import ChooseDate from './ChooseDate'
+import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
 export default {
   name:'ChartRegions',
@@ -319,14 +322,14 @@ methods:{
 
         }
 
-        // return the derivative of an array
-        function derivate(cumulativeValues){
-          let derivative = []
-          for ( let i=0; i < cumulativeValues.length-1;i++){
-            derivative.push(cumulativeValues[i+1]-cumulativeValues[i])
-          }
-          return derivative;
-        }
+        // // return the derivative of an array
+        // function derivate(cumulativeValues){
+        //   let derivative = []
+        //   for ( let i=0; i < cumulativeValues.length-1;i++){
+        //     derivative.push(cumulativeValues[i+1]-cumulativeValues[i])
+        //   }
+        //   return derivative;
+        // }
 
         // return the sum of the two array, if the first array is empty it returns the second Array
         function sumArray(firstArray, secondArray){
@@ -350,12 +353,12 @@ methods:{
       }
     }
 
-    // compute rolling mean on a week window
-    function meanWeek(tabValues){
-      let weekAverage=[];
-      for (let i=0;i<tabValues.length-7; i++){
-        weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
-      }
-      return weekAverage;
-    }
+    // // compute rolling mean on a week window
+    // function meanWeek(tabValues){
+    //   let weekAverage=[];
+    //   for (let i=0;i<tabValues.length-7; i++){
+    //     weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
+    //   }
+    //   return weekAverage;
+    // }
     </script>

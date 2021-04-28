@@ -5,7 +5,7 @@
       <p> Última actualización : {{update}}</p>
       <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
     </div>
-    <div id='block_graph' v-if="vacunaChile.labels.length > 0">
+    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="vacunaChile.labels.length > 0">
       <div class="optionDosis">
         <div class='dosis1'> {{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div class='dosis2'> {{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis</div>
@@ -32,13 +32,13 @@
   justify-content: center;
   flex-direction:column;
 }
+
 #slogan{
   max-width:800px;
   text-align:justify;
   font-size:20px;
   font-weight: bold;
-  padding:0px 5px 0px 5px;
-
+  padding:0px 10px 0px 10px;
 }
 
 .dosis1{
@@ -77,7 +77,6 @@
   flex-direction:row;
   justify-content: space-around;
   align-items: space-around ;
-
 }
 
 .optionsGraph{
@@ -98,11 +97,10 @@
   box-shadow: 0px 0px 3px 3px #e8e8e8;
   border-radius:7px;
   background-color: white;
+  /* padding:10px 10px 10px 10px; */
+  /* margin:5px 5px 5px 5px; */
   padding:10px 10px 10px 10px;
-  margin:5px 5px 5px 5px;
-
-  margin-top:5px;
-  margin-bottom:5px;
+  margin:5px 15px 5px 5px;
 
 }
 
@@ -112,7 +110,6 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-
 }
 
 @media all and (max-width: 1100px) {
@@ -138,6 +135,7 @@
 
   .wrapper{
     width:100%;
+    margin:10px 10px 10px 10px;
 
   }
   .optionsGraph{
