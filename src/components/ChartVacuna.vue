@@ -154,7 +154,7 @@ export default {
         'primera dosis por dia':[],
         'segunda dosis por dia':[]
       },
-      fromDate: "2021-02-01",
+      fromDate: "01-02-2021",
       listOfMonths:[],
       options:{
         scales: {
@@ -194,7 +194,7 @@ export default {
     renderChartVacuna(){
       let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
       return {
-        labels:this.vacunaChile.labels.filter((x) => { return x >= this.fromDate }),
+        labels:this.vacunaChile.labels.filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY') }),
         datasets: [
           {
             label: "primera dosis",
@@ -220,7 +220,7 @@ export default {
     renderChartVacunaPorDia(){
       let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
       return {
-        labels:this.vacunaChile.labels.filter((x) => { return x >= this.fromDate }),
+        labels:this.vacunaChile.labels.filter((x) => { return  moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY')}),
         datasets: [
           {
             label: "con primera dosis",
@@ -240,7 +240,7 @@ export default {
     update: function(){
       let now = new Date();
       now = moment(now).format("DD-MM-YYYY");
-      let lastUpdate = moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+      let lastUpdate = moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
       if(now == lastUpdate){
         return 'hoy'
       }
@@ -254,7 +254,7 @@ export default {
   },
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
-      this.vacunaChile.labels = Object.keys(data[0]).slice(2);
+      this.vacunaChile.labels = Object.keys(data[0]).slice(2).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
       Object.values(data[0]).slice(2).map(i => Number(i)).forEach((d)=> {this.vacunaChile['primera dosis'].push(Math.round(d/19000)/10)})
       Object.values(data[1]).slice(2).map(i => Number(i)).forEach((d)=>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19000)/10)})
       derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})

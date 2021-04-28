@@ -83,7 +83,7 @@ export default {
         '60-69':[],
         '>=70':[]
       },
-      fromDate: "2021-01-01",
+      fromDate: "01-01-2021",
       listOfMonths:[],
       optionsLineUciChile:{
         scales: {
@@ -106,12 +106,12 @@ export default {
   },
   methods:{
     changeFromDate(event){
-      this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('YYYY-MM-01')
+      this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
     },
     renderChileUciChart(){
       let indexDate = this.uciChile.labels.indexOf(this.fromDate)
       return {
-        labels:this.uciChile.labels.filter((x) => { return x >= this.fromDate }),
+        labels:this.uciChile.labels.filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY') }),
         datasets: [
           {
             label: "<=39",
@@ -170,7 +170,7 @@ export default {
   },
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto9/HospitalizadosUCIEtario.csv').then(data => {
-      this.uciChile.labels = Object.keys(data[0]).slice(1);
+      this.uciChile.labels = Object.keys(data[0]).slice(1).map(d=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
       for (let index in data){
         if(index != "columns"){
           let age = Object.values(data[index])[0]
@@ -184,7 +184,7 @@ export default {
     // function to generate list of months
     let generateListOfMonths  =  () => {
       let currentDate = moment('05-2020', 'MM-YYYY')
-      while(currentDate < moment(this.uciChile.labels[this.uciChile.labels.length-1],'YYYY-MM-DD')){
+      while(currentDate < moment(this.uciChile.labels[this.uciChile.labels.length-1],'DD-MM-YYYY')){
         this.listOfMonths.push(currentDate.format('MMMM YYYY'))
         currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
       }

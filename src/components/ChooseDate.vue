@@ -15,7 +15,7 @@ export default {
   props:['listOfMonths','fromDate'],
   methods:{
     monthToDate(date){
-      return moment(date, 'MMMM-YYYY').format('YYYY-MM-01')
+      return moment(date, 'MMMM-YYYY').format('01-MM-YYYY')
     },
     changeFromDate(event){
       this.$emit('newFromDate', event)

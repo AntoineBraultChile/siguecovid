@@ -109,7 +109,7 @@
         'Deaths': 'Fallecidos por COVID-19'
       },
       backgroundColor:{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
-        fromDate: "2021-01-01",
+        fromDate: "01-01-2021",
         listOfMonths:[],
         options:{
           title:{
@@ -134,7 +134,7 @@
       // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
       let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
       return {
-        labels:this.dataCovid['labels'+type].filter((x) => { return x >= fromDate }),
+        labels:this.dataCovid['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
         datasets:[
           {label:this.title[type]+ ' en '+ name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
         }
@@ -166,7 +166,7 @@
       let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       return{
-        labels:this.dataCovid['labels'+type].filter((x) => { return x >= fromDate }),
+        labels:this.dataCovid['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
         datasets:[
           {type:'line', label:'Media de 7 dias', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
           {type:'bar',label:this.title[type]+ ' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
@@ -204,7 +204,7 @@
       let indexDate = this.dataCovid['labelsPcr'].indexOf(fromDate)
       // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
       return{
-        labels:this.dataCovid['labelsPcr'].filter((x) => { return x >= fromDate }),
+        labels:this.dataCovid['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
         datasets:[
           {type:'line', label:'Positividad (media de 7 dias)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
           {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)}
@@ -244,14 +244,14 @@
         this.currentRegion = event.target.value;
       },
       changeFromDate(event){
-        this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('YYYY-MM-01')
+        this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
       }
     },
     computed:{
       update: function(){
         let now = new Date();
         now = moment(now).format("DD-MM-YYYY");
-        let lastUpdate = moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+        let lastUpdate = moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
         if(now == lastUpdate){
           return 'hoy'
         }
@@ -267,9 +267,9 @@
       const getDataCsv = (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
         d3.csv(path).then(data => {
           if (derivative==true){
-            this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+            this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           }else{
-            this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+            this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           }
 
 
@@ -326,7 +326,7 @@
       // function to generate list of months
       let generateListOfMonths  =  () => {
        let currentDate = moment('05-2020', 'MM-YYYY')
-       while(currentDate < moment(this.dataCovid.labelsUci[this.dataCovid.labelsUci.length-1],'YYYY-MM-DD')){
+       while(currentDate < moment(this.dataCovid.labelsUci[this.dataCovid.labelsUci.length-1],'DD-MM-YYYY')){
          this.listOfMonths.push(currentDate.format('MMMM YYYY'))
          currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
        }

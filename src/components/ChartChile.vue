@@ -113,7 +113,7 @@ export default {
         ChileMeanCases:[],
         ChilePos:[]
       },
-      fromDate: "2021-01-01",
+      fromDate: "01-01-2021",
       listOfMonths:[],
       backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
       title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
@@ -128,8 +128,9 @@ methods:{
     let fromDate = this.fromDate
     // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
     let indexDate = this.dataCovidChile['labels'+type].indexOf(fromDate)
+
     return {
-      labels:this.dataCovidChile['labels'+type].filter((x) => { return x >= fromDate }),
+      labels:this.dataCovidChile['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY') }),
       datasets:[
         {type:'bar',label:this.title[type]+ ' en Chile', backgroundColor:this.backgroundColor[type], fill:false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}]
       }
@@ -160,7 +161,7 @@ methods:{
         let indexDate = this.dataCovidChile['labels'+type].indexOf(fromDate)
         // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
         return{
-          labels:this.dataCovidChile['labels'+type].filter((x) => { return x >= fromDate }),
+          labels:this.dataCovidChile['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY') }),
           datasets:[
             {type:'line', label:'Media de 7 dias',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovidChile['ChileMean'+type].slice(indexDate-7)},
             {type:'bar',label:this.title[type]+' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}
@@ -180,7 +181,7 @@ methods:{
         let indexDate = this.dataCovidChile['labelsPcr'].indexOf(fromDate)
         // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
         return{
-          labels:this.dataCovidChile['labelsPcr'].filter((x) => { return x >= fromDate }),
+          labels:this.dataCovidChile['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')}),
           datasets:[
             {type:'line', label:'Positividad (media de 7 dias)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
             {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovidChile['ChilePcr'].slice(indexDate)}
@@ -238,14 +239,14 @@ methods:{
         }
       },
       changeFromDate(event){
-        this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('YYYY-MM-01')
+        this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
       }
     },
       computed:{
         update: function(){
           let now = new Date();
           now = moment(now).format("DD-MM-YYYY");
-          let lastUpdate = moment(this.dataCovidChile.labelsCases[this.dataCovidChile.labelsCases.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+          let lastUpdate = moment(this.dataCovidChile.labelsCases[this.dataCovidChile.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
           if(now == lastUpdate){
             return 'hoy'
           }
@@ -259,16 +260,16 @@ methods:{
     },
       async created(){
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
-          this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+          this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovidChile, 'ChileCases', dayCases);
 
-          this.$set(this.dataCovidChile, 'LabelsMeanCases' ,Object.keys(data[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")}));
+          this.$set(this.dataCovidChile, 'LabelsMeanCases' ,Object.keys(data[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
           this.$set(this.dataCovidChile, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
 
         })
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv').then(data=>{
-          this.dataCovidChile['labelsDeaths'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+          this.dataCovidChile['labelsDeaths'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovidChile, 'ChileDeaths', dayCases);
 
@@ -278,15 +279,15 @@ methods:{
         const getDataCsv = (path, type, derivative,  initializeMonths = false) => {
           d3.csv(path).then(data => {
             if (derivative==true){
-              this.dataCovidChile['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+              this.dataCovidChile['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }else{
-              this.dataCovidChile['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("YYYY-MM-DD")})
+              this.dataCovidChile['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }
 
             if(initializeMonths == true){
               let currentDate = moment('05-2020', 'MM-YYYY')
-              while(currentDate < moment(this.dataCovidChile.labelsUci[this.dataCovidChile.labelsUci.length-1],'YYYY-MM-DD')){
-                this.listOfMonths.push(currentDate.format('MMMM YYYY'))
+              while(currentDate < moment(this.dataCovidChile.labelsUci[this.dataCovidChile.labelsUci.length-1],'DD-MM-YYYY')){
+                this.listOfMonths.push(moment(currentDate, 'MM-YYYY').format('MMMM YYYY'))
                 currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
               }
             }
@@ -306,23 +307,6 @@ methods:{
 
         }
 
-        // d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto55/Positividad_nacional.csv').then(data =>{
-        //     data.slice(6).forEach((d)=> {
-        //       this.dataCovidChile['ChilePos'].push(Math.round(d['positividad']*1000)/10);
-        //       this.dataCovidChile['labelsPos'].push(d['fecha']);
-        //     })
-        // })
-
-
-
-        // // compute the rolling week average
-        // function meanWeek(tabValues){
-        //   let weekAverage=[];
-        //   for (let i=0;i<tabValues.length-7; i++){
-        //     weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
-        //   }
-        //   return weekAverage;
-        // }
         // return the derivative of an array
         function derivate(cumulativeValues){
           let derivative = []
@@ -355,7 +339,6 @@ methods:{
     }
 
     // compute rolling mean on a week window
-
     function meanWeek(tabValues){
       let weekAverage=[];
       for (let i=0;i<tabValues.length-7; i++){
