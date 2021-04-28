@@ -7,8 +7,14 @@
     <header>
     <div class="d-flex  justify-content-between">
     <div class="title">
-        <router-link to="/" v-on:click.native='navBar=false'> <i class="fas fa-user-secret"></i> Sigue Covid Chile</router-link>
-        <hr>
+        <router-link to="/" v-on:click.native='navBar=false'>
+
+          <!-- <i class="fas fa-user-secret"></i> Sigue Covid Chile -->
+          <h1><i class="fas fa-user-secret" style="color:black"></i>  <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue</span>
+            <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
+            <span style='font-weight:350;font-size:15px;'>   en Chile</span></h1>
+        </router-link>
+        <!-- <hr> -->
     </div>
     <div id='icons'>
     <i class='fas fa-bars' v-on:click='navBar=true' v-if='!navBar'></i>
@@ -45,9 +51,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
-div i{
+/* div i{
   font-size:25px;
-}
+} */
 header{
   position: fixed;
   width:100%;
@@ -81,10 +87,10 @@ header{
   /* background-color:#f9f9f9; */
   /* background-color: #FFFACD; */
 }
-.title{
-  display:flex;
-  align-items:center;
+h1, i{
+
   font-size:20px;
+  margin-bottom:0px;
 }
 
 .title a, .title a:hover{

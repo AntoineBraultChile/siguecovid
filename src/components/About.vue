@@ -39,7 +39,9 @@ export default {
   border-radius:45px;
 
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  box-shadow: 0px 3px 8px #e8e8e8;
+  /* box-shadow: 0px 3px 8px #e8e8e8; */
+  box-shadow: 0px 0px 5px 5px #e8e8e8;
+
   background-color: white;
 }
 
@@ -48,7 +50,7 @@ export default {
   font-size:20px;
 
 }
-@media all and (max-width: 960px) {
+@media all and (max-width: 1100px) {
  .about p{
    font-size:15px;
  }

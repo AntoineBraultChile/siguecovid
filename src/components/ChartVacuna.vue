@@ -32,7 +32,9 @@
   font-weight: bold;
   color:#2c3e50;
   /* color:white; */
-  box-shadow: 0px 3px 8px #e8e8e8;
+  /* box-shadow: 0px 3px 8px #e8e8e8; */
+  box-shadow: 0px 0px 5px 5px #e8e8e8;
+
   border-radius:45px;
   background-color: #82CFFD;
   padding:10px 10px 10px 10px;
@@ -43,7 +45,9 @@
   font-weight: bold;
   color:#2c3e50;
   /* color:white; */
-  box-shadow: 0px 3px 8px #e8e8e8;
+  /* box-shadow: 0px 3px 8px #e8e8e8; */
+  box-shadow: 0px 0px 5px 5px #e8e8e8;
+
   border-radius:45px;
   background-color:#eba434;
   /* background-color: #dd4b39; */
@@ -77,7 +81,9 @@
   width:45%;
 
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  box-shadow: 0px 3px 8px #e8e8e8;
+  /* box-shadow: 0px 3px 8px #e8e8e8; */
+  box-shadow: 0px 0px 5px 5px #e8e8e8;
+
   border-radius:45px;
   background-color: white;
   padding:10px 10px 10px 10px;
@@ -95,12 +101,12 @@
 
 }
 
-@media all and (max-width: 960px) {
+@media all and (max-width: 1100px) {
 
 
   .optionDosis{
     width:100%;
-    flex-direction:column;
+    /* flex-direction:column; */
 
 
   }
@@ -232,7 +238,18 @@ export default {
   },
   computed:{
     update: function(){
-      return moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+      let now = new Date();
+      now = moment(now).format("DD-MM-YYYY");
+      let lastUpdate = moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+      if(now == lastUpdate){
+        return 'hoy'
+      }
+      else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+        return 'ayer'
+      }
+      else{
+        return lastUpdate
+      }
     }
   },
   async created(){

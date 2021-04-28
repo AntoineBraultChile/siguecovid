@@ -8,9 +8,11 @@
     <div class="d-flex justify-content-between">
         <router-link to="/">
     <div class="title">
-       <i class="fas fa-user-secret"></i>
 
- Sigue Covid en Chile
+<h1><i class="fas fa-user-secret" style="color:black"></i>
+  <span style='font-weight:bold; color:black;font-family:Avenir'> Sigue</span>
+  <span style='color:black;opacity:0.4;font-weight:300;'>Covid</span>
+  <span style='font-weight:350;font-size:30px;'> en Chile</span></h1>
     </div>
 </router-link>
   <div id="nav">
@@ -28,8 +30,6 @@
 <script>
 export default {
   name:'NavBar',
-
-
 }
 </script>
 
@@ -53,6 +53,13 @@ header{
   align-items:center;
 }
 .title{
+  padding-top:7px;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+}
+.title h1, i{
   font-size:35px;
 }
 
@@ -70,7 +77,7 @@ a .title , header a:hover{
    border-color:white; */
    /* background-color:white; */
   text-decoration:none;
-  font-weight: bold;
+  font-weight: normal;
   font-size:25px;
   /* color: #2c3e50; */
   padding: 0px 10px 0px 10px;

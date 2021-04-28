@@ -35,7 +35,7 @@
   /* padding-top:20px; */
 }
 
-@media all and (max-width: 960px) {
+@media all and (max-width: 1100px) {
   .vues{
 
   margin-top:60px;
@@ -56,12 +56,12 @@ import NavBarMobile from './components/NavBarMobile'
     },
     methods:{
       setMobileMode(){
-      this.mobileMode = window.innerWidth <= 960
+      this.mobileMode = window.innerWidth <= 1100
     }
     },
     mounted() {
       window.addEventListener('resize', () => {
-        this.mobileMode = window.innerWidth <= 960
+        this.mobileMode = window.innerWidth <= 1100
       })
     },
     created(){

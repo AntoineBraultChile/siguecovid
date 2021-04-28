@@ -57,7 +57,7 @@
     justify-content: space-around;
   }
 
-  @media all and (max-width: 960px) {
+  @media all and (max-width: 1100px) {
 
    #block_graph{
      flex-direction:column;
@@ -249,7 +249,18 @@
     },
     computed:{
       update: function(){
-        return moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+        let now = new Date();
+        now = moment(now).format("DD-MM-YYYY");
+        let lastUpdate = moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+        if(now == lastUpdate){
+          return 'hoy'
+        }
+        else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+          return 'ayer'
+        }
+        else{
+          return lastUpdate
+        }
       }
     },
     async created(){

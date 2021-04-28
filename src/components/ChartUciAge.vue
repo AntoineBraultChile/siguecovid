@@ -28,7 +28,8 @@
 .graphUci{
   width:50%;
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  box-shadow: 0px 3px 8px #e8e8e8;
+  /* box-shadow: 0px 3px 8px #e8e8e8; */
+  box-shadow: 0px 0px 5px 5px #e8e8e8;
 
   border-radius:45px;
   background-color: white;
@@ -42,7 +43,7 @@
   justify-content: center;
 }
 
-@media all and (max-width: 960px) {
+@media all and (max-width: 1100px) {
 
  #block_graph{
    flex-direction:column;
@@ -153,7 +154,18 @@ export default {
   },
   computed:{
     update: function(){
-      return moment(this.uciChile.labels[this.uciChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+      let now = new Date();
+      now = moment(now).format("DD-MM-YYYY");
+      let lastUpdate = moment(this.uciChile.labels[this.uciChile.labels.length-1], "YYYY-MM-DD").format("DD-MM-YYYY")
+      if(now == lastUpdate){
+        return 'hoy'
+      }
+      else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+        return 'ayer'
+      }
+      else{
+        return lastUpdate
+      }
     }
   },
   async created(){
