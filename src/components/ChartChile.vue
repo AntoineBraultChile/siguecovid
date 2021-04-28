@@ -1,12 +1,14 @@
 <template>
-  <div class="ActivityGraph">
+  <div class="ChartChile">
+    <h2 id='slogan'>   La pandemia de covid-19 en Chile    </h2>
+
+    <!-- Aquí están los gráficos de la evolución diaria de los  casos nuevos,
+      la positividad, el número de pruebas PCR, el número de personas en la unidad de cuidados intensivos y los fallecidos en Chile. -->
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
-      <p id='slogan'>        Visualiza fácilmente en tiempo real los datos de Covid-19 en Chile y en regiones.
-      </p>
       <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
     </div>
-    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-around' v-if="dataCovidChile.labelsUci.length > 0">
+    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="dataCovidChile.labelsUci.length > 0">
       <div class='graph'>
         <!-- <bar-chart  :chartData="getRegionValues('Cases')" :options="getRegionOptions('Cases')"> </bar-chart> -->
         <bar-chart  :chartData="getChartWithMean('Cases')" :options="getOptionsChartWithMean('Cases')"> </bar-chart>
@@ -22,17 +24,25 @@
       <div class='graph'>
         <bar-chart  :chartData="getRegionValues('Deaths')" :options="getRegionOptions('Deaths')"> </bar-chart>
       </div>
-
     </div>
 
-  </div>
+</div>
 </template>
 
 <style>
 select{
   margin-left:10px;
 }
+.ChartChile{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+}
 #slogan{
+  max-width:800px;
+  text-align:justify;
+  font-size:20px;
   font-weight: bold;
 }
 .optionsGraph{
@@ -47,13 +57,12 @@ select{
 .graph{
   width:45%;
   /* border: solid 2px; */
-  margin-bottom:10px;
+  margin:5px 5px 5px 5px;
   /* border-color: #e8e8e8; */
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
   box-shadow: 0px 0px 5px 5px #e8e8e8;
-
-  border-radius: 25px;
+  border-radius: 7px;
   background-color: white;
   padding:10px 10px 10px 10px;
 
@@ -70,9 +79,12 @@ label{
 
 
 @media all and (max-width: 1100px) {
-
+  #slogan{
+        font-size:20px;
+  }
   .graph{
     width:100%;
+    margin:10px 10px 10px 10px;
   }
   .optionsGraph{
     display:flex;

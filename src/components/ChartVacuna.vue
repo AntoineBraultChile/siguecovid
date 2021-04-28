@@ -1,5 +1,6 @@
 <template>
   <div class="ChartVacuna">
+    <h2 id='slogan'>Avances de la campaña de vacunación contra el covid-19 en chile </h2>
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
       <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
@@ -13,10 +14,10 @@
         <span class='dosis1' > {{(Math.round(this.vacunaChile['primera dosis'].slice(-1)[0]*190000)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span class='dosis2'> {{(Math.round(this.vacunaChile['segunda dosis'].slice(-1)[0]*190000)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  </span>
       </div>
-      <div class='graphVac'>
+      <div class='wrapper'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
       </div>
-      <div class='graphVac'>
+      <div class='wrapper'>
         <bar-chart  :chartData="renderChartVacunaPorDia()" :options='optionsPorDia'> </bar-chart>
       </div>
     </div>
@@ -25,7 +26,20 @@
 </template>
 
 <style>
+.ChartVacuna{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+}
+#slogan{
+  max-width:800px;
+  text-align:justify;
+  font-size:20px;
+  font-weight: bold;
+  padding:0px 5px 0px 5px;
 
+}
 
 .dosis1{
   /* border:solid black 2px; */
@@ -33,9 +47,9 @@
   color:#2c3e50;
   /* color:white; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 5px 5px #e8e8e8;
+  box-shadow: 0px 0px 3px 3px #e8e8e8;
 
-  border-radius:45px;
+  border-radius:7px;
   background-color: #82CFFD;
   padding:10px 10px 10px 10px;
   margin-top:5px;
@@ -46,9 +60,9 @@
   color:#2c3e50;
   /* color:white; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 5px 5px #e8e8e8;
+  box-shadow: 0px 0px 3px 3px #e8e8e8;
 
-  border-radius:45px;
+  border-radius:5px;
   background-color:#eba434;
   /* background-color: #dd4b39; */
   padding:10px 10px 10px 10px;
@@ -69,7 +83,6 @@
 .optionsGraph{
   display:flex;
   flex-direction:row;
-
   justify-content: center;
 
 }
@@ -77,16 +90,17 @@
 .optionsGraph p{
   padding: 0px 20px 0px 20px;
 }
-.graphVac{
-  width:45%;
 
+.wrapper{
+  width:45%;
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 5px 5px #e8e8e8;
-
-  border-radius:45px;
+  box-shadow: 0px 0px 3px 3px #e8e8e8;
+  border-radius:7px;
   background-color: white;
   padding:10px 10px 10px 10px;
+  margin:5px 5px 5px 5px;
+
   margin-top:5px;
   margin-bottom:5px;
 
@@ -95,14 +109,18 @@
 #block_graph{
   display:flex;
   flex-direction:row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 
 }
 
 @media all and (max-width: 1100px) {
+  #slogan{
 
+    font-size:15px;
+
+  }
 
   .optionDosis{
     width:100%;
@@ -118,7 +136,7 @@
 
   }
 
-  .graphVac{
+  .wrapper{
     width:100%;
 
   }

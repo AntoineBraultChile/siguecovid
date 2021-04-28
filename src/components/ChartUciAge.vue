@@ -1,5 +1,7 @@
 <template>
   <div class="ChartUciAge">
+    <h2 id='slogan'>Personas actualmente en unidad de cuidados intensivos por edad en Chile. </h2>
+
     <div class="optionsGraph">
       <p> Última actualización : {{update}}</p>
       <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
@@ -16,6 +18,19 @@
 
 <style scoped>
 
+.ChartUciAge{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+}
+#slogan{
+  max-width:800px;
+  text-align:justify;
+  font-size:20px;
+  font-weight: bold;
+  padding:0px 5px 0px 5px;
+}
 .optionsGraph{
   display:flex;
   flex-direction:row;
@@ -31,7 +46,7 @@
   /* box-shadow: 0px 3px 8px #e8e8e8; */
   box-shadow: 0px 0px 5px 5px #e8e8e8;
 
-  border-radius:45px;
+  border-radius:7px;
   background-color: white;
   padding:10px;
 }
@@ -44,6 +59,10 @@
 }
 
 @media all and (max-width: 1100px) {
+  #slogan{
+
+    font-size:15px;
+  }
 
  #block_graph{
    flex-direction:column;

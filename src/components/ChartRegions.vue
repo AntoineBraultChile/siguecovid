@@ -1,6 +1,9 @@
 <template>
-  <div class="ActivityGraph">
+  <div class="ChartRegion">
+    <h2 id='slogan'>   La pandemia de covid-19 en las regiones de Chile   </h2>
+
     <div class="optionsGraph">
+
       <p> Última actualización : {{update}}</p>
 
         <p>
@@ -36,6 +39,19 @@
   </template>
 
   <style>
+
+  .ChartRegion{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+  }
+  #slogan{
+    max-width:800px;
+    text-align:justify;
+    font-size:20px;
+    font-weight: bold;
+  }
   .optionsGraph{
     display:flex;
     flex-direction:row;
@@ -54,11 +70,14 @@
     display:flex;
     flex-direction:row;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
   }
 
   @media all and (max-width: 1100px) {
+    #slogan{
 
+      font-size:15px;
+    }
    #block_graph{
      flex-direction:column;
    }

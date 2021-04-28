@@ -12,7 +12,7 @@
           <!-- <i class="fas fa-user-secret"></i> Sigue Covid Chile -->
           <h1><i class="fas fa-user-secret" style="color:black"></i>  <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue</span>
             <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
-            <span style='font-weight:350;font-size:15px;'>   en Chile</span></h1>
+            <span style='color:black;font-weight:350;font-size:15px;'>   en Chile</span></h1>
         </router-link>
         <!-- <hr> -->
     </div>
