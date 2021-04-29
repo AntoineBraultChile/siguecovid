@@ -3,7 +3,7 @@
     <div class="containerSection">
       <div class="titleContainer">
 
-    <h1 > <span id='slogan'> Personas actualmente en unidad de cuidados intensivos por edad en Chile.</span> </h1>
+    <h1 id='slogan'> Personas actualmente en unidad de cuidados intensivos por edad en Chile.</h1>
     <p> Última actualización : {{update}}</p>
 
     <div class="optionsGraph">

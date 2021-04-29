@@ -81,7 +81,7 @@ export default {
   align-items:center;
 }
 #icons .icon{
-    font-size:25px;
+    font-size:30px;
     color:black;
     /* padding-left:20px; */
 }
@@ -165,7 +165,7 @@ header{
   align-items: center;
   text-decoration:none;
   font-weight: normal;
-  font-size:25px;
+  font-size:20px;
   color: #2c3e50;
   padding-top:10px;
   padding-bottom:10px;

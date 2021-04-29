@@ -4,7 +4,7 @@
 
     <div class="containerSection">
       <div class="titleContainer">
-        <h1 >  <span id='slogan'>La pandemia de Covid-19 en Chile  </span>   </h1>
+        <h1  id='slogan'>La pandemia de Covid-19 en Chile  </h1>
         <p> Última actualización : {{update}}    </p>
         <div class="optionsGraph">
           <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
