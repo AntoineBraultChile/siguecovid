@@ -22,17 +22,30 @@
     <!-- <i class='fas fa-bars' v-on:click='navBar=true' v-if='!navBar'></i>
     <i class='fas fa-times' v-on:click='navBar=false' v-if='navBar'></i> -->
   </div>
-    <div id="nav" v-if='navBar'>
-    <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
-    <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
-    <router-link to="/uci" v-on:click.native='navBar=false'>UCI por edad</router-link>
-    <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
-
-    <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
   </div>
-
-</div>
 </header>
+<transition name="slideNavMenu">
+    <div id="nav" v-if='navBar'>
+
+
+      <div class="routeNavMobile" >
+        <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
+        <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
+        <router-link to="/uci" v-on:click.native='navBar=false'>UCI por edad</router-link>
+        <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
+        <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
+      </div>
+
+      <div class="blurred" v-on:click='navBar=false'>
+
+      </div>
+    </div>
+
+    </transition>
+
+
+
+
 </div>
 </template>
 
@@ -49,6 +62,20 @@ export default {
 
 
 <style lang="css" scoped>
+
+
+.slideNavMenu-enter-active, .slideNavMenu-leave-active {
+  /* transition: opacity .5s; */
+  /* transition: width 0%; */
+  transition: transform 200ms;
+
+}
+.slideNavMenu-enter, .slideNavMenu-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  /* opacity: 0; */
+   /* width:0%; */
+  transform: translateX(500px);
+}
+
 #icons{
   display:flex;
   align-items:center;
@@ -58,51 +85,56 @@ export default {
     color:black;
     /* padding-left:20px; */
 }
-/* .icon{
-  height:100%;
-  border:solid;
-  font-size:40px;
-} */
-/* div i{
-  font-size:25px;
-} */
+
 header{
   position: fixed;
   width:100%;
   top:0px;
-  /* border-bottom:solid 0.5px;
-  border-color: gray; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
-
   padding:0px 10px 0px 10px;
-  /* background-color: #FFFACD; */
   background-color:white;
 }
-#nav {
-  /* border:solid 0.5px;
-  border-color:gray; */
-  border-left:solid 1px;
-  border-top:solid 1px;
 
-  border-color:#e8e8e8;
-  box-shadow: 1px 1px 1px 1px #e8e8e8;
-  border-radius:7px;
+#nav {
+  height:100%;
+  width:100%;
+  /* border-left:solid 1px;
+  border-top:solid 1px; */
+  /* border-color:#e8e8e8;
+  box-shadow: -10px 0px 10px 1px #e8e8e8; */
+  /* border-radius:7px; */
   position:absolute;
-  right:10px;
+  right:0px;
   top:38px;
-  height:150px;
+  /* height:150px; */
   display:flex;
-  flex-direction:column;
-  justify-content: space-between;
-  background-color: white;
+  flex-direction:row-reverse;
+  justify-content: flex-start;
+  align-items: flex-end;
+  /* background-color: white; */
 
   /* background-color:#f9f9f9; */
   /* background-color: #FFFACD; */
 }
+.routeNavMobile{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  width:50%;
+  background-color: white;
+  border-left:solid 1px;
+  border-top:solid 1px;
+  border-color:#e8e8e8;
+  box-shadow: -5px 0px 5px 1px #e8e8e8;
+}
+
+.blurred{
+  width:50%;
+  height:100%;
+}
 
 /* .title{
   padding-top:7px;
-
 } */
 
 .title, font-awesome-icon{
@@ -121,20 +153,22 @@ header{
 } */
 
 .title a, .title a:hover{
-  height:100%;
+  height:50%;
   text-decoration:none;
   color: #2c3e50;
 }
-#nav a {
-  height:100%;
+.routeNavMobile a {
+
   display:flex;
+  border-bottom:solid 1px #2c3e50;
   justify-content: center;
   align-items: center;
   text-decoration:none;
-  font-weight: bold;
-  font-size:15px;
+  font-weight: normal;
+  font-size:25px;
   color: #2c3e50;
-  padding: 0px 10px 0px 10px;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 
 a {
@@ -146,6 +180,7 @@ a {
   /* color: #42b983; */
   /* color:#4285F4; */
   color:white;
+
   /* background-color:#2c3e50; */
   background-color: rgb(0,0,0,0.8);
 

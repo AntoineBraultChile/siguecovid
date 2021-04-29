@@ -2,7 +2,7 @@
   <div id="app">
 
   <nav-bar v-if='!mobileMode'></nav-bar>
-  <nav-bar-mobile v-if='mobileMode'> </nav-bar-mobile>
+  <nav-bar-mobile navBar='navBar' v-if='mobileMode'> </nav-bar-mobile>
 
 <div class="vues">
   <router-view/>
