@@ -83,7 +83,7 @@ export default {
 #icons .icon{
     font-size:30px;
     color:black;
-    /* padding-left:20px; */
+     /* padding-top:20px;  */
 }
 
 header{
@@ -91,7 +91,7 @@ header{
   width:100%;
   top:0px;
   box-shadow: 1px 1px 1px 1px #e8e8e8;
-  padding:0px 10px 0px 10px;
+  padding:5px 10px 5px 10px;
   background-color:white;
 }
 
@@ -105,7 +105,7 @@ header{
   /* border-radius:7px; */
   position:absolute;
   right:0px;
-  top:38px;
+  top:49px;
   /* height:150px; */
   display:flex;
   flex-direction:row-reverse;

@@ -38,7 +38,7 @@ header{
   /* border-bottom:solid 0.5px; */
   /* border-color: white; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
-  padding:0px 20px  0px 20px;
+  padding:5px 20px  0px 20px;
   /* background-color: #FFFACD; */
   /* background-color:#f9f9f9; */
   background-color: white;

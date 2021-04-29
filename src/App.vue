@@ -35,7 +35,7 @@
 @media all and (max-width: 1100px) {
   .vues{
 
-  margin-top:50px;
+  margin-top:55px;
 }
 }
 </style>
