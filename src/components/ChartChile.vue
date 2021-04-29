@@ -1,51 +1,140 @@
 <template>
   <div class="ChartChile">
-    <h2 id='slogan'>   La pandemia de covid-19 en Chile    </h2>
 
-    <!-- Aquí están los gráficos de la evolución diaria de los  casos nuevos,
-      la positividad, el número de pruebas PCR, el número de personas en la unidad de cuidados intensivos y los fallecidos en Chile. -->
-    <div class="optionsGraph">
-      <p> Última actualización : {{update}}</p>
-      <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
+
+    <div class="containerSection">
+      <div class="titleContainer">
+        <h1 >  <span id='slogan'>La pandemia de Covid-19 en Chile  </span>   </h1>
+        <p> Última actualización : {{update}}    </p>
+        <div class="optionsGraph">
+          <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
+        </div>
+      </div>
+
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovidChile.labelsUci.length > 0">
+
+        <div class="optionDosis">
+          <span class='dosis color1'> <span>{{this.dataCovidChile.ChileMeanCases.slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:15px;">media móvil de 7 días</span> </span>   </span>
+          <span class='dosis color2'> Variación semanal de los casos {{(variationCases() > 0 ? '+' : ' ')+variationCases().toString()}}%</span>
+        </div>
+        <div class="optionDosis">
+          <span class='dosis color3' >Personas en unidad de cuidados intensivos {{this.dataCovidChile.ChileUci.slice(-1)[0]}}</span>
+          <span class='dosis color4'> Fallecidos {{update}} {{this.dataCovidChile.ChileDeaths.slice(-1)[0]}}</span>
+        </div>
+
+        <div class='graph'>
+
+          <!-- <bar-chart  :chartData="getRegionValues('Cases')" :options="getRegionOptions('Cases')"> </bar-chart> -->
+          <bar-chart  :chartData="getChartWithMean('Cases')" :options="getOptionsChartWithMean('Cases')"> </bar-chart>
+        </div>
+        <div class='graph'>
+          <!-- <bar-chart  :chartData="getRegionValues('Pcr')" :options="getRegionOptions('Pcr')"> </bar-chart> -->
+          <bar-chart  :chartData="getChartPosPcr()" :options="getOptionsChartPosPcr()"> </bar-chart>
+
+        </div>
+        <div class='graph'>
+          <bar-chart  :chartData="getRegionValues('Uci')" :options="getRegionOptions('Uci')"> </bar-chart>
+        </div>
+        <div class='graph'>
+          <bar-chart  :chartData="getRegionValues('Deaths')" :options="getRegionOptions('Deaths')"> </bar-chart>
+        </div>
+      </div>
     </div>
-    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="dataCovidChile.labelsUci.length > 0">
-      <div class='graph'>
-        <!-- <bar-chart  :chartData="getRegionValues('Cases')" :options="getRegionOptions('Cases')"> </bar-chart> -->
-        <bar-chart  :chartData="getChartWithMean('Cases')" :options="getOptionsChartWithMean('Cases')"> </bar-chart>
-      </div>
-      <div class='graph'>
-        <!-- <bar-chart  :chartData="getRegionValues('Pcr')" :options="getRegionOptions('Pcr')"> </bar-chart> -->
-        <bar-chart  :chartData="getChartPosPcr()" :options="getOptionsChartPosPcr()"> </bar-chart>
+    <footer>
+      <p>
+        Como se calculan los indicatores :
+        <ul>
+          <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
+          <li> La variación semanal se calcula como la media móvil de los últimos siete días dividida por la media móvil del día anterior. </li>
+        </ul>
+      </p>
+    </footer>
 
-      </div>
-      <div class='graph'>
-        <bar-chart  :chartData="getRegionValues('Uci')" :options="getRegionOptions('Uci')"> </bar-chart>
-      </div>
-      <div class='graph'>
-        <bar-chart  :chartData="getRegionValues('Deaths')" :options="getRegionOptions('Deaths')"> </bar-chart>
-      </div>
-    </div>
-
-</div>
+  </div>
 </template>
 
 <style>
+.titleContainer{
+  width:100%;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
+  border-radius: 7px;
+  background-color: white;
+  padding:15px 10px 0px 10px;
+  margin-bottom:5px;
+}
 
-/* select{
-  margin-left:10px;
-} */
 .ChartChile{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+}
+
+footer{
+  display:flex;
+  width:80%;
+  border-top: 1px solid;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+footer p{
+  text-align:left;
+  font-size:15px;
+}
+.containerSection{
+  width:80%;
   display:flex;
   align-items: center;
   justify-content: center;
   flex-direction:column;
 }
-#slogan{
-  max-width:800px;
-  text-align:justify;
-  font-size:20px;
-  font-weight: bold;
+
+.optionDosis{
+  width:49%;
+  display:flex;
+  flex-direction:row;
+  justify-content: space-around;
+  align-items: space-around ;
 }
+
+.dosis{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight: bold;
+  color:#2c3e50;
+  border-radius:7px;
+  padding:10px 5px 10px 5px;
+  margin-top:5px;
+  margin-bottom:5px;
+  margin-left:10px;
+  margin-right:10px;
+
+}
+.color1{
+  border: solid 1px rgb(147,219,112);
+  background-color: rgb(147,219,112,0.4);
+}
+.color2{
+  border: solid 1px rgb(130,207,253);
+  background-color:rgb(130,207,253,0.4);
+}
+.color3{
+  border: solid 1px 	rgb(221,75,57);
+  background-color:	rgb(221,75,57,0.4);
+
+}
+.color4{
+  border: solid 1px rgb(35, 43, 43);
+  background-color:rgb(35, 43, 43,0.4);
+}
+
+
+#slogan{
+  font-size:25px;
+}
+
 .optionsGraph{
   display:flex;
   flex-direction:row;
@@ -57,36 +146,71 @@
 }
 
 .graph{
-  width:45%;
+  width:49.5%;
   /* border: solid 2px; */
-  margin:5px 5px 5px 5px;
+  /* margin:0px 10px 5px   6px; */
+  margin:5px 0px 5px 0px;
   /* border-color: #e8e8e8; */
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 5px 5px #e8e8e8;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
   background-color: white;
-  padding:10px 10px 10px 10px;
-
+  padding:0px 0px 10px 0px;
 }
 
 #block_graph{
-  width:100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
-/*
-label{
-  margin-right:10px;
-} */
-
 
 
 @media all and (max-width: 1100px) {
+  footer{
+    width:100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .containerSection{
+    padding-left: 10px;
+    padding-right: 10px;
+
+  }
+  .titleContainer{
+    width:100%;
+    margin:5px 20px 5px 20px;
+  }
+  .containerSection{
+    width:100%;
+  }
+
+  .dosis.color1, .dosis.color3{
+    width:50%;
+    margin:5px 5px 5px 0px;
+
+  }
+  .dosis.color2, .dosis.color4{
+    width:50%;
+    margin:5px 0px 5px 5px;
+  }
+  .optionDosis{
+    width:100%;
+  }
+  p{
+    font-size:15px;
+  }
+  #block_graph{
+    width:100%;
+    padding:0px 0px 0px 0px;
+    font-size:15px;
+  }
   #slogan{
-        font-size:15px;
+    font-size:20px;
   }
   .graph{
     width:100%;
-    margin:10px 10px 10px 10px;
+    margin:5px 0px 5px 0px;
   }
   .optionsGraph{
     display:flex;
@@ -114,112 +238,62 @@ export default {
     'choose-date': ChooseDate
   },
   metaInfo() {
-       return {
-           title: "Sigue Covid en Chile - Siga  la epidemia de covid-19 y el proceso de vacunación en chile y en regiones",
-           meta: [
-               { name: 'description',
-                content:  `Sigue Covid facilita la visualización de datos sobre la epidemia de covid-19 en Chile
-                y en las regiones del país. Encontrará información actualizada diariamente sobre el número de nuevos casos, pruebas de PCR,
-                personas en  unidad de cuidados intensivos y fallecidos. También podrá consultar el progreso de la campaña de vacunación.`},
-               {name: 'robots', content: 'index,follow'}
-           ]
-       }},
-  data () {
-    return{
-      dataCovidChile:{
-        labelsUci:[],
-        labelsPcr:[],
-        labelsCases:[],
-        labelsDeaths:[],
-        labelsPos:[],
-        ChileUci:[],
-        ChilePcr:[],
-        ChileCases:[],
-        ChileDeaths:[],
-        ChileMeanCases:[],
-        ChilePos:[]
-      },
-      fromDate: "01-01-2021",
-      listOfMonths:[],
-      backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
-      title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
-      'Pcr':'PCR',
-      'Cases':'Casos',
-      'Deaths': 'Fallecidos por COVID-19'
-    }
-  }
-},
-methods:{
-  getRegionValues(type){
-    let fromDate = this.fromDate
-    // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
-    let indexDate = this.dataCovidChile['labels'+type].indexOf(fromDate)
-
     return {
-      labels:this.dataCovidChile['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY') }),
-      datasets:[
-        {type:'bar',label:this.title[type]+ ' en Chile', backgroundColor:this.backgroundColor[type], fill:false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}]
-      }
-    },
-    getRegionOptions(type){
+      title: "Sigue Covid en Chile - Siga  la epidemia de covid-19 y el proceso de vacunación en chile y en regiones",
+      meta: [
+        { name: 'description',
+        content:  `Sigue Covid facilita la visualización de datos sobre la epidemia de covid-19 en Chile
+        y en las regiones del país. Encontrará información actualizada diariamente sobre el número de nuevos casos, pruebas de PCR,
+        personas en  unidad de cuidados intensivos y fallecidos. También podrá consultar el progreso de la campaña de vacunación.`},
+        {name: 'robots', content: 'index,follow'}
+      ]
+    }},
+    data () {
       return{
-        scales: {
-          yAxes: [{
-            ticks: {
-               beginAtZero: true
-            }
-          }]
+        dataCovidChile:{
+          labelsUci:[],
+          labelsPcr:[],
+          labelsCases:[],
+          labelsDeaths:[],
+          labelsPos:[],
+          ChileUci:[],
+          ChilePcr:[],
+          ChileCases:[],
+          ChileDeaths:[],
+          ChileMeanCases:[],
+          ChilePos:[],
         },
-        title:{
-          display:true,
-          text:this.title[type]+ ' en Chile',
-          fontSize:20
-        },
-        legend: {
-          display:false,
-        },
-        responsive:true,
-        maintainAspectRatio:false
-      }},
-      getChartWithMean(type){
+        fromDate: "01-01-2021",
+        listOfMonths:[],
+        backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
+        title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
+        'Pcr':'PCR',
+        'Cases':'Casos',
+        'Deaths': 'Fallecidos por Covid-19'
+      }
+    }
+  },
+  methods:{
+    variationCases(){
+      return Math.round(-(1-this.dataCovidChile.ChileMeanCases.slice(-1)[0]/this.dataCovidChile.ChileMeanCases.slice(-8)[0])*1000)/10
+    },
+    getRegionValues(type){
+      let fromDate = this.fromDate
+      // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
+      let indexDate = this.dataCovidChile['labels'+type].indexOf(fromDate)
 
-        let fromDate = this.fromDate
-        let indexDate = this.dataCovidChile['labels'+type].indexOf(fromDate)
-        // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
-        return{
-          labels:this.dataCovidChile['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY') }),
-          datasets:[
-            {type:'line', label:'Media de 7 dias',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovidChile['ChileMean'+type].slice(indexDate-7)},
-            {type:'bar',label:this.title[type]+' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}
-          ]
+      return {
+        labels:this.dataCovidChile['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY') }),
+        datasets:[
+          {type:'bar',label:this.title[type]+ ' en Chile', backgroundColor:this.backgroundColor[type], fill:false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}]
         }
       },
-      getChartPosPcr(){
-        // compute the positivity
-        let Pcr= this.dataCovidChile['ChilePcr']
-        let Cases = this.dataCovidChile['ChileCases']
-        let Pos=[]
-        for (let i=0;i<Pcr.length;i++){
-          Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
-        }
-        Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
-        let fromDate = this.fromDate
-        let indexDate = this.dataCovidChile['labelsPcr'].indexOf(fromDate)
-        // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
-        return{
-          labels:this.dataCovidChile['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')}),
-          datasets:[
-            {type:'line', label:'Positividad (media de 7 dias)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
-            {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovidChile['ChilePcr'].slice(indexDate)}
-          ]
-        }
-      },
-      getOptionsChartWithMean(type){
+      getRegionOptions(type){
         return{
           scales: {
             yAxes: [{
               ticks: {
-                 beginAtZero: true
+                beginAtZero: true
               }
             }]
           },
@@ -228,46 +302,99 @@ methods:{
             text:this.title[type]+ ' en Chile',
             fontSize:20
           },
+          legend: {
+            display:false,
+          },
           responsive:true,
           maintainAspectRatio:false
-        }
-      },
-      getOptionsChartPosPcr(){
-        return{
-          scales: {
-            yAxes: [{
-              id: 'Pos',
-              type: 'linear',
-              position: 'left',
-              ticks: {
-                 beginAtZero: true,
-                 callback: function(tick) {
-                  return tick.toString() + '%';
+        }},
+        getChartWithMean(type){
+
+          let fromDate = this.fromDate
+          let indexDate = this.dataCovidChile['labels'+type].indexOf(fromDate)
+          // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
+          return{
+            labels:this.dataCovidChile['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY') }),
+            datasets:[
+              {type:'line', label:'Media móvil de 7  días',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovidChile['ChileMean'+type].slice(indexDate-7)},
+              {type:'bar',label:this.title[type]+' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovidChile['Chile'+type].slice(indexDate)}
+            ]
+          }
+        },
+        getChartPosPcr(){
+          // compute the positivity
+          let Pcr= this.dataCovidChile['ChilePcr']
+          let Cases = this.dataCovidChile['ChileCases']
+          let Pos=[]
+          for (let i=0;i<Pcr.length;i++){
+            Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
+          }
+          Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
+          let fromDate = this.fromDate
+          let indexDate = this.dataCovidChile['labelsPcr'].indexOf(fromDate)
+          // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
+          return{
+            labels:this.dataCovidChile['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')}),
+            datasets:[
+              {type:'line', label:'Positividad (media móvil de 7 días)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
+              {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovidChile['ChilePcr'].slice(indexDate)}
+            ]
+          }
+        },
+        getOptionsChartWithMean(type){
+          return{
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
                 }
-              }
-            }, {
-              id: 'Pcr',
-              type: 'linear',
-              position: 'right',
-              // ticks: {
-              //   max: 1,
-              //   min: 0
-              // }
-            }]
-          },
-          title:{
-            display:true,
-            text:'Positividad y PCR en Chile',
-            fontSize:20
-          },
-          responsive:true,
-          maintainAspectRatio:false
+              }]
+            },
+            title:{
+              display:true,
+              text:this.title[type]+ ' en Chile',
+              fontSize:20
+            },
+            responsive:true,
+            maintainAspectRatio:false
+          }
+        },
+        getOptionsChartPosPcr(){
+          return{
+            scales: {
+              yAxes: [{
+                id: 'Pos',
+                type: 'linear',
+                position: 'left',
+                ticks: {
+                  beginAtZero: true,
+                  callback: function(tick) {
+                    return tick.toString() + '%';
+                  }
+                }
+              }, {
+                id: 'Pcr',
+                type: 'linear',
+                position: 'right',
+                // ticks: {
+                //   max: 1,
+                //   min: 0
+                // }
+              }]
+            },
+            title:{
+              display:true,
+              text:'Positividad y PCR en Chile',
+              fontSize:20
+            },
+            responsive:true,
+            maintainAspectRatio:false
+          }
+        },
+        changeFromDate(event){
+          this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
         }
       },
-      changeFromDate(event){
-        this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
-      }
-    },
       computed:{
         update: function(){
           let now = new Date();
@@ -283,7 +410,7 @@ methods:{
             return lastUpdate
           }
         }
-    },
+      },
       async created(){
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
           this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})

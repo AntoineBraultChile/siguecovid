@@ -1,6 +1,7 @@
 <template >
   <div class="about">
     <div class="aboutMe">
+        <h1 id='slogan'>A propósito</h1>
       <p>
         Me llamo Antoine Brault y soy investigador en mathemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
@@ -31,6 +32,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+#slogan{
+  font-size:25px;
+  padding-left:0px;
+}
 .about{
   display:flex;
   flex-direction:row;
@@ -40,17 +45,17 @@ export default {
 
 }
 .aboutMe{
+  text-align:left;
   max-width:800px;
   height:100%;
-  margin-top:20px;
+  /* margin-top:20px; */
   /* padding:0px 10px 0px 10px; */
   padding:10px 20px 10px 20px;
   border-radius:7px;
 
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 5px 5px #e8e8e8;
-
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
   background-color: white;
 }
 
@@ -62,6 +67,10 @@ export default {
 @media all and (max-width: 1100px) {
  .about p{
    font-size:15px;
+ }
+ #slogan{
+
+   font-size:20px;
  }
 }
 </style>

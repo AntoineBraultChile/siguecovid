@@ -1,11 +1,11 @@
 <template>
   <div class="ChartRegion">
-    <h2 id='slogan'>   La pandemia de covid-19 en las regiones de Chile   </h2>
+    <div class="containerSection">
+        <div class="titleContainer">
+    <h1 id='slogan'>   La pandemia de Covid-19 en las regiones de Chile   </h1>
+    <p> Última actualización : {{update}}</p>
 
     <div class="optionsGraph">
-
-      <p> Última actualización : {{update}}</p>
-
         <p>
           <label for="region">Elija su región </label>
           <select name="region" id="region" v-on:change="changeCurrentRegion($event)">
@@ -14,17 +14,24 @@
         </p>
         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
       </div>
-      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="dataCovid.labelsUci.length > 0">
-
-        <div class='graph'>
-          <!-- <bar-chart  :chartData="getRegionValues(currentRegion,'Cases')" :options="getRegionOptions(currentRegion,'Cases')"> </bar-chart> -->
-          <bar-chart  :chartData="getChartWithMean(currentRegion,'Cases')" :options="getOptionsChartWithMean(currentRegion,'Cases')"> </bar-chart>
-
+      </div>
+      <div class="subtitleContainer">
+        <h2><span class='subtitle'>Región {{currentRegion}}</span></h2>
+      </div>
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsUci.length > 0">
+        <div class="optionDosis">
+          <span class='dosis color1'> <span>{{dataCovid[currentRegion+'MeanCases'].slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:15px;">media móvil de 7 días</span> </span>   </span>
+          <span class='dosis color2'> Variación semanal de los casos {{(variationCases(currentRegion) > 0 ? '+' : ' ')+variationCases(currentRegion).toString()}}%</span>
+        </div>
+        <div class="optionDosis">
+          <span class='dosis color3' >Personas en unidad de cuidados intensivos {{dataCovid[currentRegion+'Uci'].slice(-1)[0]}}</span>
+          <span class='dosis color4'> Fallecidos {{update}} {{dataCovid[currentRegion+'Deaths'].slice(-1)[0]}}</span>
         </div>
         <div class='graph'>
-          <!-- <bar-chart  :chartData="getRegionValues(currentRegion,'Pcr')" :options="getRegionOptions(currentRegion,'Pcr')"> </bar-chart> -->
+          <bar-chart  :chartData="getChartWithMean(currentRegion,'Cases')" :options="getOptionsChartWithMean(currentRegion,'Cases')"> </bar-chart>
+        </div>
+        <div class='graph'>
           <bar-chart  :chartData="getChartPosPcr(currentRegion)" :options="getOptionsChartPosPcr(currentRegion)"> </bar-chart>
-
         </div>
         <div class='graph'>
           <bar-chart  :chartData="getRegionValues(currentRegion,'Uci')" :options="getRegionOptions(currentRegion,'Uci')"> </bar-chart>
@@ -32,26 +39,86 @@
         <div class='graph'>
           <bar-chart  :chartData="getRegionValues(currentRegion,'Deaths')" :options="getRegionOptions(currentRegion,'Deaths')"> </bar-chart>
         </div>
-
       </div>
+    </div>
+      <footer>
+        <p>
+
+            Como se calculan los indicatores :
+          <ul>
+            <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
+            <li> La variación semanal se calcula como la media móvil de los últimos siete días dividida por la media móvil del día anterior. </li>
+          </ul>
+        </p>
+      </footer>
 
     </div>
+
   </template>
 
-  <style>
+  <style >
+  .titleContainer{
+    width:100%;
+    box-shadow: 0px 0px 2px 2px #e8e8e8;
+    border-radius: 7px;
+    background-color: white;
+    padding:15px 10px 0px 10px;
+    margin-bottom:10px;
+  }
+  .subtitleContainer{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    box-shadow: 0px 0px 2px 2px #e8e8e8;
+    border-radius: 7px;
+    background-color: white;
+    /* padding:15px 10px 0px 10px; */
+    margin-bottom:5px;
+  }
+  .subtitleContainer h2{
+    text-align:center;
+    /* border:solid; */
 
+  }
   .ChartRegion{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  footer{
+    display:flex;
+    width:80%;
+    border-top: 1px solid;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  footer p{
+    text-align:left;
+    font-size:15px;
+  }
+  .containerSection{
+    width:80%;
     display:flex;
     align-items: center;
     justify-content: center;
     flex-direction:column;
   }
 
+  .optionDosis{
+    width:49%;
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+    align-items: space-around ;
+  }
+
+
   #slogan{
-    max-width:800px;
-    text-align:justify;
-    font-size:20px;
-    font-weight: bold;
+    font-size:25px;
   }
   .optionsGraph{
     display:flex;
@@ -59,46 +126,98 @@
     justify-content: center;
   }
 
-  .optionsGraph p{
+  /* .optionsGraph p{
     padding: 0px 20px 0px 20px;
-  }
+  } */
 
   .graph{
-    width:45%;
-    padding:10px 10px 10px 10px;
-    margin:5px 5px 5px 5px;
+    width:49.5%;
+    margin:5px 0px 5px 0px;
+    /* border-color: #e8e8e8; */
+    /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
+    /* box-shadow: 0px 3px 8px #e8e8e8; */
+    box-shadow: 0px 0px 2px 2px #e8e8e8;
+    border-radius: 7px;
+    background-color: white;
+    padding:0px 0px 10px 0px;
 
   }
 
   #block_graph{
-    width:100%;
+    /* width:100%; */
     display:flex;
-    flex-direction:row;
-    flex-wrap: wrap;
+    /* flex-direction:row;
+    flex-wrap: wrap; */
     justify-content: center;
     align-items:center;
   }
 
+  .subtitle{
+    font-size: 25px;
+    font-weight:normal;
+  }
+
   @media all and (max-width: 1100px) {
+    footer{
+      width:100%;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .containerSection{
+      padding-left: 10px;
+      padding-right: 10px;
+
+    }
+    .titleContainer{
+      width:100%;
+      margin:5px 20px 5px 20px;
+    }
+    .subtitleContainer{
+      margin-top:5px;
+    }
+    .containerSection{
+      width:100%;
+    }
+    .dosis.color1, .dosis.color3{
+      width:50%;
+      margin:5px 5px 5px 0px;
+
+    }
+    .dosis.color2, .dosis.color4{
+      width:50%;
+      margin:5px 0px 5px 5px;
+    }
+    .optionDosis{
+      width:100%;
+    }
+    #block_graph{
+      width:100%;
+      padding:0px 0px 0px 0px;
+      font-size:15px;
+
+    }
+
+    .subtitle{
+      font-size: 20px;
+      font-weight:normal;
+    }
+
     #slogan{
 
+      font-size:20px;
+    }
+    p{
       font-size:15px;
     }
-   #block_graph{
-     flex-direction:column;
-   }
 
-   .graph{
-     width:100%;
-     margin:10px 10px 10px 10px;
-     /* margin:5px 15px 5px 5px; */
+    .graph{
+      width:100%;
+      margin:5px 0px 5px 0px;
+    }
 
-
-   }
    .optionsGraph{
-     display:flex;
-     flex-direction:column;
-     justify-content: center;
+       display:flex;
+       justify-content: center;
    }
   }
 
@@ -147,7 +266,7 @@
         title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
         'Pcr':'PCR',
         'Cases':'Casos',
-        'Deaths': 'Fallecidos por COVID-19'
+        'Deaths': 'Fallecidos por Covid-19'
       },
       backgroundColor:{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
         fromDate: "01-01-2021",
@@ -170,6 +289,9 @@
       }
     },
     methods:{
+      variationCases(region){
+        return Math.round(-(1-this.dataCovid[region+'MeanCases'].slice(-1)[0]/this.dataCovid[region+'MeanCases'].slice(-8)[0])*1000)/10;
+      },
       getRegionValues(name,type){
       let fromDate = this.fromDate
       // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
@@ -209,7 +331,7 @@
       return{
         labels:this.dataCovid['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
         datasets:[
-          {type:'line', label:'Media de 7 dias', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
+          {type:'line', label:'Media móvil de 7  días', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
           {type:'bar',label:this.title[type]+ ' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
         ]
       }
@@ -247,7 +369,7 @@
       return{
         labels:this.dataCovid['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
         datasets:[
-          {type:'line', label:'Positividad (media de 7 dias)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
+          {type:'line', label:'Positividad (media móvil de 7 días)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
           {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)}
         ]
       }

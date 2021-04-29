@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-        crossorigin="anonymous">
 
   <nav-bar v-if='!mobileMode'></nav-bar>
   <nav-bar-mobile v-if='mobileMode'> </nav-bar-mobile>
@@ -32,14 +28,14 @@
 
 
 .vues{
-  margin-top:100px;
+  margin-top:70px;
   /* padding-top:20px; */
 }
 
 @media all and (max-width: 1100px) {
   .vues{
 
-  margin-top:60px;
+  margin-top:50px;
 }
 }
 </style>

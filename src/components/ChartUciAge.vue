@@ -1,35 +1,59 @@
 <template>
   <div class="ChartUciAge">
-    <h2 id='slogan'>Personas actualmente en unidad de cuidados intensivos por edad en Chile. </h2>
+    <div class="containerSection">
+      <div class="titleContainer">
+
+    <h1 > <span id='slogan'> Personas actualmente en unidad de cuidados intensivos por edad en Chile.</span> </h1>
+    <p> Última actualización : {{update}}</p>
 
     <div class="optionsGraph">
-      <p> Última actualización : {{update}}</p>
       <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
     </div>
-    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="uciChile.labels.length > 0">
+  </div>
+    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
 
       <div class='graphUci'>
         <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
       </div>
     </div>
+  </div>
 
   </div>
 </template>
 
 <style scoped>
 
+.titleContainer{
+  width:100%;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
+  border-radius: 7px;
+  background-color: white;
+  padding:15px 10px 0px 10px;
+  margin-bottom:5px;
+}
 .ChartUciAge{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+
+}
+.containerSection{
+  width:80%;
   display:flex;
   align-items: center;
   justify-content: center;
   flex-direction:column;
 }
+
 #slogan{
-  max-width:800px;
-  text-align:justify;
+  /* text-align:justify; */
+  font-size:25px;
+
+  /* padding:0px 10px 0px 10px; */
+}
+.titleContainer p{
   font-size:20px;
-  font-weight: bold;
-  padding:0px 10px 0px 10px;
 }
 .optionsGraph{
   display:flex;
@@ -37,40 +61,46 @@
   justify-content: center;
 }
 
-.optionsGraph p{
+/* .optionsGraph p{
   padding: 0px 20px 0px 20px;
-}
+} */
 .graphUci{
-  width:50%;
-  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 5px 5px #e8e8e8;
-
+  margin-top:10px;
+  width:100%;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius:7px;
   background-color: white;
 
 }
 
 #block_graph{
-
+  width:100%;
   display:flex;
   flex-direction:row;
   justify-content: center;
 }
 
 @media all and (max-width: 1100px) {
-  #slogan{
-
-    font-size:15px;
+  .containerSection{
+    width:100%;
   }
 
+  #slogan{
+    font-size:20px;
+  }
+.titleContainer  p{
+    font-size:15px;
+  }
  #block_graph{
    flex-direction:column;
+   padding:0px 0px 0px 0px;
+
  }
 
  .graphUci{
    width:100%;
-   margin:10px 10px 10px 10px;
+   margin-top:5px;
+
 
  }
  .optionsGraph{
@@ -99,9 +129,10 @@ export default {
            title: "Numero de personas en unidad de cuidados intensivos por Covid-19 y por edad en Chile",
            meta: [
                { name: 'description', content: `Grafico del numero de personas en unidad de cuidados intensivos por Covid-19 y por edad en Chile`},
-               {name: 'robots', content: 'index,follow'}
+               { name: 'robots', content: 'index,follow'}
            ]
-       }},
+       }
+     },
   data () {
     return{
       uciChile:{

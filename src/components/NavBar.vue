@@ -5,11 +5,10 @@
     <div class="d-flex justify-content-between">
         <router-link to="/">
     <div class="title">
-
-<h1><i class="fas fa-user-secret" style="color:black"></i>
+  <font-awesome-icon icon="virus" style="color:black" />
+  <!-- <i class="fas fa-user-secret" style="color:black"></i> -->
   <span style='font-weight:bold; color:black;font-family:Avenir'> Sigue</span>
-  <span style='color:black;opacity:0.4;font-weight:300;'>Covid</span>
-  <span style='color:black;font-weight:350;font-size:30px;'> en Chile</span></h1>
+  <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span> <span style='color:black;font-weight:350;font-size:30px;'> en Chile</span>
     </div>
 </router-link>
   <div id="nav">
@@ -43,20 +42,20 @@ header{
   /* background-color: #FFFACD; */
   /* background-color:#f9f9f9; */
   background-color: white;
-
+  z-index:100;
 }
 #nav {
   display:flex;
   align-items:center;
 }
 .title{
-  padding-top:7px;
-  display:flex;
+  /* padding-top:7px; */
+  /* display:flex;
   flex-direction:row;
   justify-content:space-between;
-  align-items:center;
+  align-items:center; */
 }
-.title h1, i{
+.title, font-awesome-icon{
   font-size:35px;
 }
 
@@ -65,6 +64,8 @@ a .title , header a:hover{
   color: #2c3e50;
 }
 #nav a {
+  color:black;
+
   display:flex;
   justify-content:center;
   align-items: center;

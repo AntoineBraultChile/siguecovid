@@ -1,18 +1,24 @@
 <template>
   <div class="ChartVacuna">
-    <h2 id='slogan'>Avances de la campaña de vacunación contra el covid-19 en chile </h2>
-    <div class="optionsGraph">
+    <div class="containerSection">
+      <div class="titleContainer">
+
+      <h1 id='slogan'>Avances de la campaña de vacunación contra el Covid-19 en chile </h1>
       <p> Última actualización : {{update}}</p>
-      <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
-    </div>
-    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-center' v-if="vacunaChile.labels.length > 0">
+
+        <div class="optionsGraph">
+          <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
+        </div>
+      </div>
+
+    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="vacunaChile.labels.length > 0">
       <div class="optionDosis">
-        <div class='dosis1'> {{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis (+ {{Math.round((this.vacunaChile['primera dosis'].slice(-1)[0]-this.vacunaChile['primera dosis'].slice(-2)[0])*10)/10}}%) </div>
-        <div class='dosis2'> {{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis  (+ {{Math.round((this.vacunaChile['segunda dosis'].slice(-1)[0]-this.vacunaChile['segunda dosis'].slice(-2)[0])*10)/10}}%)</div>
+        <span class='dosis color1'> <span>{{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis <span> (+{{Math.round((this.vacunaChile['primera dosis'].slice(-1)[0]-this.vacunaChile['primera dosis'].slice(-2)[0])*10)/10}}%)</span></span>  </span>
+        <span class='dosis color2'> <span>{{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis <span> (+{{Math.round((this.vacunaChile['segunda dosis'].slice(-1)[0]-this.vacunaChile['segunda dosis'].slice(-2)[0])*10)/10}}%)</span></span> </span>
       </div>
       <div class="optionDosis">
-        <span class='dosis1' > {{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis (+{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} )  </span>
-        <span class='dosis2'> {{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis  (+{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} )</span>
+        <span class='dosis color1' > <span>{{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} primera dosis <span> (+{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}})</span></span> </span>
+        <span class='dosis color2'> <span>{{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }} segunda dosis <span> (+{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}})</span></span> </span>
       </div>
       <div class='wrapper'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
@@ -21,127 +27,151 @@
         <bar-chart  :chartData="renderChartVacunaPorDia()" :options='optionsPorDia'> </bar-chart>
       </div>
     </div>
-
+</div>
   </div>
 </template>
 
-<style>
+<style scoped>
+
 .ChartVacuna{
   display:flex;
   align-items: center;
   justify-content: center;
   flex-direction:column;
 }
+.titleContainer{
+  width:100%;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
+  border-radius: 7px;
+  background-color: white;
+  padding:15px 10px 0px 10px;
+  margin-bottom:5px;
+}
 
 #slogan{
-  max-width:800px;
-  text-align:justify;
-  font-size:20px;
-  font-weight: bold;
-  padding:0px 10px 0px 10px;
+  font-size:25px;
 }
 
-.dosis1{
-  /* border:solid black 2px; */
-  font-weight: bold;
-  color:#2c3e50;
-  /* color:white; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 3px 3px #e8e8e8;
-
-  border-radius:7px;
-  background-color: #82CFFD;
-  padding:10px 3px 10px 3px;
-  margin-top:5px;
-  margin-bottom:5px;
+.containerSection{
+  width:80%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
 }
-.dosis2{
-  font-weight: bold;
-  color:#2c3e50;
-  /* color:white; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 3px 3px #e8e8e8;
-
-  border-radius:5px;
-  background-color:#eba434;
-  /* background-color: #dd4b39; */
-  padding:10px 3px 10px 3px;
-  margin-top:5px;
-  margin-bottom:5px;
-}
-
-
 .optionDosis{
-  width:45%;
+  width:49%;
   display:flex;
   flex-direction:row;
   justify-content: space-around;
   align-items: space-around ;
 }
 
+.dosis{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight: bold;
+  color:#2c3e50;
+  border-radius:7px;
+  padding:10px 5px 10px 5px;
+  margin-top:5px;
+  margin-bottom:5px;
+  margin-left:10px;
+  margin-right:10px;
+}
+.color1{
+  border: solid 1px rgb(130,207,253);
+  background-color: rgb(130,207,253,0.4);
+}
+.color2{
+  border: solid 1px rgb( 	235, 164, 52);
+  background-color:rgb( 	235, 164, 52,0.4);
+}
+
 .optionsGraph{
   display:flex;
   flex-direction:row;
   justify-content: center;
-
 }
+
 
 .optionsGraph p{
   padding: 0px 20px 0px 20px;
 }
 
 .wrapper{
-  width:45%;
+  width:49.4%;
+  margin:5px 0px 5px 0px;
+
   /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
   /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 3px 3px #e8e8e8;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius:7px;
   background-color: white;
   /* padding:10px 10px 10px 10px; */
   /* margin:5px 5px 5px 5px; */
-  padding:10px 10px 10px 10px;
-  margin:5px 5px 5px 5px;
+  padding:0px 0px 10px 0px;
 
 }
 
 #block_graph{
+  padding-left:0px;
   display:flex;
-  flex-direction:row;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 @media all and (max-width: 1100px) {
+  .containerSection{
+    padding-left: 10px;
+    padding-right: 10px;
+
+  }
+  .titleContainer{
+    width:100%;
+    margin:5px 20px 5px 20px;
+  }
+  .containerSection{
+    width:100%;
+  }
   #slogan{
 
-    font-size:15px;
+    font-size:20px;
 
   }
+  .dosis.color1{
+    width:50%;
+    margin:5px 5px 5px 0px;
 
+}
+.dosis.color2{
+  width:50%;
+  margin:5px 0px 5px 5px;
+}
   .optionDosis{
     width:100%;
-    /* flex-direction:column; */
-
-
   }
-
 
   #block_graph{
     flex-direction:column;
     font-size:15px;
 
-  }
 
+  }
   .wrapper{
     width:100%;
-    margin:10px 10px 10px 10px;
+    margin:5px 0px 5px 0px;
+
+    /* margin:10px 0px 10px 0px; */
 
   }
   .optionsGraph{
     display:flex;
     flex-direction:column;
     justify-content: center;
+    font-size:15px;
+
   }
 }
 </style>
