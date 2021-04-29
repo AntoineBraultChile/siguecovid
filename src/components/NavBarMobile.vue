@@ -26,8 +26,6 @@
 </header>
 <transition name="slideNavMenu">
     <div id="nav" v-if='navBar'>
-
-
       <div class="routeNavMobile" >
         <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
         <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
@@ -36,12 +34,12 @@
         <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
       </div>
 
-      <div class="blurred" v-on:click='navBar=false'>
-
-      </div>
     </div>
+  </transition>
 
-    </transition>
+    <div class="blurred" v-on:click='navBar=false' v-if='navBar'>
+  </div>
+
 
 
 
@@ -63,18 +61,21 @@ export default {
 
 <style lang="css" scoped>
 
-
 .slideNavMenu-enter-active, .slideNavMenu-leave-active {
   /* transition: opacity .5s; */
   /* transition: width 0%; */
-  transition: transform 200ms;
+  z-index:400;
+
+  transition: transform 100ms;
 
 }
 .slideNavMenu-enter, .slideNavMenu-leave-to /* .fade-leave-active below version 2.1.8 */ {
   /* opacity: 0; */
    /* width:0%; */
+  z-index:400;
   transform: translateX(500px);
 }
+
 
 #icons{
   display:flex;
@@ -96,27 +97,18 @@ header{
 }
 
 #nav {
-  height:100%;
-  width:100%;
-  /* border-left:solid 1px;
-  border-top:solid 1px; */
-  /* border-color:#e8e8e8;
-  box-shadow: -10px 0px 10px 1px #e8e8e8; */
-  /* border-radius:7px; */
   position:absolute;
   right:0px;
   top:49px;
-  /* height:150px; */
+  height:100%;
+  width:100%;
   display:flex;
   flex-direction:row-reverse;
   justify-content: flex-start;
   align-items: flex-end;
-  /* background-color: white; */
-
-  /* background-color:#f9f9f9; */
-  /* background-color: #FFFACD; */
 }
 .routeNavMobile{
+  position:absolute;
   height:100%;
   display:flex;
   flex-direction:column;
@@ -125,12 +117,19 @@ header{
   border-left:solid 1px;
   border-top:solid 1px;
   border-color:#e8e8e8;
-  box-shadow: -5px 0px 5px 1px #e8e8e8;
+  box-shadow: -2px 0px 2px 1px #e8e8e8;
+  z-index:3;
 }
 
 .blurred{
-  width:50%;
+  position:absolute;
+  top:49px;
+  left: 0px;
+  width:100%;
   height:100%;
+  opacity:0.3;
+  background-color: black;
+  z-index:2;
 }
 
 /* .title{
