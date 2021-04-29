@@ -105,7 +105,7 @@ footer p{
   font-weight: bold;
   color:#2c3e50;
   border-radius:7px;
-  padding:10px 5px 10px 5px;
+  padding: 5px 5px 5px 5px;
   margin-top:5px;
   margin-bottom:5px;
   margin-left:10px;
@@ -161,7 +161,7 @@ footer p{
 
 #block_graph{
   display:flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
 }
 

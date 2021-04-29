@@ -74,7 +74,7 @@
   font-weight: bold;
   color:#2c3e50;
   border-radius:7px;
-  padding:10px 5px 10px 5px;
+  padding: 5px 5px 5px 5px;
   margin-top:5px;
   margin-bottom:5px;
   margin-left:10px;
@@ -118,8 +118,8 @@
 #block_graph{
   padding-left:0px;
   display:flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 @media all and (max-width: 1100px) {

@@ -149,7 +149,7 @@
     /* flex-direction:row;
     flex-wrap: wrap; */
     justify-content: center;
-    align-items:center;
+    align-items: stretch;
   }
 
   .subtitle{
