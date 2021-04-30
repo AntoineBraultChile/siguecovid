@@ -24,7 +24,7 @@
   </div>
   </div>
 </header>
-    <div id="nav" >
+<!-- <div id="nav" v-if='navBar'> -->
 <transition name="slideNavMenu">
 
       <div class="routeNavMobile" v-if='navBar'>
@@ -38,7 +38,7 @@
   </transition>
   <div class="blurred" v-on:click='navBar=false' v-if='navBar'>
 </div>
-</div>
+<!-- </div> -->
 
 </div>
 </template>
@@ -112,9 +112,13 @@ header{
 }
 
 .routeNavMobile{
-  position:absolute;
+  position:fixed;
+  top:49px;
+
+  right: 0px;
+
   height:100%;
-  display:flex;
+  display:flex-end;
   flex-direction:column;
   width:50%;
   background-color: white;
@@ -149,17 +153,6 @@ header{
   font-size:25px;
 }
 
-/* .title a{
-  border:solid;
-  align-items:center;
-  display:inline;
-  justify-content: center;
-  text-align:center;
-
-  font-size:30px;
-  margin-bottom:0px;
-} */
-
 .title a, .title a:hover{
   height:50%;
   text-decoration:none;
@@ -184,7 +177,7 @@ a {
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active, #nav a:hover{
+.routeNavMobile a.router-link-exact-active, .routeNavMobile a:hover{
   /* color: #42b983; */
   /* color:#4285F4; */
   color:white;
