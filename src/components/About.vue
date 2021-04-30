@@ -3,7 +3,7 @@
     <div class="aboutMe">
         <h1 id='slogan'>A propósito</h1>
       <p>
-        Me llamo Antoine Brault y soy investigador en mathemáticas aplicadas en Chile.
+        Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
       </p>
 
