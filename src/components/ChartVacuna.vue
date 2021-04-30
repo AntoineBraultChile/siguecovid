@@ -53,7 +53,9 @@
 }
 
 .containerSection{
-  width:80%;
+  /* width:80%; */
+  max-width:1400px;
+  padding:0px 10px 0px 10px;
   display:flex;
   align-items: center;
   justify-content: center;
