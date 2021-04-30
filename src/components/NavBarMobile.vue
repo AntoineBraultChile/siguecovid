@@ -65,15 +65,19 @@ export default {
   /* transition: opacity .5s; */
   /* transition: width 0%; */
   z-index:400;
-
   transition: transform 100ms;
 
 }
 .slideNavMenu-enter, .slideNavMenu-leave-to /* .fade-leave-active below version 2.1.8 */ {
   /* opacity: 0; */
    /* width:0%; */
-  z-index:400;
+
   transform: translateX(500px);
+}
+
+.slideNavMenu-enter-to {
+  z-index:400;
+
 }
 
 
@@ -97,7 +101,9 @@ header{
 }
 
 #nav {
-  position:absolute;
+  /* position: fixed; */
+
+  position:fixed;
   right:0px;
   top:49px;
   height:100%;
@@ -106,7 +112,9 @@ header{
   flex-direction:row-reverse;
   justify-content: flex-start;
   align-items: flex-end;
+  z-index:300;
 }
+
 .routeNavMobile{
   position:absolute;
   height:100%;
@@ -118,18 +126,23 @@ header{
   border-top:solid 1px;
   border-color:#e8e8e8;
   box-shadow: -2px 0px 2px 1px #e8e8e8;
-  z-index:3;
+  z-index:400;
 }
 
 .blurred{
-  position:absolute;
+  position:fixed;
+  /* height:100%; */
+  display:flex;
+  flex-direction:column;
+  /* width:50%; */
   top:49px;
   left: 0px;
   width:100%;
   height:100%;
   opacity:0.3;
   background-color: black;
-  z-index:2;
+  z-index:1;
+
 }
 
 /* .title{
