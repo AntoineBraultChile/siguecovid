@@ -3,7 +3,7 @@
     <div class="containerSection">
       <div class="titleContainer">
 
-      <h1 id='slogan'>Avances de la campaña de vacunación contra el Covid-19 en chile </h1>
+      <h1 id='slogan'>Avances de la campaña de vacunación contra el Covid-19 en Chile </h1>
       <p> Última actualización : {{update}}</p>
 
         <div class="optionsGraph">
