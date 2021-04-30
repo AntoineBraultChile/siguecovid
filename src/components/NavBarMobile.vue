@@ -24,9 +24,10 @@
   </div>
   </div>
 </header>
+    <div id="nav" >
 <transition name="slideNavMenu">
-    <div id="nav" v-if='navBar'>
-      <div class="routeNavMobile" >
+
+      <div class="routeNavMobile" v-if='navBar'>
         <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
         <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
         <router-link to="/uci" v-on:click.native='navBar=false'>UCI por edad</router-link>
@@ -34,15 +35,10 @@
         <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
       </div>
 
-    </div>
   </transition>
-
-    <div class="blurred" v-on:click='navBar=false' v-if='navBar'>
-  </div>
-
-
-
-
+  <div class="blurred" v-on:click='navBar=false' v-if='navBar'>
+</div>
+</div>
 
 </div>
 </template>
@@ -141,7 +137,7 @@ header{
   height:100%;
   opacity:0.3;
   background-color: black;
-  z-index:1;
+  z-index:350;
 
 }
 
