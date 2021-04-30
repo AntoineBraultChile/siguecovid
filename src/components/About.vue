@@ -2,16 +2,20 @@
   <div class="about">
     <div class="aboutMe">
         <h1 id='slogan'>A propósito</h1>
+
+        <p>
+          Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
+          y el progreso de la vacunación en Chile. Los datos proceden del
+          <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
+        </p>
+
       <p>
         Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
+        Estoy abierto a sus comentarios u observaciones para mejorar el sitio.
       </p>
 
-      <p>
-        Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
-        y el progreso de la vacunación en Chile. Los datos proceden del
-        <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
-      </p>
+
     </div>
 
 
