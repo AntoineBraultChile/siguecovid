@@ -201,11 +201,13 @@
 </style>
 
 <script>
-import BarChart from './BarChart'
-import LineChart from './LineChart'
+
+import LineChart from '../components/LineChart'
+import BarChart from '../components/BarChart'
+import Update from '../components/Update'
+
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
-import Update from './Update'
 // import ChooseDate from './ChooseDate'
 
 export default {
@@ -318,22 +320,7 @@ export default {
       }
     }
   },
-  // computed:{
-  //   update: function(){
-  //     let now = new Date();
-  //     now = moment(now).format("DD-MM-YYYY");
-  //     let lastUpdate = moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-  //     if(now == lastUpdate){
-  //       return 'hoy'
-  //     }
-  //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-  //       return 'ayer'
-  //     }
-  //     else{
-  //       return lastUpdate
-  //     }
-  //   }
-  // },
+
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
       this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});

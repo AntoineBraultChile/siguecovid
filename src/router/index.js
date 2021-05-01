@@ -13,12 +13,12 @@ export const routes = [
     path: '/',
     name: 'ChartChile',
     // component: ChartChile,
-    component: () => import(/* webpackChunkName: "about" */ '../components/ChartChile.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChartChile.vue')
   },
   {
     path: '/regions',
     name: 'ChartRegions',
-    component: () => import(/* webpackChunkName: "about" */ '../components/ChartRegions.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChartRegions.vue')
   },
   {
     path: '/uci',
@@ -26,7 +26,7 @@ export const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../components/ChartUciAge.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChartUciAge.vue')
   },
   {
     path: '/vacuna',
@@ -34,7 +34,7 @@ export const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../components/ChartVacuna.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChartVacuna.vue')
   },
   {
     path: '/about',
@@ -42,7 +42,7 @@ export const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../components/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 

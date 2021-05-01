@@ -106,12 +106,13 @@
   </style>
 
   <script>
-  import BarChart from './BarChart'
+
+  import BarChart from '../components/BarChart'
+  import ChooseDate from '../components/ChooseDate'
+  import Update from '../components/Update'
   import * as d3 from 'd3-fetch'
   import moment from 'moment';
 
-  import Update from './Update'
-  import ChooseDate from './ChooseDate'
   import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
 
@@ -294,22 +295,7 @@
         this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
       }
     },
-    // computed:{
-    //   update: function(){
-    //     let now = new Date();
-    //     now = moment(now).format("DD-MM-YYYY");
-    //     let lastUpdate = moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-    //     if(now == lastUpdate){
-    //       return 'hoy'
-    //     }
-    //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-    //       return 'ayer'
-    //     }
-    //     else{
-    //       return lastUpdate
-    //     }
-    //   }
-    // },
+
     async created(){
       const getDataCsv = (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
         d3.csv(path).then(data => {

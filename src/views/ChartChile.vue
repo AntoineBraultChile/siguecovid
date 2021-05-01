@@ -71,13 +71,15 @@
 </style>
 
 <script>
-import BarChart from './BarChart'
+import BarChart from '../components/BarChart'
+import ChooseDate from '../components/ChooseDate'
+import Update from '../components/Update'
+
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
 moment.locale('es');
 
-import ChooseDate from './ChooseDate'
-import Update from './Update'
+
 import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
 export default {
@@ -241,22 +243,7 @@ export default {
           this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
         }
       },
-      // computed:{
-      //   update: function(){
-      //     let now = new Date();
-      //     now = moment(now).format("DD-MM-YYYY");
-      //     let lastUpdate = moment(this.dataCovidChile.labelsCases[this.dataCovidChile.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-      //     if(now == lastUpdate){
-      //       return 'hoy'+'('+lastUpdate+')'
-      //     }
-      //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-      //       return 'ayer '+'('+lastUpdate+')'
-      //     }
-      //     else{
-      //       return lastUpdate
-      //     }
-      //   }
-      // },
+
       async created(){
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
           this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})

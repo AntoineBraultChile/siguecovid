@@ -14,7 +14,11 @@
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
         Estoy abierto a sus comentarios u observaciones para mejorar la página web.
       </p>
+
+
     </div>
+
+
   </div>
 </template>
 

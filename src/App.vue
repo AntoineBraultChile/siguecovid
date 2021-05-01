@@ -41,8 +41,8 @@
 </style>
 
 <script>
-import NavBar from './components/NavBar'
-import NavBarMobile from './components/NavBarMobile'
+import NavBar from './views/NavBar'
+import NavBarMobile from './views/NavBarMobile'
 
   export default{
     components:{'nav-bar':NavBar, 'nav-bar-mobile':NavBarMobile},
