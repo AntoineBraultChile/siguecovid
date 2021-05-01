@@ -4,7 +4,7 @@
       <div class="titleContainer">
 
       <h1 id='slogan'>Avances de la campaña de vacunación contra el Covid-19 en Chile </h1>
-      <p> Última actualización : {{update}}</p>
+      <!-- <p> Última actualización : {{update}}</p> -->
 
         <div class="optionsGraph">
           <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
@@ -13,12 +13,28 @@
 
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="vacunaChile.labels.length > 0">
       <div class="optionDosis">
-        <span class='dosis color1'> <span>{{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis <span> (+{{Math.round((this.vacunaChile['primera dosis'].slice(-1)[0]-this.vacunaChile['primera dosis'].slice(-2)[0])*10)/10}}%)</span></span>  </span>
-        <span class='dosis color2'> <span>{{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis <span> (+{{Math.round((this.vacunaChile['segunda dosis'].slice(-1)[0]-this.vacunaChile['segunda dosis'].slice(-2)[0])*10)/10}}%)</span></span> </span>
+        <div class='dosis color1'>
+          <span>{{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis </span>
+          <span class='en24horas'> +{{Math.round((this.vacunaChile['primera dosis'].slice(-1)[0]-this.vacunaChile['primera dosis'].slice(-2)[0])*10)/10}}% en 24 horas</span>
+          <update :labels="vacunaChile.labels"> </update>
+        </div>
+        <div class='dosis color2'>
+          <span>{{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis </span>
+          <span class='en24horas'> +{{Math.round((this.vacunaChile['segunda dosis'].slice(-1)[0]-this.vacunaChile['segunda dosis'].slice(-2)[0])*10)/10}}% en 24 horas</span>
+          <update :labels="vacunaChile.labels"> </update>
+        </div>
       </div>
       <div class="optionDosis">
-        <span class='dosis color1' > <span>{{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} primera dosis <span> (+{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}})</span></span> </span>
-        <span class='dosis color2'> <span>{{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }} segunda dosis <span> (+{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}})</span></span> </span>
+        <div class='dosis color1' >
+          <span>{{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} primera dosis</span>
+           <span class='en24horas'> +{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas</span>
+          <update :labels="vacunaChile.labels"> </update>
+        </div>
+        <div class='dosis color2'>
+          <span>{{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }} segunda dosis </span>
+          <span class='en24horas'> +{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas</span>
+          <update :labels="vacunaChile.labels"> </update>
+        </div>
       </div>
       <div class='wrapper'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
@@ -32,6 +48,10 @@
 </template>
 
 <style scoped>
+.en24horas{
+  font-size:16px;
+  font-weight:normal;
+}
 
 .ChartVacuna{
   display:flex;
@@ -71,6 +91,7 @@
 
 .dosis{
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
   font-weight: bold;
@@ -158,8 +179,9 @@
   #block_graph{
     flex-direction:column;
     font-size:16px;
-
-
+  }
+  .en24horas{
+    font-size:14px;
   }
   .wrapper{
     width:100%;
@@ -183,14 +205,15 @@ import BarChart from './BarChart'
 import LineChart from './LineChart'
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
-
+import Update from './Update'
 // import ChooseDate from './ChooseDate'
 
 export default {
   name:'ChartVacuna',
   components:{
     'line-chart': LineChart,
-    'bar-chart': BarChart
+    'bar-chart': BarChart,
+    'update':Update
     // 'choose-date': ChooseDate
   },
   metaInfo() {
@@ -295,22 +318,22 @@ export default {
       }
     }
   },
-  computed:{
-    update: function(){
-      let now = new Date();
-      now = moment(now).format("DD-MM-YYYY");
-      let lastUpdate = moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-      if(now == lastUpdate){
-        return 'hoy'
-      }
-      else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-        return 'ayer'
-      }
-      else{
-        return lastUpdate
-      }
-    }
-  },
+  // computed:{
+  //   update: function(){
+  //     let now = new Date();
+  //     now = moment(now).format("DD-MM-YYYY");
+  //     let lastUpdate = moment(this.vacunaChile.labels[this.vacunaChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
+  //     if(now == lastUpdate){
+  //       return 'hoy'
+  //     }
+  //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+  //       return 'ayer'
+  //     }
+  //     else{
+  //       return lastUpdate
+  //     }
+  //   }
+  // },
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv').then(data => {
       this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});

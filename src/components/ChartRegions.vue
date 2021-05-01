@@ -3,7 +3,7 @@
     <div class="containerSection">
         <div class="titleContainer">
     <h1 id='slogan'>   La pandemia de Covid-19 en las regiones de Chile   </h1>
-    <p> Última actualización : {{update}}</p>
+    <!-- <p> Última actualización : {{update}}</p> -->
 
     <div class="optionsGraph">
         <p>
@@ -21,12 +21,22 @@
       </div>
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsUci.length > 0">
         <div class="optionDosis">
-          <span class='dosis color1'> <span>{{dataCovid[currentRegion+'MeanCases'].slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span> </span>   </span>
-          <span class='dosis color2'> Variación semanal de los casos {{(variationCases(currentRegion) > 0 ? '+' : ' ')+variationCases(currentRegion).toString()}}%</span>
+          <div class='dosis color1'> <span>{{dataCovid[currentRegion+'MeanCases'].slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span> </span>
+            <update :labels="dataCovid['labelsCases']"> </update>
+
+           </div>
+          <div class='dosis color2'> Variación semanal de los casos {{(variationCases(currentRegion) > 0 ? '+' : ' ')+variationCases(currentRegion).toString()}}%
+            <update :labels="dataCovid['labelsPcr']"> </update>
+
+          </div>
         </div>
         <div class="optionDosis">
-          <span class='dosis color3' >Personas en unidad de cuidados intensivos {{dataCovid[currentRegion+'Uci'].slice(-1)[0]}}</span>
-          <span class='dosis color4'> Fallecidos {{update}} {{dataCovid[currentRegion+'Deaths'].slice(-1)[0]}}</span>
+          <div class='dosis color3' >Personas en unidad de cuidados intensivos {{dataCovid[currentRegion+'Uci'].slice(-1)[0]}}
+            <update :labels="dataCovid['labelsUci']"> </update>
+          </div>
+          <div class='dosis color4'> Fallecidos {{dataCovid[currentRegion+'Deaths'].slice(-1)[0]}}
+            <update :labels="dataCovid['labelsDeaths']"> </update>
+          </div>
         </div>
         <div class='graph'>
           <bar-chart  :chartData="getChartWithMean(currentRegion,'Cases')" :options="getOptionsChartWithMean(currentRegion,'Cases')"> </bar-chart>
@@ -44,8 +54,7 @@
     </div>
       <footer>
         <p>
-
-            Como se calculan los indicatores :
+          Como se calculan los indicatores :
           <ul>
             <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
             <li> La variación semanal se calcula como la media móvil de los últimos siete días dividida por la media móvil del día anterior. </li>
@@ -57,14 +66,15 @@
 
   </template>
 
+  <style src='../assets/chartChileAndRegion.css'>
+  </style>
+
   <style >
-  .titleContainer{
-    width:100%;
-    box-shadow: 0px 0px 2px 2px #e8e8e8;
-    border-radius: 7px;
-    background-color: white;
-    padding:15px 10px 0px 10px;
-    margin-bottom:10px;
+  .ChartRegion{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
   }
   .subtitleContainer{
     display:flex;
@@ -82,148 +92,17 @@
     /* border:solid; */
 
   }
-  .ChartRegion{
-    display:flex;
-    flex-direction:column;
-    align-items: center;
-    justify-content: center;
-  }
 
-  footer{
-    display:flex;
-    width:80%;
-    border-top: 1px solid;
-    margin-top: 10px;
-    padding-top: 10px;
-  }
-
-  footer p{
-    text-align:left;
-    font-size:16px;
-  }
-  .containerSection{
-    /* width:80%; */
-    max-width:1400px;
-    padding:0px 10px 0px 10px;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction:column;
-  }
-
-  .optionDosis{
-    width:49%;
-    display:flex;
-    flex-direction:row;
-    justify-content: space-around;
-    align-items: space-around ;
-  }
-
-
-  #slogan{
-    font-size:25px;
-  }
-  .optionsGraph{
-    display:flex;
-    flex-direction:row;
-    justify-content: center;
-  }
-
-  .optionsGraph p{
-    padding: 0px 10px 0px 10px;
-  }
-
-  .graph{
-    width:49.5%;
-    margin:5px 0px 5px 0px;
-    /* border-color: #e8e8e8; */
-    /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-    /* box-shadow: 0px 3px 8px #e8e8e8; */
-    box-shadow: 0px 0px 2px 2px #e8e8e8;
-    border-radius: 7px;
-    background-color: white;
-    padding:0px 0px 10px 0px;
-
-  }
-
-  #block_graph{
-    /* width:100%; */
-    display:flex;
-    /* flex-direction:row;
-    flex-wrap: wrap; */
-    justify-content: center;
-    align-items: stretch;
+  @media all and (max-width: 1100px) {
+  .subtitleContainer{
+    margin-top:5px;
   }
 
   .subtitle{
-    font-size: 25px;
+    font-size: 20px;
     font-weight:normal;
   }
-
-  @media all and (max-width: 1100px) {
-    footer{
-      width:100%;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    .containerSection{
-      padding-left: 10px;
-      padding-right: 10px;
-
-    }
-    .titleContainer{
-      width:100%;
-      margin:5px 20px 5px 20px;
-    }
-    .subtitleContainer{
-      margin-top:5px;
-    }
-    .containerSection{
-      width:100%;
-    }
-    .dosis.color1, .dosis.color3{
-      width:50%;
-      margin:5px 5px 5px 0px;
-
-    }
-    .dosis.color2, .dosis.color4{
-      width:50%;
-      margin:5px 0px 5px 5px;
-    }
-    .optionDosis{
-      width:100%;
-    }
-    #block_graph{
-      width:100%;
-      padding:0px 0px 0px 0px;
-      font-size:16px;
-
-    }
-
-    .subtitle{
-      font-size: 20px;
-      font-weight:normal;
-    }
-
-    #slogan{
-
-      font-size:20px;
-    }
-    p{
-      font-size:16px;
-    }
-
-    .graph{
-      width:100%;
-      margin:5px 0px 5px 0px;
-    }
-
-   .optionsGraph{
-       display:flex;
-       justify-content: center;
-   }
-  }
-
+}
   </style>
 
   <script>
@@ -231,6 +110,7 @@
   import * as d3 from 'd3-fetch'
   import moment from 'moment';
 
+  import Update from './Update'
   import ChooseDate from './ChooseDate'
   import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
@@ -239,7 +119,8 @@
     name:'ChartRegions',
     components:{
       'bar-chart': BarChart,
-      'choose-date': ChooseDate
+      'choose-date': ChooseDate,
+      'update': Update
     },
     metaInfo() {
          return {
@@ -413,22 +294,22 @@
         this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
       }
     },
-    computed:{
-      update: function(){
-        let now = new Date();
-        now = moment(now).format("DD-MM-YYYY");
-        let lastUpdate = moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-        if(now == lastUpdate){
-          return 'hoy'
-        }
-        else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-          return 'ayer'
-        }
-        else{
-          return lastUpdate
-        }
-      }
-    },
+    // computed:{
+    //   update: function(){
+    //     let now = new Date();
+    //     now = moment(now).format("DD-MM-YYYY");
+    //     let lastUpdate = moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
+    //     if(now == lastUpdate){
+    //       return 'hoy'
+    //     }
+    //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+    //       return 'ayer'
+    //     }
+    //     else{
+    //       return lastUpdate
+    //     }
+    //   }
+    // },
     async created(){
       const getDataCsv = (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
         d3.csv(path).then(data => {

@@ -3,7 +3,6 @@
     <div class="containerSection">
       <div class="titleContainer">
         <h1  id='slogan'>La pandemia de Covid-19 en Chile  </h1>
-        <p> Última actualización : {{update}}    </p>
         <div class="optionsGraph">
           <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
         </div>
@@ -11,12 +10,21 @@
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovidChile.labelsUci.length > 0">
 
         <div class="optionDosis">
-          <span class='dosis color1'> <span>{{this.dataCovidChile.ChileMeanCases.slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span> </span>   </span>
-          <span class='dosis color2'> Variación semanal de los casos {{(variationCases() > 0 ? '+' : ' ')+variationCases().toString()}}%</span>
+          <div class='dosis color1'> <span>{{this.dataCovidChile.ChileMeanCases.slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span>   </span>
+            <update :labels='dataCovidChile.labelsCases'> </update>
+       </div>
+          <div class='dosis color2'> <span>Variación semanal de los casos {{(variationCases() > 0 ? '+' : ' ')+variationCases().toString()}}%</span>
+            <update :labels='dataCovidChile.labelsCases'> </update>
+           </div>
         </div>
         <div class="optionDosis">
-          <span class='dosis color3' >Personas en unidad de cuidados intensivos {{this.dataCovidChile.ChileUci.slice(-1)[0]}}</span>
-          <span class='dosis color4'> Fallecidos {{update}} {{this.dataCovidChile.ChileDeaths.slice(-1)[0]}}</span>
+          <div class='dosis color3'> <span>Personas en unidad de cuidados intensivos {{this.dataCovidChile.ChileUci.slice(-1)[0]}} </span>
+            <update :labels='dataCovidChile.labelsCases'> </update>
+          </div>
+          <div class='dosis color4'> Fallecidos {{this.dataCovidChile.ChileDeaths.slice(-1)[0]}}
+            <update :labels='dataCovidChile.labelsCases'> </update>
+
+          </div>
         </div>
 
         <div class='graph'>
@@ -50,174 +58,15 @@
   </div>
 </template>
 
-<style>
-.titleContainer{
-  width:100%;
-  box-shadow: 0px 0px 2px 2px #e8e8e8;
-  border-radius: 7px;
-  background-color: white;
-  padding:15px 10px 0px 10px;
-  margin-bottom:5px;
-}
+<style src='../assets/chartChileAndRegion.css'>
+</style>
 
+<style >
 .ChartChile{
   display:flex;
   flex-direction:column;
   align-items: center;
   justify-content: center;
-}
-
-footer{
-  display:flex;
-  width:80%;
-  border-top: 1px solid;
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-footer p{
-  text-align:left;
-  font-size:16px;
-}
-.containerSection{
-  /* width:80%; */
-  max-width:1400px;
-  padding:0px 10px 0px 10px;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction:column;
-}
-
-.optionDosis{
-  width:49%;
-  display:flex;
-  flex-direction:row;
-  justify-content: space-around;
-  align-items: space-around ;
-}
-
-.dosis{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-weight: bold;
-  color:#2c3e50;
-  border-radius:7px;
-  padding: 5px 5px 5px 5px;
-  margin-top:5px;
-  margin-bottom:5px;
-  margin-left:10px;
-  margin-right:10px;
-
-}
-.color1{
-  border: solid 1px rgb(147,219,112);
-  background-color: rgb(147,219,112,0.4);
-}
-.color2{
-  border: solid 1px rgb(130,207,253);
-  background-color:rgb(130,207,253,0.4);
-}
-.color3{
-  border: solid 1px 	rgb(221,75,57);
-  background-color:	rgb(221,75,57,0.4);
-
-}
-.color4{
-  border: solid 1px rgb(35, 43, 43);
-  background-color:rgb(35, 43, 43,0.4);
-}
-
-
-#slogan{
-  font-size:25px;
-}
-
-.optionsGraph{
-  display:flex;
-  flex-direction:row;
-  justify-content: center;
-}
-
-.optionsGraph p{
-  padding: 0px 20px 0px 20px;
-}
-
-.graph{
-  width:49.5%;
-  /* border: solid 2px; */
-  /* margin:0px 10px 5px   6px; */
-  margin:5px 0px 5px 0px;
-  /* border-color: #e8e8e8; */
-  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
-  box-shadow: 0px 0px 2px 2px #e8e8e8;
-  border-radius: 7px;
-  background-color: white;
-  padding:0px 0px 10px 0px;
-}
-
-#block_graph{
-  display:flex;
-  align-items: stretch;
-  justify-content: center;
-}
-
-
-@media all and (max-width: 1100px) {
-  footer{
-    width:100%;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  .containerSection{
-    padding-left: 10px;
-    padding-right: 10px;
-
-  }
-  .titleContainer{
-    width:100%;
-    margin:5px 20px 5px 20px;
-  }
-  .containerSection{
-    width:100%;
-  }
-
-  .dosis.color1, .dosis.color3{
-    width:50%;
-    margin:5px 5px 5px 0px;
-
-  }
-  .dosis.color2, .dosis.color4{
-    width:50%;
-    margin:5px 0px 5px 5px;
-  }
-  .optionDosis{
-    width:100%;
-  }
-  p{
-    font-size:16px;
-  }
-  #block_graph{
-    width:100%;
-    padding:0px 0px 0px 0px;
-    font-size:16px;
-  }
-  #slogan{
-    font-size:20px;
-  }
-  .graph{
-    width:100%;
-    margin:5px 0px 5px 0px;
-  }
-  .optionsGraph{
-    display:flex;
-    flex-direction:column;
-    justify-content: center;
-    font-size:16px;
-
-  }
 }
 </style>
 
@@ -228,13 +77,15 @@ import moment from 'moment';
 moment.locale('es');
 
 import ChooseDate from './ChooseDate'
+import Update from './Update'
 import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
 export default {
   name:'ChartRegions',
   components:{
     'bar-chart': BarChart,
-    'choose-date': ChooseDate
+    'choose-date': ChooseDate,
+    'update': Update
   },
   metaInfo() {
     return {
@@ -375,10 +226,6 @@ export default {
                 id: 'Pcr',
                 type: 'linear',
                 position: 'right',
-                // ticks: {
-                //   max: 1,
-                //   min: 0
-                // }
               }]
             },
             title:{
@@ -394,22 +241,22 @@ export default {
           this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
         }
       },
-      computed:{
-        update: function(){
-          let now = new Date();
-          now = moment(now).format("DD-MM-YYYY");
-          let lastUpdate = moment(this.dataCovidChile.labelsCases[this.dataCovidChile.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-          if(now == lastUpdate){
-            return 'hoy'
-          }
-          else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-            return 'ayer'
-          }
-          else{
-            return lastUpdate
-          }
-        }
-      },
+      // computed:{
+      //   update: function(){
+      //     let now = new Date();
+      //     now = moment(now).format("DD-MM-YYYY");
+      //     let lastUpdate = moment(this.dataCovidChile.labelsCases[this.dataCovidChile.labelsCases.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
+      //     if(now == lastUpdate){
+      //       return 'hoy'+'('+lastUpdate+')'
+      //     }
+      //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+      //       return 'ayer '+'('+lastUpdate+')'
+      //     }
+      //     else{
+      //       return lastUpdate
+      //     }
+      //   }
+      // },
       async created(){
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
           this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
@@ -459,15 +306,6 @@ export default {
 
         }
 
-        // // return the derivative of an array
-        // function derivate(cumulativeValues){
-        //   let derivative = []
-        //   for ( let i=0; i < cumulativeValues.length-1;i++){
-        //     derivative.push(cumulativeValues[i+1]-cumulativeValues[i])
-        //   }
-        //   return derivative;
-        // }
-
         // return the sum of the two array, if the first array is empty it returns the second Array
         function sumArray(firstArray, secondArray){
           if (firstArray.length == 0){
@@ -481,21 +319,10 @@ export default {
           }
         }
 
-        // // this.regionName.push('Chile') // add Chile to the name of region
-        // getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true)
         getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false);
         getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
-        // getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv', 'Deaths', true)
 
       }
     }
 
-    // // compute rolling mean on a week window
-    // function meanWeek(tabValues){
-    //   let weekAverage=[];
-    //   for (let i=0;i<tabValues.length-7; i++){
-    //     weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
-    //   }
-    //   return weekAverage;
-    // }
     </script>

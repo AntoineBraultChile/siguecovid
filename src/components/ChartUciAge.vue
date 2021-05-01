@@ -4,8 +4,8 @@
       <div class="titleContainer">
 
     <h1 id='slogan'> Personas actualmente en unidad de cuidados intensivos por edad en Chile.</h1>
-    <p> Última actualización : {{update}}</p>
-
+    <!-- <p> Última actualización : {{update}}</p> -->
+    <p>   <update :labels="uciChile.labels"> </update> </p>
     <div class="optionsGraph">
       <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
     </div>
@@ -119,13 +119,15 @@ import LineChart from './LineChart'
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
 
+import Update from './Update'
 import ChooseDate from './ChooseDate'
 
 export default {
   name:'ChartUciAge',
   components:{
     'line-chart': LineChart,
-    'choose-date': ChooseDate
+    'choose-date': ChooseDate,
+    'update': Update
   },
   metaInfo() {
        return {
@@ -215,22 +217,22 @@ export default {
       }
     }
   },
-  computed:{
-    update: function(){
-      let now = new Date();
-      now = moment(now).format("DD-MM-YYYY");
-      let lastUpdate = moment(this.uciChile.labels[this.uciChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
-      if(now == lastUpdate){
-        return 'hoy'
-      }
-      else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-        return 'ayer'
-      }
-      else{
-        return lastUpdate
-      }
-    }
-  },
+  // computed:{
+  //   update: function(){
+  //     let now = new Date();
+  //     now = moment(now).format("DD-MM-YYYY");
+  //     let lastUpdate = moment(this.uciChile.labels[this.uciChile.labels.length-1], "DD-MM-YYYY").format("DD-MM-YYYY")
+  //     if(now == lastUpdate){
+  //       return 'hoy'
+  //     }
+  //     else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+  //       return 'ayer'
+  //     }
+  //     else{
+  //       return lastUpdate
+  //     }
+  //   }
+  // },
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto9/HospitalizadosUCIEtario.csv').then(data => {
       this.uciChile.labels = Object.keys(data[0]).slice(1).map(d=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
