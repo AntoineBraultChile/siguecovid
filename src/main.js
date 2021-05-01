@@ -1,8 +1,18 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+// import VueCompositionAPI from '@vue/composition-api'
+// Vue.use(VueCompositionAPI)
+
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+
+Vue.component('VueSlider', VueSlider)
+
+
 // import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faVirus, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'

@@ -2,10 +2,10 @@
   <div class="ChartChile">
     <div class="containerSection">
       <div class="titleContainer">
-        <h1  id='slogan'>La pandemia de Covid-19 en Chile  </h1>
-        <div class="optionsGraph">
-          <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
-        </div>
+        <h1  id='slogan'>La pandemia de Covid-19 en Chile</h1>
+        <!-- <div class="optionsGraph" v-if="dataCovidChile.labelsUci.length > 0"> -->
+          <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' :fromMonth='fromMonth' v-on:newFromDate="changeFromDate"></choose-date> -->
+          <!-- </div> -->
       </div>
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovidChile.labelsUci.length > 0">
 
@@ -26,6 +26,13 @@
 
           </div>
         </div>
+        <div class="slideBarContainer">
+          Gráficos a partir de {{fromMonth}}
+          <div class="slideBar" v-if="dataCovidChile.labelsUci.length > 0">
+            <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
+          </div>
+        </div>
+
 
         <div class='graph'>
 
@@ -72,8 +79,12 @@
 
 <script>
 import BarChart from '../components/BarChart'
-import ChooseDate from '../components/ChooseDate'
+// import ChooseDate from '../components/ChooseDate'
 import Update from '../components/Update'
+
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+
 
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
@@ -86,9 +97,10 @@ export default {
   name:'ChartRegions',
   components:{
     'bar-chart': BarChart,
-    'choose-date': ChooseDate,
-    'update': Update
-  },
+    // 'choose-date': ChooseDate,
+    'update': Update,
+    'vue-slider': VueSlider
+      },
   metaInfo() {
     return {
       title: "Sigue Covid en Chile - Siga  la epidemia de covid-19 y el proceso de vacunación en chile y en regiones",
@@ -102,6 +114,7 @@ export default {
     }},
     data () {
       return{
+        dateValue:'enero 2021',
         dataCovidChile:{
           labelsUci:[],
           labelsPcr:[],
@@ -116,6 +129,8 @@ export default {
           ChilePos:[],
         },
         fromDate: "01-01-2021",
+        fromMonth:'',
+        // markSlideBar:true,
         listOfMonths:[],
         backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
         title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
@@ -239,17 +254,19 @@ export default {
             maintainAspectRatio:false
           }
         },
-        changeFromDate(event){
-          this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+        // changeFromDate(event){
+        //   this.fromDate = moment(event.target.value, 'MMMM YYYY').format('01-MM-YYYY')
+        //   console.log(event.target.value)
+        // },
+        updateCurrentDate(){
+          this.fromDate = moment(this.fromMonth, 'MMMM YYYY').format('01-MM-YYYY')
         }
       },
-
       async created(){
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
           this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovidChile, 'ChileCases', dayCases);
-
           this.$set(this.dataCovidChile, 'LabelsMeanCases' ,Object.keys(data[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
           this.$set(this.dataCovidChile, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
 
@@ -308,7 +325,7 @@ export default {
 
         getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false);
         getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
-
+        this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
       }
     }
 

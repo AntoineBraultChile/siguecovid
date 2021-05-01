@@ -6,12 +6,17 @@
     <h1 id='slogan'> Personas actualmente en unidad de cuidados intensivos por edad en Chile.</h1>
     <!-- <p> Última actualización : {{update}}</p> -->
     <p>   <update :labels="uciChile.labels"> </update> </p>
-    <div class="optionsGraph">
+    <!-- <div class="optionsGraph">
       <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
-    </div>
+    </div> -->
   </div>
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
-
+      <div class="slideBarContainer">
+        Gráficos a partir de {{fromMonth}}
+        <div class="slideBar" v-if="uciChile.labels.length > 0">
+          <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
+        </div>
+      </div>
       <div class='graphUci'>
         <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
       </div>
@@ -22,6 +27,26 @@
 </template>
 
 <style scoped>
+
+.slideBarContainer{
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
+  border-radius: 7px;
+  background-color: white;
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
+.slideBar{
+  display:flex;
+  flex-direction:column;
+  width:90%;
+  padding:0px 0px 10px 0px;
+}
 
 .titleContainer{
   width:100%;
@@ -58,11 +83,11 @@
 .titleContainer p{
   font-size:20px;
 }
-.optionsGraph{
+/* .optionsGraph{
   display:flex;
   flex-direction:row;
   justify-content: center;
-}
+} */
 
 /* .optionsGraph p{
   padding: 0px 20px 0px 20px;
@@ -97,6 +122,8 @@
  #block_graph{
    flex-direction:column;
    padding:0px 0px 0px 0px;
+   font-size:16px;
+
 
  }
 
@@ -117,8 +144,11 @@
 <script>
 
 import LineChart from '../components/LineChart'
-import ChooseDate from '../components/ChooseDate'
+// import ChooseDate from '../components/ChooseDate'
 import Update from '../components/Update'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+
 
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
@@ -128,7 +158,8 @@ export default {
   name:'ChartUciAge',
   components:{
     'line-chart': LineChart,
-    'choose-date': ChooseDate,
+    'vue-slider': VueSlider,
+    // 'choose-date': ChooseDate,
     'update': Update
   },
   metaInfo() {
@@ -172,8 +203,11 @@ export default {
     }
   },
   methods:{
-    changeFromDate(event){
-      this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+    // changeFromDate(event){
+    //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+    // },
+    updateCurrentDate(){
+      this.fromDate = moment(this.fromMonth, 'MMMM YYYY').format('01-MM-YYYY')
     },
     renderChileUciChart(){
       let indexDate = this.uciChile.labels.indexOf(this.fromDate)
@@ -241,6 +275,8 @@ export default {
         currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
       }
     }
+    this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+
   }
 }
 </script>

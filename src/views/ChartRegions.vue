@@ -5,7 +5,7 @@
     <h1 id='slogan'>   La pandemia de Covid-19 en las regiones de Chile   </h1>
     <!-- <p> Última actualización : {{update}}</p> -->
 
-    <div class="optionsGraph">
+    <!-- <div class="optionsGraph">
         <p>
           <label for="region">Elija su región </label>
           <select name="region" id="region" v-on:change="changeCurrentRegion($event)">
@@ -13,11 +13,20 @@
           </select>
         </p>
 
-        <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
-      </div>
+         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
+      </div> -->
       </div>
       <div class="subtitleContainer">
         <h2><span class='subtitle'>Región {{currentRegion}}</span></h2>
+        <div class="optionsGraph">
+            <p>
+              <label for="region">Elija otra región  </label>
+              <select name="region" id="region" v-on:change="changeCurrentRegion($event)">
+                <option v-for="region in regionName"  :key='region' :value='region' :selected='currentRegion==region'> {{region}} </option>
+              </select>
+            </p>
+            <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
+          </div>
       </div>
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsUci.length > 0">
         <div class="optionDosis">
@@ -30,12 +39,19 @@
 
           </div>
         </div>
+
         <div class="optionDosis">
           <div class='dosis color3' >Personas en unidad de cuidados intensivos {{dataCovid[currentRegion+'Uci'].slice(-1)[0]}}
             <update :labels="dataCovid['labelsUci']"> </update>
           </div>
           <div class='dosis color4'> Fallecidos {{dataCovid[currentRegion+'Deaths'].slice(-1)[0]}}
             <update :labels="dataCovid['labelsDeaths']"> </update>
+          </div>
+        </div>
+        <div class="slideBarContainer" >
+          Gráficos a partir de {{fromMonth}}
+          <div class="slideBar" v-if="dataCovid.labelsUci.length > 0">
+            <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
           </div>
         </div>
         <div class='graph'>
@@ -78,19 +94,25 @@
   }
   .subtitleContainer{
     display:flex;
+    flex-direction:column;
     justify-content: center;
     align-items: center;
     width:100%;
     box-shadow: 0px 0px 2px 2px #e8e8e8;
     border-radius: 7px;
     background-color: white;
+    padding-top:5px;
     /* padding:15px 10px 0px 10px; */
     margin-bottom:5px;
+    margin-top:5px;
   }
   .subtitleContainer h2{
     text-align:center;
     /* border:solid; */
+  }
 
+  .optionsGraph label{
+    padding-right: 5px;
   }
 
   @media all and (max-width: 1100px) {
@@ -108,8 +130,13 @@
   <script>
 
   import BarChart from '../components/BarChart'
-  import ChooseDate from '../components/ChooseDate'
+  // import ChooseDate from '../components/ChooseDate'
   import Update from '../components/Update'
+
+  import VueSlider from 'vue-slider-component'
+  import 'vue-slider-component/theme/default.css'
+
+
   import * as d3 from 'd3-fetch'
   import moment from 'moment';
 
@@ -120,7 +147,8 @@
     name:'ChartRegions',
     components:{
       'bar-chart': BarChart,
-      'choose-date': ChooseDate,
+      // 'choose-date': ChooseDate,
+      'vue-slider': VueSlider,
       'update': Update
     },
     metaInfo() {
@@ -138,7 +166,7 @@
         currentRegion:'Metropolitana',
         regionName:[],
         dataCovid:{
-          labelsUci:[1],
+          labelsUci:[],
           labelsPcr:[],
           labelsCases:[],
           labelsDeaths:[],
@@ -291,8 +319,11 @@
       changeCurrentRegion(event){
         this.currentRegion = event.target.value;
       },
-      changeFromDate(event){
-        this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+      // changeFromDate(event){
+      //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+      // },
+      updateCurrentDate(){
+        this.fromDate = moment(this.fromMonth, 'MMMM YYYY').format('01-MM-YYYY')
       }
     },
 
@@ -380,6 +411,7 @@
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false);
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false,true,true);
       getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv', 'Deaths', true)
+      this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
   }
 }
