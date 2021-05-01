@@ -31,6 +31,6 @@ export default {
 <style media="screen">
 
 label{
-  margin-right:10px;
+  margin-right:5px;
 }
 </style>

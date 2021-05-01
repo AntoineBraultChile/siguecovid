@@ -1,18 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
-import ChartChile from '../components/ChartChile.vue'
+// import ChartChile from '../components/ChartChile.vue'
 
 // import ChartRegions from '../components/ChartRegions.vue'
 // import ChartUciAge from '../components/ChartUciAge.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+export const routes = [
   {
     path: '/',
     name: 'ChartChile',
-    component: ChartChile,
+    // component: ChartChile,
+    component: () => import(/* webpackChunkName: "about" */ '../components/ChartChile.vue')
   },
   {
     path: '/regions',
@@ -49,8 +50,8 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
+  base: process.env.BASE_URL,
   routes
 })
-
 
 export default router

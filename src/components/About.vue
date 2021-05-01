@@ -12,7 +12,7 @@
       <p>
         Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
-        Estoy abierto a sus comentarios u observaciones para mejorar el sitio.
+        Estoy abierto a sus comentarios u observaciones para mejorar la página web.
       </p>
 
 
@@ -70,7 +70,7 @@ export default {
 }
 @media all and (max-width: 1100px) {
  .about p{
-   font-size:15px;
+   font-size:16px;
  }
  #slogan{
 

@@ -1,7 +1,5 @@
 <template>
   <div class="ChartChile">
-
-
     <div class="containerSection">
       <div class="titleContainer">
         <h1  id='slogan'>La pandemia de Covid-19 en Chile  </h1>
@@ -13,7 +11,7 @@
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovidChile.labelsUci.length > 0">
 
         <div class="optionDosis">
-          <span class='dosis color1'> <span>{{this.dataCovidChile.ChileMeanCases.slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:15px;">media móvil de 7 días</span> </span>   </span>
+          <span class='dosis color1'> <span>{{this.dataCovidChile.ChileMeanCases.slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span> </span>   </span>
           <span class='dosis color2'> Variación semanal de los casos {{(variationCases() > 0 ? '+' : ' ')+variationCases().toString()}}%</span>
         </div>
         <div class="optionDosis">
@@ -79,7 +77,7 @@ footer{
 
 footer p{
   text-align:left;
-  font-size:15px;
+  font-size:16px;
 }
 .containerSection{
   /* width:80%; */
@@ -199,12 +197,12 @@ footer p{
     width:100%;
   }
   p{
-    font-size:15px;
+    font-size:16px;
   }
   #block_graph{
     width:100%;
     padding:0px 0px 0px 0px;
-    font-size:15px;
+    font-size:16px;
   }
   #slogan{
     font-size:20px;
@@ -217,7 +215,7 @@ footer p{
     display:flex;
     flex-direction:column;
     justify-content: center;
-    font-size:15px;
+    font-size:16px;
 
   }
 }

@@ -92,7 +92,7 @@
     font-size:20px;
   }
 .titleContainer  p{
-    font-size:15px;
+    font-size:16px;
   }
  #block_graph{
    flex-direction:column;

@@ -12,6 +12,7 @@
             <option v-for="region in regionName"  :key='region' :value='region' :selected='currentRegion==region'> {{region}} </option>
           </select>
         </p>
+
         <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
       </div>
       </div>
@@ -20,7 +21,7 @@
       </div>
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsUci.length > 0">
         <div class="optionDosis">
-          <span class='dosis color1'> <span>{{dataCovid[currentRegion+'MeanCases'].slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:15px;">media móvil de 7 días</span> </span>   </span>
+          <span class='dosis color1'> <span>{{dataCovid[currentRegion+'MeanCases'].slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span> </span>   </span>
           <span class='dosis color2'> Variación semanal de los casos {{(variationCases(currentRegion) > 0 ? '+' : ' ')+variationCases(currentRegion).toString()}}%</span>
         </div>
         <div class="optionDosis">
@@ -98,7 +99,7 @@
 
   footer p{
     text-align:left;
-    font-size:15px;
+    font-size:16px;
   }
   .containerSection{
     /* width:80%; */
@@ -128,9 +129,9 @@
     justify-content: center;
   }
 
-  /* .optionsGraph p{
-    padding: 0px 20px 0px 20px;
-  } */
+  .optionsGraph p{
+    padding: 0px 10px 0px 10px;
+  }
 
   .graph{
     width:49.5%;
@@ -195,7 +196,7 @@
     #block_graph{
       width:100%;
       padding:0px 0px 0px 0px;
-      font-size:15px;
+      font-size:16px;
 
     }
 
@@ -209,7 +210,7 @@
       font-size:20px;
     }
     p{
-      font-size:15px;
+      font-size:16px;
     }
 
     .graph{

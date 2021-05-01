@@ -157,7 +157,7 @@
 
   #block_graph{
     flex-direction:column;
-    font-size:15px;
+    font-size:16px;
 
 
   }
@@ -172,7 +172,7 @@
     display:flex;
     flex-direction:column;
     justify-content: center;
-    font-size:15px;
+    font-size:16px;
 
   }
 }
