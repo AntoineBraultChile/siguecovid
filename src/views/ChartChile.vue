@@ -10,18 +10,31 @@
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovidChile.labelsUci.length > 0">
 
         <div class="optionDosis">
-          <div class='dosis color1'> <span>{{this.dataCovidChile.ChileMeanCases.slice(-1)[0]}} casos <span  style="font-weight:normal; font-size:16px;">media móvil de 7 días</span>   </span>
+          <div class='dosis color1'>
+            <span>{{dataCovidChile.ChileMeanCases.slice(-1)[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} casos  </span>
+            <span class='en24horas'> {{(dataCovidChile.ChileMeanCases.slice(-1)[0]-dataCovidChile.ChileMeanCases.slice(-2)[0]>0? '+':' ')+(dataCovidChile.ChileMeanCases.slice(-1)[0]-dataCovidChile.ChileMeanCases.slice(-2)[0]).toString()}} casos  en 24 horas </span>
+            <span  style="font-weight:normal; font-size:12px;"> Media móvil de 7 días</span>
             <update :labels='dataCovidChile.labelsCases'> </update>
        </div>
-          <div class='dosis color2'> <span>Variación semanal de los casos {{(variationCases() > 0 ? '+' : ' ')+variationCases().toString()}}%</span>
+          <!-- <div class='dosis color2'> <span>Variación semanal de los casos {{(variationCases() > 0 ? '+' : ' ')+variationCases().toString()}}%</span>
             <update :labels='dataCovidChile.labelsCases'> </update>
-           </div>
+           </div> -->
+           <div class='dosis color2'> <span> {{dataCovidChile.ChilePos.slice(-1)[0]}} % de positividad</span>
+             <span class='en24horas'> {{(dataCovidChile.ChilePos.slice(-1)[0]-dataCovidChile.ChilePos.slice(-2)[0]>0? '+':' ')+(Math.round((dataCovidChile.ChilePos.slice(-1)[0]-dataCovidChile.ChilePos.slice(-2)[0])*10)/10).toString()}}% en 24 horas </span>
+             <span  style="font-weight:normal; font-size:12px;"> Media móvil de 7 días</span>
+             <update :labels='dataCovidChile.labelsCases'> </update>
+            </div>
         </div>
         <div class="optionDosis">
-          <div class='dosis color3'> <span>Personas en unidad de cuidados intensivos {{this.dataCovidChile.ChileUci.slice(-1)[0]}} </span>
+          <div class='dosis color3'>
+            <span> {{this.dataCovidChile.ChileUci.slice(-1)[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} personas en UCI</span>
+            <span class='en24horas'> {{(dataCovidChile.ChileUci.slice(-1)[0]-dataCovidChile.ChileUci.slice(-2)[0]>0? '+':' ')+(dataCovidChile.ChileUci.slice(-1)[0]-dataCovidChile.ChileUci.slice(-2)[0]).toString()}} en 24 horas </span>
+            <span style='font-size:12px;font-weight:normal'> UCI: unidad de cuidados intensivos </span>
             <update :labels='dataCovidChile.labelsCases'> </update>
           </div>
-          <div class='dosis color4'> Fallecidos {{this.dataCovidChile.ChileDeaths.slice(-1)[0]}}
+          <div class='dosis color4'>
+            <span>Total fallecidos {{dataCovidChile.ChileTotalDeaths[0][0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} </span>
+            <span class='en24horas'> {{dataCovidChile.ChileDeaths.slice(-1)[0]}} en 24 horas </span>
             <update :labels='dataCovidChile.labelsCases'> </update>
 
           </div>
@@ -125,8 +138,9 @@ export default {
           ChilePcr:[],
           ChileCases:[],
           ChileDeaths:[],
+          ChileTotalDeaths:[],
           ChileMeanCases:[],
-          ChilePos:[],
+          ChilePos:[]
         },
         fromDate: "01-01-2021",
         fromMonth:'',
@@ -141,9 +155,9 @@ export default {
     }
   },
   methods:{
-    variationCases(){
-      return Math.round(-(1-this.dataCovidChile.ChileMeanCases.slice(-1)[0]/this.dataCovidChile.ChileMeanCases.slice(-8)[0])*1000)/10
-    },
+    // variationCases(){
+    //   return Math.round(-(1-this.dataCovidChile.ChileMeanCases.slice(-1)[0]/this.dataCovidChile.ChileMeanCases.slice(-8)[0])*1000)/10
+    // },
     getRegionValues(type){
       let fromDate = this.fromDate
       // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
@@ -189,21 +203,12 @@ export default {
           }
         },
         getChartPosPcr(){
-          // compute the positivity
-          let Pcr= this.dataCovidChile['ChilePcr']
-          let Cases = this.dataCovidChile['ChileCases']
-          let Pos=[]
-          for (let i=0;i<Pcr.length;i++){
-            Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
-          }
-          Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
           let fromDate = this.fromDate
           let indexDate = this.dataCovidChile['labelsPcr'].indexOf(fromDate)
-          // let indexDatePos = this.dataCovidChile['labelsPos'].indexOf(fromDate)
           return{
             labels:this.dataCovidChile['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')}),
             datasets:[
-              {type:'line', label:'Positividad (media móvil de 7 días)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:Pos.slice(indexDate-7)},
+              {type:'line', label:'Positividad (media móvil de 7 días)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovidChile['ChilePos'].slice(indexDate-7)},
               {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovidChile['ChilePcr'].slice(indexDate)}
             ]
           }
@@ -254,33 +259,18 @@ export default {
             maintainAspectRatio:false
           }
         },
-        // changeFromDate(event){
-        //   this.fromDate = moment(event.target.value, 'MMMM YYYY').format('01-MM-YYYY')
-        //   console.log(event.target.value)
-        // },
         updateCurrentDate(){
           this.fromDate = moment(this.fromMonth, 'MMMM YYYY').format('01-MM-YYYY')
         }
       },
       async created(){
-        d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
-          this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-          let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
-          this.$set(this.dataCovidChile, 'ChileCases', dayCases);
-          this.$set(this.dataCovidChile, 'LabelsMeanCases' ,Object.keys(data[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
-          this.$set(this.dataCovidChile, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
-
-        })
-        d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv').then(data=>{
-          this.dataCovidChile['labelsDeaths'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-          let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
-          this.$set(this.dataCovidChile, 'ChileDeaths', dayCases);
 
 
-        })
 
-        const getDataCsv = (path, type, derivative,  initializeMonths = false) => {
-          d3.csv(path).then(data => {
+
+
+        const getDataCsv =  async (path, type, derivative,  initializeMonths = false) => {
+          let data = await d3.csv(path)
             if (derivative==true){
               this.dataCovidChile['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }else{
@@ -306,8 +296,9 @@ export default {
               }
             }
             this.$set(this.dataCovidChile, 'Chile'+type, chileValues);
-          })
-
+            if (type =='Pcr'){
+            return this.dataCovidChile['ChilePcr']
+          }
         }
 
         // return the sum of the two array, if the first array is empty it returns the second Array
@@ -323,9 +314,67 @@ export default {
           }
         }
 
-        getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false);
-        getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
-        this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+
+
+
+          // download PCR and Cases data
+          const dataCases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv')
+          this.dataCovidChile['labelsCases'] =  Object.keys(dataCases[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          dayCases = derivate(Object.values(dataCases[16]).slice(3).map(i => Number(i)))
+          this.$set(this.dataCovidChile, 'ChileCases', dayCases);
+          this.$set(this.dataCovidChile, 'LabelsMeanCases' ,Object.keys(dataCases[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+          this.$set(this.dataCovidChile, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
+
+          const Pcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false)
+
+          // compute the positivity
+          let Cases = this.dataCovidChile['ChileCases'];
+          let Pos=[];
+          for (let i=0;i<Pcr.length;i++){
+            Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
+          }
+          Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
+          this.dataCovidChile.ChilePos = Pos;
+
+
+          // download deaths data
+            const dataDeaths = await  d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv')
+            this.dataCovidChile['labelsDeaths'] =  Object.keys(dataDeaths[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+            this.dataCovidChile.ChileTotalDeaths.push(Object.values(dataDeaths[16]).slice(-1).map(i => Number(i)))
+            let dayCases = derivate(Object.values(dataDeaths[16]).slice(3).map(i => Number(i)))
+            this.$set(this.dataCovidChile, 'ChileDeaths', dayCases);
+
+
+          // download UCI data
+          getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
+
+
+          // update fromMonth
+          this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+
+        //  d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv').then(data=>{
+        //   this.dataCovidChile['labelsCases'] =  Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+        //   let dayCases = derivate(Object.values(data[16]).slice(3).map(i => Number(i)))
+        //   this.$set(this.dataCovidChile, 'ChileCases', dayCases);
+        //   this.$set(this.dataCovidChile, 'LabelsMeanCases' ,Object.keys(data[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+        //   this.$set(this.dataCovidChile, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
+        //   // console.log(this.dataCovidChile['ChileMeanCases'])
+        // }).then( async ()=>{
+        //   let Pcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false)
+        //   return Pcr;
+        // }).then( (Pcr)=> {
+        //   // compute the positivity
+        //   // let Pcr= this.dataCovidChile['ChilePcr'];
+        //   let Cases = this.dataCovidChile['ChileCases'];
+        //   // console.log(this.dataCovidChile['ChilePcr'])
+        //   let Pos=[];
+        //   for (let i=0;i<Pcr.length;i++){
+        //     Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
+        //   }
+        //   Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
+        //   this.dataCovidChile.ChilePos = Pos;
+        // })
+
       }
     }
 

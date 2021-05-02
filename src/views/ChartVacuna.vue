@@ -26,12 +26,12 @@
       </div>
       <div class="optionDosis">
         <div class='dosis color1' >
-          <span>{{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} primera dosis</span>
+          <span>{{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis</span>
            <span class='en24horas'> +{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas</span>
           <update :labels="vacunaChile.labels"> </update>
         </div>
         <div class='dosis color2'>
-          <span>{{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }} segunda dosis </span>
+          <span>{{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis </span>
           <span class='en24horas'> +{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas</span>
           <update :labels="vacunaChile.labels"> </update>
         </div>
@@ -64,7 +64,7 @@
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
   background-color: white;
-  padding:15px 10px 0px 10px;
+  padding:10px 10px 0px 10px;
   margin-bottom:5px;
 }
 

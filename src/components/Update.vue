@@ -15,10 +15,10 @@ export default {
       now = moment(now).format("DD-MM-YYYY");
       let lastUpdate = moment(this.labels.slice(-1)[0], "DD-MM-YYYY").format("DD-MM-YYYY")
       if(now == lastUpdate){
-        return 'hoy'+'('+lastUpdate+')'
+        return 'hoy'+' ('+lastUpdate+')'
       }
       else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
-        return 'ayer '+'('+lastUpdate+')'
+        return 'ayer '+' ('+lastUpdate+')'
       }
       else{
         return lastUpdate

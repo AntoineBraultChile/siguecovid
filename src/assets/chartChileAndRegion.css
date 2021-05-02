@@ -1,3 +1,8 @@
+.en24horas{
+  font-size:16px;
+  font-weight:normal;
+}
+
 
 .slideBarContainer{
   display:flex;
@@ -17,6 +22,7 @@
   flex-direction:column;
   width:90%;
   padding:0px 0px 10px 0px;
+  z-index:0;
 }
 
 .titleContainer{
@@ -24,7 +30,7 @@
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
   background-color: white;
-  padding:15px 10px 0px 10px;
+  padding:10px 10px 0px 10px;
   margin-bottom:5px;
 }
 
@@ -125,10 +131,14 @@ footer p{
   display:flex;
   align-items: stretch;
   justify-content: center;
+  font-size:18px;
 }
 
 
 @media all and (max-width: 1100px) {
+  .en24horas{
+    font-size:14px;
+  }
   footer{
     width:100%;
     padding-left: 10px;

@@ -7,11 +7,9 @@
         <router-link to="/" v-on:click.native='navBar=false'>
           <!-- <i class="fas fa-user-secret"></i> Sigue Covid Chile -->
             <font-awesome-icon class='icon' icon="virus" style="color:black" />
-
             <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue</span>
               <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
               <span style='color:black;font-weight:350;font-size:20px;'>   en Chile</span>
-
         </router-link>
         <!-- <hr> -->
     </div>
@@ -94,6 +92,7 @@ header{
   box-shadow: 1px 1px 1px 1px #e8e8e8;
   padding:5px 10px 5px 10px;
   background-color:white;
+  z-index:10;
 }
 
 #nav {
@@ -145,9 +144,6 @@ header{
 
 }
 
-/* .title{
-  padding-top:7px;
-} */
 
 .title, font-awesome-icon{
   font-size:25px;

@@ -46,6 +46,8 @@
   flex-direction:column;
   width:90%;
   padding:0px 0px 10px 0px;
+  z-index:0;
+
 }
 
 .titleContainer{
@@ -53,7 +55,7 @@
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
   background-color: white;
-  padding:15px 10px 0px 10px;
+  padding:10px 10px 0px 10px;
   margin-bottom:5px;
 }
 .ChartUciAge{
