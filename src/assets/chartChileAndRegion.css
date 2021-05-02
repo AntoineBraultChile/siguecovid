@@ -1,8 +1,8 @@
-.en24horas{
+/* .en24horas{
   font-size:16px;
   font-weight:normal;
 }
-
+ */
 
 .slideBarContainer{
   display:flex;
@@ -57,7 +57,7 @@ footer p{
   flex-direction:column;
 }
 
-.optionDosis{
+/* .optionDosis{
   width:49%;
   display:flex;
   flex-direction:row;
@@ -97,7 +97,7 @@ footer p{
   border: solid 1px rgb(35, 43, 43);
   background-color:rgb(35, 43, 43,0.4);
 }
-
+ */
 
 #slogan{
   font-size:30px;
@@ -113,19 +113,14 @@ footer p{
   padding: 0px 20px 0px 20px;
 } */
 
-.graph{
+/* .graph{
   width:49.5%;
-  /* border: solid 2px; */
-  /* margin:0px 10px 5px   6px; */
   margin:5px 0px 5px 0px;
-  /* border-color: #e8e8e8; */
-  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
   background-color: white;
   padding:0px 0px 10px 0px;
-}
+} */
 
 #block_graph{
   display:flex;
@@ -136,9 +131,9 @@ footer p{
 
 
 @media all and (max-width: 1100px) {
-  .en24horas{
+  /* .en24horas{
     font-size:14px;
-  }
+  } */
   footer{
     width:100%;
     padding-left: 10px;
@@ -157,7 +152,7 @@ footer p{
     width:100%;
   }
 
-  .dosis.color1, .dosis.color3{
+  /* .dosis.color1, .dosis.color3{
     width:50%;
     margin:5px 5px 5px 0px;
 
@@ -168,7 +163,7 @@ footer p{
   }
   .optionDosis{
     width:100%;
-  }
+  } */
   p{
     font-size:16px;
   }
@@ -180,10 +175,10 @@ footer p{
   #slogan{
     font-size:20px;
   }
-  .graph{
+  /* .graph{
     width:100%;
     margin:5px 0px 5px 0px;
-  }
+  } */
   /* .optionsGraph{
     display:flex;
     flex-direction:column;
