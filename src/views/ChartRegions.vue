@@ -3,7 +3,7 @@
     <div class="containerSection">
     <title-container titleName='La pandemia de Covid-19 en las regiones de Chile' :update='false'/>
 
-      <div class="subtitleContainer">
+      <div class="subtitleContainer" v-if='regionName.length>0'>
         <h2><span class='subtitle'>Región {{currentRegion}}</span></h2>
         <div class="optionsGraph">
           <p>
@@ -15,9 +15,9 @@
         </div>
       </div>
 
-      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' >
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0" >
 
-        <indicators v-if="dataCovid.labelsCases.length > 0"
+        <indicators
           :labels="dataCovid['labelsCases']"
           :cases="dataCovid[currentRegion+'MeanCases']"
           :positivity="dataCovid[currentRegion+'Pos']"
@@ -49,6 +49,7 @@
     <style >
     .ChartRegion{
       display:flex;
+      width:100%;
       flex-direction:column;
       align-items: center;
       justify-content: center;

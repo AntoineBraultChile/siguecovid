@@ -5,26 +5,22 @@
     <div class="d-flex  justify-content-between">
     <div class="title">
         <router-link to="/" v-on:click.native='navBar=false'>
-          <!-- <i class="fas fa-user-secret"></i> Sigue Covid Chile -->
             <font-awesome-icon class='icon' icon="virus" style="color:black" />
             <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue</span>
               <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
               <span style='color:black;font-weight:350;font-size:20px;'>   en Chile</span>
         </router-link>
-        <!-- <hr> -->
     </div>
     <div id='icons'>
       <font-awesome-icon class='icon' icon="times" v-on:click='navBar=false' v-if='navBar'/>
 
       <font-awesome-icon class='icon' icon="bars" v-on:click='navBar=true' v-if='!navBar'/>
-    <!-- <i class='fas fa-bars' v-on:click='navBar=true' v-if='!navBar'></i>
-    <i class='fas fa-times' v-on:click='navBar=false' v-if='navBar'></i> -->
+
   </div>
   </div>
 </header>
-<!-- <div id="nav" v-if='navBar'> -->
-<transition name="slideNavMenu">
 
+<transition name="slideNavMenu">
       <div class="routeNavMobile" v-if='navBar'>
         <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
         <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
@@ -32,8 +28,8 @@
         <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
         <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
       </div>
-
   </transition>
+
   <div class="blurred" v-on:click='navBar=false' v-if='navBar'>
 </div>
 <!-- </div> -->
@@ -56,16 +52,11 @@ export default {
 <style lang="css" scoped>
 
 .slideNavMenu-enter-active, .slideNavMenu-leave-active {
-  /* transition: opacity .5s; */
-  /* transition: width 0%; */
   z-index:400;
   transition: transform 100ms;
 
 }
 .slideNavMenu-enter, .slideNavMenu-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  /* opacity: 0; */
-   /* width:0%; */
-
   transform: translateX(500px);
 }
 
@@ -174,12 +165,7 @@ a {
 }
 
 .routeNavMobile a.router-link-exact-active, .routeNavMobile a:hover{
-  /* color: #42b983; */
-  /* color:#4285F4; */
   color:white;
-
-  /* background-color:#2c3e50; */
   background-color: rgb(0,0,0,0.8);
-
 }
 </style>

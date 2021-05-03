@@ -3,8 +3,8 @@
     <div class="containerSection">
       <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
 
-      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between'>
-        <indicators v-if="dataCovid.labelsUci.length > 0"
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsUci.length > 0">
+        <indicators
           :labels='dataCovid.labelsCases'
           :cases='dataCovid.ChileMeanCases'
           :positivity='dataCovid.ChilePos'
@@ -13,13 +13,7 @@
           type='epidemic'
            />
 
-        <!-- <div class="slideBarContainer">
-          Gráficos a partir de {{fromMonth}}
-          <div class="slideBar" v-if="dataCovid.labelsUci.length > 0">
-            <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
-          </div>
-        </div> -->
-        <slide-bar  v-if="dataCovid.labelsUci.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
+        <slide-bar  :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
           <charts-epidemic region="Chile" :fromDate="fromDate" :dataCovid="dataCovid"/>
       </div>
@@ -35,6 +29,7 @@
 
 <style >
 .ChartChile{
+  width:100%;
   display:flex;
   flex-direction:column;
   align-items: center;

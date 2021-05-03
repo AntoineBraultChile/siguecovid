@@ -26,6 +26,9 @@
   </div>
 </template>
 
+<style src='../assets/chartChileAndRegion.css'>
+</style>
+
 <style scoped>
 
 .ChartVacuna{
@@ -36,15 +39,14 @@
 }
 
 
-.containerSection{
-  /* width:80%; */
+/* .containerSection{
   max-width:1400px;
   padding:0px 10px 0px 10px;
   display:flex;
   align-items: center;
   justify-content: center;
   flex-direction:column;
-}
+} */
 
 .wrapper{
   width:49.4%;
@@ -56,15 +58,15 @@
 
 }
 
-#block_graph{
+/* #block_graph{
   padding-left:0px;
   display:flex;
   justify-content: space-between;
   align-items: stretch;
-}
+} */
 
 @media all and (max-width: 1100px) {
-  .containerSection{
+  /* .containerSection{
     padding-left: 10px;
     padding-right: 10px;
 
@@ -76,7 +78,7 @@
   #block_graph{
     flex-direction:column;
     font-size:16px;
-  }
+  } */
 
   .wrapper{
     width:100%;

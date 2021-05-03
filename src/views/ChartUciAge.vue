@@ -5,12 +5,6 @@
   <title-container titleName='Personas actualmente en unidad de cuidados intensivos por edad en Chile.'/>
 
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
-      <!-- <div class="slideBarContainer">
-        Gráficos a partir de {{fromMonth}}
-        <div class="slideBar" v-if="uciChile.labels.length > 0">
-          <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
-        </div>
-      </div> -->
       <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
       <div class='graphUci'>
         <update :labels="uciChile.labels"> </update>
@@ -23,8 +17,6 @@
 </template>
 
 <style scoped>
-
-
 
 .ChartUciAge{
   display:flex;
