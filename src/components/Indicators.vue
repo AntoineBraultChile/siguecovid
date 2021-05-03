@@ -1,26 +1,26 @@
 <template lang="html">
   <div class="indicators">
     <div class="optionDosis">
-      <div class='dosis' :class='colorsIndicator[0]'>
+      <div class='dosis indicator1' :class='colorsIndicator[0]'>
         <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
         <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
         <span class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </span>
         <update :labels='labels'> </update>
       </div>
-      <div class='dosis' :class='colorsIndicator[1]' > <span> {{positivity.slice(-1)[0]+text[1]}} </span>
+      <div class='dosis indicator2' :class='colorsIndicator[1]' > <span> {{positivity.slice(-1)[0]+text[1]}} </span>
         <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
         <span class='en24horas'> {{incrementLastDay(positivity)}} en 24 horas </span>
         <update :labels='labels'> </update>
       </div>
     </div>
     <div class="optionDosis">
-      <div class='dosis' :class='colorsIndicator[2]' >
+      <div class='dosis indicator3' :class='colorsIndicator[2]' >
         <span> {{numberToStringFormat(uci.slice(-1)[0]) + text[2]}}</span>
         <span class='en24horas'> {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} en 24 horas </span>
         <span class='legend' v-if="type=='epidemic'"> UCI: unidad de cuidados intensivos </span>
         <update :labels='labels'> </update>
       </div>
-      <div class='dosis' :class='colorsIndicator[3]' >
+      <div class='dosis indicator4' :class='colorsIndicator[3]' >
         <span>{{numberToStringFormat(deaths.slice(-1)[0]) + text[3]}} </span>
         <span class='en24horas'>  {{numberToStringFormat(incrementLastDay(deaths))}} en 24 horas </span>
         <update :labels='labels'> </update>
@@ -145,12 +145,12 @@ created(){
   .en24horas{
     font-size:14px;
   }
-  .dosis.color1, .dosis.color3{
+  .dosis.indicator1, .dosis.indicator3{
     width:50%;
     margin:5px 5px 5px 0px;
 
   }
-  .dosis.color2, .dosis.color4{
+  .dosis.indicator2, .dosis.indicator4{
     width:50%;
     margin:5px 0px 5px 5px;
   }
