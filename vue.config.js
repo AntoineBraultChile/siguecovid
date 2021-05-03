@@ -1,8 +1,6 @@
 require = require('esm')(module);
 const { routes } = require('./src/router/index.js');
 
-// const routes = router.routes
-
 module.exports = {
     pluginOptions: {
         sitemap: {
@@ -16,4 +14,20 @@ module.exports = {
             },
         }
     }
+}
+
+const path = require('path')
+const PrerenderSPAPlugin = require('prerender-spa-plugin')
+
+module.exports = {
+  configureWebpack: {
+  plugins: [
+    new PrerenderSPAPlugin({
+      // Required - The path to the webpack-outputted app to prerender.
+      staticDir: path.join(__dirname, 'dist'),
+      // Required - Routes to render.
+      routes: [ '/', '/about', '/regions', '/uci', '/vacuna' ],
+    })
+  ]
+}
 }
