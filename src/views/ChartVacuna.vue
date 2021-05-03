@@ -1,41 +1,20 @@
 <template>
   <div class="ChartVacuna">
     <div class="containerSection">
-      <div class="titleContainer">
-
-      <h1 id='slogan'>Avances de la campaña de vacunación contra el Covid-19 en Chile </h1>
-      <!-- <p> Última actualización : {{update}}</p> -->
-
-        <div class="optionsGraph">
-          <!-- <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date> -->
-        </div>
-      </div>
+      <title-container titleName='Avances de la campaña de vacunación contra el Covid-19 en Chile' />
 
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="vacunaChile.labels.length > 0">
-      <div class="optionDosis">
-        <div class='dosis color1'>
-          <span>{{this.vacunaChile['primera dosis'].slice(-1)[0]}}% con una dosis </span>
-          <span class='en24horas'> +{{Math.round((this.vacunaChile['primera dosis'].slice(-1)[0]-this.vacunaChile['primera dosis'].slice(-2)[0])*10)/10}}% en 24 horas</span>
-          <update :labels="vacunaChile.labels"> </update>
-        </div>
-        <div class='dosis color2'>
-          <span>{{this.vacunaChile['segunda dosis'].slice(-1)[0]}}% con dos dosis </span>
-          <span class='en24horas'> +{{Math.round((this.vacunaChile['segunda dosis'].slice(-1)[0]-this.vacunaChile['segunda dosis'].slice(-2)[0])*10)/10}}% en 24 horas</span>
-          <update :labels="vacunaChile.labels"> </update>
-        </div>
-      </div>
-      <div class="optionDosis">
-        <div class='dosis color1' >
-          <span>{{this.vacunaChile['total primera dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} primera dosis</span>
-           <span class='en24horas'> +{{(this.vacunaChile['total primera dosis'][1]-this.vacunaChile['total primera dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas</span>
-          <update :labels="vacunaChile.labels"> </update>
-        </div>
-        <div class='dosis color2'>
-          <span>{{this.vacunaChile['total segunda dosis'][1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }} segunda dosis </span>
-          <span class='en24horas'> +{{(this.vacunaChile['total segunda dosis'][1]-this.vacunaChile['total segunda dosis'][0]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas</span>
-          <update :labels="vacunaChile.labels"> </update>
-        </div>
-      </div>
+
+      <indicators v-if="vacunaChile.labels.length > 0"
+        :labels="vacunaChile.labels"
+        :cases="vacunaChile['primera dosis']"
+        :positivity="vacunaChile['segunda dosis']"
+        :uci="vacunaChile['total primera dosis']"
+        :deaths="vacunaChile['total segunda dosis']"
+        :colors='colorsIndicator'
+        type='vaccin'
+        />
+
       <div class='wrapper'>
         <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
       </div>
@@ -48,10 +27,6 @@
 </template>
 
 <style scoped>
-.en24horas{
-  font-size:16px;
-  font-weight:normal;
-}
 
 .ChartVacuna{
   display:flex;
@@ -59,18 +34,7 @@
   justify-content: center;
   flex-direction:column;
 }
-.titleContainer{
-  width:100%;
-  box-shadow: 0px 0px 2px 2px #e8e8e8;
-  border-radius: 7px;
-  background-color: white;
-  padding:10px 10px 0px 10px;
-  margin-bottom:5px;
-}
 
-#slogan{
-  font-size:25px;
-}
 
 .containerSection{
   /* width:80%; */
@@ -81,59 +45,13 @@
   justify-content: center;
   flex-direction:column;
 }
-.optionDosis{
-  width:49%;
-  display:flex;
-  flex-direction:row;
-  justify-content: space-around;
-  align-items: space-around ;
-}
-
-.dosis{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  font-weight: bold;
-  color:#2c3e50;
-  border-radius:7px;
-  padding: 5px 5px 5px 5px;
-  margin-top:5px;
-  margin-bottom:5px;
-  margin-left:10px;
-  margin-right:10px;
-}
-.color1{
-  border: solid 1px rgb(130,207,253);
-  background-color: rgb(130,207,253,0.4);
-}
-.color2{
-  border: solid 1px rgb( 	235, 164, 52);
-  background-color:rgb( 	235, 164, 52,0.4);
-}
-
-.optionsGraph{
-  display:flex;
-  flex-direction:row;
-  justify-content: center;
-}
-
-
-.optionsGraph p{
-  padding: 0px 20px 0px 20px;
-}
 
 .wrapper{
   width:49.4%;
   margin:5px 0px 5px 0px;
-
-  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius:7px;
   background-color: white;
-  /* padding:10px 10px 10px 10px; */
-  /* margin:5px 5px 5px 5px; */
   padding:0px 0px 10px 0px;
 
 }
@@ -151,28 +69,7 @@
     padding-right: 10px;
 
   }
-  .titleContainer{
-    width:100%;
-    margin:5px 20px 5px 20px;
-  }
   .containerSection{
-    width:100%;
-  }
-  #slogan{
-
-    font-size:20px;
-
-  }
-  .dosis.color1{
-    width:50%;
-    margin:5px 5px 5px 0px;
-
-}
-.dosis.color2{
-  width:50%;
-  margin:5px 0px 5px 5px;
-}
-  .optionDosis{
     width:100%;
   }
 
@@ -180,23 +77,12 @@
     flex-direction:column;
     font-size:16px;
   }
-  .en24horas{
-    font-size:14px;
-  }
+
   .wrapper{
     width:100%;
     margin:5px 0px 5px 0px;
-
-    /* margin:10px 0px 10px 0px; */
-
   }
-  .optionsGraph{
-    display:flex;
-    flex-direction:column;
-    justify-content: center;
-    font-size:16px;
 
-  }
 }
 </style>
 
@@ -204,8 +90,9 @@
 
 import LineChart from '../components/LineChart'
 import BarChart from '../components/BarChart'
-import Update from '../components/Update'
-
+// import Update from '../components/Update'
+import TitleContainer from '@/components/TitleContainer'
+import Indicators from '@/components/Indicators'
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
 // import ChooseDate from './ChooseDate'
@@ -215,7 +102,9 @@ export default {
   components:{
     'line-chart': LineChart,
     'bar-chart': BarChart,
-    'update':Update
+    'title-container': TitleContainer,
+    'indicators':Indicators,
+    // 'update':Update
     // 'choose-date': ChooseDate
   },
   metaInfo() {
@@ -229,6 +118,7 @@ export default {
        }},
   data () {
     return{
+      colorsIndicator:['blue', 'orange', 'blue', 'orange'],
       vacunaChile:{
         labels:[],
         'primera dosis':[],
@@ -272,9 +162,6 @@ export default {
     }
   },
   methods:{
-    changeFromDate(event){
-      this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('YYYY-MM-01')
-    },
     renderChartVacuna(){
       let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
       return {

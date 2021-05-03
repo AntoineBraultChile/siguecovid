@@ -1,5 +1,4 @@
 <template lang="html">
-
       <span style="font-weight:normal; font-size:12px;"> Última actualización : {{update}} </span>
 </template>
 

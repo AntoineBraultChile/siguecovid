@@ -1,23 +1,19 @@
 <template>
   <div class="ChartUciAge">
     <div class="containerSection">
-      <div class="titleContainer">
 
-    <h1 id='slogan'> Personas actualmente en unidad de cuidados intensivos por edad en Chile.</h1>
-    <!-- <p> Última actualización : {{update}}</p> -->
-    <p>   <update :labels="uciChile.labels"> </update> </p>
-    <!-- <div class="optionsGraph">
-      <choose-date :listOfMonths='listOfMonths' :fromDate='fromDate' v-on:newFromDate="changeFromDate"></choose-date>
-    </div> -->
-  </div>
+  <title-container titleName='Personas actualmente en unidad de cuidados intensivos por edad en Chile.'/>
+
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
-      <div class="slideBarContainer">
+      <!-- <div class="slideBarContainer">
         Gráficos a partir de {{fromMonth}}
         <div class="slideBar" v-if="uciChile.labels.length > 0">
           <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
         </div>
-      </div>
+      </div> -->
+      <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
       <div class='graphUci'>
+        <update :labels="uciChile.labels"> </update>
         <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
       </div>
     </div>
@@ -28,36 +24,8 @@
 
 <style scoped>
 
-.slideBarContainer{
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-  align-items: center;
-  width:100%;
-  box-shadow: 0px 0px 2px 2px #e8e8e8;
-  border-radius: 7px;
-  background-color: white;
-  margin-top:5px;
-  margin-bottom:5px;
-}
 
-.slideBar{
-  display:flex;
-  flex-direction:column;
-  width:90%;
-  padding:0px 0px 10px 0px;
-  z-index:0;
 
-}
-
-.titleContainer{
-  width:100%;
-  box-shadow: 0px 0px 2px 2px #e8e8e8;
-  border-radius: 7px;
-  background-color: white;
-  padding:10px 10px 0px 10px;
-  margin-bottom:5px;
-}
 .ChartUciAge{
   display:flex;
   flex-direction:column;
@@ -66,7 +34,6 @@
 
 }
 .containerSection{
-  /* width:80%; */
   width:100%;
   max-width:1400px;
   padding:0px 10px 0px 10px;
@@ -76,24 +43,7 @@
   flex-direction:column;
 }
 
-#slogan{
-  /* text-align:justify; */
-  font-size:25px;
 
-  /* padding:0px 10px 0px 10px; */
-}
-.titleContainer p{
-  font-size:20px;
-}
-/* .optionsGraph{
-  display:flex;
-  flex-direction:row;
-  justify-content: center;
-} */
-
-/* .optionsGraph p{
-  padding: 0px 20px 0px 20px;
-} */
 .graphUci{
   margin-top:10px;
   width:100%;
@@ -115,12 +65,8 @@
     width:100%;
   }
 
-  #slogan{
-    font-size:20px;
-  }
-.titleContainer  p{
-    font-size:16px;
-  }
+
+
  #block_graph{
    flex-direction:column;
    padding:0px 0px 0px 0px;
@@ -148,8 +94,10 @@
 import LineChart from '../components/LineChart'
 // import ChooseDate from '../components/ChooseDate'
 import Update from '../components/Update'
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/default.css'
+import TitleContainer from '../components/TitleContainer'
+import SlideBar from '../components/SlideBar'
+// import VueSlider from 'vue-slider-component'
+// import 'vue-slider-component/theme/default.css'
 
 
 import * as d3 from 'd3-fetch'
@@ -160,7 +108,9 @@ export default {
   name:'ChartUciAge',
   components:{
     'line-chart': LineChart,
-    'vue-slider': VueSlider,
+    'slide-bar': SlideBar,
+    // 'vue-slider': VueSlider,
+    'title-container': TitleContainer,
     // 'choose-date': ChooseDate,
     'update': Update
   },
@@ -208,8 +158,9 @@ export default {
     // changeFromDate(event){
     //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
     // },
-    updateCurrentDate(){
-      this.fromDate = moment(this.fromMonth, 'MMMM YYYY').format('01-MM-YYYY')
+    updateCurrentDate(payload){
+      this.fromMonth = payload
+      this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
     },
     renderChileUciChart(){
       let indexDate = this.uciChile.labels.indexOf(this.fromDate)

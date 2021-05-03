@@ -1,9 +1,8 @@
 <template>
   <div class="ChartRegion">
     <div class="containerSection">
-      <div class="titleContainer">
-        <h1 id='slogan'>   La pandemia de Covid-19 en las regiones de Chile   </h1>
-      </div>
+    <title-container titleName='La pandemia de Covid-19 en las regiones de Chile' :update='false'/>
+
       <div class="subtitleContainer">
         <h2><span class='subtitle'>Región {{currentRegion}}</span></h2>
         <div class="optionsGraph">
@@ -15,30 +14,32 @@
           </p>
         </div>
       </div>
+
       <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' >
 
-        <indicators v-if="dataCovid.labelsCases.length > 0" :labels="dataCovid['labelsCases']"  :cases="dataCovid[currentRegion+'MeanCases']"  :positivity="dataCovid[currentRegion+'Pos']"  :uci="dataCovid[currentRegion+'Uci']"  :deaths="dataCovid[currentRegion+'Deaths']"  :totalDeaths="dataCovid[currentRegion+'TotalDeaths'][0]"/>
-
+        <indicators v-if="dataCovid.labelsCases.length > 0"
+          :labels="dataCovid['labelsCases']"
+          :cases="dataCovid[currentRegion+'MeanCases']"
+          :positivity="dataCovid[currentRegion+'Pos']"
+          :uci="dataCovid[currentRegion+'Uci']"
+          :deaths="dataCovid[currentRegion+'TotalDeaths']"
+          type='epidemic'
+          />
+<!--
           <div class="slideBarContainer" >
             Gráficos a partir de {{fromMonth}}
             <div class="slideBar" v-if="dataCovid.labelsCases.length > 0">
+
               <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
             </div>
-          </div>
+          </div> -->
+          <slide-bar  v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
           <charts-epidemic v-if="dataCovid.labelsCases.length > 0" :region="currentRegion" :fromDate="fromDate" :dataCovid="dataCovid"/>
           </div>
         </div>
+        <footer-indicators/>
 
-        <footer>
-          <p>
-            Como se calculan los indicatores :
-            <ul>
-              <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
-              <li> La variación semanal se calcula como la media móvil de los últimos siete días dividida por la media móvil del día anterior. </li>
-            </ul>
-          </p>
-        </footer>
       </div>
     </template>
 
@@ -88,32 +89,30 @@
     </style>
 
     <script>
-
-    // import BarChart from '../components/BarChart'
     import Indicators from '@/components/Indicators'
     import ChartsEpidemic from '@/components/ChartsEpidemic'
-    // import ChooseDate from '../components/ChooseDate'
-    // import Update from '../components/Update'
+    import TitleContainer from '@/components/TitleContainer'
+    import FooterIndicators from '@/components/FooterIndicators'
+    import SlideBar from '@/components/SlideBar'
 
-    import VueSlider from 'vue-slider-component'
-    import 'vue-slider-component/theme/default.css'
+    import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
+    // import VueSlider from 'vue-slider-component'
+    // import 'vue-slider-component/theme/default.css'
 
     import * as d3 from 'd3-fetch'
     import moment from 'moment';
 
-    import  {meanWeek, derivate} from '@/assets/mathFunctions'
-
-
     export default {
       name:'ChartRegions',
       components:{
-        // 'bar-chart': BarChart,
-        // 'choose-date': ChooseDate,
-        'vue-slider': VueSlider,
-        // 'update': Update
+        // 'vue-slider': VueSlider,
         'charts-epidemic': ChartsEpidemic,
-        'indicators': Indicators
+        'title-container':TitleContainer,
+        'indicators': Indicators,
+        'slide-bar': SlideBar,
+        'footer-indicators': FooterIndicators
+
       },
       metaInfo() {
         return {
@@ -156,12 +155,14 @@
           // changeFromDate(event){
           //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
           // },
-          updateCurrentDate(){
-            this.fromDate = moment(this.fromMonth, 'MMMM YYYY').format('01-MM-YYYY')
+          updateCurrentDate(payload){
+            this.fromMonth = payload
+            this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
           }
         },
 
         async created(){
+          //fetching data
           const getDataCsv = async (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
             let data = await d3.csv(path)
             if (derivative==true){
@@ -174,13 +175,13 @@
               generateListOfMonths();
             }
 
-            // let chileValues = []; // the sum of the regional time series
+            // get data for each region
             for (let index=0; index < data.length; index++){
               if (initializeRegionName == true && data[index].Region!=undefined && data[index].Region!='Total'){
                 this.regionName.push(data[index].Region)
               }
               if(type=='Deaths'){
-                this.$set(this.dataCovid, data[index].Region+'TotalDeaths', Object.values(data[index]).slice(-1).map(i => Number(i)))
+                this.$set(this.dataCovid, data[index].Region+'TotalDeaths', Object.values(data[index]).map(i => Number(i)))
               }
               // if we ask the derivative of the time serie (use to convert cumulative time serie to daily time serie)
               if(derivative==true){
@@ -208,9 +209,13 @@
             }
           }
 
+          // Uci
           getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false,false,false);
+          // Deaths
           getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv', 'Deaths', true)
+          // PCR number each day
           let dataPcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false);
+          // Cases
           let dataCases = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true, true,true, true)
 
 
@@ -225,6 +230,8 @@
             Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
             this.$set(this.dataCovid, region+'Pos', Pos);
           }
+
+          // update fromMonth from fromDate
           this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
         }
       }

@@ -35,7 +35,6 @@ export default {
     // },
     changeFromDate(event){
       this.$emit('newFromDate', event)
-      console.log(this.$emit)
      }
   }
 }
