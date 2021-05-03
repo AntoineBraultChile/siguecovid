@@ -3,8 +3,8 @@
     <div class="containerSection">
       <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
 
-      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsUci.length > 0">
-        <indicators
+      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' >
+        <indicators v-if="dataCovid.labelsCases.length > 0"
           :labels='dataCovid.labelsCases'
           :cases='dataCovid.ChileMeanCases'
           :positivity='dataCovid.ChilePos'
@@ -13,9 +13,9 @@
           type='epidemic'
            />
 
-        <slide-bar  :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
+        <slide-bar v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
-          <charts-epidemic region="Chile" :fromDate="fromDate" :dataCovid="dataCovid"/>
+          <charts-epidemic v-if="dataCovid.labelsUci.length > 0" region="Chile" :fromDate="fromDate" :dataCovid="dataCovid"/>
       </div>
     </div>
 
@@ -137,9 +137,10 @@ export default {
               }
             }
             this.$set(this.dataCovid, 'Chile'+type, chileValues);
-            if (type =='Pcr'){
-            return this.dataCovid['ChilePcr']
-          }
+          //   if (type =='Pcr'){
+          //   return this.dataCovid['ChilePcr']
+          // }
+          return this.dataCovid['Chile'+type]
         }
 
         // return the sum of the two array, if the first array is empty it returns the second Array
@@ -156,42 +157,87 @@ export default {
         }
 
 
+        async function requests() {
+          try {
+            var getResults = await Promise.all([
+              d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv'),
+              getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false),
+              d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv'),
+              getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true)
+            ]);
+            return getResults
+          } catch (error) {
+            console.log(error)
 
+            throw (error)
+          }
+        }
 
-          // download PCR and Cases data
-          const dataCases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv')
-          this.dataCovid['labelsCases'] =  Object.keys(dataCases[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-          dayCases = derivate(Object.values(dataCases[16]).slice(3).map(i => Number(i)))
+        requests().then(data => {
+          // deaths
+          this.dataCovid['labelsDeaths'] =  Object.keys(data[2][0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          this.dataCovid.ChileTotalDeaths = Object.values(data[2][16]).slice(3).map(i => Number(i))
+          let dayCases = derivate(Object.values(data[2][16]).slice(3).map(i => Number(i)))
+          this.$set(this.dataCovid, 'ChileDeaths', dayCases);
+
+          // cases
+          this.dataCovid['labelsCases'] =  Object.keys(data[0][0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          dayCases = derivate(Object.values(data[0][16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovid, 'ChileCases', dayCases);
-          this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(dataCases[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+          this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(data[0][0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
           this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
-
-          const Pcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false)
 
           // compute the positivity
           let Cases = this.dataCovid['ChileCases'];
-          let Pos=[];
+          let Pcr = this.dataCovid['ChilePcr'];
+          let Pos=[]
           for (let i=0;i<Pcr.length;i++){
             Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
           }
           Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
           this.dataCovid.ChilePos = Pos;
 
-
-          // download deaths data
-            const dataDeaths = await  d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv')
-            this.dataCovid['labelsDeaths'] =  Object.keys(dataDeaths[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-            this.dataCovid.ChileTotalDeaths = Object.values(dataDeaths[16]).slice(3).map(i => Number(i))
-            let dayCases = derivate(Object.values(dataDeaths[16]).slice(3).map(i => Number(i)))
-            this.$set(this.dataCovid, 'ChileDeaths', dayCases);
-
-
-          // download UCI data
-          getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
-
-
           // update fromMonth
           this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+
+        })
+
+
+
+          // // download PCR and Cases data
+          // const dataCases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv')
+          // this.dataCovid['labelsCases'] =  Object.keys(dataCases[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          // dayCases = derivate(Object.values(dataCases[16]).slice(3).map(i => Number(i)))
+          // this.$set(this.dataCovid, 'ChileCases', dayCases);
+          // this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(dataCases[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+          // this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
+          //
+          // const Pcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false)
+          //
+          // // compute the positivity
+          // let Cases = this.dataCovid['ChileCases'];
+          // let Pos=[];
+          // for (let i=0;i<Pcr.length;i++){
+          //   Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
+          // }
+          // Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
+          // this.dataCovid.ChilePos = Pos;
+          //
+          //
+          // // download deaths data
+          //   const dataDeaths = await  d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv')
+          //   this.dataCovid['labelsDeaths'] =  Object.keys(dataDeaths[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          //   this.dataCovid.ChileTotalDeaths = Object.values(dataDeaths[16]).slice(3).map(i => Number(i))
+          //   let dayCases = derivate(Object.values(dataDeaths[16]).slice(3).map(i => Number(i)))
+          //   this.$set(this.dataCovid, 'ChileDeaths', dayCases);
+          //
+          //
+          // // download UCI data
+          // getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
+          //
+          //
+          // // update fromMonth
+          // this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
       }
     }

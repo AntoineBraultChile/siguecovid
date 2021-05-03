@@ -86,6 +86,10 @@
         font-size: 20px;
         font-weight:normal;
       }
+
+      .optionsGraph p{
+        font-size:16px;
+      }
     }
     </style>
 

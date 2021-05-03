@@ -3,13 +3,13 @@
     <div class="optionDosis">
       <div class='dosis' :class='colorsIndicator[0]'>
         <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
-        <span class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </span>
         <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
+        <span class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </span>
         <update :labels='labels'> </update>
       </div>
       <div class='dosis' :class='colorsIndicator[1]' > <span> {{positivity.slice(-1)[0]+text[1]}} </span>
-        <span class='en24horas'> {{incrementLastDay(positivity)}} en 24 horas </span>
         <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
+        <span class='en24horas'> {{incrementLastDay(positivity)}} en 24 horas </span>
         <update :labels='labels'> </update>
       </div>
     </div>
@@ -111,8 +111,8 @@ created(){
   padding: 5px 5px 5px 5px;
   margin-top:5px;
   margin-bottom:5px;
-  margin-left:10px;
-  margin-right:10px;
+  /* margin-left:10px;
+  margin-right:10px; */
 
 }
 .green{
@@ -156,6 +156,8 @@ created(){
   }
   .optionDosis{
     width:100%;
+    justify-content: space-between;
   }
+
 }
 </style>
