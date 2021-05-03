@@ -16,4 +16,17 @@ function derivate(cumulativeValues){
   return derivative;
 }
 
-export  {meanWeek,derivate}
+// return the sum of the two array, if the first array is empty it returns the second Array
+function sumArray(firstArray, secondArray){
+  if (firstArray.length == 0){
+    return secondArray;
+  }else{
+    if (firstArray.length != secondArray.length){
+      console.log('ERROR: the two arrays need to have the same length or the first array need to be empty !');
+    }else{
+      return firstArray.map((el,indx) => {return el + secondArray[indx]});
+    }
+  }
+}
+
+export  {meanWeek,derivate,sumArray}
