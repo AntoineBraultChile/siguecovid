@@ -57,7 +57,11 @@ components:{
 methods: {
   // return the increment of values at time n minus time n-1, with + or - in front of the increment
   incrementLastDay(timeSerie){
+    if (Math.round((timeSerie.slice(-1)[0]-timeSerie.slice(-2)[0])*10)==0){
+      return 'No variación'
+    }else{
     return (timeSerie.slice(-1)[0]-timeSerie.slice(-2)[0]>0? '+':' ')+(Math.round((timeSerie.slice(-1)[0]-timeSerie.slice(-2)[0])*10)/10).toString()
+  }
   },
   numberToStringFormat(number){
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
