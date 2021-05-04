@@ -39,7 +39,14 @@
           </div>
         </div>
       </div>
+      <footer-indicators>
+        <p>
+          Calculamos los porcentajes a partir de las proyecciones de población del <a href="https://www.ine.cl/docs/default-source/proyecciones-de-poblacion/cuadros-estadisticos/base-2017/ine_estimaciones-y-proyecciones-2002-2035_base-2017_region_base.csv?sfvrsn=1c01d705_8&download=true">INE</a> para el año 2020.
+          Se calcula que la población chilena es de 19 458 310 .
+      </p>
+      </footer-indicators>
     </div>
+
   </template>
 
   <style src='../assets/chartChileAndRegion.css'>
@@ -64,8 +71,6 @@
 
   }
 
-
-
   @media all and (max-width: 1100px) {
 
 .wrapper{
@@ -85,6 +90,7 @@ import Update from '../components/Update'
 import TitleContainer from '@/components/TitleContainer'
 import Indicators from '@/components/Indicators'
 import TitleGraphic from '@/components/TitleGraphic'
+import FooterIndicators from '@/components/FooterIndicators'
 
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
@@ -98,6 +104,7 @@ export default {
     'title-container': TitleContainer,
     'title-graphic': TitleGraphic,
     'indicators':Indicators,
+    'footer-indicators': FooterIndicators,
     'update':Update
     // 'choose-date': ChooseDate
   },
@@ -295,9 +302,9 @@ export default {
       // fetching datas vaccination first and second doses in Chile
       let  data = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv')
       this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
-      Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/19000)/10)})
+      Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/19500)/10)})
       this.vacunaChile['total primera dosis'] = Object.values(data[0]).slice(1).slice(-2).map(d=>{return Math.round(d)})
-      Object.values(data[1]).slice(2).map(i => Number(i)).forEach(d =>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19000)/10)})
+      Object.values(data[1]).slice(2).map(i => Number(i)).forEach(d =>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19500)/10)})
       this.vacunaChile['total segunda dosis'] = Object.values(data[1]).slice(1).slice(-2).map(d=>{return Math.round(d)})
       derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})
       derivate(Object.values(data[1]).slice(2).map(i => Number(i))).forEach((d)=>{ this.vacunaChile['segunda dosis por dia'].push(d)})

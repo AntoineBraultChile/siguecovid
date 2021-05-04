@@ -5,8 +5,9 @@
 
         <p>
           Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
-          y el progreso de la vacunación en Chile. Los datos proceden del
-          <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>.
+          y el progreso de la vacunación en Chile. Los datos epidemiológicos proceden del
+          <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>
+          y los  datos demográficos del <a href="https://www.ine.cl/"> Instituto Nacional de Estadísticas</a>.
         </p>
 
       <p>

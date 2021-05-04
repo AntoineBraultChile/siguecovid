@@ -20,7 +20,13 @@
     </div>
 
 
-<footer-indicators/>
+<footer-indicators><p>
+  Como se calculan los indicatores :
+  <ul>
+    <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
+  </ul>
+</p>
+</footer-indicators>
   </div>
 </template>
 
