@@ -1,7 +1,7 @@
 <template >
   <div class="about">
     <div class="aboutMe">
-        <h1 id='slogan'>A propósito</h1>
+        <h1 id='slogan'>Contacto</h1>
 
         <p>
           Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
@@ -13,7 +13,7 @@
       <p>
         Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
-        Estoy abierto a sus comentarios u observaciones para mejorar la página web.
+        Estoy abierto a sus comentarios y observaciones para mejorar la página web.
       </p>
 
 
@@ -27,7 +27,7 @@
 export default {
   metaInfo() {
        return {
-           title: "A propósito de Sigue Covid",
+           title: "Contacto",
            meta: [
                { name: 'description', content: `Sigue Covid  permite una visualización del estado de la pandemia de Covid-19 en Chile`},
                {name: 'robots', content: 'index,follow'}

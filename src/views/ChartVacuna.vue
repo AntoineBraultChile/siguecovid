@@ -14,6 +14,9 @@
           :colors='colorsIndicator'
           type='vaccin'
           />
+
+          <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
+
           <div class='wrapper'>
             <title-graphic> Proporción de la población chilena vacunada</title-graphic>
             <update :labels="vacunaChile.labels"> </update>
@@ -91,6 +94,7 @@ import TitleContainer from '@/components/TitleContainer'
 import Indicators from '@/components/Indicators'
 import TitleGraphic from '@/components/TitleGraphic'
 import FooterIndicators from '@/components/FooterIndicators'
+import SlideBar from '../components/SlideBar'
 
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
@@ -105,7 +109,8 @@ export default {
     'title-graphic': TitleGraphic,
     'indicators':Indicators,
     'footer-indicators': FooterIndicators,
-    'update':Update
+    'update':Update,
+    'slide-bar':SlideBar
     // 'choose-date': ChooseDate
   },
   metaInfo() {
@@ -185,6 +190,10 @@ export default {
     }
     },
     methods:{
+      updateCurrentDate(payload){
+        this.fromMonth = payload
+        this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
+      },
       renderChartVacuna(){
         let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
         return {
@@ -339,6 +348,19 @@ export default {
 
         getVaccinByAge(firstDosesByAge, "firstDosesByAgeGroup")
         getVaccinByAge(secondDosesByAge, "secondDosesByAgeGroup")
+
+        // function to generate list of months
+        let generateListOfMonths  =  async (labels) => {
+          let currentDate = moment('02-2021', 'MM-YYYY')
+          let listOfMonths =[]
+          while(currentDate < moment(labels[labels.length-1],'DD-MM-YYYY')){
+            listOfMonths.push(currentDate.format('MMMM YYYY'))
+            currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+          }
+          return listOfMonths
+        }
+        this.listOfMonths =   await generateListOfMonths(this.vacunaChile.labels)
+        this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
     }
 

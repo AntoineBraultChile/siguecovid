@@ -26,7 +26,7 @@
         <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
         <router-link to="/edad" v-on:click.native='navBar=false'> Por edad</router-link>
         <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
-        <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
+        <router-link to="/about" v-on:click.native='navBar=false'>Contacto</router-link>
       </div>
   </transition>
 

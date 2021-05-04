@@ -16,7 +16,7 @@
     <router-link to="/regions">Por región</router-link>
     <router-link to="/edad">Por edad</router-link>
     <router-link to="/vacuna">Vacunación</router-link>
-    <router-link to="/about">A propósito</router-link>
+    <router-link to="/about">Contacto</router-link>
   </div>
 </div>
 </header>
