@@ -14,18 +14,28 @@
           :colors='colorsIndicator'
           type='vaccin'
           />
-
           <div class='wrapper'>
+            <title-graphic> Proporción de la población chilena vacunada</title-graphic>
+            <update :labels="vacunaChile.labels"> </update>
             <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
           </div>
           <div class='wrapper'>
+            <title-graphic> Número de personas vacunadas cada dia</title-graphic>
+            <update :labels="vacunaChile.labels"> </update>
+
             <bar-chart  :chartData="renderChartVacunaPorDia()" :options='optionsPorDia'> </bar-chart>
           </div>
           <div class='wrapper'>
-            <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="optionsByAge('una dosis')"> </line-chart>
+            <title-graphic> Personas vacunadas con al menos una dosis por edad</title-graphic>
+            <update :labels="vacunaChile.labels"> </update>
+
+            <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="optionsByAge()"> </line-chart>
           </div>
           <div class='wrapper'>
-            <line-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="optionsByAge('dos dosis')"> </line-chart>
+            <title-graphic> Personas vacunadas con dos dosis por edad</title-graphic>
+            <update :labels="vacunaChile.labels"> </update>
+
+            <line-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="optionsByAge()"> </line-chart>
           </div>
         </div>
       </div>
@@ -44,16 +54,6 @@
     flex-direction:column;
   }
 
-
-  /* .containerSection{
-  max-width:1400px;
-  padding:0px 10px 0px 10px;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction:column;
-  } */
-
   .wrapper{
     width:49.4%;
     margin:5px 0px 5px 0px;
@@ -64,27 +64,9 @@
 
   }
 
-  /* #block_graph{
-  padding-left:0px;
-  display:flex;
-  justify-content: space-between;
-  align-items: stretch;
-  } */
+
 
   @media all and (max-width: 1100px) {
-    /* .containerSection{
-    padding-left: 10px;
-    padding-right: 10px;
-
-  }
-  .containerSection{
-  width:100%;
-}
-
-#block_graph{
-flex-direction:column;
-font-size:16px;
-} */
 
 .wrapper{
   width:100%;
@@ -99,9 +81,11 @@ import  {derivate, sumArray} from '@/assets/mathFunctions'
 
 import LineChart from '../components/LineChart'
 import BarChart from '../components/BarChart'
-// import Update from '../components/Update'
+import Update from '../components/Update'
 import TitleContainer from '@/components/TitleContainer'
 import Indicators from '@/components/Indicators'
+import TitleGraphic from '@/components/TitleGraphic'
+
 import * as d3 from 'd3-fetch'
 import moment from 'moment';
 // import ChooseDate from './ChooseDate'
@@ -112,8 +96,9 @@ export default {
     'line-chart': LineChart,
     'bar-chart': BarChart,
     'title-container': TitleContainer,
+    'title-graphic': TitleGraphic,
     'indicators':Indicators,
-    // 'update':Update
+    'update':Update
     // 'choose-date': ChooseDate
   },
   metaInfo() {
@@ -171,22 +156,22 @@ export default {
               }
             }]
           },
-          title:{
-            display:true,
-            text:'Proporción de la población chilena vacunada',
-            fontSize:20
-          },
+          // title:{
+          //   display:true,
+          //   text:'Proporción de la población chilena vacunada',
+          //   fontSize:20
+          // },
           lineTension: 1,
           responsive:true,
           maintainAspectRatio:false
         },
 
         optionsPorDia:{
-          title:{
-            display:true,
-            text:'Número de personas vacunadas cada dia',
-            fontSize:20
-          },
+          // title:{
+          //   display:true,
+          //   text:'Número de personas vacunadas cada dia',
+          //   fontSize:20
+          // },
           responsive:true,
           maintainAspectRatio:false
         },
@@ -281,7 +266,7 @@ export default {
           ]
         }
       },
-      optionsByAge(dosisNumber){
+      optionsByAge(){
         return{
         scales: {
           yAxes: [{
@@ -293,11 +278,11 @@ export default {
             }
           }]
         },
-        title:{
-          display:true,
-          text:'Personas vacunadas con ' + dosisNumber + ' por edad',
-          fontSize:20
-        },
+        // title:{
+        //   display:true,
+        //   text:'Personas vacunadas con ' + dosisNumber + ' por edad',
+        //   fontSize:20
+        // },
         lineTension: 1,
         responsive:true,
         maintainAspectRatio:false

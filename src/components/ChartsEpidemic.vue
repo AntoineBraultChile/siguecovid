@@ -1,15 +1,26 @@
 <template lang="html">
   <div class="ChartsEpidemic">
     <div class='graph'>
+      <title-graphic> {{title['Cases']}} en {{region}} </title-graphic>
+      <update :labels="dataCovid.labelsCases"> </update>
+
       <bar-chart  :chartData="getChartWithMean(region,'Cases')" :options="getOptionsChartWithMean(region,'Cases')"> </bar-chart>
     </div>
     <div class='graph'>
+      <title-graphic> {{title['Pcr']}} en {{region}} </title-graphic>
+      <update :labels="dataCovid.labelsPcr"> </update>
+
       <bar-chart  :chartData="getChartPosPcr(region)" :options="getOptionsChartPosPcr(region)"> </bar-chart>
     </div>
     <div class='graph'>
+      <title-graphic> {{title['Uci']}} en {{region}} </title-graphic>
+      <update :labels="dataCovid.labelsUci"> </update>
       <bar-chart  :chartData="getRegionValues(region,'Uci')" :options="getRegionOptions(region,'Uci')"> </bar-chart>
     </div>
     <div class='graph'>
+      <title-graphic> {{title['Deaths']}} en {{region}} </title-graphic>
+      <update :labels="dataCovid.labelsDeaths"> </update>
+
       <bar-chart  :chartData="getRegionValues(region,'Deaths')" :options="getRegionOptions(region,'Deaths')"> </bar-chart>
     </div>
   </div>
@@ -17,20 +28,24 @@
 
 <script>
 import BarChart from '../components/BarChart'
+import Update from '../components/Update'
 import moment from 'moment';
 moment.locale('es');
 
+import TitleGraphic from '../components/TitleGraphic'
 export default {
   name:'ChartsEpidemic',
   props:['region','fromDate','dataCovid'],
   components:{
-    'bar-chart': BarChart
+    'bar-chart': BarChart,
+    'update': Update,
+    'title-graphic':TitleGraphic
   },
   data(){
     return{
       backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
       title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
-      'Pcr':'PCR',
+      'Pcr':'Positividad y PCR en ',
       'Cases':'Casos',
       'Deaths': 'Fallecidos por Covid-19'
     }
@@ -47,7 +62,7 @@ methods:{
       {label:this.title[type]+ ' en '+ name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
     }
   },
-  getRegionOptions(name,type){
+  getRegionOptions(){
   return{
     scales: {
       yAxes: [{
@@ -56,12 +71,12 @@ methods:{
         }
       }]
     },
-    title:{
-      display:true,
-      text:this.title[type]+ ' en ' + name,
-      fontSize:20
-
-    },
+    // title:{
+    //   display:true,
+    //   text:this.title[type]+ ' en ' + name,
+    //   fontSize:20
+    //
+    // },
     legend: {
       display:false,
     },
@@ -81,7 +96,7 @@ getChartWithMean(name,type){
     ]
   }
 },
-getOptionsChartWithMean(name, type){
+getOptionsChartWithMean(){
   return{
     scales: {
       yAxes: [{
@@ -90,11 +105,11 @@ getOptionsChartWithMean(name, type){
         }
       }]
     },
-    title:{
-      display:true,
-      text:this.title[type]+ ' en '+ name,
-      fontSize:20
-    },
+    // title:{
+    //   display:true,
+    //   text:this.title[type]+ ' en '+ name,
+    //   fontSize:20
+    // },
     responsive:true,
     maintainAspectRatio:false
   }
@@ -111,13 +126,13 @@ getChartPosPcr(name){
     ]
   }
 },
-getOptionsChartPosPcr(name){
+getOptionsChartPosPcr(){
   return{
-    title:{
-      display:true,
-      text:'Positividad y PCR en '+ name,
-      fontSize:20
-    },
+    // title:{
+    //   display:true,
+    //   text:'Positividad y PCR en '+ name,
+    //   fontSize:20
+    // },
     scales: {
       yAxes: [{
         id: 'Pos',

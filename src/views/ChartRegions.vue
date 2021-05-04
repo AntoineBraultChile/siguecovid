@@ -70,6 +70,7 @@
     }
     .subtitleContainer h2{
       text-align:center;
+      font-size:25px;
       /* border:solid; */
     }
 

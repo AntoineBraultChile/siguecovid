@@ -24,7 +24,7 @@
       <div class="routeNavMobile" v-if='navBar'>
         <router-link to="/" v-on:click.native='navBar=false'> Chile</router-link>
         <router-link to="/regions" v-on:click.native='navBar=false'>Por región</router-link>
-        <router-link to="/uci" v-on:click.native='navBar=false'>UCI por edad</router-link>
+        <router-link to="/edad" v-on:click.native='navBar=false'> Por edad</router-link>
         <router-link to="/vacuna" v-on:click.native='navBar=false'>Vacunación</router-link>
         <router-link to="/about" v-on:click.native='navBar=false'>A propósito</router-link>
       </div>

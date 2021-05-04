@@ -1,14 +1,21 @@
 <template>
-  <div class="ChartUciAge">
+  <div class="ChartAge">
     <div class="containerSection">
 
-  <title-container titleName='Personas actualmente en unidad de cuidados intensivos por edad en Chile.'/>
+  <title-container titleName='Personas actualmente en unidad de cuidados intensivos y total fallecidos por edad en Chile.'/>
 
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
       <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
       <div class='graphUci'>
+        <title-graphic>Personas en unidad de cuidados intensivos por Covid-19 por edad</title-graphic>
         <update :labels="uciChile.labels"> </update>
         <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
+      </div>
+      <div class='graphUci'>
+        <title-graphic>Total fallecidos por Covid-19 por edad </title-graphic>
+        <update :labels="uciChile.labels"> </update>
+        <bar-chart  :chartData="renderChileDeaths()" :options='optionsChileDeathsByAge'> </bar-chart>
+
       </div>
     </div>
   </div>
@@ -18,7 +25,7 @@
 
 <style scoped>
 
-.ChartUciAge{
+.ChartAge{
   display:flex;
   flex-direction:column;
   align-items: center;
@@ -38,7 +45,7 @@
 
 .graphUci{
   margin-top:10px;
-  width:100%;
+  width:49.4%;
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius:7px;
   background-color: white;
@@ -84,10 +91,12 @@
 <script>
 
 import LineChart from '../components/LineChart'
+import BarChart from '../components/BarChart'
 // import ChooseDate from '../components/ChooseDate'
 import Update from '../components/Update'
 import TitleContainer from '../components/TitleContainer'
 import SlideBar from '../components/SlideBar'
+import TitleGraphic from '../components/TitleGraphic'
 // import VueSlider from 'vue-slider-component'
 // import 'vue-slider-component/theme/default.css'
 
@@ -97,26 +106,37 @@ import moment from 'moment';
 
 
 export default {
-  name:'ChartUciAge',
+  name:'ChartAge',
   components:{
     'line-chart': LineChart,
+    'bar-chart':BarChart,
     'slide-bar': SlideBar,
     // 'vue-slider': VueSlider,
     'title-container': TitleContainer,
+    'title-graphic':TitleGraphic,
     // 'choose-date': ChooseDate,
     'update': Update
   },
   metaInfo() {
        return {
-           title: "Numero de personas en unidad de cuidados intensivos por Covid-19 y por edad en Chile",
+           title: "Numero de personas en unidad de cuidados intensivos y total fallecidos por Covid-19 y por edad en Chile",
            meta: [
-               { name: 'description', content: `Grafico del numero de personas en unidad de cuidados intensivos por Covid-19 y por edad en Chile`},
+               { name: 'description', content: `Grafico del numero de personas en unidad de cuidados intensivos y del numero total de fallecidos por Covid-19 y por edad en Chile`},
                { name: 'robots', content: 'index,follow'}
            ]
        }
      },
   data () {
     return{
+      // colors:['#82CFFD','#eba434','#93DB70','#232b2b', '#f87979', 'rgb(153, 102, 255)', 'rgb(255, 205, 86)'],
+      // backgroundColor: ["rgb(35, 43, 100)","rgb(35, 43, 43)","rgb(35, 43, 43)","rgb(35, 43, 43)", "rgb(35, 43, 43)", "rgb(35, 43, 43)", "rgb(35, 43, 43)"],
+      colors: "rgb(35, 43, 100)",
+      backgroundColors: "rgb(35, 43, 43,0.4)",
+      deathsChile:{
+        // labels:[],
+        ageGroup:[],
+        values:[]
+      },
       uciChile:{
         labels:[],
         '<=39':[],
@@ -127,6 +147,7 @@ export default {
       },
       fromDate: "01-01-2021",
       listOfMonths:[],
+
       optionsLineUciChile:{
         scales: {
           yAxes: [{
@@ -135,12 +156,27 @@ export default {
             }
           }]
         },
-        title:{
-          display:true,
-          text:'Personas en unidad de cuidados intensivos por Covid-19 por edad',
-          fontSize:20
-        },
+        // title:{
+        //   display:true,
+        //   text:'Personas en unidad de cuidados intensivos por Covid-19 por edad',
+        //   fontSize:20
+        // },
         lineTension: 1,
+        responsive:true,
+        maintainAspectRatio:false
+      },
+
+      optionsChileDeathsByAge:{
+        scales: {
+          yAxes: [{
+            ticks: {
+               beginAtZero: true
+            }
+          }]
+        },
+        legend: {
+          display:false,
+        },
         responsive:true,
         maintainAspectRatio:false
       }
@@ -196,6 +232,19 @@ export default {
           }
         ]
       }
+    },
+    renderChileDeaths(){
+      return {
+        labels: this.deathsChile.ageGroup,
+        datasets: [{
+          type:'bar',
+          label:'',
+          borderColor: this.colors,
+          backgroundColor: this.backgroundColors,
+          data:this.deathsChile.values
+        }],
+        borderWidth:1
+      }
     }
   },
 
@@ -222,6 +271,12 @@ export default {
     }
     this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
+    let dataDeaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto10/FallecidosEtario.csv')
+    // this.deathsChile.labels = Object.keys(dataDeaths[0]).slice(1).map(d=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
+    for (let deaths of dataDeaths){
+      this.deathsChile.ageGroup.push(deaths['Grupo de edad'])
+      this.deathsChile.values.push(Number(Object.values(deaths).slice(-1)[0]))
+    }
   }
 }
 </script>

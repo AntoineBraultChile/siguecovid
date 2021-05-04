@@ -10,7 +10,7 @@ module.exports = {
             routes,
             pretty:true,
             defaults: {
-              lastmod:    '2021-04-30',
+              lastmod:    '2021-05-03',
               changefreq: 'daily',
               priority:   1.0,
             },
@@ -22,7 +22,7 @@ module.exports = {
         // Required - The path to the webpack-outputted app to prerender.
         staticDir: path.join(__dirname, 'dist'),
         // Required - Routes to render.
-        routes: [ '/', '/about', '/regions', '/uci', '/vacuna' ],
+        routes: [ '/', '/about', '/regions', '/edad', '/vacuna' ],
       })
     ]
   }

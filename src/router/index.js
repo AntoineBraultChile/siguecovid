@@ -21,12 +21,12 @@ export const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/ChartRegions.vue')
   },
   {
-    path: '/uci',
-    name: 'ChartUciAge',
+    path: '/edad',
+    name: 'ChartAge',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ChartUciAge.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ChartAge.vue')
   },
   {
     path: '/vacuna',
@@ -51,7 +51,10 @@ export const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior () {
+    return { x: 0, y: 0 };
+  }
 })
 
 export default router
