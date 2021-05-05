@@ -5,7 +5,7 @@
     <div class="title">
         <router-link to="/" v-on:click.native='navBar=false'>
             <font-awesome-icon class='icon' icon="virus" style="color:black" />
-            <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue</span>
+            <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue </span>
               <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
               <span style='color:black;font-weight:350;font-size:20px;'>   en Chile</span>
         </router-link>

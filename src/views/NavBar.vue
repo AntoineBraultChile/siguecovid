@@ -7,7 +7,7 @@
     <div class="title">
   <font-awesome-icon icon="virus" style="color:black" />
   <!-- <i class="fas fa-user-secret" style="color:black"></i> -->
-  <span style='font-weight:bold; color:black;font-family:Avenir'> Sigue</span>
+  <span style='font-weight:bold; color:black;font-family:Avenir'> Sigue </span>
   <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span> <span style='color:black;font-weight:350;font-size:30px;'> en Chile</span>
     </div>
 </router-link>
