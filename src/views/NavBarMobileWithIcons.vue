@@ -59,7 +59,7 @@ export default {
 .bottom-bar{
   z-index:10;
   width:100%;
-  height:40px;
+  height:50px;
   display:flex;
   /* position:fixed; */
   /* top:100px; */
@@ -71,12 +71,13 @@ export default {
   box-shadow: 1px 1px 1px 1px #e8e8e8;
 }
 .add-margin{
-  margin-bottom:40px;
+  margin-bottom:50px;
 }
 
 
 .bottom-bar a{
-  padding:5px 0px 5px 0px;
+  width:100%;
+  padding:10px 0px 10px 0px;
   color: black;
   font-size:20px;
 }
