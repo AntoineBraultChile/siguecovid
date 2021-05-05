@@ -1,8 +1,9 @@
 <template>
   <div id="app">
+    <nav-bar-mobile-with-icons  v-if='mobileMode'> </nav-bar-mobile-with-icons>
 
-  <nav-bar v-if='!mobileMode'></nav-bar>
-  <nav-bar-mobile  v-if='mobileMode'> </nav-bar-mobile>
+  <nav-bar v-else></nav-bar>
+  <!-- <nav-bar-mobile  v-if='mobileMode'> </nav-bar-mobile> -->
 
 <div class="vues">
   <router-view/>
@@ -46,7 +47,7 @@ import NavBarMobileWithIcons from './views/NavBarMobileWithIcons'
   export default{
     components:{'nav-bar':NavBar,
     // 'nav-bar-mobile':NavBarMobile,
-    'nav-bar-mobile':NavBarMobileWithIcons,
+    'nav-bar-mobile-with-icons':NavBarMobileWithIcons,
 
     // 'bottom-bar': BottomBar
   },
@@ -55,19 +56,21 @@ import NavBarMobileWithIcons from './views/NavBarMobileWithIcons'
         mobileMode:false,
       }
     },
-    methods:{
-      setMobileMode(){
-      this.mobileMode = window.innerWidth <= 1100
-    }
-    },
+    // methods:{
+    //   setMobileMode(){
+    //   this.mobileMode = window.innerWidth <= 1100
+    // }
+    // },
     mounted() {
+      this.mobileMode = window.innerWidth <= 1100
       window.addEventListener('resize', () => {
         this.mobileMode = window.innerWidth <= 1100
       })
 
     },
-    created(){
-      this.setMobileMode();
-    }
+    // created(){
+    //   this.mobileMode = window.innerWidth <= 1100
+    //   // this.setMobileMode();
+    // }
   }
 </script>

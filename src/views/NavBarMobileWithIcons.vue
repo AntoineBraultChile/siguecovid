@@ -25,10 +25,9 @@
 
 <script>
 export default {
-  name:'NavBarMobile',
+  name:'NavBarMobileWithIcons',
   data:()=>{
     return{
-      navBar:false,
       fixedNavBar:false,
     }
   },
