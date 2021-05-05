@@ -15,7 +15,7 @@
           type='vaccin'
           />
 
-          <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
+        <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
           <div class='wrapper'>
             <title-graphic> Proporción de la población chilena vacunada</title-graphic>
@@ -41,6 +41,8 @@
             <line-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="optionsByAge()"> </line-chart>
           </div>
         </div>
+        <spinner size='massive' v-else ></spinner>
+
       </div>
       <footer-indicators>
         <p>

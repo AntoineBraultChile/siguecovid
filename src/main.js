@@ -9,6 +9,8 @@ import 'vue-slider-component/theme/default.css'
 
 Vue.component('VueSlider', VueSlider)
 
+import Spinner from 'vue-simple-spinner'
+Vue.component('spinner', Spinner)
 
 // import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'

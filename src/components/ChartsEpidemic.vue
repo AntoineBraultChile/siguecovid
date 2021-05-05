@@ -1,23 +1,23 @@
 <template lang="html">
-  <div class="ChartsEpidemic">
-    <div class='graph'>
+  <div class="ChartsEpidemic" >
+    <div class='graph' v-if='dataCovid.labelsCases.length>0'>
       <title-graphic> {{title['Cases']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsCases"> </update>
 
       <bar-chart  :chartData="getChartWithMean(region,'Cases')" :options="getOptionsChartWithMean(region,'Cases')"> </bar-chart>
     </div>
-    <div class='graph'>
+    <div class='graph' v-if='dataCovid.labelsPcr.length>0'>
       <title-graphic> {{title['Pcr']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsPcr"> </update>
 
       <bar-chart  :chartData="getChartPosPcr(region)" :options="getOptionsChartPosPcr(region)"> </bar-chart>
     </div>
-    <div class='graph'>
+    <div class='graph' v-if='dataCovid.labelsUci.length>0'>
       <title-graphic> {{title['Uci']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsUci"> </update>
       <bar-chart  :chartData="getRegionValues(region,'Uci')" :options="getRegionOptions(region,'Uci')"> </bar-chart>
     </div>
-    <div class='graph'>
+    <div class='graph' v-if='dataCovid.labelsDeaths.length>0'>
       <title-graphic> {{title['Deaths']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsDeaths"> </update>
 
@@ -71,12 +71,6 @@ methods:{
         }
       }]
     },
-    // title:{
-    //   display:true,
-    //   text:this.title[type]+ ' en ' + name,
-    //   fontSize:20
-    //
-    // },
     legend: {
       display:false,
     },
@@ -105,11 +99,6 @@ getOptionsChartWithMean(){
         }
       }]
     },
-    // title:{
-    //   display:true,
-    //   text:this.title[type]+ ' en '+ name,
-    //   fontSize:20
-    // },
     responsive:true,
     maintainAspectRatio:false
   }

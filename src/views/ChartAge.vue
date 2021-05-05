@@ -7,8 +7,8 @@
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
       <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
         <div class='graphUci'>
-          <title-graphic>Incidence por edad </title-graphic>
-          <span style='font-size:16px'>Incidence: número semanal de casos por cada 100.000 habitantes</span> <br>
+          <title-graphic>Incidencia por edad </title-graphic>
+          <span style='font-size:16px'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
           <update :labels="casesChile.labels"> </update>
           <line-chart  :chartData="renderChileCases()" :options='optionsLineUciChile'> </line-chart>
 
@@ -22,11 +22,10 @@
         <title-graphic>Total fallecidos por Covid-19 por edad </title-graphic>
         <update :labels="uciChile.labels"> </update>
         <bar-chart  :chartData="renderChileDeaths()" :options='optionsChileDeathsByAge'> </bar-chart>
-
       </div>
-
-
     </div>
+    <spinner size='massive' v-else ></spinner>
+
   </div>
 
   </div>

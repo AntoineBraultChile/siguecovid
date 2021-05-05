@@ -35,8 +35,10 @@
           </div> -->
           <slide-bar  v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
-          <charts-epidemic v-if="dataCovid.labelsCases.length > 0" :region="currentRegion" :fromDate="fromDate" :dataCovid="dataCovid"/>
+          <charts-epidemic :region="currentRegion" :fromDate="fromDate" :dataCovid="dataCovid"/>
           </div>
+          <spinner size='massive' v-else ></spinner>
+
         </div>
         <footer-indicators><p>
           Como se calculan los indicatores :
