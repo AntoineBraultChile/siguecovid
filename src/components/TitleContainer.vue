@@ -30,7 +30,7 @@ export default {
 @media all and (max-width: 1100px) {
   .Title{
     width:100%;
-    margin:5px 20px 5px 20px;
+      margin:0px 20px 5px 20px;
   }
 
   #slogan{

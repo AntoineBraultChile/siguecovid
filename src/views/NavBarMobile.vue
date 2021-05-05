@@ -140,11 +140,11 @@ header{
   font-size:25px;
 }
 
-.title a, .title a:hover{
-  height:50%;
-  text-decoration:none;
-  color: #2c3e50;
-}
+  .title a, .title a:hover{
+    height:50%;
+    text-decoration:none;
+    color: #2c3e50;
+  }
 .routeNavMobile a {
 
   display:flex;

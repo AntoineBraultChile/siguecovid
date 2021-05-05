@@ -2,7 +2,7 @@
   <div class="ChartAge">
     <div class="containerSection">
 
-  <title-container titleName='Personas actualmente en unidad de cuidados intensivos y total fallecidos por edad en Chile.'/>
+  <title-container titleName='La pandemia de Covid-19 por edad en Chile.'/>
 
     <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
       <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
@@ -128,9 +128,9 @@ export default {
   },
   metaInfo() {
        return {
-           title: "Numero de personas en unidad de cuidados intensivos y total fallecidos por Covid-19 y por edad en Chile",
+           title: "La pandemia de Covid-19 por edad en Chile.",
            meta: [
-               { name: 'description', content: `Grafico del numero de personas en unidad de cuidados intensivos y del numero total de fallecidos por Covid-19 y por edad en Chile`},
+               { name: 'description', content: `Graficos de la incidencia,  del numero de personas en unidad de cuidados intensivos y del numero total de fallecidos por edad en Chile`},
                { name: 'robots', content: 'index,follow'}
            ]
        }

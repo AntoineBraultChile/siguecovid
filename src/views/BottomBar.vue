@@ -79,11 +79,6 @@ export default {
 
 
   .bottom-bar  a.router-link-exact-active,   .bottom-bar  a:hover{
-  /* color: #42b983; */
-  /* border: solid 0.5px ;
-   border-radius: 25px; */
-   /* background-color:#ecebeb; */
-  /* color: #B22222; */
    color:#4285F4;
 
 

@@ -8,7 +8,7 @@
   <router-view/>
 
 </div>
-   <bottom-bar v-if='mobileMode'></bottom-bar>
+   <!-- <bottom-bar v-if='mobileMode'></bottom-bar> -->
 
   </div>
 </template>
@@ -30,8 +30,9 @@
 
 @media all and (max-width: 1100px) {
   .vues{
-    margin-top:55px;
-    padding-bottom:60px
+    /* margin-top:55px; */
+    padding-bottom:10px;
+    margin-top:10px;
   }
 
 }
@@ -39,13 +40,15 @@
 
 <script>
 import NavBar from './views/NavBar'
-import NavBarMobile from './views/NavBarMobile'
-import BottomBar from './views/BottomBar'
+// import NavBarMobile from './views/NavBarMobile'
+import NavBarMobileWithIcons from './views/NavBarMobileWithIcons'
 
   export default{
     components:{'nav-bar':NavBar,
-    'nav-bar-mobile':NavBarMobile,
-    'bottom-bar': BottomBar
+    // 'nav-bar-mobile':NavBarMobile,
+    'nav-bar-mobile':NavBarMobileWithIcons,
+
+    // 'bottom-bar': BottomBar
   },
     data:()=>{
       return{
