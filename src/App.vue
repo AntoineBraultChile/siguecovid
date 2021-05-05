@@ -2,11 +2,14 @@
   <div id="app">
 
   <nav-bar v-if='!mobileMode'></nav-bar>
-  <nav-bar-mobile navBar='navBar' v-if='mobileMode'> </nav-bar-mobile>
+  <nav-bar-mobile  v-if='mobileMode'> </nav-bar-mobile>
 
 <div class="vues">
   <router-view/>
+
 </div>
+   <bottom-bar v-if='mobileMode'></bottom-bar>
+
   </div>
 </template>
 
@@ -19,13 +22,6 @@
   color: #2c3e50;
   font-size:20px;
 }
-/* body{
-  margin:0px;
-  padding:0px;
-  /* background-color:red; */
-  /* background-color:  #fcfbef; */
-/* } */
-
 
 .vues{
   margin-top:70px;
@@ -35,19 +31,25 @@
 @media all and (max-width: 1100px) {
   .vues{
     margin-top:55px;
+    padding-bottom:60px
   }
+
 }
 </style>
 
 <script>
 import NavBar from './views/NavBar'
 import NavBarMobile from './views/NavBarMobile'
+import BottomBar from './views/BottomBar'
 
   export default{
-    components:{'nav-bar':NavBar, 'nav-bar-mobile':NavBarMobile},
+    components:{'nav-bar':NavBar,
+    'nav-bar-mobile':NavBarMobile,
+    'bottom-bar': BottomBar
+  },
     data:()=>{
       return{
-        mobileMode:false
+        mobileMode:false,
       }
     },
     methods:{
@@ -59,6 +61,7 @@ import NavBarMobile from './views/NavBarMobile'
       window.addEventListener('resize', () => {
         this.mobileMode = window.innerWidth <= 1100
       })
+
     },
     created(){
       this.setMobileMode();

@@ -13,11 +13,11 @@
     </div>
     <div id='icons'>
       <font-awesome-icon class='icon' icon="times" v-on:click='navBar=false' v-if='navBar'/>
-
       <font-awesome-icon class='icon' icon="bars" v-on:click='navBar=true' v-if='!navBar'/>
 
   </div>
   </div>
+
 </header>
 
 <transition name="slideNavMenu">

@@ -17,12 +17,17 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faVirus, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faVirus, faBars, faTimes , faHome, faSyringe, faFlag, faEnvelope, faUsers} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faVirus)
 library.add(faBars)
 library.add(faTimes)
+library.add(faHome)
+library.add(faSyringe)
+library.add(faFlag)
+library.add(faEnvelope)
+library.add(faUsers)
 
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
