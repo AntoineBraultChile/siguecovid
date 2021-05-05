@@ -81,7 +81,7 @@ export default {
       title: "Sigue Covid en Chile - Siga  la epidemia de covid-19 y el proceso de vacunación en chile y en regiones",
       meta: [
         { name: 'description',
-        content:  `Sigue Covid facilita la visualización de datos sobre la epidemia de covid-19 en Chile
+        content:  `Sigue Covid facilita la visualización de datos sobre la epidemia de Covid-19 en Chile
         y en las regiones del país. Encontrará información actualizada diariamente sobre el número de nuevos casos, pruebas de PCR,
         personas en  unidad de cuidados intensivos y fallecidos. También podrá consultar el progreso de la campaña de vacunación.`},
         {name: 'robots', content: 'index,follow'}
@@ -101,7 +101,7 @@ export default {
           ChileDeaths:[],
           ChileTotalDeaths:[],
           ChileMeanCases:[],
-          ChilePos:[]
+          ChilePos:[],
         },
         fromDate: "01-01-2021",
         fromMonth:'',
@@ -188,6 +188,8 @@ export default {
           this.dataCovid.ChileTotalDeaths = Object.values(data[2][16]).slice(3).map(i => Number(i))
           let dayCases = derivate(Object.values(data[2][16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovid, 'ChileDeaths', dayCases);
+          this.$set(this.dataCovid, 'LabelsMeanDeaths' ,Object.keys(data[2][0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+          this.$set(this.dataCovid, 'ChileMeanDeaths' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
 
           // cases
           this.dataCovid['labelsCases'] =  Object.keys(data[0][0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
@@ -213,40 +215,6 @@ export default {
 
 
 
-          // // download PCR and Cases data
-          // const dataCases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv')
-          // this.dataCovid['labelsCases'] =  Object.keys(dataCases[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-          // dayCases = derivate(Object.values(dataCases[16]).slice(3).map(i => Number(i)))
-          // this.$set(this.dataCovid, 'ChileCases', dayCases);
-          // this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(dataCases[0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
-          // this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
-          //
-          // const Pcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false)
-          //
-          // // compute the positivity
-          // let Cases = this.dataCovid['ChileCases'];
-          // let Pos=[];
-          // for (let i=0;i<Pcr.length;i++){
-          //   Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
-          // }
-          // Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
-          // this.dataCovid.ChilePos = Pos;
-          //
-          //
-          // // download deaths data
-          //   const dataDeaths = await  d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv')
-          //   this.dataCovid['labelsDeaths'] =  Object.keys(dataDeaths[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-          //   this.dataCovid.ChileTotalDeaths = Object.values(dataDeaths[16]).slice(3).map(i => Number(i))
-          //   let dayCases = derivate(Object.values(dataDeaths[16]).slice(3).map(i => Number(i)))
-          //   this.$set(this.dataCovid, 'ChileDeaths', dayCases);
-          //
-          //
-          // // download UCI data
-          // getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true);
-          //
-          //
-          // // update fromMonth
-          // this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
       }
     }

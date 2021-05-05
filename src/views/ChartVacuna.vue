@@ -170,22 +170,12 @@ export default {
               }
             }]
           },
-          // title:{
-          //   display:true,
-          //   text:'Proporción de la población chilena vacunada',
-          //   fontSize:20
-          // },
           lineTension: 1,
           responsive:true,
           maintainAspectRatio:false
         },
 
         optionsPorDia:{
-          // title:{
-          //   display:true,
-          //   text:'Número de personas vacunadas cada dia',
-          //   fontSize:20
-          // },
           responsive:true,
           maintainAspectRatio:false
         },
