@@ -4,7 +4,8 @@
 
   <title-container titleName='La pandemia de Covid-19 por edad en Chile.'/>
 
-    <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0">
+    <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0"> -->
+    <div id='block_graph' v-if="uciChile.labels.length > 0">
       <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
         <div class='graphUci'>
           <title-graphic>Incidencia por edad </title-graphic>
@@ -65,6 +66,8 @@
   display:flex;
   flex-direction:row;
   justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 @media all and (max-width: 1100px) {

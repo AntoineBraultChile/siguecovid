@@ -1,16 +1,17 @@
 <template >
   <div class="NavBar">
-
     <header>
-    <div class="d-flex justify-content-between">
-        <router-link to="/">
+    <!-- <div class="d-flex justify-content-between"> -->
+    <div class='container-title'>
     <div class="title">
+      <router-link to="/">
+
   <font-awesome-icon icon="virus" style="color:black" />
-  <!-- <i class="fas fa-user-secret" style="color:black"></i> -->
   <span style='font-weight:bold; color:black;font-family:Avenir'> Sigue </span>
   <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span> <span style='color:black;font-weight:350;font-size:30px;'> en Chile</span>
+  </router-link>
     </div>
-</router-link>
+
   <div id="nav">
     <router-link to="/">Chile</router-link>
     <router-link to="/regions">Por región</router-link>
@@ -30,15 +31,36 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.NavBar{
+  display:flex;
+  justify-content: space-between;
+}
+/* .container-title{
+  width:100%;
+  border:solid;
 
+  display:flex;
+  justify-content: space-between;
+  align-items: space-between;
+} */
+.container-title{
+  width:100%;
+  padding:5px 20px  0px 20px;
+  display:flex;
+  justify-content: space-between;
+  align-items: space-between;
+
+}
 header{
   position: fixed;
   top:0px;
   width:100%;
+  display:flex;
+  justify-content: space-between;
+  align-items: space-between;
   /* border-bottom:solid 0.5px; */
   /* border-color: white; */
   box-shadow: 1px 1px 1px 1px #e8e8e8;
-  padding:5px 20px  0px 20px;
   /* background-color: #FFFACD; */
   /* background-color:#f9f9f9; */
   background-color: white;
@@ -59,7 +81,7 @@ header{
   font-size:35px;
 }
 
-a .title , header a:hover{
+header a  , header a:hover{
   text-decoration:none;
   color: #2c3e50;
 }

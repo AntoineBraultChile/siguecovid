@@ -3,7 +3,8 @@
     <div class="containerSection">
     <title-container titleName='La pandemia de Covid-19 en las regiones de Chile' :update='false'/>
 
-      <div class="subtitleContainer" v-if='regionName.length>0'>
+    <region-choice :currentRegion='currentRegion' :regionName='regionName' v-on:new-region="changeCurrentRegion" v-if='regionName.length>0'/>
+      <!-- <div class="subtitleContainer" v-if='regionName.length>0'>
         <h2><span class='subtitle'>Región {{currentRegion}}</span></h2>
         <div class="optionsGraph">
           <p>
@@ -13,9 +14,10 @@
             </select>
           </p>
         </div>
-      </div>
+      </div> -->
 
-      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0" >
+      <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0" > -->
+      <div id='block_graph'  v-if="dataCovid.labelsCases.length > 0" >
 
         <indicators
           :labels="dataCovid['labelsCases']"
@@ -61,7 +63,7 @@
       align-items: center;
       justify-content: center;
     }
-    .subtitleContainer{
+    /* .subtitleContainer{
       display:flex;
       flex-direction:column;
       justify-content: center;
@@ -71,15 +73,16 @@
       border-radius: 7px;
       background-color: white;
       padding-top:5px;
-      /* padding:15px 10px 0px 10px; */
       margin-bottom:5px;
       margin-top:5px;
+
     }
     .subtitleContainer h2{
       text-align:center;
       font-size:25px;
-      /* border:solid; */
-    }
+      font-weight:normal;
+
+    } */
 
     .optionsGraph label{
       padding-right: 5px;
@@ -108,6 +111,8 @@
     import FooterIndicators from '@/components/FooterIndicators'
     import SlideBar from '@/components/SlideBar'
 
+    import RegionChoice from '@/components/RegionChoice'
+
     import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
     // import VueSlider from 'vue-slider-component'
@@ -124,6 +129,7 @@
         'title-container':TitleContainer,
         'indicators': Indicators,
         'slide-bar': SlideBar,
+        'region-choice':RegionChoice,
         'footer-indicators': FooterIndicators
 
       },
@@ -162,8 +168,8 @@
         // variationCases(region){
         //   return Math.round(-(1-this.dataCovid[region+'MeanCases'].slice(-1)[0]/this.dataCovid[region+'MeanCases'].slice(-8)[0])*1000)/10;
         // },
-          changeCurrentRegion(event){
-            this.currentRegion = event.target.value;
+          changeCurrentRegion(payload){
+            this.currentRegion = payload.target.value;
           },
           // changeFromDate(event){
           //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')

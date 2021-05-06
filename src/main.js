@@ -13,7 +13,7 @@ import Spinner from 'vue-simple-spinner'
 Vue.component('spinner', Spinner)
 
 // // import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 import { library } from '@fortawesome/fontawesome-svg-core'

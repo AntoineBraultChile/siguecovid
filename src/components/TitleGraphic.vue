@@ -19,6 +19,7 @@ export default {
 .TitleGraphic h2{
   font-size:20px;
   margin-bottom:0px;
+  font-weight:normal;
 }
 
 @media all and (max-width: 1100px) {

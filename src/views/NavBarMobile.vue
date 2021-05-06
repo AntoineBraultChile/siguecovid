@@ -2,7 +2,7 @@
   <div class="NavBarMobile">
 
     <header>
-    <div class="d-flex  justify-content-between">
+    <div class="title-container">
     <div class="title">
         <router-link to="/" v-on:click.native='navBar=false'>
             <font-awesome-icon class='icon' icon="virus" style="color:black" />

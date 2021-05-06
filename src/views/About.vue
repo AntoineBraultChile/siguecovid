@@ -29,7 +29,7 @@ export default {
        return {
            title: "Contacto",
            meta: [
-               { name: 'description', content: `Sigue Covid  permite una visualización del estado de la pandemia de Covid-19 en Chile`},
+               { name: 'description', content: `Sigue Covid permite una visualización del estado de la pandemia de Covid-19 en Chile`},
                {name: 'robots', content: 'index,follow'}
            ]
        }},
@@ -40,13 +40,15 @@ export default {
 #slogan{
   font-size:25px;
   padding-left:0px;
+  font-weight:normal;
 }
 .about{
   display:flex;
   flex-direction:row;
   justify-content: center;
   height:100%;
-  padding:5px 10px 0px 10px;
+
+  /* padding:5px 10px 0px 10px; */
 
 }
 .aboutMe{
@@ -67,8 +69,15 @@ export default {
  .about p{
   text-align:justify;
   font-size:20px;
+  line-height: 170%;
 
 }
+
+a, a:hover{
+  color: #4285F4;
+  text-decoration:none;
+}
+
 @media all and (max-width: 1100px) {
  .about p{
    font-size:16px;

@@ -2,9 +2,9 @@
   <div class="indicators">
     <div class="optionDosis">
       <div class='dosis indicator1' :class='colorsIndicator[0]' v-if='cases.length>0'>
-        <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
-        <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
-        <span class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </span>
+        <div>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </div>
+        <div  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</div>
+        <div class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </div>
         <update :labels='labels'> </update>
       </div>
       <div class='dosis indicator2' :class='colorsIndicator[1]' v-if='positivity.length>0'>
@@ -35,9 +35,7 @@ import Update from './Update'
 
 export default {
   name:'Indicators',
-  // examples props : dataCovidChile.labelsCases, dataCovidChile.ChileMeanCases, dataCovidChile.ChilePos, dataCovidChile.ChileUci, dataCovidChile.ChileDeaths, dataCovidChile.ChileTotalDeaths[0][0]
   props:{'labels':{type:Array},
-  // 'data':{type Object}
   'cases':{type:Array},
   'positivity':{type:Array},
   'uci':{type:Array},
@@ -82,6 +80,8 @@ created(){
 </script>
 
 <style lang="css" scoped>
+
+
 .indicators{
   width:100%;
   display:flex;
@@ -106,9 +106,10 @@ created(){
 }
 
 .dosis{
+  height:80px;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
   font-weight: bold;
   color:#2c3e50;

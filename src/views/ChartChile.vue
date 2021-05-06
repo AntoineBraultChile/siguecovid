@@ -3,7 +3,9 @@
     <div class="containerSection">
       <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
 
-      <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0">
+      <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0"> -->
+      <div id='block_graph' v-if="dataCovid.labelsCases.length > 0">
+
         <indicators
           :labels='dataCovid.labelsCases'
           :cases='dataCovid.ChileMeanCases'
