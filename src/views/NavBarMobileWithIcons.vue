@@ -50,6 +50,7 @@ export default {
     margin:0px;
 }
 
+
 .fixed-nav-bar{
     position:fixed;
     top:0px;
@@ -70,12 +71,15 @@ export default {
   box-shadow: 1px 1px 1px 1px #e8e8e8;
 }
 .add-margin{
-  margin-bottom:50px;
+  margin-bottom:60px;
 }
 
 
 .bottom-bar a{
   width:100%;
+  display:flex;
+  justify-content:space-around;
+  align-items: center;
   padding:10px 0px 10px 0px;
   color: black;
   font-size:20px;

@@ -65,5 +65,9 @@ select {
       font-weight:normal;
     }
 
+    select {
+      font-size: 16px;
+    }
+
 }
 </style>

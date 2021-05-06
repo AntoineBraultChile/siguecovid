@@ -23,6 +23,10 @@
   color: #2c3e50;
   font-size:20px;
 }
+a, a:hover{
+  color: #4285F4;
+  text-decoration:none;
+}
 
 .vues{
   margin-top:70px;

@@ -3,13 +3,22 @@
     <div class="aboutMe">
         <h1 id='slogan'>Contacto</h1>
 
+        <h2>Información sobre Sigue Covid</h2>
         <p>
           Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
           y el progreso de la vacunación en Chile. Los datos epidemiológicos proceden del
           <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>
-          y los  datos demográficos del <a href="https://www.ine.cl/"> Instituto Nacional de Estadísticas</a>.
+          y los  datos demográficos del <a href="https://www.ine.cl/" target="_blank"> Instituto Nacional de Estadísticas</a>.
         </p>
 
+        <p>
+          Si está interesado en visualizar los datos de Covid-19, existen otros visualizadores
+          con indicadores complementarios a esta página web. En particular, recomiendo el visualizador del
+              <a href="http://covid-19vis.cmm.uchile.cl/geo" target="_blank"> Centro de Modelamiento Matemático</a> y
+            <a href="https://www.icovidchile.cl/" target="_blank">icovid</a>.
+        </p>
+
+        <h2>Quièn soy</h2>
       <p>
         Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
@@ -37,8 +46,12 @@ export default {
 </script>
 
 <style lang="css" scoped>
-#slogan{
+h2{
+  font-weight:normal;
   font-size:25px;
+}
+#slogan{
+  font-size:30px;
   padding-left:0px;
   font-weight:normal;
 }
@@ -72,10 +85,10 @@ export default {
   line-height: 170%;
 }
 
-a, a:hover{
+/* a, a:hover{
   color: #4285F4;
   text-decoration:none;
-}
+} */
 
 @media all and (max-width: 1100px) {
  .about p{
@@ -83,6 +96,11 @@ a, a:hover{
  }
  #slogan{
 
+   font-size:20px;
+ }
+
+ h2{
+   font-weight:normal;
    font-size:20px;
  }
 }

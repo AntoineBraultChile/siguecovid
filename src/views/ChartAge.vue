@@ -28,6 +28,14 @@
     <spinner size='massive' v-else ></spinner>
 
   </div>
+  <footer-indicators><p>
+    Como se calculan los indicatores :
+    <ul>
+      <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
+      da el número de fallecidos por Covid-19 sospechosos. </li>
+    </ul>
+  </p>
+  </footer-indicators>
 
   </div>
 </template>
@@ -54,6 +62,8 @@
 
 .graphUci{
   margin-top:5px;
+  margin-bottom:5px;
+
   width:49.4%;
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius:7px;
@@ -68,7 +78,7 @@
   justify-content: center;
   flex-wrap: wrap;
   justify-content: space-between;
-} 
+}
 
 @media all and (max-width: 1100px) {
   .containerSection{
@@ -86,8 +96,6 @@
  .graphUci{
    width:100%;
    margin-top:5px;
-
-
  }
  .optionsGraph{
    display:flex;
@@ -107,6 +115,7 @@ import Update from '../components/Update'
 import TitleContainer from '../components/TitleContainer'
 import SlideBar from '../components/SlideBar'
 import TitleGraphic from '../components/TitleGraphic'
+import FooterIndicators from '../components/FooterIndicators'
 // import VueSlider from 'vue-slider-component'
 // import 'vue-slider-component/theme/default.css'
 
@@ -121,6 +130,7 @@ export default {
     'line-chart': LineChart,
     'bar-chart':BarChart,
     'slide-bar': SlideBar,
+    'footer-indicators': FooterIndicators,
     // 'vue-slider': VueSlider,
     'title-container': TitleContainer,
     'title-graphic':TitleGraphic,

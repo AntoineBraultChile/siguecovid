@@ -46,6 +46,8 @@
           Como se calculan los indicatores :
           <ul>
             <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
+            <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
+            da el número de fallecidos por Covid-19 sospechosos. </li>
           </ul>
         </p>
         </footer-indicators>

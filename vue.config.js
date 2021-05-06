@@ -28,7 +28,21 @@ module.exports = {
   }
 }
 
+// to analyse bundle
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//     .BundleAnalyzerPlugin;module.exports = {
+//     configureWebpack: {
+//         plugins: [new BundleAnalyzerPlugin()]
+//     }
+// };
 
+module.exports = {
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: false
+    }
+  }
+};
 
 // const path = require('path')
 // const PrerenderSPAPlugin = require('prerender-spa-plugin')
