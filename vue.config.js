@@ -3,6 +3,8 @@ const { routes } = require('./src/router/index.js');
 const path = require('path');
 const PrerenderSPAPlugin = require('prerender-spa-plugin');
 
+const webpack = require('webpack');
+
 module.exports = {
     pluginOptions: {
         sitemap: {
@@ -14,7 +16,8 @@ module.exports = {
               changefreq: 'daily',
               priority:   1.0,
             },
-        }
+        },
+
     },
     configureWebpack: {
     plugins: [
@@ -23,7 +26,9 @@ module.exports = {
         staticDir: path.join(__dirname, 'dist'),
         // Required - Routes to render.
         routes: [ '/', '/about', '/regions', '/edad', '/vacuna' ],
-      })
+      }),
+      // Ignore all locale files of moment.js
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ]
   }
 }
@@ -36,13 +41,6 @@ module.exports = {
 //     }
 // };
 
-module.exports = {
-  pluginOptions: {
-    webpackBundleAnalyzer: {
-      openAnalyzer: false
-    }
-  }
-};
 
 // const path = require('path')
 // const PrerenderSPAPlugin = require('prerender-spa-plugin')

@@ -26,7 +26,11 @@
 </template>
 
 <script>
-import moment from 'moment';
+// import moment from 'moment';
+// moment.locale('es');
+
+const moment = require('moment');
+require('moment/locale/es');
 moment.locale('es');
 
 import BarChart from '../components/BarChart'

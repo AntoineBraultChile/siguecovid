@@ -121,8 +121,10 @@
     // import 'vue-slider-component/theme/default.css'
 
     import * as d3 from 'd3-fetch'
-    import moment from 'moment';
-
+    const moment = require('moment');
+    require('moment/locale/es');
+    moment.locale('es');
+    
     export default {
       name:'ChartRegions',
       components:{
