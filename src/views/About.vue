@@ -70,7 +70,6 @@ export default {
   text-align:justify;
   font-size:20px;
   line-height: 170%;
-
 }
 
 a, a:hover{

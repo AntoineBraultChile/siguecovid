@@ -41,6 +41,7 @@ select {
     border-radius: 7px;
     background-color: white;
     margin-top:5px;
+    margin-bottom:5px;
     /* padding:15px 10px 0px 10px; */
     /* margin-bottom:5px;
     margin-top:5px; */
