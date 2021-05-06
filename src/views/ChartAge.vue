@@ -164,7 +164,7 @@ export default {
         '60-69':[],
         '>=70':[]
       },
-      fromDate: "01-01-2021",
+      fromDate: "01-02-2021",
       listOfMonths:[],
       dicMonth:[],
 

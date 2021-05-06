@@ -2,9 +2,9 @@
   <div class="indicators">
     <div class="optionDosis">
       <div class='dosis indicator1' :class='colorsIndicator[0]' v-if='cases.length>0'>
-        <div>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </div>
-        <div  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</div>
-        <div class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </div>
+        <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
+        <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
+        <span class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </span>
         <update :labels='labels'> </update>
       </div>
       <div class='dosis indicator2' :class='colorsIndicator[1]' v-if='positivity.length>0'>
@@ -80,7 +80,9 @@ created(){
 </script>
 
 <style lang="css" scoped>
-
+span{
+  padding:2px 0px 2px 0px;
+}
 
 .indicators{
   width:100%;
@@ -106,7 +108,6 @@ created(){
 }
 
 .dosis{
-  height:80px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;

@@ -105,7 +105,7 @@ export default {
           ChileMeanCases:[],
           ChilePos:[],
         },
-        fromDate: "01-01-2021",
+        fromDate: "01-02-2021",
         fromMonth:'',
         listOfMonths:[]
     }
