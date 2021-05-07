@@ -5,6 +5,7 @@ const PrerenderSPAPlugin = require('prerender-spa-plugin');
 
 const webpack = require('webpack');
 
+
 module.exports = {
     pluginOptions: {
         sitemap: {
@@ -29,8 +30,10 @@ module.exports = {
       }),
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    ]
-  }
+    ],
+    
+  },
+
 }
 
 // to analyse bundle

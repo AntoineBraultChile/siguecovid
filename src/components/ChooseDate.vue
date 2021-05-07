@@ -13,7 +13,10 @@
 </template>
 
 <script>
-import moment from 'moment';
+// import moment from 'moment';
+const moment = require('moment');
+require('moment/locale/es');
+moment.locale('es');
 // import VueSlider from 'vue-slider-component'
 // import 'vue-slider-component/theme/default.css'
 

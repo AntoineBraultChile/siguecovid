@@ -18,7 +18,7 @@
             <a href="https://www.icovidchile.cl/" target="_blank">icovid</a>.
         </p>
 
-        <h2>Quièn soy</h2>
+        <h2>Quién soy</h2>
       <p>
         Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
