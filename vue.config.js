@@ -21,6 +21,9 @@ module.exports = {
 
     },
     configureWebpack: {
+      externals: {
+      moment: 'moment'
+  },
     plugins: [
       new PrerenderSPAPlugin({
         // Required - The path to the webpack-outputted app to prerender.
@@ -31,8 +34,9 @@ module.exports = {
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
-    
+
   },
+
 
 }
 

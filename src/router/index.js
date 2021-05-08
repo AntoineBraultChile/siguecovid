@@ -13,7 +13,7 @@ export const routes = [
     path: '/',
     name: 'ChartChile',
     // component: ChartChile,
-    component: () => import(/* webpackChunkName: "" */ /* webpackPrefetch: true */ /* webpackChunkName: "company-side" */ '../views/ChartChile.vue')
+    component: () => import(/* webpackChunkName: "about" */ /* webpackPrefetch: true */ /* webpackChunkName: "company-side" */ '../views/ChartChile.vue')
   },
   {
     path: '/regions',

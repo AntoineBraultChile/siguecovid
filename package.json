@@ -43,7 +43,6 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.9.2",
-    "sass-loader": "^7.0.3",
     "vue-cli-plugin-element": "~1.0.1",
     "vue-cli-plugin-sitemap": "~2.3.0",
     "vue-cli-plugin-webpack-bundle-analyzer": "~4.0.0",
