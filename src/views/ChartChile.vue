@@ -138,7 +138,7 @@ export default {
             }
 
             if(initializeMonths == true){
-              let currentDate = dayjs('2020-05', 'MM-YYYY')
+              let currentDate = dayjs('05-2020', 'MM-YYYY')
               while(currentDate < dayjs(this.dataCovid.labelsUci[this.dataCovid.labelsUci.length-1],'DD-MM-YYYY')){
                 this.listOfMonths.push(dayjs(currentDate, 'MM-YYYY').format('MMMM YYYY'))
                 currentDate = dayjs(currentDate,'MM-YYYY').add(1,'M')

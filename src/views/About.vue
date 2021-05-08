@@ -66,7 +66,7 @@ h2{
 }
 .aboutMe{
   text-align:left;
-  max-width:800px;
+  max-width:700px;
   height:100%;
   /* margin-top:20px; */
   /* padding:0px 10px 0px 10px; */
@@ -81,6 +81,7 @@ h2{
 
  .about p{
   text-align:justify;
+  /* font-size:1.9rem; */
   font-size:20px;
   line-height: 170%;
 }
