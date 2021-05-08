@@ -99,10 +99,17 @@ import SlideBar from '../components/SlideBar'
 
 import * as d3 from 'd3-fetch'
 // import moment from 'moment';
-const moment = require('moment');
-require('moment/locale/es');
-moment.locale('es');
+
+// const moment = require('moment');
+// require('moment/locale/es');
+// moment.locale('es');
+
 // import ChooseDate from './ChooseDate'
+
+import * as dayjs from 'dayjs'
+
+import 'dayjs/locale/es' // load on demand
+dayjs.locale('es') // use Spanish locale globally
 
 export default {
   name:'ChartVacuna',
@@ -186,12 +193,12 @@ export default {
     methods:{
       updateCurrentDate(payload){
         this.fromMonth = payload
-        this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
+        this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
       },
       renderChartVacuna(){
         let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
         return {
-          labels:this.vacunaChile.labels.filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY') }),
+          labels:this.vacunaChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
           datasets: [
             {
               label: "primera dosis",
@@ -217,7 +224,7 @@ export default {
       renderChartVacunaPorDia(){
         let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
         return {
-          labels:this.vacunaChile.labels.filter((x) => { return  moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY')}),
+          labels:this.vacunaChile.labels.filter((x) => { return  dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY')}),
           datasets: [
             {
               label: "con primera dosis",
@@ -236,7 +243,7 @@ export default {
         let indexDate = this.vacunaChile.labelsByAge.indexOf(this.fromDate)
 
         return {
-          labels: this.vacunaChile.labelsByAge.filter((x) => { return  moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY')}),
+          labels: this.vacunaChile.labelsByAge.filter((x) => { return  dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY')}),
           datasets: [
             {
               label: "16-39",
@@ -304,7 +311,7 @@ export default {
 
       // fetching datas vaccination first and second doses in Chile
       let  data = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv')
-      this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
+      this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
       Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/19500)/10)})
       this.vacunaChile['total primera dosis'] = Object.values(data[0]).slice(1).slice(-2).map(d=>{return Math.round(d)})
       Object.values(data[1]).slice(2).map(i => Number(i)).forEach(d =>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19500)/10)})
@@ -317,7 +324,7 @@ export default {
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_1eraDosis.csv'),
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_2daDosis.csv')])
 
-      this.vacunaChile.labelsByAge  = Object.keys(firstDosesByAge[0]).slice(1).map(d =>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+      this.vacunaChile.labelsByAge  = Object.keys(firstDosesByAge[0]).slice(1).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
       let ageGroup =['16']
       Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach(d => ageGroup.push(d))
 
@@ -345,16 +352,16 @@ export default {
 
         // function to generate list of months
         let generateListOfMonths  =  async (labels) => {
-          let currentDate = moment('02-2021', 'MM-YYYY')
+          let currentDate = dayjs('02-2021', 'MM-YYYY')
           let listOfMonths =[]
-          while(currentDate < moment(labels[labels.length-1],'DD-MM-YYYY')){
+          while(currentDate < dayjs(labels[labels.length-1],'DD-MM-YYYY')){
             listOfMonths.push(currentDate.format('MMMM YYYY'))
-            currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+            currentDate = dayjs(currentDate,'MM-YYYY').add(1,'M')
           }
           return listOfMonths
         }
         this.listOfMonths =   await generateListOfMonths(this.vacunaChile.labels)
-        this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+        this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
     }
 

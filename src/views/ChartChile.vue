@@ -6,7 +6,7 @@
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0"> -->
       <div id='block_graph' v-if="dataCovid.labelsCases.length > 0">
 
-        <indicators
+        <indicators v-if="dataCovid.labelsUci.length > 0"
           :labels='dataCovid.labelsCases'
           :cases='dataCovid.ChileMeanCases'
           :positivity='dataCovid.ChilePos'
@@ -65,13 +65,16 @@ import SlideBar from '@/components/SlideBar'
 
 import * as d3 from 'd3-fetch'
 
-// import moment from 'moment';
+
+// const moment = require('moment');
+// require('moment/locale/es');
 // moment.locale('es');
-const moment = require('moment');
-require('moment/locale/es');
-moment.locale('es');
 
-
+import * as dayjs from 'dayjs'
+var customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
+import 'dayjs/locale/es' // load on demand
+dayjs.locale('es') // use Spanish locale globally
 
 export default {
   name:'ChartChile',
@@ -101,7 +104,7 @@ export default {
           labelsPcr:[],
           labelsCases:[],
           labelsDeaths:[],
-          labelsPos:[],
+          // labelsPos:[],
           ChileUci:[],
           ChilePcr:[],
           ChileCases:[],
@@ -121,7 +124,7 @@ export default {
     // },
         updateCurrentDate(payload){
           this.fromMonth = payload
-          this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
+          this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
         }
       },
       async created(){
@@ -129,16 +132,16 @@ export default {
         const getDataCsv =  async (path, type, derivative,  initializeMonths = false) => {
           let data = await d3.csv(path)
             if (derivative==true){
-              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }else{
-              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }
 
             if(initializeMonths == true){
-              let currentDate = moment('05-2020', 'MM-YYYY')
-              while(currentDate < moment(this.dataCovid.labelsUci[this.dataCovid.labelsUci.length-1],'DD-MM-YYYY')){
-                this.listOfMonths.push(moment(currentDate, 'MM-YYYY').format('MMMM YYYY'))
-                currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+              let currentDate = dayjs('2020-05', 'MM-YYYY')
+              while(currentDate < dayjs(this.dataCovid.labelsUci[this.dataCovid.labelsUci.length-1],'DD-MM-YYYY')){
+                this.listOfMonths.push(dayjs(currentDate, 'MM-YYYY').format('MMMM YYYY'))
+                currentDate = dayjs(currentDate,'MM-YYYY').add(1,'M')
               }
             }
             let chileValues = []; // the sum of the regional time series
@@ -191,18 +194,18 @@ export default {
 
         requests().then(data => {
           // deaths
-          this.dataCovid['labelsDeaths'] =  Object.keys(data[2][0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          this.dataCovid['labelsDeaths'] =  Object.keys(data[2][0]).slice(3+1).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           this.dataCovid.ChileTotalDeaths = Object.values(data[2][16]).slice(3).map(i => Number(i))
           let dayCases = derivate(Object.values(data[2][16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovid, 'ChileDeaths', dayCases);
-          this.$set(this.dataCovid, 'LabelsMeanDeaths' ,Object.keys(data[2][0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+          this.$set(this.dataCovid, 'LabelsMeanDeaths' ,Object.keys(data[2][0]).slice(3+1+7).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
           this.$set(this.dataCovid, 'ChileMeanDeaths' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
 
           // cases
-          this.dataCovid['labelsCases'] =  Object.keys(data[0][0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+          this.dataCovid['labelsCases'] =  Object.keys(data[0][0]).slice(3+1).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
           dayCases = derivate(Object.values(data[0][16]).slice(3).map(i => Number(i)))
           this.$set(this.dataCovid, 'ChileCases', dayCases);
-          this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(data[0][0]).slice(3+1+7).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
+          this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(data[0][0]).slice(3+1+7).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
           this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
 
           // compute the positivity
@@ -216,7 +219,7 @@ export default {
           this.dataCovid.ChilePos = Pos;
 
           // update fromMonth
-          this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+          this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
         })
 
