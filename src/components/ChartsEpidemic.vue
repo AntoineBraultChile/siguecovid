@@ -26,12 +26,18 @@
 </template>
 
 <script>
-// import moment from 'moment';
+
+// const moment = require('moment');
+// require('moment/locale/es');
 // moment.locale('es');
 
-const moment = require('moment');
-require('moment/locale/es');
-moment.locale('es');
+
+import * as dayjs from 'dayjs'
+var customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
+import 'dayjs/locale/es' // load on demand
+dayjs.locale('es') // use Spanish locale globally
+
 
 import BarChart from '../components/BarChart'
 import Update from '../components/Update'
@@ -62,7 +68,7 @@ methods:{
     // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
     let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
     return {
-      labels:this.dataCovid['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
+      labels:this.dataCovid['labels'+type].filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(fromDate,'DD-MM-YYYY')  }),
       datasets:[
         {label:this.title[type]+ ' en '+ name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
       }
@@ -75,7 +81,7 @@ methods:{
       let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       return{
-        labels:this.dataCovid['labels'+type].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
+        labels:this.dataCovid['labels'+type].filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(fromDate,'DD-MM-YYYY')  }),
         datasets:[
           {type:'line', label:'Media móvil de 7  días', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
           {type:'bar',label:this.title[type]+ ' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
@@ -88,7 +94,7 @@ methods:{
       let indexDate = this.dataCovid['labelsPcr'].indexOf(fromDate)
       let indexDatePos = indexDate-7
       return{
-        labels:this.dataCovid['labelsPcr'].filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(fromDate,'DD-MM-YYYY')  }),
+        labels:this.dataCovid['labelsPcr'].filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(fromDate,'DD-MM-YYYY')  }),
         datasets:[
           {type:'line', label:'Positividad (media móvil de 7 días)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Pos'].slice(indexDatePos)},
           {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)}

@@ -86,7 +86,7 @@ export default {
 }
 
 
-  .bottom-bar  a.router-link-exact-active,   .bottom-bar  a:hover{
+  .bottom-bar  a.router-link-exact-active{
    color:#4285F4;
  }
 
@@ -114,6 +114,11 @@ header{
   color: #2c3e50;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .bottom-bar  a:hover{
+  color:#4285F4;
+ }
+}
 
 
 

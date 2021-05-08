@@ -121,10 +121,16 @@
     // import 'vue-slider-component/theme/default.css'
 
     import * as d3 from 'd3-fetch'
-    const moment = require('moment');
-    require('moment/locale/es');
-    moment.locale('es');
-    
+    // const moment = require('moment');
+    // require('moment/locale/es');
+    // moment.locale('es');
+
+    import * as dayjs from 'dayjs'
+    var customParseFormat = require('dayjs/plugin/customParseFormat')
+    dayjs.extend(customParseFormat)
+    import 'dayjs/locale/es' // load on demand
+    dayjs.locale('es') // use Spanish locale globally
+
     export default {
       name:'ChartRegions',
       components:{
@@ -176,11 +182,11 @@
             this.currentRegion = payload.target.value;
           },
           // changeFromDate(event){
-          //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+          //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
           // },
           updateCurrentDate(payload){
             this.fromMonth = payload
-            this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
+            this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
           }
         },
 
@@ -189,9 +195,9 @@
           const getDataCsv = async (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
             let data = await d3.csv(path)
             if (derivative==true){
-              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }else{
-              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
             }
 
             if(initializeMonths == true){
@@ -225,10 +231,10 @@
 
           // function to generate list of months
           let generateListOfMonths  =  () => {
-            let currentDate = moment('05-2020', 'MM-YYYY')
-            while(currentDate < moment(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1],'DD-MM-YYYY')){
+            let currentDate = dayjs('05-2020', 'MM-YYYY')
+            while(currentDate < dayjs(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1],'DD-MM-YYYY')){
               this.listOfMonths.push(currentDate.format('MMMM YYYY'))
-              currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+              currentDate = dayjs(currentDate,'MM-YYYY').add(1,'M')
             }
           }
 
@@ -255,7 +261,7 @@
           }
 
           // update fromMonth from fromDate
-          this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+          this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
         }
       }
 

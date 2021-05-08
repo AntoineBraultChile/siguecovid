@@ -123,9 +123,15 @@ import FooterIndicators from '../components/FooterIndicators'
 import * as d3 from 'd3-fetch'
 // import moment from 'moment';
 
-const moment = require('moment');
-require('moment/locale/es');
-moment.locale('es');
+// const moment = require('moment');
+// require('moment/locale/es');
+// moment.locale('es');
+
+import * as dayjs from 'dayjs'
+var customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
+import 'dayjs/locale/es' // load on demand
+dayjs.locale('es') // use Spanish locale globally
 
 export default {
   name:'ChartAge',
@@ -210,16 +216,16 @@ export default {
   },
   methods:{
     // changeFromDate(event){
-    //   this.fromDate = moment(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+    //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
     // },
     updateCurrentDate(payload){
       this.fromMonth = payload
-      this.fromDate = moment(payload, 'MMMM YYYY').format('01-MM-YYYY')
+      this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
     },
     renderChileUciChart(){
       let indexDate = this.uciChile.labels.indexOf(this.fromDate)
       return {
-        labels:this.uciChile.labels.filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(this.fromDate,'DD-MM-YYYY') }),
+        labels:this.uciChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
         datasets: [
           {
             label: "<=39",
@@ -285,7 +291,7 @@ export default {
            // data:d
       })})
       return{
-        labels:this.casesChile.labels.filter((x) => { return moment(x,'DD-MM-YYYY') >= moment(this.dicMonth[this.fromDate],'DD-MM-YYYY') }),
+        labels:this.casesChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.dicMonth[this.fromDate],'DD-MM-YYYY') }),
         // labels:this.casesChile.labels,
 
         datasets:mydatasets
@@ -295,7 +301,7 @@ export default {
 
   async created(){
     d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto9/HospitalizadosUCIEtario.csv').then(data => {
-      this.uciChile.labels = Object.keys(data[0]).slice(1).map(d=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
+      this.uciChile.labels = Object.keys(data[0]).slice(1).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
       for (let index in data){
         if(index != "columns"){
           let age = Object.values(data[index])[0]
@@ -308,17 +314,17 @@ export default {
     })
     // function to generate list of months
     let generateListOfMonths  =  () => {
-      let currentDate = moment('05-2020', 'MM-YYYY')
-      while(currentDate < moment(this.uciChile.labels[this.uciChile.labels.length-1],'DD-MM-YYYY')){
+      let currentDate = dayjs('05-2020', 'MM-YYYY')
+      while(currentDate < dayjs(this.uciChile.labels[this.uciChile.labels.length-1],'DD-MM-YYYY')){
         this.listOfMonths.push(currentDate.format('MMMM YYYY'))
-        currentDate = moment(currentDate,'MM-YYYY').add(1,'M')
+        currentDate = dayjs(currentDate,'MM-YYYY').add(1,'M')
       }
     }
-    this.fromMonth = moment(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+    this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
     // fetch deaths y age in chile
     let dataDeaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto10/FallecidosEtario.csv')
-    // this.deathsChile.labels = Object.keys(dataDeaths[0]).slice(1).map(d=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
+    // this.deathsChile.labels = Object.keys(dataDeaths[0]).slice(1).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
     for (let deaths of dataDeaths){
       this.deathsChile.ageGroup.push(deaths['Grupo de edad'])
       this.deathsChile.values.push(Number(Object.values(deaths).slice(-1)[0]))
@@ -326,7 +332,7 @@ export default {
 
     // fetch cases by age and gender, we want to convert it to cases by age groups
     let dataCases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto16/CasosGeneroEtario.csv')
-    this.casesChile.labels = Object.keys(dataCases[0]).slice(2).map(d=>  {return moment(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+    this.casesChile.labels = Object.keys(dataCases[0]).slice(2).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
 
     // initialize value cases by age and group age and sum Male and Female
     for (let cases of dataCases){
@@ -355,11 +361,12 @@ export default {
     // generate of list of date which start week from '04-05-2020' to today
     let dateWeekStart = ['20-04-2020'];
     let addDate =dateWeekStart[0]
-    while(moment(addDate, 'DD-MM-YYYY') <= moment(this.casesChile.labels.slice(-1), 'DD-MM-YYYY')) {
-      // console.log(moment(this.casesChile.labels.slice(-1), 'YYYY-MM-DD'))
-      addDate = moment(addDate, 'DD-MM-YYYY').add(7,'d').format('DD-MM-YYYY')
+    // while(dayjs(addDate, 'DD-MM-YYYY') <= dayjs(this.casesChile.labels.slice(-1), 'DD-MM-YYYY')) {
+     do {
+      // console.log(dayjs(this.casesChile.labels.slice(-1), 'YYYY-MM-DD'))
+      addDate = dayjs(addDate, 'DD-MM-YYYY').add(7,'d').format('DD-MM-YYYY')
       dateWeekStart.push(addDate)
-    }
+    }while(dayjs(this.casesChile.labels.slice(-1)[0], 'DD-MM-YYYY').isAfter(dayjs(addDate, 'DD-MM-YYYY')));
 
     let weekCasesValues =[]
     this.casesChile.values.forEach((casesAge,indxCasesAge) =>{
@@ -382,9 +389,9 @@ export default {
     let dic ={}
     for (let month of this.listOfMonths){
       for (let date of this.casesChile.labels){
-        if(moment(date, 'DD-MM-YYYY').format('MM-YYYY') == moment(month,'MMMM YYYY').format('MM-YYYY')){
-          if (!Object.keys(dic).includes(moment(month,'MMMM YYYY').format('01-MM-YYYY'))) {
-            dic[moment(month, 'MMMM YYYY').format('01-MM-YYYY')] = date
+        if(dayjs(date, 'DD-MM-YYYY').format('MM-YYYY') == dayjs(month,'MMMM YYYY').format('MM-YYYY')){
+          if (!Object.keys(dic).includes(dayjs(month,'MMMM YYYY').format('01-MM-YYYY'))) {
+            dic[dayjs(month, 'MMMM YYYY').format('01-MM-YYYY')] = date
           }
         }
       }

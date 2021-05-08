@@ -3,27 +3,39 @@
     <div class="optionDosis">
       <div class='dosis indicator1' :class='colorsIndicator[0]' v-if='cases.length>0'>
         <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
-        <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
-        <span class='en24horas'> {{incrementLastDay(cases)}}  en 24 horas </span>
+        <span class='en24horas'>
+          <font-awesome-icon v-if="incrementLastDay(cases)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px'/>
+            <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px'/>
+                {{incrementLastDay(cases)}}  en 24 horas </span>
+                <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
+
         <update :labels='labels'> </update>
       </div>
       <div class='dosis indicator2' :class='colorsIndicator[1]' v-if='positivity.length>0'>
          <span> {{positivity.slice(-1)[0]+text[1]}} </span>
-        <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
-        <span class='en24horas'> {{incrementLastDay(positivity)}} en 24 horas </span>
+        <span class='en24horas'>
+        <font-awesome-icon v-if="incrementLastDay(positivity)<0 && type=='epidemic' " icon='angle-double-down'  class='fa-fw' color='green' style='font-size:20px'/>
+            <font-awesome-icon v-if="incrementLastDay(positivity)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw'  color='red' style='font-size:20px'/>
+           {{incrementLastDay(positivity)}} en 24 horas </span>
+           <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
+
         <update :labels='labels'> </update>
       </div>
     </div>
     <div class="optionDosis">
       <div class='dosis indicator3' :class='colorsIndicator[2]' v-if='uci.length>0'>
         <span> {{numberToStringFormat(uci.slice(-1)[0]) + text[2]}}</span>
-        <span class='en24horas'> {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} en 24 horas </span>
+        <span class='en24horas'>
+          <font-awesome-icon v-if="incrementLastDay(uci)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px'/>
+            <font-awesome-icon v-if="incrementLastDay(uci)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px'/>
+          {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} en 24 horas </span>
         <span class='legend' v-if="type=='epidemic'"> UCI: unidad de cuidados intensivos </span>
         <update :labels='labels'> </update>
       </div>
       <div class='dosis indicator4' :class='colorsIndicator[3]' v-if='deaths.length>0'>
         <span>{{numberToStringFormat(deaths.slice(-1)[0]) + text[3]}} </span>
-        <span class='en24horas'>  {{numberToStringFormat(incrementLastDay(deaths))}} en 24 horas </span>
+        <span class='en24horas'>
+          {{numberToStringFormat(incrementLastDay(deaths))}} en 24 horas </span>
         <update :labels='labels'> </update>
       </div>
     </div>
@@ -92,6 +104,9 @@ span{
   align-items: center;
 }
 .en24horas{
+  display:flex;
+  align-items:space-between;
+  justify-content: space-between;
   font-size:16px;
   font-weight:normal;
 }
@@ -124,25 +139,25 @@ span{
 }
 .green{
   border: solid 1px rgb(147,219,112);
-  background-color: rgb(147,219,112,0.4);
+  background-color: rgb(147,219,112,0.3);
 }
 .blue{
   border: solid 1px rgb(130,207,253);
-  background-color:rgb(130,207,253,0.4);
+  background-color:rgb(130,207,253,0.3);
 }
 .red{
   border: solid 1px 	rgb(221,75,57);
-  background-color:	rgb(221,75,57,0.4);
+  background-color:	rgb(221,75,57,0.3);
 
 }
 .black{
   border: solid 1px rgb(35, 43, 43);
-  background-color:rgb(35, 43, 43,0.4);
+  background-color:rgb(35, 43, 43,0.3);
 }
 
 .orange{
   border: solid 1px rgb( 	235, 164, 52);
-  background-color:rgb( 235, 164, 52, 0.4);
+  background-color:rgb( 235, 164, 52, 0.3);
 }
 
 @media all and (max-width: 1100px) {

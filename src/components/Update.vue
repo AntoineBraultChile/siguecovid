@@ -4,9 +4,15 @@
 
 <script>
 // import moment from 'moment';
-const moment = require('moment');
-require('moment/locale/es');
-moment.locale('es');
+// const moment = require('moment');
+// require('moment/locale/es');
+// moment.locale('es');
+
+import * as dayjs from 'dayjs'
+var customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
+import 'dayjs/locale/es' // load on demand
+dayjs.locale('es') // use Spanish locale globally
 
 export default {
   name:'update',
@@ -14,12 +20,12 @@ export default {
   computed:{
     update: function(){
       let now = new Date();
-      now = moment(now).format("DD-MM-YYYY");
-      let lastUpdate = moment(this.labels.slice(-1)[0], "DD-MM-YYYY").format("DD-MM-YYYY")
+      now = dayjs(now).format("DD-MM-YYYY");
+      let lastUpdate = dayjs(this.labels.slice(-1)[0], "DD-MM-YYYY").format("DD-MM-YYYY")
       if(now == lastUpdate){
         return 'hoy'+' ('+lastUpdate+')'
       }
-      else if(moment(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
+      else if(dayjs(lastUpdate,'DD-MM-YYYY').add(1,'d').format("DD-MM-YYYY") == now ){
         return 'ayer '+' ('+lastUpdate+')'
       }
       else{
