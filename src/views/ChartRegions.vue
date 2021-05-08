@@ -126,7 +126,8 @@
     // moment.locale('es');
 
     import * as dayjs from 'dayjs'
-
+    var customParseFormat = require('dayjs/plugin/customParseFormat')
+    dayjs.extend(customParseFormat)
     import 'dayjs/locale/es' // load on demand
     dayjs.locale('es') // use Spanish locale globally
 
