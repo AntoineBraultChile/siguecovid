@@ -53,6 +53,8 @@
 }
 #description{
   font-size:20px;
+  text-align:justify;
+  line-height: 150%;
 }
 
 @media all and (max-width: 1100px) {

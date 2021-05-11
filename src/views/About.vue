@@ -60,7 +60,6 @@ h2{
   flex-direction:row;
   justify-content: center;
   height:100%;
-
   /* padding:5px 10px 0px 10px; */
 
 }
@@ -83,7 +82,7 @@ h2{
   text-align:justify;
   /* font-size:1.9rem; */
   font-size:20px;
-  line-height: 170%;
+  line-height: 150%;
 }
 
 /* a, a:hover{
