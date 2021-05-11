@@ -44,6 +44,10 @@
 </style>
 
 <style >
+.box-container{
+  display:flex;
+  align-items: center;
+}
 .ChartChile{
   width:100%;
   display:flex;
@@ -55,6 +59,7 @@
   font-size:20px;
   text-align:justify;
   line-height: 150%;
+  padding:0px 5px 0px 5px;
 }
 
 @media all and (max-width: 1100px) {

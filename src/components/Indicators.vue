@@ -109,9 +109,11 @@ created(){
   padding-bottom:10px;
 }
 .container-indicators{
+  width:100%;
   display:flex;
   flex-direction:row;
   flex-wrap:wrap;
+  justify-content: space-between;
 }
 
 span{
@@ -193,12 +195,12 @@ span{
   }
   .dosis.indicator1, .dosis.indicator3{
     width:50%;
-    margin:5px 5px 5px 0px;
+    margin:5px 5px 5px 5px;
 
   }
   .dosis.indicator2, .dosis.indicator4{
     width:50%;
-    margin:5px 0px 5px 5px;
+    margin:5px 5px 5px 5px;
   }
   .optionDosis{
     width:100%;
