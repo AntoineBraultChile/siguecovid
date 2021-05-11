@@ -1,12 +1,8 @@
 <template lang="html">
-      <span style="font-weight:normal; font-size:12px;"> Última actualización : {{update}} </span>
+      <span style="font-weight:normal; font-size:14px; color:gray;"> Última actualización : {{update}} </span>
 </template>
 
 <script>
-// import moment from 'moment';
-// const moment = require('moment');
-// require('moment/locale/es');
-// moment.locale('es');
 
 import * as dayjs from 'dayjs'
 var customParseFormat = require('dayjs/plugin/customParseFormat')

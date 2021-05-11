@@ -3,7 +3,7 @@
     <div class='graph' v-if='dataCovid.labelsCases.length>0'>
       <title-graphic> {{title['Cases']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsCases"> </update>
-
+      
       <bar-chart  :chartData="plotBarChartWithMean(region,'Cases')" :options="chartOptions('Cases')"> </bar-chart>
     </div>
     <div class='graph' v-if='dataCovid.labelsPcr.length>0'>
@@ -57,7 +57,7 @@ export default {
       backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
       title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
       'Pcr':'Positividad y PCR en ',
-      'Cases':'Casos',
+      'Cases':'Casos nuevos',
       'Deaths': 'Fallecidos por Covid-19'
     }
   }

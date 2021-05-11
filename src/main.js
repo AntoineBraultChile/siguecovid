@@ -34,6 +34,11 @@ library.add(faAngleDoubleDown)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
+import BoxContainer from '@/components/BoxContainer'
+Vue.component('box-container', BoxContainer)
+
+import Subtitle from '@/components/Subtitle'
+Vue.component('subtitle', Subtitle)
 
 Vue.config.productionTip = false
 

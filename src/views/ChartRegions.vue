@@ -1,7 +1,10 @@
 <template>
   <div class="ChartRegion">
     <div class="containerSection">
+      <box-container>
+
     <title-container titleName='La pandemia de Covid-19 en las regiones de Chile' :update='false'/>
+  </box-container>
 
     <region-choice :currentRegion='currentRegion' :regionName='regionName' v-on:new-region="changeCurrentRegion" v-if='regionName.length>0'/>
       <!-- <div class="subtitleContainer" v-if='regionName.length>0'>
@@ -26,6 +29,7 @@
           :uci="dataCovid[currentRegion+'Uci']"
           :deaths="dataCovid[currentRegion+'TotalDeaths']"
           type='epidemic'
+          :region='currentRegion'
           />
 <!--
           <div class="slideBarContainer" >
@@ -145,10 +149,10 @@
       },
       metaInfo() {
         return {
-          title: "Evolución de  la epidemia de Covid-19 en las regiones de Chile",
+          title: "Evolución de la pandemia de Covid-19 en las regiones de Chile",
           meta: [
             { name: 'description',
-            content:  `Graficos de los casos nuevos, positividad, numero de test Pcr, numero de personas actualmente en unidad de cuidados intensivos,
+            content:  `Graficos y indicatores de los casos nuevos, positividad, numero de test Pcr, numero de personas actualmente en unidad de cuidados intensivos,
             fallecidos en las regiones de Chile `},
             {name: 'robots', content: 'index,follow'}
           ]

@@ -1,7 +1,10 @@
 <template>
   <div class="ChartVacuna">
     <div class="containerSection">
+      <box-container>
+
       <title-container titleName='Avances de la campaña de vacunación contra el Covid-19 en Chile' />
+    </box-container>
 
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="vacunaChile.labels.length > 0"> -->
 <div id='block_graph'  v-if="vacunaChile.labels.length > 0">
@@ -130,7 +133,8 @@ export default {
       title: "Campaña de vacunación en Chile",
       meta: [
         { name: 'description', content: `Avances de la campaña de vacunación en Chile: proporción de la población chilena
-        vacunada con una o dos dosis, numero de primera dosis y segunda sosis administrada cada dia y en total.`},
+        vacunada con una o dos dosis, numero de primera dosis y segunda sosis administrada cada dia y en total. Graficos de la proporción
+        de la población vacunada por edad con una o dos dosis.`},
         {name: 'robots', content: 'index,follow'}
       ]
     }},

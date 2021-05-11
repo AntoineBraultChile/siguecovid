@@ -1,9 +1,12 @@
 <template>
   <div class="ChartChile">
     <div class="containerSection">
-      <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
+      <box-container>
+         <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
+         <p id='description'>Sigue Covid facilita el seguimiento y la visualización de la evolución de la pandemia de Covid-19 en Chile
+         basado en  <a href="https://www.minciencia.gob.cl/covid19/">datos del Ministerio de Ciencia</a>.</p>
+       </box-container>
 
-      <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0"> -->
       <div id='block_graph' v-if="dataCovid.labelsCases.length > 0">
 
         <indicators v-if="dataCovid.labelsUci.length > 0"
@@ -13,6 +16,7 @@
           :uci='dataCovid.ChileUci'
           :deaths='dataCovid.ChileTotalDeaths'
           type='epidemic'
+          region='Chile'
            />
 
         <slide-bar v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
@@ -46,6 +50,15 @@
   flex-direction:column;
   align-items: center;
   justify-content: center;
+}
+#description{
+  font-size:20px;
+}
+
+@media all and (max-width: 1100px) {
+  #description{
+    font-size:16px;
+  }
 }
 </style>
 
@@ -88,12 +101,12 @@ export default {
       },
   metaInfo() {
     return {
-      title: "Sigue Covid en Chile - Siga  la epidemia de covid-19 y el proceso de vacunación en chile y en regiones",
+      title: "Sigue Covid en Chile - Visualizador de la pandemia de Covid-19 y el proceso de vacunación en Chile y en las regiones",
       meta: [
         { name: 'description',
-        content:  `Sigue Covid facilita la visualización de datos sobre la epidemia de Covid-19 en Chile
-        y en las regiones del país. Encontrará información actualizada diariamente sobre el número de nuevos casos, pruebas de PCR,
-        personas en  unidad de cuidados intensivos y fallecidos. También podrá consultar el progreso de la campaña de vacunación.`},
+        content:  `Visualizador de datos sobre la pandemia de Covid-19 en Chile. Encontra información actualizada diariamente sobre
+        el número de  casos nuevos, pruebas de PCR,
+        personas en  unidad de cuidados intensivos y fallecidos.`},
         {name: 'robots', content: 'index,follow'}
       ]
     }},

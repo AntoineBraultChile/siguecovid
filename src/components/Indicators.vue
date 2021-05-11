@@ -1,44 +1,56 @@
 <template lang="html">
   <div class="indicators">
+    <box-container>
+      <div style='display:flex; flex-direction:column; margin-bottom:5px; '>
+        <subtitle v-if="type=='epidemic'">Indicadores clave de la pandemia de Covid-19 en {{region}}</subtitle>
+        <subtitle v-else>Indicadores clave de la vacunación contra el Covid-19 en Chile</subtitle>
+        <update :labels='labels'> </update>
+      </div>
+
+      <div class="container-indicators">
+
     <div class="optionDosis">
       <div class='dosis indicator1' :class='colorsIndicator[0]' v-if='cases.length>0'>
         <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
         <span class='en24horas'>
-          <font-awesome-icon v-if="incrementLastDay(cases)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px'/>
-            <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px'/>
+          <font-awesome-icon v-if="incrementLastDay(cases)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
+            <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px' title='Está aumentando'/>
                 {{incrementLastDay(cases)}}  en 24 horas </span>
-                <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
-
-        <update :labels='labels'> </update>
+                <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de los casos diarios detectados por PCR </span>
+        <!-- <update :labels='labels'> </update> -->
       </div>
       <div class='dosis indicator2' :class='colorsIndicator[1]' v-if='positivity.length>0'>
          <span> {{positivity.slice(-1)[0]+text[1]}} </span>
         <span class='en24horas'>
-        <font-awesome-icon v-if="incrementLastDay(positivity)<0 && type=='epidemic' " icon='angle-double-down'  class='fa-fw' color='green' style='font-size:20px'/>
-            <font-awesome-icon v-if="incrementLastDay(positivity)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw'  color='red' style='font-size:20px'/>
+        <font-awesome-icon v-if="incrementLastDay(positivity)<0 && type=='epidemic' " icon='angle-double-down'  class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
+            <font-awesome-icon v-if="incrementLastDay(positivity)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw'  color='red' style='font-size:20px' title='Está aumentando'/>
            {{incrementLastDay(positivity)}} en 24 horas </span>
-           <span  class='legend' v-if="type=='epidemic'"> Media móvil de 7 días</span>
-
-        <update :labels='labels'> </update>
+           <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de la positividad que es la proporcion de test PCR que salen positivos al SARS-CoV-2</span>
+        <!-- <update :labels='labels'> </update> -->
       </div>
     </div>
     <div class="optionDosis">
       <div class='dosis indicator3' :class='colorsIndicator[2]' v-if='uci.length>0'>
         <span> {{numberToStringFormat(uci.slice(-1)[0]) + text[2]}}</span>
         <span class='en24horas'>
-          <font-awesome-icon v-if="incrementLastDay(uci)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px'/>
-            <font-awesome-icon v-if="incrementLastDay(uci)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px'/>
+          <font-awesome-icon v-if="incrementLastDay(uci)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
+            <font-awesome-icon v-if="incrementLastDay(uci)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px' title='Está aumentando'/>
           {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} en 24 horas </span>
-        <span class='legend' v-if="type=='epidemic'"> UCI: unidad de cuidados intensivos </span>
-        <update :labels='labels'> </update>
+        <span class='legend' v-if="type=='epidemic'"> La UCI es la sigla de unidad de cuidados intensivos </span>
+        <!-- <update :labels='labels'> </update> -->
       </div>
       <div class='dosis indicator4' :class='colorsIndicator[3]' v-if='deaths.length>0'>
         <span>{{numberToStringFormat(deaths.slice(-1)[0]) + text[3]}} </span>
         <span class='en24horas'>
           {{numberToStringFormat(incrementLastDay(deaths))}} en 24 horas </span>
-        <update :labels='labels'> </update>
+          <span class='legend' v-if="type=='epidemic'"> Corresponde a los fallecidos por Covid-19 confirmados con un test PCR positivos al SARS-CoV-2  </span>
+
+        <!-- <update :labels='labels'> </update> -->
       </div>
     </div>
+  </div>
+
+  </box-container>
   </div>
 </template>
 
@@ -53,7 +65,8 @@ export default {
   'uci':{type:Array},
   'deaths':{type:Array},
   'colors':{type:Array, default: function (){return ['green', 'blue', 'red', 'black']}},
-  'type':{type :String, default: function (){return 'epidemic'} }
+  'type':{type :String, default: function (){return 'epidemic'} },
+  'region':{type: String}
 },
 data(){
   return{
@@ -80,7 +93,7 @@ methods: {
 },
 created(){
   if(this.typeIndicator=='epidemic'){
-    this.text = [' casos', ' % de positividad', ' personas en UCI', ' total fallecidos']
+    this.text = [' casos nuevos', ' % de positividad', ' personas en UCI', ' total fallecidos']
   }else if(this.typeIndicator=='vaccin'){
     this.text = ['% con una dosis', '% con dos dosis', ' primera dosis', ' segunda dosis']
   }else{
@@ -92,6 +105,15 @@ created(){
 </script>
 
 <style lang="css" scoped>
+.box-container{
+  padding-bottom:10px;
+}
+.container-indicators{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+}
+
 span{
   padding:2px 0px 2px 0px;
 }
@@ -115,6 +137,7 @@ span{
   font-size:12px;
 }
 .optionDosis{
+
   width:49%;
   display:flex;
   flex-direction:row;
@@ -123,6 +146,7 @@ span{
 }
 
 .dosis{
+  width:40%;
   display:flex;
   flex-direction:column;
   justify-content:space-between;

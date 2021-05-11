@@ -1,8 +1,10 @@
 <template>
   <div class="ChartAge">
     <div class="containerSection">
+      <box-container>
 
   <title-container titleName='La pandemia de Covid-19 por edad en Chile.'/>
+</box-container>
 
     <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0"> -->
     <div id='block_graph' v-if="casesChile.labels.length > 0">
@@ -150,7 +152,7 @@ export default {
        return {
            title: "La pandemia de Covid-19 por edad en Chile.",
            meta: [
-               { name: 'description', content: `Graficos de la incidencia,  del numero de personas en unidad de cuidados intensivos y del numero total de fallecidos por edad en Chile`},
+               { name: 'description', content: `Graficos de la incidencia por edad,  del numero de personas en unidad de cuidados intensivos por edad y del numero total de fallecidos por edad en Chile`},
                { name: 'robots', content: 'index,follow'}
            ]
        }
