@@ -4,7 +4,7 @@
       <box-container>
          <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
          <p id='description'>Sigue Covid facilita el seguimiento y la visualización de la evolución de la pandemia de Covid-19 en Chile
-         basado en  <a href="https://www.minciencia.gob.cl/covid19/">datos del Ministerio de Ciencia</a>.</p>
+         basado en  <a href="https://www.minciencia.gob.cl/covid19/" target='_blank'>datos del Ministerio de Ciencia</a>.</p>
        </box-container>
 
       <div id='block_graph' v-if="dataCovid.labelsCases.length > 0">
