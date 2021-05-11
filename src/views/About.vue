@@ -67,13 +67,8 @@ h2{
   text-align:left;
   max-width:700px;
   height:100%;
-  /* margin-top:20px; */
-  /* padding:0px 10px 0px 10px; */
   padding:10px 20px 10px 20px;
   border-radius:7px;
-
-  /* box-shadow: 1px 1px 2px 2px #e8e8e8; */
-  /* box-shadow: 0px 3px 8px #e8e8e8; */
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   background-color: white;
 }
