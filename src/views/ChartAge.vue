@@ -354,11 +354,12 @@ export default {
         casesByTenYears.push(sumArray(this.casesChile.values[i],this.casesChile.values[i+1]))
     }
     casesByTenYears.slice(-1)[0] = sumArray(casesByTenYears.slice(-1)[0], this.casesChile.values.slice(-1)[0])
+    console.log(casesByTenYears)
     this.casesChile.values = casesByTenYears;
 
     // create age group 10 20 30 40 50 60 70 80 200(max age)
     this.casesChile.ageGroup = [...Array(7).keys()].map(i => String((i+1)*10))
-     this.casesChile.ageGroup.push(">=70")
+    this.casesChile.ageGroup.push(">=70")
 
     // generate of list of date which start week from '04-05-2020' to today
     let dateWeekStart = ['20-04-2020'];
@@ -380,7 +381,7 @@ export default {
       })
       weekCasesValues.push(derivate(weekCasesValuesAge).map(d => d/this.casesChile.agePopulation[indxCasesAge]*100000))
     })
-    this.casesChile.values = weekCasesValues
+    this.casesChile.values = weekCasesValues.map(d => {return d.map(dd => {return Math.round(dd)})})
 
     // set new labels by week
     let labelsByWeek =[]

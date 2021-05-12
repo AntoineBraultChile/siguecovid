@@ -43,7 +43,7 @@
         <span>{{numberToStringFormat(deaths.slice(-1)[0]) + text[3]}} </span>
         <span class='en24horas'>
           {{numberToStringFormat(incrementLastDay(deaths))}} en 24 horas </span>
-          <span class='legend' v-if="type=='epidemic'"> Corresponde a los fallecidos por Covid-19 confirmados con un test PCR positivos al SARS-CoV-2  </span>
+          <span class='legend' v-if="type=='epidemic'"> Corresponde a los fallecidos por Covid-19 confirmados con un test PCR positivo al SARS-CoV-2  </span>
 
         <!-- <update :labels='labels'> </update> -->
       </div>
