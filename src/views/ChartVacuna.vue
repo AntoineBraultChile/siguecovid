@@ -54,7 +54,7 @@
       </div>
       <footer-indicators>
         <p>
-          Calculamos los porcentajes a partir de las proyecciones de población del <a href="https://www.ine.cl/docs/default-source/proyecciones-de-poblacion/cuadros-estadisticos/base-2017/ine_estimaciones-y-proyecciones-2002-2035_base-2017_region_base.csv?sfvrsn=1c01d705_8&download=true">INE</a> para el año 2020.
+          Calculamos los porcentajes a partir de las proyecciones de población del <a href="https://www.ine.cl/docs/default-source/proyecciones-de-poblacion/cuadros-estadisticos/base-2017/ine_estimaciones-y-proyecciones-2002-2035_base-2017_region_base.csv?sfvrsn=1c01d705_8&download=true">INE</a> para el año 2021.
           Se calcula que la población chilena es de {{populationChile['Total']}}.
       </p>
       </footer-indicators>
@@ -209,6 +209,13 @@ export default {
               }
             }]
           },
+          tooltips: {
+     mode: 'index',
+           intersect: false
+  },   hover: {
+        mode: 'index',
+        intersect: false
+     },
           lineTension: 1,
           responsive:true,
           maintainAspectRatio:false
@@ -338,6 +345,13 @@ export default {
             }
           }]
         },
+        tooltips: {
+   mode: 'index',
+         intersect: false
+},   hover: {
+      mode: 'index',
+      intersect: false
+   },
         lineTension: 1,
         responsive:true,
         maintainAspectRatio:false

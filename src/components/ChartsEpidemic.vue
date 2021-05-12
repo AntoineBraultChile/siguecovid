@@ -3,7 +3,7 @@
     <div class='graph' v-if='dataCovid.labelsCases.length>0'>
       <title-graphic> {{title['Cases']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsCases"> </update>
-      
+
       <bar-chart  :chartData="plotBarChartWithMean(region,'Cases')" :options="chartOptions('Cases')"> </bar-chart>
     </div>
     <div class='graph' v-if='dataCovid.labelsPcr.length>0'>
@@ -121,6 +121,13 @@ methods:{
         legend: {
           display:false,
         },
+        tooltips: {
+   mode: 'index',
+         intersect: false
+},   hover: {
+      mode: 'index',
+      intersect: false
+   },
         responsive:true,
         maintainAspectRatio:false
       }

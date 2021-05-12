@@ -195,6 +195,13 @@ export default {
             }
           }]
         },
+        tooltips: {
+   mode: 'index',
+         intersect: false
+},   hover: {
+      mode: 'index',
+      intersect: false
+   },
         lineTension: 1,
         responsive:true,
         maintainAspectRatio:false
@@ -211,6 +218,13 @@ export default {
         legend: {
           display:false,
         },
+        tooltips: {
+   mode: 'index',
+         intersect: false
+},   hover: {
+      mode: 'index',
+      intersect: false
+   },
         responsive:true,
         maintainAspectRatio:false
       }
