@@ -42,6 +42,12 @@
 
             <line-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="optionsByAge()"> </line-chart>
           </div>
+
+          <div class='wrapper'>
+            <title-graphic> Proporción de población vacunada por región</title-graphic>
+            <update :labels="vacunaChile.labels"> </update>
+            <bar-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="optionsByAge()"> </bar-chart>
+          </div>
         </div>
         <spinner size='massive' v-else ></spinner>
 
@@ -49,7 +55,7 @@
       <footer-indicators>
         <p>
           Calculamos los porcentajes a partir de las proyecciones de población del <a href="https://www.ine.cl/docs/default-source/proyecciones-de-poblacion/cuadros-estadisticos/base-2017/ine_estimaciones-y-proyecciones-2002-2035_base-2017_region_base.csv?sfvrsn=1c01d705_8&download=true">INE</a> para el año 2020.
-          Se calcula que la población chilena es de 19 458 310 .
+          Se calcula que la población chilena es de {{populationChile['Total']}}.
       </p>
       </footer-indicators>
     </div>
@@ -101,13 +107,6 @@ import FooterIndicators from '@/components/FooterIndicators'
 import SlideBar from '../components/SlideBar'
 
 import * as d3 from 'd3-fetch'
-// import moment from 'moment';
-
-// const moment = require('moment');
-// require('moment/locale/es');
-// moment.locale('es');
-
-// import ChooseDate from './ChooseDate'
 
 import * as dayjs from 'dayjs'
 var customParseFormat = require('dayjs/plugin/customParseFormat')
@@ -141,6 +140,32 @@ export default {
     data () {
       return{
         colorsIndicator:['blue', 'orange', 'blue', 'orange'],
+        vacunaRegions:{
+          regionName:[],
+          firstDoses:[],
+          secondDoses:[]
+        },
+        populationChile:{ // projection 2021 https://es.wikipedia.org/wiki/Anexo:Regiones_de_Chile_por_poblaci%C3%B3n
+          'Total':19678363,
+          'Metropolitana':8242459,
+          'Aysén':107158 ,
+          'Antofagasta':703534 ,
+          'Arica y Parinacota':316168 ,
+          'Atacama':316168,
+          'Coquimbo':848079 ,
+          'Araucanía':1019548 ,
+          'Los Lagos':897708 ,
+          'Los Ríos':407837 ,
+          'Magallanes':179533 ,
+          'Tarapacá':391558 ,
+          'Valparaíso':1979373 ,
+          "Ñuble":514609 ,
+          "Biobío":1670590 ,
+          "O’Higgins":1000959 ,
+          "Maule":1143012 ,
+
+        }
+        ,
         vacunaChile:{
           labels:[],
           'primera dosis':[],
@@ -207,8 +232,6 @@ export default {
           datasets: [
             {
               label: "primera dosis",
-              // borderColor: '#93DB70',
-              // backgroundColor: '#93DB70',
               borderColor: '#82CFFD',
               backgroundColor: '#82CFFD',
               fill: false,
@@ -216,8 +239,6 @@ export default {
             },
             {
               label: "segunda dosis",
-              // borderColor: '#dd4b39',
-              // backgroundColor:'#dd4b39',
               borderColor: '#eba434',
               backgroundColor:'#eba434',
               fill: false,
@@ -240,6 +261,23 @@ export default {
               label: "con segunda dosis",
               backgroundColor: '#eba434',
               data: this.vacunaChile["segunda dosis por dia"].slice(indexDate)
+            }
+          ]
+        }
+      },
+      renderChartVacunaPorRegion(){
+        return {
+          labels:this.vacunaRegions.regionName,
+          datasets: [
+            {
+              label: "con primera dosis",
+              backgroundColor: '#82CFFD',
+              data: this.vacunaRegions.firstDoses
+            },
+            {
+              label: "con segunda dosis",
+              backgroundColor: '#eba434',
+              data: this.vacunaRegions.secondDoses
             }
           ]
         }
@@ -300,11 +338,6 @@ export default {
             }
           }]
         },
-        // title:{
-        //   display:true,
-        //   text:'Personas vacunadas con ' + dosisNumber + ' por edad',
-        //   fontSize:20
-        // },
         lineTension: 1,
         responsive:true,
         maintainAspectRatio:false
@@ -316,10 +349,17 @@ export default {
 
       // fetching datas vaccination first and second doses in Chile
       let  data = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv')
+
+      data.forEach(d => {
+        (!this.vacunaRegions.regionName.includes(d['Region']))?this.vacunaRegions.regionName.push(d['Region']):'';
+        let value = Math.round(Object.values(d).slice(-1)[0]/this.populationChile[d['Region']]*1000)/10;
+        (d['Dosis']=='Primera' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
+      })
+
       this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
-      Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/19500)/10)})
+      Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/this.populationChile['Total']*1000)/10)})
       this.vacunaChile['total primera dosis'] = Object.values(data[0]).slice(1).slice(-2).map(d=>{return Math.round(d)})
-      Object.values(data[1]).slice(2).map(i => Number(i)).forEach(d =>{ this.vacunaChile['segunda dosis'].push(Math.round(d/19500)/10)})
+      Object.values(data[1]).slice(2).map(i => Number(i)).forEach(d =>{ this.vacunaChile['segunda dosis'].push(Math.round(d/this.populationChile['Total']*1000)/10)})
       this.vacunaChile['total segunda dosis'] = Object.values(data[1]).slice(1).slice(-2).map(d=>{return Math.round(d)})
       derivate(Object.values(data[0]).slice(2).map(i => Number(i))).forEach((d)=> {this.vacunaChile['primera dosis por dia'].push(d)})
       derivate(Object.values(data[1]).slice(2).map(i => Number(i))).forEach((d)=>{ this.vacunaChile['segunda dosis por dia'].push(d)})
