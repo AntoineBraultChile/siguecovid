@@ -274,7 +274,7 @@
           renderChartVacunaPorDia(){
             let indexDate = this.vacunaChile.labels.indexOf(this.fromDate)
             return {
-              labels:this.vacunaChile.labels.filter((x) => { return  dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY')}),
+              labels:this.vacunaChile.labels.filter((x) => {return  dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY')}).slice(1),
               datasets: [
                 {
                   label: "con primera dosis",
@@ -439,6 +439,10 @@
               this.listOfMonths =   await generateListOfMonths(this.vacunaChile.labels)
               this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
+
+              // vaccine type
+              let vaccineType = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/fabricante.csv')
+              console.log(vaccineType)
             }
 
           }
