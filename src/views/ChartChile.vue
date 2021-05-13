@@ -24,6 +24,7 @@
           <charts-epidemic  region="Chile" :fromDate="fromDate" :dataCovid="dataCovid"/>
 
       </div>
+
       <spinner size='massive' v-else ></spinner>
     </div>
 
@@ -77,6 +78,7 @@ import ChartsEpidemic from '@/components/ChartsEpidemic'
 import TitleContainer from '@/components/TitleContainer'
 import FooterIndicators from '@/components/FooterIndicators'
 import SlideBar from '@/components/SlideBar'
+// import BarChart from '@/components/BarChart'
 
 
 // import VueSlider from 'vue-slider-component'
@@ -103,6 +105,7 @@ export default {
     'indicators': Indicators,
     'charts-epidemic': ChartsEpidemic,
     // 'vue-slider': VueSlider,
+    // 'bar-chart':BarChart,
     'slide-bar': SlideBar,
     'footer-indicators': FooterIndicators
       },
@@ -119,6 +122,25 @@ export default {
     }},
     data () {
       return{
+        populationChile:{ // projection 2021 https://es.wikipedia.org/wiki/Anexo:Regiones_de_Chile_por_poblaci%C3%B3n
+          'Total':19678363,
+          'Metropolitana':8242459,
+          'Aysén':107158 ,
+          'Antofagasta':703534 ,
+          'Arica y Parinacota':316168 ,
+          'Atacama':316168,
+          'Coquimbo':848079 ,
+          'Araucanía':1019548 ,
+          'Los Lagos':897708 ,
+          'Los Ríos':407837 ,
+          'Magallanes':179533 ,
+          'Tarapacá':391558 ,
+          'Valparaíso':1979373 ,
+          "Ñuble":514609 ,
+          "Biobío":1670590 ,
+          "O’Higgins":1000959 ,
+          "Maule":1143012 ,
+        },
         dataCovid:{
           labelsUci:[],
           labelsPcr:[],
@@ -132,16 +154,53 @@ export default {
           ChileTotalDeaths:[],
           ChileMeanCases:[],
           ChilePos:[],
+          incidence:{
+            regionName:[],
+            values:[],
+            variations:[]
+          }
         },
         fromDate: "01-02-2021",
         fromMonth:'',
-        listOfMonths:[]
+        listOfMonths:[],
+        // options:{
+        //   scales: {
+        //     yAxes: [{
+        //       ticks: {
+        //         beginAtZero: true
+        //       }
+        //     }]
+        //   },
+        //   legend: {
+        //     display:false,
+        //   },
+        //   tooltips: {
+        //     mode: 'index',
+        //     intersect: false
+        //   },   hover: {
+        //     mode: 'index',
+        //     intersect: false
+        //   },
+        //   responsive:true,
+        //   maintainAspectRatio:false
+        // }
     }
   },
   methods:{
-    // variationCases(){
-    //   return Math.round(-(1-this.dataCovid.ChileMeanCases.slice(-1)[0]/this.dataCovid.ChileMeanCases.slice(-8)[0])*1000)/10
+    // getChart(){
+    //   return {
+    //     labels: this.dataCovid.incidence.regionName,
+    //     datasets: [{
+    //       type:'bar',
+    //       label:'',
+    //       borderColor: '#82CFFD',
+    //       backgroundColor: '#82CFFD',
+    //       data:this.dataCovid.incidence.values
+    //     }],
+    //     borderWidth:1
+    //   }
     // },
+
         updateCurrentDate(payload){
           this.fromMonth = payload
           this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
@@ -227,6 +286,17 @@ export default {
           this.$set(this.dataCovid, 'ChileCases', dayCases);
           this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(data[0][0]).slice(3+1+7).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
           this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
+          this.dataCovid.incidence.regionName
+          data[0].forEach(d =>{
+            this.dataCovid.incidence.regionName.push(d['Region']);
+            let incidence = Object.values(d).slice(-9,-1).map(i => Number(i))
+            incidence = Math.round((incidence.slice(-1)[0]-incidence[0])/this.populationChile[d['Region']]*100000)
+            let incidenceOneDayBefore = Object.values(d).slice(-10,-2).map(i => Number(i))
+            incidenceOneDayBefore = Math.round((incidenceOneDayBefore.slice(-1)[0]-incidenceOneDayBefore[0])/this.populationChile[d['Region']]*100000)
+            this.dataCovid.incidence.values.push(incidence);
+            this.dataCovid.incidence.variations.push(incidence-incidenceOneDayBefore)
+          })
+          // console.log(data[0])
 
           // compute the positivity
           let Cases = this.dataCovid['ChileCases'];

@@ -22,14 +22,24 @@
       <update :labels="dataCovid.labelsDeaths"> </update>
       <bar-chart  :chartData="plotBarChartWithMean(region,'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
     </div>
+    <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
+      <title-graphic> Incidencia en Chile por región</title-graphic>
+      <span style='font-size:16px'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
+
+      <update :labels="dataCovid.labelsCases"> </update>
+      <bar-chart :chartData="getChartIncidence(dataCovid.incidence.values)" :options="chartOptions('Incidence')"></bar-chart>
+    </div>
+    <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
+      <title-graphic> Variación de la incidencia en Chile por región</title-graphic>
+      <span style='font-size:16px'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia de ayer</span> <br>
+
+      <update :labels="dataCovid.labelsCases"> </update>
+      <bar-chart :chartData="getChartIncidence(dataCovid.incidence.variations, 'variations')" :options="chartOptions('Incidence')"></bar-chart>
+    </div>
   </div>
 </template>
 
 <script>
-
-// const moment = require('moment');
-// require('moment/locale/es');
-// moment.locale('es');
 
 
 import * as dayjs from 'dayjs'
@@ -63,6 +73,25 @@ export default {
   }
 },
 methods:{
+  getChartIncidence(values, type){
+    let colors = [];
+    if (type=='variations'){
+    values.forEach(d => {d<0 ? colors.push(this.backgroundColor['Cases']): colors.push(this.backgroundColor['Uci'])})
+  }else{
+    colors = this.backgroundColor['Pcr']
+  }
+    return {
+      labels: this.dataCovid.incidence.regionName,
+      datasets: [{
+        type:'bar',
+        label:'',
+        borderColor: colors,
+        backgroundColor: colors,
+        data:values
+      }],
+      borderWidth:1
+    }
+  },
   plotBar(name,type){
     let fromDate = this.fromDate
     // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
@@ -73,9 +102,6 @@ methods:{
         {label:this.title[type]+ ' en '+ name, backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}]
       }
     },
-
-
-
     plotBarChartWithMean(name,type){
       let fromDate = this.fromDate
       let indexDate = this.dataCovid['labels'+type].indexOf(fromDate)
@@ -122,12 +148,12 @@ methods:{
           display:false,
         },
         tooltips: {
-   mode: 'index',
-         intersect: false
-},   hover: {
-      mode: 'index',
-      intersect: false
-   },
+          mode: 'index',
+          intersect: false
+        },   hover: {
+          mode: 'index',
+          intersect: false
+        },
         responsive:true,
         maintainAspectRatio:false
       }
