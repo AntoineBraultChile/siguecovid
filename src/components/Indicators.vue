@@ -15,7 +15,8 @@
         <span class='en24horas'>
           <font-awesome-icon v-if="incrementLastDay(cases)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
             <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px' title='Está aumentando'/>
-                {{incrementLastDay(cases)}}  en 24 horas </span>
+                {{incrementLastDay(cases)}}  en 24 horas
+               </span>
                 <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de los casos diarios detectados por PCR </span>
         <!-- <update :labels='labels'> </update> -->
       </div>
@@ -66,7 +67,7 @@ export default {
   'deaths':{type:Array},
   'colors':{type:Array, default: function (){return ['green', 'blue', 'red', 'black']}},
   'type':{type :String, default: function (){return 'epidemic'} },
-  'region':{type: String}
+  'region':{type: String},
 },
 data(){
   return{
