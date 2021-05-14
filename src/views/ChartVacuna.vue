@@ -7,8 +7,8 @@
       </box-container>
 
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="vacunaChile.labels.length > 0"> -->
-      <div id='block_graph'  v-if="vacunaChile.labels.length > 0">
-        <indicators v-if="vacunaChile.labels.length > 0"
+      <div id='block_graph'  v-if="vacunaChile.labels.length > 0 && listOfMonths.length > 0">
+        <indicators
           :labels="vacunaChile.labels"
           :cases="vacunaChile['primera dosis']"
           :positivity="vacunaChile['segunda dosis']"
@@ -18,7 +18,7 @@
           type='vaccin'
           />
 
-          <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
+          <slide-bar  :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
             <div class='wrapper'>
               <title-graphic> Proporción de la población chilena vacunada</title-graphic>
               <update :labels="vacunaChile.labels"> </update>

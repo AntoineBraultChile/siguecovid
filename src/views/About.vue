@@ -48,10 +48,12 @@ export default {
 <style lang="css" scoped>
 h2{
   font-weight:normal;
-  font-size:25px;
+  /* font-size:25px; */
+  font-size:1.3rem;
 }
 #slogan{
-  font-size:30px;
+  /* font-size:30px; */
+  font-size:1.5rem;
   padding-left:0px;
   font-weight:normal;
 }
@@ -60,6 +62,7 @@ h2{
   flex-direction:row;
   justify-content: center;
   height:100%;
+  margin-top:20px;
 
   /* padding:5px 10px 0px 10px; */
 
@@ -76,8 +79,8 @@ h2{
 
  .about p{
   text-align:justify;
-  /* font-size:1.9rem; */
-  font-size:20px;
+  /* font-size:20px; */
+  font-size:1.2rem;
   line-height: 150%;
 }
 
@@ -87,7 +90,7 @@ h2{
 } */
 
 @media all and (max-width: 1100px) {
- .about p{
+ /* .about p{
    font-size:16px;
  }
  #slogan{
@@ -98,6 +101,6 @@ h2{
  h2{
    font-weight:normal;
    font-size:20px;
- }
+ } */
 }
 </style>

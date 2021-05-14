@@ -60,7 +60,7 @@
   font-size:20px;
   text-align:justify;
   line-height: 150%;
-  padding:0px 5px 0px 5px;
+  padding:0px 10px 0px 10px;
 }
 
 @media all and (max-width: 1100px) {

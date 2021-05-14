@@ -17,14 +17,15 @@ export default {
   padding:5px 5px 0px 5px;
 }
 .TitleGraphic h2{
-  font-size:20px;
+  /* font-size:20px; */
+  font-size:1.2rem;
   margin-bottom:0px;
   font-weight:normal;
 }
-
+/* 
 @media all and (max-width: 1100px) {
   .TitleGraphic h2{
     font-size:20px;
   }
-}
+} */
 </style>

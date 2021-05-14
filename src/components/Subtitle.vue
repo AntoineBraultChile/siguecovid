@@ -13,15 +13,16 @@ export default {
 <style lang="css" scoped>
 h2{
   font-weight:normal;
-  font-size:25px;
+  /* font-size:25px; */
+  font-size:1.3rem;
   margin-bottom:5px;
 }
 
-@media all and (max-width: 1100px) {
+/* @media all and (max-width: 1100px) {
 
 h2{
     font-size:18px;
 
   }
-}
+} */
 </style>

@@ -13,8 +13,8 @@
       <div class='dosis indicator1' :class='colorsIndicator[0]' v-if='cases.length>0'>
         <span>{{numberToStringFormat(cases.slice(-1)[0])+text[0]}}  </span>
         <span class='en24horas'>
-          <font-awesome-icon v-if="incrementLastDay(cases)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
-            <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px' title='Está aumentando'/>
+          <font-awesome-icon v-if="incrementLastDay(cases)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:1.1rem' title='Está bajando'/>
+            <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:1.1rem' title='Está aumentando'/>
                 {{incrementLastDay(cases)}}  en 24 horas
                </span>
                 <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de los casos diarios detectados por PCR </span>
@@ -23,8 +23,8 @@
       <div class='dosis indicator2' :class='colorsIndicator[1]' v-if='positivity.length>0'>
          <span> {{positivity.slice(-1)[0]+text[1]}} </span>
         <span class='en24horas'>
-        <font-awesome-icon v-if="incrementLastDay(positivity)<0 && type=='epidemic' " icon='angle-double-down'  class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
-            <font-awesome-icon v-if="incrementLastDay(positivity)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw'  color='red' style='font-size:20px' title='Está aumentando'/>
+        <font-awesome-icon v-if="incrementLastDay(positivity)<0 && type=='epidemic' " icon='angle-double-down'  class='fa-fw' color='green' style='font-size:1.1rem' title='Está bajando'/>
+            <font-awesome-icon v-if="incrementLastDay(positivity)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw'  color='red' style='font-size:1.1rem' title='Está aumentando'/>
            {{incrementLastDay(positivity)}} en 24 horas </span>
            <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de la positividad que es la proporcion de test PCR que salen positivos al SARS-CoV-2</span>
         <!-- <update :labels='labels'> </update> -->
@@ -34,8 +34,8 @@
       <div class='dosis indicator3' :class='colorsIndicator[2]' v-if='uci.length>0'>
         <span> {{numberToStringFormat(uci.slice(-1)[0]) + text[2]}}</span>
         <span class='en24horas'>
-          <font-awesome-icon v-if="incrementLastDay(uci)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:20px' title='Está bajando'/>
-            <font-awesome-icon v-if="incrementLastDay(uci)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:20px' title='Está aumentando'/>
+          <font-awesome-icon v-if="incrementLastDay(uci)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:1.1rem' title='Está bajando'/>
+            <font-awesome-icon v-if="incrementLastDay(uci)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:1.1rem' title='Está aumentando'/>
           {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} en 24 horas </span>
         <span class='legend' v-if="type=='epidemic'"> La UCI es la sigla de unidad de cuidados intensivos </span>
         <!-- <update :labels='labels'> </update> -->
@@ -132,15 +132,16 @@ span{
   display:flex;
   align-items:space-between;
   justify-content: space-between;
-  font-size:16px;
+  /* font-size:16px; */
+  font-size:1.1rem;
   font-weight:normal;
 }
 .legend{
   font-weight:normal;
-  font-size:12px;
+  /* font-size:12px; */
+  font-size:0.8rem;
 }
 .optionDosis{
-
   width:49%;
   display:flex;
   flex-direction:row;
@@ -191,9 +192,9 @@ span{
   .indicators{
     flex-direction:column;
   }
-  .en24horas{
+  /* .en24horas{
     font-size:14px;
-  }
+  } */
   .dosis.indicator1, .dosis.indicator3{
     width:50%;
     margin:5px 5px 5px 5px;

@@ -7,7 +7,7 @@
             <font-awesome-icon class='icon' icon="virus" style="color:black" />
             <span style='font-weight:bold; color:black;font-family:Avenir;'>  Sigue </span>
               <span style='color:black;opacity:0.4;font-weight:300;'>Covid </span>
-              <span style='color:black;font-weight:350;font-size:20px;'>   en Chile</span>
+              <span style='color:black;font-weight:350;font-size:1.5rem;'>   en Chile</span>
         </router-link>
     </div>
   <div class='bottom-bar' :class="{'fixed-nav-bar' : fixedNavBar}" >
@@ -82,7 +82,8 @@ export default {
   align-items: center;
   padding:10px 0px 10px 0px;
   color: black;
-  font-size:20px;
+  /* font-size:20px; */
+  font-size:1.2rem;
 }
 
 

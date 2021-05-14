@@ -16,7 +16,8 @@ footer{
 
 footer p{
   text-align:left;
-  font-size:16px;
+  /* font-size:16px; */
+  font-size:1rem;
 }
 @media all and (max-width: 1100px) {
 
@@ -25,10 +26,11 @@ footer p{
     padding-left: 10px;
     padding-right: 10px;
   }
-  footer p{
+  /* footer p{
     text-align:left;
     font-size:10px;
-  }
+
+  } */
 
 }
 </style>

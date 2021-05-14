@@ -1,5 +1,5 @@
 <template lang="html">
-      <span style="font-weight:normal; font-size:14px; color:gray;"> Última actualización : {{update}} </span>
+      <span style="font-weight:normal; font-size:0.9rem; color:gray;"> Última actualización : {{update}} </span>
 </template>
 
 <script>

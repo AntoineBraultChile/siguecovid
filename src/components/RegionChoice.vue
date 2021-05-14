@@ -3,7 +3,7 @@
     <h2 class='subtitle'>Región {{currentRegion}}</h2>
     <div class="optionsGraph">
       <p>
-        <label for="region">Elija otra región  </label>
+        <label for="region"> Elija otra región  </label>
         <!-- <select name="region" id="region" v-on:change="changeCurrentRegion($event)"> -->
         <select name="region" id="region" v-on:change="emitregion($event)">
           <option v-for="region in regionName"  :key='region' :value='region' :selected='currentRegion==region'> {{region}}
@@ -27,9 +27,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
-select {
+/* select {
   font-size: 20px;
-}
+} */
 
 .region-choice{
     display:flex;
@@ -48,26 +48,34 @@ select {
   }
   .region-choice .subtitle{
     text-align:center;
-    font-size:25px;
+    /* font-size:25px; */
+    font-size:1.3rem;
     font-weight:normal;
     margin-bottom:0px;
     margin-top:10px;
 
     /* border:solid; */
   }
+  .label{
+    font-size: 1.2rem;
+
+  }
+  select {
+    font-size: 1.2rem;
+  }
   @media all and (max-width: 1100px) {
     .subtitleContainer{
       margin-top:5px;
     }
 
-    .region-choice .subtitle{
+    /* .region-choice .subtitle{
       font-size: 20px;
       font-weight:normal;
-    }
+    } */
 
-    select {
+    /* select {
       font-size: 16px;
-    }
+    } */
 
 }
 </style>

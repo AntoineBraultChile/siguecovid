@@ -24,14 +24,14 @@
     </div>
     <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
       <title-graphic> Incidencia en Chile por región</title-graphic>
-      <span style='font-size:16px'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
+      <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
 
       <update :labels="dataCovid.labelsCases"> </update>
       <bar-chart :chartData="getChartIncidence(dataCovid.incidence.values)" :options="chartOptions('Incidence')"></bar-chart>
     </div>
     <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
       <title-graphic> Variación de la incidencia en Chile por región</title-graphic>
-      <span style='font-size:16px'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia de ayer</span> <br>
+      <span style='font-size:1rem'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia de ayer</span> <br>
 
       <update :labels="dataCovid.labelsCases"> </update>
       <bar-chart :chartData="getChartIncidence(dataCovid.incidence.variations, 'variations')" :options="chartOptions('Incidence')"></bar-chart>

@@ -22,10 +22,10 @@ export default {
 }
 
 #slogan{
-  font-size:30px;
+  font-size:1.5rem;
   font-weight:normal;
   margin:0px;
-  padding:10px 0px 10px 0px;
+  padding:10px 10px 10px 10px;
 
 }
 @media all and (max-width: 1100px) {
@@ -34,9 +34,9 @@ export default {
     /* margin:0px 20px 5px 20px; */
   }
 
-  #slogan{
+  /* #slogan{
     font-size:20px;
-  }
+  } */
 }
 
 </style>

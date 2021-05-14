@@ -11,7 +11,7 @@
         <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
           <div class='graphUci'>
             <title-graphic>Incidencia por edad en Chile</title-graphic>
-            <span style='font-size:16px'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
+            <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
             <update :labels="casesChile.labels"> </update>
             <line-chart  :chartData="renderChileCases()" :options='optionsLineUciChile'> </line-chart>
 
