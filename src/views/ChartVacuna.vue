@@ -83,6 +83,7 @@
 
       <style scoped>
 
+
       .ChartVacuna{
         display:flex;
         align-items: center;
