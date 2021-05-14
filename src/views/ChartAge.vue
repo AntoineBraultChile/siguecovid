@@ -10,19 +10,19 @@
       <div id='block_graph' v-if="casesChile.labels.length > 0">
         <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
           <div class='graphUci'>
-            <title-graphic>Incidencia por edad </title-graphic>
+            <title-graphic>Incidencia por edad en Chile</title-graphic>
             <span style='font-size:16px'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
             <update :labels="casesChile.labels"> </update>
             <line-chart  :chartData="renderChileCases()" :options='optionsLineUciChile'> </line-chart>
 
           </div>
           <div class='graphUci'>
-            <title-graphic>Personas en unidad de cuidados intensivos por Covid-19 por edad</title-graphic>
+            <title-graphic>Personas en unidad de cuidados intensivos por Covid-19 por edad en Chile</title-graphic>
             <update :labels="uciChile.labels"> </update>
             <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
           </div>
           <div class='graphUci'>
-            <title-graphic>Total fallecidos por Covid-19 por edad </title-graphic>
+            <title-graphic>Total fallecidos por Covid-19 por edad en Chile</title-graphic>
             <update :labels="uciChile.labels"> </update>
             <bar-chart  :chartData="renderChileDeaths()" :options='optionsChileDeathsByAge'> </bar-chart>
           </div>
