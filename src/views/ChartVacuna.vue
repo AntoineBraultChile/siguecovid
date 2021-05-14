@@ -55,7 +55,7 @@
             </div>
             <div class='wrapper'>
               <title-graphic> Proporción de cada tipo de vacuna utilizada en Chile</title-graphic>
-              <update :labels="vacunaChile.labels"> </update>
+              <update :labels="vaccineType.labels"> </update>
               <doughnut-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut()" :options="optionsDoughnut"> </doughnut-chart>
               </div>
             <div class='wrapper'>
