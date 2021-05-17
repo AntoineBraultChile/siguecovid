@@ -109,7 +109,7 @@ a {
    /* background-color:#ecebeb; */
   /* color: #B22222; */
    color:#4285F4;
-
+   transition: color ease 200ms;
 
 }
 </style>
