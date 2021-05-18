@@ -267,6 +267,7 @@
                 borderWidth:5,
                 label: {
                   content: "Inicio vacunación",
+                  color:'#fff',
                   backgroundColor: '#f87979',
                   enabled: true,
                   position: "center",
@@ -335,15 +336,15 @@
           datasets: [
             {
               label: "Uci",
-              borderColor: '#82CFFD',
-              backgroundColor:'#82CFFD',
+              borderColor: '#dd4b39',
+              backgroundColor:'#dd4b39',
               fill: false,
               data: this.meanAgeUciChile.values.slice(indexDate)
             },
             {
               label: "Fallecidos",
-              borderColor: this.backgroundColors,
-              backgroundColor:this.backgroundColors,
+              borderColor: '#232b2b',
+              backgroundColor:'#232b2b',
               fill: false,
               data: this.meanAgeDeathsChile.mean.slice(indexDateDeath)
             },
