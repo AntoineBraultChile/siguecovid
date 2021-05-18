@@ -13,18 +13,29 @@
             <title-graphic>Incidencia por edad en Chile</title-graphic>
             <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
             <update :labels="casesChile.labels"> </update>
-            <line-chart  :chartData="renderChileCases()" :options='optionsLineUciChile'> </line-chart>
+            <line-chart  :chartData="renderChileCases()" :options='optionsByAge(true,true,false)'> </line-chart>
 
           </div>
           <div class='graphUci'>
-            <title-graphic>Personas en unidad de cuidados intensivos por Covid-19 por edad en Chile</title-graphic>
+            <title-graphic>Personas en UCI por Covid-19 por edad en Chile</title-graphic>
+            <span style='font-size:1rem'>La UCI es la sigla de unidad de cuidados intensivos</span> <br>
+
             <update :labels="uciChile.labels"> </update>
-            <line-chart  :chartData="renderChileUciChart()" :options='optionsLineUciChile'> </line-chart>
+            <line-chart  :chartData="renderChileUciChart()" :options='optionsByAge(true,true,false)'> </line-chart>
+          </div>
+
+          <div class='graphUci'>
+            <title-graphic>Edad media de las personas en UCI y fallecidos por Covid-19 en Chile</title-graphic>
+            <span style='font-size:1rem'>La UCI es la sigla de unidad de cuidados intensivos</span> <br>
+
+            <update :labels="meanAgeUciChile.labels"> </update>
+            <line-chart  :chartData="renderChartMeanAgeUciChile()" :options='optionsByAge(true,false,true)'> </line-chart>
           </div>
           <div class='graphUci'>
             <title-graphic>Total fallecidos por Covid-19 por edad en Chile</title-graphic>
+
             <update :labels="uciChile.labels"> </update>
-            <bar-chart  :chartData="renderChileDeaths()" :options='optionsChileDeathsByAge'> </bar-chart>
+            <bar-chart  :chartData="renderChileDeaths()" :options='optionsByAge(false,true,false)'> </bar-chart>
           </div>
         </div>
         <spinner size='massive' v-else ></spinner>
@@ -35,6 +46,19 @@
         <ul>
           <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
             da el número de fallecidos por Covid-19 sospechosos. </li>
+            <li>
+              Tenemos datos de edad en la UCI sólo para los grupos de edad
+              &lt;=39, 40-49, 50-59, 60-69, >=70. La edad media en la UCI se calcula asignando el valor 30 al grupo de edad 	&lt;=39,
+              el valor 45 al grupo de edad 40-49, 55 al grupo de edad 50-59, 65 al grupo de edad  60-69, 75 al grupo de edad >=70.
+              No es la media real que calculamos por falta de datos. Pero da una idea de la evolución de la edad media en UCI.
+            </li>
+            <li>
+              Tenemos datos de edad de los fallecidos por Covid-19 sólo para los grupos de edad
+              &lt;=39, 40-49, 50-59, 60-69, 70-79, 80-89, >=90. La edad media de los fallecidos se calcula asignando el valor 30 al grupo de edad 	&lt;=39,
+              el valor 45 al grupo de edad 40-49, 55 al grupo de edad 50-59, 65 al grupo de edad  60-69, 75 al grupo de edad 70-79, 85 al grupo de edad 80-89
+              y 95 al grupo de edad >=90.
+              No es la media real que calculamos por falta de datos. Pero da una idea de la evolución de la edad media de los fallecidos por Covid-19.
+            </li>
           </ul>
         </p>
       </footer-indicators>
@@ -151,7 +175,8 @@
       return {
         title: "La pandemia de Covid-19 por edad en Chile.",
         meta: [
-          { name: 'description', content: `Graficos de la incidencia por edad,  del numero de personas en unidad de cuidados intensivos por edad y del numero total de fallecidos por edad en Chile`},
+          { name: 'description', content: `Graficos de la incidencia por edad,  del numero de personas en unidad de cuidados intensivos por edad,
+          de la edad media de los personas en UCI y de los fallecidos por Covid-19 y del numero total de fallecidos por edad en Chile`},
           { name: 'robots', content: 'index,follow'}
         ]
       }
@@ -174,6 +199,17 @@
           labels:[],
           values:[]
         },
+        meanAgeDeathsChile:{
+          labels:[],
+          mean:[],
+          '<=39':[],
+          '40-49':[],
+          '50-59':[],
+          '60-69':[],
+          '70-79':[],
+          '80-89':[],
+          '>=90':[]
+        },
         uciChile:{
           labels:[],
           '<=39':[],
@@ -182,40 +218,31 @@
           '60-69':[],
           '>=70':[]
         },
+        meanAgeUciChile:{
+          labels:[],
+          values:[]
+        },
         fromDate: "01-02-2021",
         listOfMonths:[],
         dicMonth:[],
 
-        optionsLineUciChile:{
+      }
+    },
+    methods:{
+      // changeFromDate(event){
+      //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+      // },
+      optionsByAge(legend, beginAtZero, annotate){
+        let options={
           scales: {
             yAxes: [{
               ticks: {
-                beginAtZero: true
-              }
-            }]
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false
-          },   hover: {
-            mode: 'index',
-            intersect: false
-          },
-          lineTension: 1,
-          responsive:true,
-          maintainAspectRatio:false
-        },
-
-        optionsChileDeathsByAge:{
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
+                beginAtZero: beginAtZero
               }
             }]
           },
           legend: {
-            display:false,
+            display:legend,
           },
           tooltips: {
             mode: 'index',
@@ -227,12 +254,32 @@
           responsive:true,
           maintainAspectRatio:false
         }
-      }
-    },
-    methods:{
-      // changeFromDate(event){
-      //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
-      // },
+        if (annotate==true){
+          options.annotation={
+            annotations: [
+              {
+                drawTime: "afterDraw",
+                type: "line",
+                mode: "vertical",
+                scaleID: "x-axis-0",
+                value: '01-02-2021',
+                borderColor: '#f87979',
+                borderWidth:5,
+                label: {
+                  content: "Inicio vacunación",
+                  backgroundColor: '#f87979',
+                  enabled: true,
+                  position: "center",
+                  xAdjust:60,
+                  yAdjust:-100
+                }
+              }
+            ]
+          }
+        }
+        return options
+
+      },
       updateCurrentDate(payload){
         this.fromMonth = payload
         this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
@@ -280,6 +327,29 @@
           ]
         }
       },
+      renderChartMeanAgeUciChile(){
+        let indexDate = this.meanAgeUciChile.labels.indexOf(this.fromDate)
+        let indexDateDeath = this.meanAgeDeathsChile.labels.indexOf(this.fromDate)
+        return{
+          labels:this.meanAgeUciChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
+          datasets: [
+            {
+              label: "Uci por Covid-19",
+              borderColor: '#82CFFD',
+              backgroundColor:'#82CFFD',
+              fill: false,
+              data: this.meanAgeUciChile.values.slice(indexDate)
+            },
+            {
+              label: "Fallecidos por Covid-19",
+              borderColor: this.backgroundColors,
+              backgroundColor:this.backgroundColors,
+              fill: false,
+              data: this.meanAgeDeathsChile.mean.slice(indexDateDeath)
+            },
+          ]
+        }
+      },
       renderChileDeaths(){
         return {
           labels: this.deathsChile.ageGroup,
@@ -324,6 +394,13 @@
               this.$set(this.uciChile, age, valuesUci);
             }
           }
+          //  compute average age in UCI en chile
+          this.meanAgeUciChile.labels = this.uciChile.labels
+          for (let i=0; i< this.uciChile.labels.length;i++){
+            this.meanAgeUciChile.values.push(Math.round(((30*this.uciChile['<=39'][i] +45*this.uciChile['40-49'][i]
+            +55*this.uciChile['50-59'][i]+65*this.uciChile['60-69'][i]+75*this.uciChile['>=70'][i])/(this.uciChile['<=39'][i] +this.uciChile['40-49'][i]
+            +this.uciChile['50-59'][i]+this.uciChile['60-69'][i]+this.uciChile['>=70'][i]))*10)/10)
+          }
           //generate list of months
           generateListOfMonths()
         })
@@ -337,12 +414,23 @@
         }
         this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
+
+
         // fetch deaths y age in chile
         let dataDeaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto10/FallecidosEtario.csv')
         // this.deathsChile.labels = Object.keys(dataDeaths[0]).slice(1).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
         for (let deaths of dataDeaths){
           this.deathsChile.ageGroup.push(deaths['Grupo de edad'])
           this.deathsChile.values.push(Number(Object.values(deaths).slice(-1)[0]))
+        }
+        // compute mean death age time service
+        this.meanAgeDeathsChile.labels = Object.keys(dataDeaths[0]).slice(2).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+        dataDeaths.map((d)=> {this.meanAgeDeathsChile[d['Grupo de edad']] = Object.values(d).slice(2).map(i => Number(i))})
+        for (let i=0; i< this.meanAgeDeathsChile.labels.length;i++){
+          this.meanAgeDeathsChile.mean.push(Math.round(((30*this.meanAgeDeathsChile['<=39'][i] +45*this.meanAgeDeathsChile['40-49'][i]
+          +55*this.meanAgeDeathsChile['50-59'][i]+65*this.meanAgeDeathsChile['60-69'][i]+75*this.meanAgeDeathsChile['70-79'][i]
+          +85*this.meanAgeDeathsChile['80-89'][i]+95*this.meanAgeDeathsChile['>=90'][i])/(this.meanAgeDeathsChile['<=39'][i] +this.meanAgeDeathsChile['40-49'][i]
+          +this.meanAgeDeathsChile['50-59'][i]+this.meanAgeDeathsChile['60-69'][i]+this.meanAgeDeathsChile['70-79'][i]+this.meanAgeDeathsChile['80-89'][i]+this.meanAgeDeathsChile['>=90'][i]))*10)/10)
         }
 
         // fetch cases by age and gender, we want to convert it to cases by age groups
@@ -367,7 +455,6 @@
           casesByTenYears.push(sumArray(this.casesChile.values[i],this.casesChile.values[i+1]))
         }
         casesByTenYears.slice(-1)[0] = sumArray(casesByTenYears.slice(-1)[0], this.casesChile.values.slice(-1)[0])
-        console.log(casesByTenYears)
         this.casesChile.values = casesByTenYears;
 
         // create age group 10 20 30 40 50 60 70 80 200(max age)
