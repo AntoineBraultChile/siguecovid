@@ -334,14 +334,14 @@
           labels:this.meanAgeUciChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
           datasets: [
             {
-              label: "Uci por Covid-19",
+              label: "Uci",
               borderColor: '#82CFFD',
               backgroundColor:'#82CFFD',
               fill: false,
               data: this.meanAgeUciChile.values.slice(indexDate)
             },
             {
-              label: "Fallecidos por Covid-19",
+              label: "Fallecidos",
               borderColor: this.backgroundColors,
               backgroundColor:this.backgroundColors,
               fill: false,
