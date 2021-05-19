@@ -25,15 +25,20 @@
           </div>
 
           <div class='graphUci'>
-            <title-graphic>Edad media de las personas en UCI y fallecidos por Covid-19 en Chile</title-graphic>
-            <span style='font-size:1rem'>La UCI es la sigla de unidad de cuidados intensivos</span> <br>
+            <title-graphic>Fallecidos diarios por Covid-19 y por edad en Chile</title-graphic>
+            <span style='font-size:1rem'>Los fallecidos confirmados por PCR en media móvil de 7 días</span> <br>
 
-            <update :labels="meanAgeUciChile.labels"> </update>
+            <update :labels="uciChile.labels"> </update>
+            <line-chart  :chartData="renderChartDeathsByAge()" :options='optionsByAge(true,true,false)'> </line-chart>
+          </div>
+          <div class='graphUci'>
+            <title-graphic> Edad media de las personas en UCI y fallecidos por Covid-19 en Chile</title-graphic>
+            <span style='font-size:1rem'>La UCI es la sigla de unidad de cuidados intensivos</span> <br>
+            <update :labels="meanAgeDeathsChile.labels"> </update>
             <line-chart  :chartData="renderChartMeanAgeUciChile()" :options='optionsByAge(true,false,true)'> </line-chart>
           </div>
           <div class='graphUci'>
             <title-graphic>Total fallecidos por Covid-19 por edad en Chile</title-graphic>
-
             <update :labels="uciChile.labels"> </update>
             <bar-chart  :chartData="renderChileDeaths()" :options='optionsByAge(false,true,false)'> </bar-chart>
           </div>
@@ -131,7 +136,7 @@
   </style>
 
   <script>
-  import  {derivate, sumArray} from '@/assets/mathFunctions'
+  import  {derivate, sumArray, meanWeek} from '@/assets/mathFunctions'
 
   import LineChart from '../components/LineChart'
   import BarChart from '../components/BarChart'
@@ -229,9 +234,6 @@
       }
     },
     methods:{
-      // changeFromDate(event){
-      //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
-      // },
       optionsByAge(legend, beginAtZero, annotate){
         let options={
           scales: {
@@ -272,7 +274,7 @@
                   enabled: true,
                   position: "center",
                   xAdjust:60,
-                  yAdjust:-100
+                  yAdjust:-60
                 }
               }
             ]
@@ -351,6 +353,27 @@
           ]
         }
       },
+      renderChartDeathsByAge(){
+        let indexDate = this.meanAgeDeathsChile.labels.indexOf(this.fromDate)
+        let ageGroup = Object.keys(this.meanAgeDeathsChile).slice(2)
+        let myDataSet = []
+        let index=0
+        for (let age of ageGroup){
+          console.log('age',age)
+          myDataSet.push({
+            label:age,
+            borderColor:this.casesChile.colors[index],
+            backgroundColor:this.casesChile.colors[index],
+            fill:false,
+            data: this.meanAgeDeathsChile[age].slice(indexDate)
+          })
+          index+=1
+        }
+        return {
+          labels:this.meanAgeDeathsChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
+          datasets:myDataSet
+        }
+      },
       renderChileDeaths(){
         return {
           labels: this.deathsChile.ageGroup,
@@ -379,7 +402,6 @@
           return{
             labels:this.casesChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.dicMonth[this.fromDate],'DD-MM-YYYY') }),
             // labels:this.casesChile.labels,
-
             datasets:mydatasets
           }
         }
@@ -425,8 +447,8 @@
           this.deathsChile.values.push(Number(Object.values(deaths).slice(-1)[0]))
         }
         // compute mean death age time service
-        this.meanAgeDeathsChile.labels = Object.keys(dataDeaths[0]).slice(2).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-        dataDeaths.map((d)=> {this.meanAgeDeathsChile[d['Grupo de edad']] = Object.values(d).slice(2).map(i => Number(i))})
+        this.meanAgeDeathsChile.labels = Object.keys(dataDeaths[0]).slice(10).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+        dataDeaths.map((d)=> {this.meanAgeDeathsChile[d['Grupo de edad']] = meanWeek(derivate(Object.values(d).slice(2).map(i => Number(i)))).map(d=>{return Math.round(d*10)/10})})
         for (let i=0; i< this.meanAgeDeathsChile.labels.length;i++){
           this.meanAgeDeathsChile.mean.push(Math.round(((30*this.meanAgeDeathsChile['<=39'][i] +45*this.meanAgeDeathsChile['40-49'][i]
           +55*this.meanAgeDeathsChile['50-59'][i]+65*this.meanAgeDeathsChile['60-69'][i]+75*this.meanAgeDeathsChile['70-79'][i]
