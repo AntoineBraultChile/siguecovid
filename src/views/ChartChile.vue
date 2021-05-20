@@ -8,7 +8,6 @@
        </box-container>
 
       <div id='block_graph' v-if="dataCovid.labelsCases.length > 0">
-
         <indicators v-if="dataCovid.labelsUci.length > 0"
           :labels='dataCovid.labelsCases'
           :cases='dataCovid.ChileMeanCases'
@@ -18,7 +17,6 @@
           type='epidemic'
           region='Chile'
            />
-
         <slide-bar v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
           <charts-epidemic  region="Chile" :fromDate="fromDate" :dataCovid="dataCovid"/>
@@ -163,44 +161,9 @@ export default {
         fromDate: "01-02-2021",
         fromMonth:'',
         listOfMonths:[],
-        // options:{
-        //   scales: {
-        //     yAxes: [{
-        //       ticks: {
-        //         beginAtZero: true
-        //       }
-        //     }]
-        //   },
-        //   legend: {
-        //     display:false,
-        //   },
-        //   tooltips: {
-        //     mode: 'index',
-        //     intersect: false
-        //   },   hover: {
-        //     mode: 'index',
-        //     intersect: false
-        //   },
-        //   responsive:true,
-        //   maintainAspectRatio:false
-        // }
     }
   },
   methods:{
-    // getChart(){
-    //   return {
-    //     labels: this.dataCovid.incidence.regionName,
-    //     datasets: [{
-    //       type:'bar',
-    //       label:'',
-    //       borderColor: '#82CFFD',
-    //       backgroundColor: '#82CFFD',
-    //       data:this.dataCovid.incidence.values
-    //     }],
-    //     borderWidth:1
-    //   }
-    // },
-
         updateCurrentDate(payload){
           this.fromMonth = payload
           this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
@@ -289,9 +252,9 @@ export default {
           this.dataCovid.incidence.regionName
           data[0].forEach(d =>{
             this.dataCovid.incidence.regionName.push(d['Region']);
-            let incidence = Object.values(d).slice(-9,-1).map(i => Number(i))
+            let incidence = Object.values(d).slice(-8).map(i => Number(i))
             incidence = Math.round((incidence.slice(-1)[0]-incidence[0])/this.populationChile[d['Region']]*100000)
-            let incidenceOneDayBefore = Object.values(d).slice(-10,-2).map(i => Number(i))
+            let incidenceOneDayBefore = Object.values(d).slice(-15,-7).map(i => Number(i))
             incidenceOneDayBefore = Math.round((incidenceOneDayBefore.slice(-1)[0]-incidenceOneDayBefore[0])/this.populationChile[d['Region']]*100000)
             this.dataCovid.incidence.values.push(incidence);
             this.dataCovid.incidence.variations.push(incidence-incidenceOneDayBefore)

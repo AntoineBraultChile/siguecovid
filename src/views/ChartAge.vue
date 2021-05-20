@@ -359,7 +359,6 @@
         let myDataSet = []
         let index=0
         for (let age of ageGroup){
-          console.log('age',age)
           myDataSet.push({
             label:age,
             borderColor:this.casesChile.colors[index],

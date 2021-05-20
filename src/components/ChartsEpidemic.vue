@@ -31,7 +31,7 @@
     </div>
     <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
       <title-graphic> Variación de la incidencia en Chile por región</title-graphic>
-      <span style='font-size:1rem'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia de ayer</span> <br>
+      <span style='font-size:1rem'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span> <br>
 
       <update :labels="dataCovid.labelsCases"> </update>
       <bar-chart :chartData="getChartIncidence(dataCovid.incidence.variations, 'variations')" :options="chartOptions('Incidence')"></bar-chart>
@@ -109,7 +109,7 @@ methods:{
       return{
         labels:this.dataCovid['labels'+type].filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(fromDate,'DD-MM-YYYY')  }),
         datasets:[
-          {type:'line', label:'Media móvil de 7  días', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-7)},
+          {type:'line', label:'Media móvil de 7  días', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Mean'+type].slice(indexDate-6)},
           {type:'bar',label:this.title[type]+ ' diarios', backgroundColor:this.backgroundColor[type],fill: false, data:this.dataCovid[name+type].slice(indexDate)}
         ]
       }
@@ -118,7 +118,7 @@ methods:{
     getChartPosPcr(name){
       let fromDate = this.fromDate
       let indexDate = this.dataCovid['labelsPcr'].indexOf(fromDate)
-      let indexDatePos = indexDate-7
+      let indexDatePos = indexDate-6
       return{
         labels:this.dataCovid['labelsPcr'].filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(fromDate,'DD-MM-YYYY')  }),
         datasets:[
@@ -130,14 +130,6 @@ methods:{
     chartOptions(type){
       let options={
         scales: {
-          // xAxes: [{
-          // type: 'time',
-          // time: {
-          //   unit: 'month',
-          // tooltipFormat: 'D MMM, YYYY',
-          // displayFormats: {'month': ' MMM YYYY'},
-          // }
-          // }],
           yAxes: [{
             ticks: {
               beginAtZero: true

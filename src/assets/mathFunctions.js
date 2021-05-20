@@ -1,7 +1,7 @@
 // compute rolling mean on a week window
 function meanWeek(tabValues){
   let weekAverage=[];
-  for (let i=0;i<tabValues.length-7; i++){
+  for (let i=0;i<tabValues.length-6; i++){
     weekAverage.push((tabValues[i]+tabValues[i+1]+tabValues[i+2]+tabValues[i+3]+tabValues[i+4]+tabValues[i+5]+tabValues[i+6])/7)
   }
   return weekAverage;
