@@ -13,6 +13,7 @@
   <div class='bottom-bar' :class="{'fixed-nav-bar' : fixedNavBar}" >
     <router-link to="/" > <font-awesome-icon class='icon' icon="home" /></router-link>
     <router-link to="/regions" ><font-awesome-icon class='icon' icon="flag" /></router-link>
+    <router-link to="/comunas" ><font-awesome-icon class='icon' icon="map-marker" /></router-link>
     <router-link to="/edad" > <font-awesome-icon class='icon' icon="users" /></router-link>
     <router-link to="/vacuna" ><font-awesome-icon class='icon' icon="syringe" /></router-link>
     <router-link to="/about">  <font-awesome-icon class='icon' icon="envelope" /> </router-link>

@@ -14,7 +14,6 @@
             <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
             <update :labels="casesChile.labels"> </update>
             <line-chart  :chartData="renderChileCases()" :options='optionsByAge(true,true,false)'> </line-chart>
-
           </div>
           <div class='graphUci'>
             <title-graphic>Personas en UCI por Covid-19 por edad en Chile</title-graphic>
@@ -72,13 +71,11 @@
   </template>
 
   <style scoped>
-
   .ChartAge{
     display:flex;
     flex-direction:column;
     align-items: center;
     justify-content: center;
-
   }
   .containerSection{
     max-width:1400px;
@@ -93,12 +90,10 @@
   .graphUci{
     margin-top:5px;
     margin-bottom:5px;
-
     width:49.4%;
     box-shadow: 0px 0px 2px 2px #e8e8e8;
     border-radius:7px;
     background-color: white;
-
   }
 
   #block_graph{
@@ -114,8 +109,6 @@
     .containerSection{
       width:100%;
     }
-
-
 
     #block_graph{
       flex-direction:column;

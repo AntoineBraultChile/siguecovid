@@ -21,6 +21,11 @@ export const routes = [
     component: () => import(/* webpackChunkName: "regions" *//* webpackPrefetch: true */ /* webpackChunkName: "company-side" */  '../views/ChartRegions.vue')
   },
   {
+    path: '/comunas',
+    name: 'ChartComunas',
+    component: () => import(/* webpackChunkName: "comunas" *//* webpackPrefetch: true */ /* webpackChunkName: "company-side" */  '../views/ChartComunas.vue')
+  },
+  {
     path: '/edad',
     name: 'ChartAge',
     // route level code-splitting

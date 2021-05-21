@@ -27,9 +27,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-/* select {
-  font-size: 20px;
-} */
 
 .region-choice{
     display:flex;
@@ -67,15 +64,6 @@ export default {
     .subtitleContainer{
       margin-top:5px;
     }
-
-    /* .region-choice .subtitle{
-      font-size: 20px;
-      font-weight:normal;
-    } */
-
-    /* select {
-      font-size: 16px;
-    } */
 
 }
 </style>

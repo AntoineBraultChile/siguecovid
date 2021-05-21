@@ -17,7 +17,7 @@ Vue.component('spinner', Spinner)
 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faVirus, faBars, faTimes , faHome, faSyringe, faFlag, faEnvelope, faUsers, faAngleDoubleUp, faAngleDoubleDown} from '@fortawesome/free-solid-svg-icons'
+import { faVirus, faBars, faTimes , faHome, faSyringe, faFlag, faEnvelope, faUsers, faAngleDoubleUp, faAngleDoubleDown, faMapMarker, faSearch} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faVirus)
@@ -30,6 +30,8 @@ library.add(faEnvelope)
 library.add(faUsers)
 library.add(faAngleDoubleUp)
 library.add(faAngleDoubleDown)
+library.add(faMapMarker)
+library.add(faSearch)
 
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
