@@ -11,7 +11,12 @@
               <title-graphic>Incidencia en la comuna de {{currentComuna}}</title-graphic>
               <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
               <update :labels="cases.labels"> </update>
-              <line-chart :chartData="ChartIncidence(currentComuna)" :options='options'></line-chart>
+              <line-chart :chartData="ChartIncidence(currentComuna)" :options="options()"></line-chart>
+            </div>
+            <div class='graph' v-if='positivity.labels.length>0'>
+              <title-graphic>Positividad de los test PCR en la comuna de {{currentComuna}}</title-graphic>
+              <update :labels="cases.labels"> </update>
+              <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity')"></line-chart>
             </div>
           </div>
           <spinner size='massive' v-else ></spinner>
@@ -46,8 +51,18 @@
         'slide-bar':SlideBar,
         'comuna-choice':ComunaChoice
       },
+      metaInfo() {
+        return {
+          title: "Evolución de la pandemia de Covid-19 en las comunas de Chile",
+          meta: [
+            { name: 'description',
+            content:  `Visualizacion de la pandemia de Covid-19 por comuna en Chile. Sigue la evolucion de la incidencia.`},
+            {name: 'robots', content: 'index,follow'}
+          ]
+        }},
       data(){
         return{
+          backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
           fromDate: "01-02-2021",
           fromMonth:'',
           listOfMonths:[],
@@ -60,28 +75,12 @@
               Arica:[],
             }
           },
-          options:{
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
-                }
-              }]
-            },
-            legend: {
-              display:false,
-            },
-            tooltips: {
-              mode: 'index',
-              intersect: false
-            },   hover: {
-              mode: 'index',
-              intersect: false
-            },
-            responsive:true,
-            maintainAspectRatio:false
+          positivity:{
+            labels:[],
+            comuna:{
+              Arica:[],
+            }
           },
-
         }
       },
       methods:{
@@ -94,16 +93,57 @@
         },
         ChartIncidence(comuna){
           let index = this.cases.labels.indexOf(this.dicMonth[this.fromDate])
+          index = index>0 ? index:0;
           return{
             labels:this.cases.labels.slice(index),
             datasets:[
-              {label:'', borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.cases.comuna[comuna].slice(index)},
+              {label:'', borderColor:this.backgroundColor['Cases'], backgroundColor:this.backgroundColor['Cases'], fill: false, data:this.cases.comuna[comuna].slice(index)},
             ]
-          }}
-        },
+          }},
+          ChartPositivity(comuna){
+            let index = this.positivity.labels.indexOf(this.dicMonth[this.fromDate])
+            index = index>0 ? index:0;
+            return{
+              labels:this.positivity.labels.slice(index),
+              datasets:[
+                {label:'', borderColor:this.backgroundColor['Pcr'], backgroundColor:this.backgroundColor['Pcr'], fill: false, data:this.positivity.comuna[comuna].slice(index)},
+              ]
+            }},
+            options(type){
+              let opt= {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true,
+                  }
+                }]
+              },
+              legend: {
+                display:false,
+              },
+              tooltips: {
+                mode: 'index',
+                intersect: false
+              },
+              hover: {
+                mode: 'index',
+                intersect: false
+              },
+              responsive:true,
+              maintainAspectRatio:false
+            }
+
+          if(type==='positivity'){
+            opt.scales.yAxes[0].ticks["callback"] = function(tick) {
+              return tick.toString() + '%';
+            }
+          }
+          return opt
+        }
+      },
         async created(){
           const casesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv');
-          const allLabels = Object.keys(casesComunas[0]).slice(5,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+          const allLabels = Object.keys(casesComunas[0]).slice(5+1,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
           // we keep only monday date
           allLabels.forEach(d => {
             // if it is a monday
@@ -115,12 +155,10 @@
                   this.dicMonth[dayjs(d,"DD-MM-YYYY").format('01-MM-YYYY')] = dayjs(d,"DD-MM-YYYY").format("DD-MM-YYYY")
                 }
               }
-
             }
           })
           // we eliminate the first monday because we are going to compute of derivative to get variation of incidence
           this.cases.labels = this.cases.labels.slice(1)
-
           casesComunas.forEach((comuna)=>{
             let allValues = Object.values(comuna).slice(5,-1).map(i => {return Number(i)})
             let valuesEachMonday = []
@@ -135,8 +173,13 @@
           this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
           this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
+          // fetch positivity by comune
+          const positivityComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto65/PositividadPorComuna.csv')
+          this.positivity.labels = Object.keys(positivityComunas[0]).slice(5).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+          positivityComunas.forEach(comuna =>{
+            this.positivity.comuna[comuna['Comuna']] = Object.values(comuna).slice(5).map(i => {return Number(i)})
+          })
         }
-
       }
       </script>
 
@@ -158,7 +201,7 @@
       }
 
       .graph{
-        width:100%;
+        width:49.5%;
         margin:5px 0px 5px 0px;
         box-shadow: 0px 0px 2px 2px #e8e8e8;
         border-radius: 7px;

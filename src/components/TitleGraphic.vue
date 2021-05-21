@@ -18,11 +18,12 @@ export default {
 }
 .TitleGraphic h2{
   /* font-size:20px; */
-  font-size:1.2rem;
+   font-size:1.2rem; 
+  /* font-size:2rem; */
   margin-bottom:0px;
   font-weight:normal;
 }
-/* 
+/*
 @media all and (max-width: 1100px) {
   .TitleGraphic h2{
     font-size:20px;

@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="region-choice" >
     <h2 class='subtitle'>Elija comuna</h2>
-    <div class="optionsGraph">
+    <div >
       <div class="search">
         <input type="text" id='comunas' name="comunas" v-model='comunaResearched'  @focus="setFocus" @blur='setBlur'
         autocomplete='off' v-on:keyup.enter='handleSubmit($event)' v-on:keyup.down='nextElement()' v-on:keyup.up='nextPrevious()'>
@@ -68,7 +68,7 @@ export default {
   watch:{
     comunaResearched(value){
       let results = this.comunaNames.filter(comuna => {
-        return comuna.toLowerCase().includes(value.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+        return comuna.toLowerCase().includes(value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
       });
       this.filtered = (results.length>0) ? results: ['No hay resultados']
       this.selected = this.filtered[0]
@@ -91,7 +91,7 @@ created(){
 }
 .icon{
   position:absolute;
-  top:22px;
+  top:25px;
   left:10px;
   /* top:190px;
   left:770px; */
@@ -104,7 +104,7 @@ created(){
   background-position: 10px 12px; /* Position the search icon */
   background-repeat: no-repeat; /* Do not repeat the icon image */
   width: 100%; /* Full-width */
-  font-size: 1rem; /* Increase font-size */
+  font-size: 1.2rem; /* Increase font-size */
   padding: 12px 10px 12px 40px; /* Add some padding */
   border: 1px solid #ddd; /* Add a grey border */
   width:220px;
@@ -118,9 +118,9 @@ created(){
 
 .listSearch{
   position:absolute;
-  top:225px;
+  /* top:228px; */
   z-index:200;
-  height:225px;
+  height:240px;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -139,7 +139,7 @@ created(){
   background-color: #f6f6f6; /* Grey background color */
   padding: 12px;
   text-decoration: none; /* Remove default text underline */
-  font-size: 1rem; /* Increase the font-size */
+  font-size: 1.2rem; /* Increase the font-size */
   color: black; /* Add a black text color */
   display: block; /* Make it into a block element to fill the whole list */
 }
@@ -174,7 +174,7 @@ created(){
 
   @media all and (max-width: 1100px) {
     .listSearch{
-      top:268px;
+      /* top:274px; */
     }
 
 }
