@@ -32,7 +32,7 @@ export default {
   },
   methods:{
     nextElement(){
-      if(this.counter < 300){
+      if(this.counter < this.filtered.length-1){
       this.counter+=1;
       this.selected = this.filtered[this.counter]
     }

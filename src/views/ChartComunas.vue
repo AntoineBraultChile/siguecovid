@@ -143,7 +143,7 @@
       },
         async created(){
           const casesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv');
-          const allLabels = Object.keys(casesComunas[0]).slice(5+1,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+          const allLabels = Object.keys(casesComunas[0]).slice(5,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
           // we keep only monday date
           allLabels.forEach(d => {
             // if it is a monday
@@ -159,6 +159,7 @@
           })
           // we eliminate the first monday because we are going to compute of derivative to get variation of incidence
           this.cases.labels = this.cases.labels.slice(1)
+          this.listOfMonths = this.listOfMonths.slice(1)
           casesComunas.forEach((comuna)=>{
             let allValues = Object.values(comuna).slice(5,-1).map(i => {return Number(i)})
             let valuesEachMonday = []
