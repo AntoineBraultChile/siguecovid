@@ -8,15 +8,21 @@
         <comuna-choice :currentComuna='currentComuna' :comunaNames='comunaNames' v-on:new-comuna="changeCurrentComuna" v-if='comunaNames.length>0'/>
           <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
             <div class='graph' v-if='cases.labels.length>0'>
-              <title-graphic>Incidencia en la comuna de {{currentComuna}}</title-graphic>
+              <title-graphic>Incidencia semanal en la comuna de {{currentComuna}}</title-graphic>
               <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
               <update :labels="cases.labels"> </update>
-              <line-chart :chartData="ChartIncidence(currentComuna)" :options="options()"></line-chart>
+              <line-chart :chartData="ChartIncidence(currentComuna)" :options="options()"/>
             </div>
             <div class='graph' v-if='positivity.labels.length>0'>
-              <title-graphic>Positividad de los test PCR en la comuna de {{currentComuna}}</title-graphic>
+              <title-graphic>Positividad semanal de los test PCR en la comuna de {{currentComuna}}</title-graphic>
               <update :labels="cases.labels"> </update>
-              <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity')"></line-chart>
+              <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity')"/>
+            </div>
+            <div class='graph' v-if='cases.labels.length>0'>
+              <title-graphic>Fallecidos semanal por Covid-19 en la comuna de {{currentComuna}}</title-graphic>
+              <span style='font-size:1rem'>Son sólo los fallecidos confirmados con un test PCR positivo</span> <br>
+              <update :labels="cases.labels"> </update>
+              <bar-chart :chartData="ChartDeaths(currentComuna)" :options="options()"></bar-chart>
             </div>
           </div>
           <spinner size='massive' v-else ></spinner>
@@ -33,6 +39,7 @@
     dayjs.locale('es') // use Spanish locale globally
     import {derivate} from '../assets/mathFunctions'
     import LineChart from '@/components/LineChart'
+    import BarChart from '@/components/BarChart'
     import Update from '../components/Update'
     import TitleGraphic from '@/components/TitleGraphic'
     import TitleContainer from '@/components/TitleContainer'
@@ -44,6 +51,7 @@
       name:'ChartComunas',
       components:{
         'line-chart':LineChart,
+        'bar-chart':BarChart,
         'update':Update,
         'title-graphic':TitleGraphic,
         'title-container': TitleContainer,
@@ -69,7 +77,14 @@
           dicMonth:{},
           currentComuna:'Arica',
           comunaNames:[],
+          dicComunaNamesAccentWithoutWith:{},
           cases:{
+            labels:[],
+            comuna:{
+              Arica:[],
+            }
+          },
+          deaths:{
             labels:[],
             comuna:{
               Arica:[],
@@ -100,6 +115,16 @@
               {label:'', borderColor:this.backgroundColor['Cases'], backgroundColor:this.backgroundColor['Cases'], fill: false, data:this.cases.comuna[comuna].slice(index)},
             ]
           }},
+          ChartDeaths(comuna){
+            let index = this.deaths.labels.indexOf(this.dicMonth[this.fromDate])
+            index = index>0 ? index:0;
+            return{
+              labels:this.deaths.labels.slice(index),
+              datasets:[
+                {label:'Confirmados', borderColor:this.backgroundColor['Deaths'], backgroundColor:this.backgroundColor['Deaths'], fill: false, data:this.deaths.comuna[comuna].slice(index)},
+                // {label:'Sospechosos', borderColor:this.backgroundColor['Deaths'], backgroundColor:this.backgroundColor['Uci'], fill: false, data:this.deathsSuspicious.comuna[comuna].slice(index)},
+              ]
+            }},
           ChartPositivity(comuna){
             let index = this.positivity.labels.indexOf(this.dicMonth[this.fromDate])
             index = index>0 ? index:0;
@@ -142,6 +167,46 @@
         }
       },
         async created(){
+          //fetch deaths by comuna
+          const deathsComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto61/serie_fallecidos_comuna.csv')
+          let allLabelsDeaths= Object.keys(deathsComunas[0]).slice(5).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+          // we keep only monday date
+          allLabelsDeaths.forEach(d => {
+            // if it is a monday
+            if(dayjs(d,"DD-MM-YYYY").get("day") === 1) {
+              this.deaths.labels.push(dayjs(d,"DD-MM-YYYY").format("DD-MM-YYYY"))
+            }
+          })
+          // we eliminate the first monday because we are going to compute of derivative to get variation of incidence
+          this.deaths.labels = this.deaths.labels.slice(1)
+
+          // deaths each week by comune
+          deathsComunas.forEach((comuna)=>{
+            // only deaths confirmed by PCR
+            if(comuna["CIE 10"]=='U07.1' || comuna["CIE 10"]==''){
+              if(!Object.keys(this.dicComunaNamesAccentWithoutWith).includes(comuna['Comuna'])){
+                  this.dicComunaNamesAccentWithoutWith[deleteAccent(comuna['Comuna'])] = comuna['Comuna']
+                }
+            let allValues = Object.values(comuna).slice(5).map(i => {return Number(i)})
+            let valuesEachMonday = []
+            allValues.forEach((d,index) =>{
+              if(dayjs(allLabelsDeaths[index],'DD-MM-YYYY').get("day")===1){
+                valuesEachMonday.push(d)
+              }
+            })
+            this.deaths.comuna[comuna['Comuna']] = derivate(valuesEachMonday)
+          }
+          })
+
+          // because Aysen can be written Aisen
+          // this.deaths.comuna['Aysen'] = this.deaths.comuna['Aisen']
+          delete this.dicComunaNamesAccentWithoutWith['Aisen']
+          this.dicComunaNamesAccentWithoutWith['Aysen'] = 'Aisén'
+
+          // we set comuna names with accents
+          this.comunaNames = Object.values(this.dicComunaNamesAccentWithoutWith)
+
+          // fetch cases
           const casesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv');
           const allLabels = Object.keys(casesComunas[0]).slice(5,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
           // we keep only monday date
@@ -157,10 +222,12 @@
               }
             }
           })
-          
+
           // we eliminate the first monday because we are going to compute of derivative to get variation of incidence
           this.cases.labels = this.cases.labels.slice(1)
           this.listOfMonths = this.listOfMonths.slice(1)
+
+          // we compute incidence each week
           casesComunas.forEach((comuna)=>{
             let allValues = Object.values(comuna).slice(5,-1).map(i => {return Number(i)})
             let valuesEachMonday = []
@@ -169,17 +236,24 @@
                 valuesEachMonday.push(Math.round(d/comuna['Poblacion']*100000))
               }
             })
-            this.cases.comuna[comuna['Comuna']] = derivate(valuesEachMonday)
+            this.cases.comuna[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = derivate(valuesEachMonday)
           })
-          this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
+          // this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
           this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+
 
           // fetch positivity by comune
           const positivityComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto65/PositividadPorComuna.csv')
           this.positivity.labels = Object.keys(positivityComunas[0]).slice(5).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
           positivityComunas.forEach(comuna =>{
-            this.positivity.comuna[comuna['Comuna']] = Object.values(comuna).slice(5).map(i => {return Number(i)})
+            this.positivity.comuna[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = Object.values(comuna).slice(5).map(i => {return Number(i)})
           })
+
+
+          // function to delete accent
+          function deleteAccent(string){
+            return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          }
         }
       }
       </script>

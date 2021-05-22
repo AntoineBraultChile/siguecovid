@@ -28,6 +28,7 @@ export default {
       filtered:[],
       counter:0,
       selected:'Arica',
+      dicAccentWithWithout:{},
     }
   },
   methods:{
@@ -68,7 +69,7 @@ export default {
   watch:{
     comunaResearched(value){
       let results = this.comunaNames.filter(comuna => {
-        return comuna.toLowerCase().includes(value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
+        return this.dicAccentWithWithout[comuna].toLowerCase().includes(value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
       });
       this.filtered = (results.length>0) ? results: ['No hay resultados']
       this.selected = this.filtered[0]
@@ -77,6 +78,14 @@ export default {
   },
 created(){
   this.comunaResearched= this.currentComuna
+  this.comunaNames.forEach(name =>
+  {
+    this.dicAccentWithWithout[name] = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  })
+
+  // because Aisen y Aysen are the same region with two different writting
+  this.dicAccentWithWithout["Aisén"] = "Aisen"
+
 }
 }
 </script>
