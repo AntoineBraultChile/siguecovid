@@ -157,6 +157,7 @@
               }
             }
           })
+          
           // we eliminate the first monday because we are going to compute of derivative to get variation of incidence
           this.cases.labels = this.cases.labels.slice(1)
           this.listOfMonths = this.listOfMonths.slice(1)
@@ -170,7 +171,6 @@
             })
             this.cases.comuna[comuna['Comuna']] = derivate(valuesEachMonday)
           })
-
           this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
           this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
