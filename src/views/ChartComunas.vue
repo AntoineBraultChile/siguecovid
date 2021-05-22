@@ -83,6 +83,9 @@
           currentComuna:'Arica',
           comunaNames:[],
           dicComunaNamesAccentWithoutWith:{},
+          population:{
+
+          },
           cases:{
             labels:[],
             comuna:{
@@ -302,6 +305,7 @@
             let accumulativeValue =[]
             valueEachDay.reduce((acc,el,i) => accumulativeValue[i]= acc+el,0)
             this.secondDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = accumulativeValue.map(d => {return Math.round(d/comuna['Poblacion']*1000)/10})
+            this.population.[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = comuna['Poblacion']
           })
 
           // function to delete accent
