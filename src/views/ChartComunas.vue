@@ -24,6 +24,11 @@
               <update :labels="cases.labels"> </update>
               <bar-chart :chartData="ChartDeaths(currentComuna)" :options="options()"></bar-chart>
             </div>
+            <div class='graph' v-if='positivity.labels.length>0'>
+              <title-graphic>Proporción de la población vacunada en la comuna de {{currentComuna}}</title-graphic>
+              <update :labels="cases.labels"> </update>
+              <line-chart :chartData="ChartVaccin(currentComuna)" :options="options('vaccine')"/>
+            </div>
           </div>
           <spinner size='massive' v-else ></spinner>
         </div>
@@ -96,6 +101,18 @@
               Arica:[],
             }
           },
+          firstDoses:{
+            labels:[],
+            comuna:{
+              Arica:[]
+            }
+          },
+          secondDoses:{
+            labels:[],
+            comuna:{
+              Arica:[]
+            }
+          }
         }
       },
       methods:{
@@ -134,6 +151,17 @@
                 {label:'', borderColor:this.backgroundColor['Pcr'], backgroundColor:this.backgroundColor['Pcr'], fill: false, data:this.positivity.comuna[comuna].slice(index)},
               ]
             }},
+            ChartVaccin(comuna){
+              let index = this.firstDoses.labels.indexOf(this.fromDate)
+              index = index>0 ? index:0;
+              return{
+                labels:this.firstDoses.labels.slice(index),
+                datasets:[
+                  {label:'primera dosis', borderColor:this.backgroundColor['Pcr'], backgroundColor:this.backgroundColor['Pcr'], fill: false, data:this.firstDoses.comuna[comuna].slice(index)},
+                  {label:'primera dosis', borderColor:'#eba434', backgroundColor:'#eba434', fill: false, data:this.secondDoses.comuna[comuna].slice(index)},
+
+                ]
+              }},
             options(type){
               let opt= {
               scales: {
@@ -158,10 +186,13 @@
               maintainAspectRatio:false
             }
 
-          if(type==='positivity'){
+          if(type==='positivity' || type=='vaccine'){
             opt.scales.yAxes[0].ticks["callback"] = function(tick) {
               return tick.toString() + '%';
             }
+          }
+          if(type=='vaccine'){
+            opt.legend.display = true
           }
           return opt
         }
@@ -249,6 +280,29 @@
             this.positivity.comuna[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = Object.values(comuna).slice(5).map(i => {return Number(i)})
           })
 
+          // fetch first vaccine doses by comune
+          const firstDosesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_1eraDosis.csv')
+
+          this.firstDoses.labels = Object.keys(firstDosesComunas[0]).slice(5).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+
+          firstDosesComunas.forEach(comuna =>
+          {
+            let valueEachDay = Object.values(comuna).slice(5).map(i=>{return Number(i)})
+            let accumulativeValue =[]
+            valueEachDay.reduce((acc,el,i) => accumulativeValue[i]= acc+el,0)
+            this.firstDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = accumulativeValue.map(d => {return Math.round(d/comuna['Poblacion']*1000)/10})
+          })
+
+          // fetch second vaccine doses by comune
+          const secondDosesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_2daDosis.csv')
+          this.secondDoses.labels = Object.keys(secondDosesComunas[0]).slice(5).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+          secondDosesComunas.forEach(comuna =>
+          {
+            let valueEachDay = Object.values(comuna).slice(5).map(i=>{return Number(i)})
+            let accumulativeValue =[]
+            valueEachDay.reduce((acc,el,i) => accumulativeValue[i]= acc+el,0)
+            this.secondDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna['Comuna']]] = accumulativeValue.map(d => {return Math.round(d/comuna['Poblacion']*1000)/10})
+          })
 
           // function to delete accent
           function deleteAccent(string){
