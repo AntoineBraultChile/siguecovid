@@ -94,7 +94,7 @@ methods: {
 },
 created(){
   if(this.typeIndicator=='epidemic'){
-    this.text = [' casos nuevos', ' % de positividad', ' personas en UCI', ' total fallecidos']
+    this.text = [' nuevos casos diarios ', ' % de positividad', ' personas en UCI', ' total fallecidos']
   }else if(this.typeIndicator=='vaccin'){
     this.text = ['% con una dosis', '% con dos dosis', ' primera dosis', ' segunda dosis']
   }else{

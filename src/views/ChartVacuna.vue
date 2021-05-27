@@ -248,7 +248,8 @@
                       //get the current items value
                       var currentValue = dataset.data[tooltipItem.index];
                       //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-                      var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+                      // var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+                      var percentage = currentValue/total*100 ;
                       return ' '+percentage + "%";
                     }
                   }
@@ -551,8 +552,10 @@
                     this.vaccineType.secondDoses[d['Type']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
                   }
                 })
+                console.log(this.vaccineType.firstDoses.proportion)
                 let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
-                this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return (Math.round(d/sum*1000)/10)})
+                this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
+                console.log(this.vaccineType.firstDoses.proportion)
                 sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
 

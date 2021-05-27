@@ -67,7 +67,7 @@ export default {
       backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
       title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
       'Pcr':'Positividad y PCR en ',
-      'Cases':'Casos nuevos',
+      'Cases':'Nuevos casos diarios',
       'Deaths': 'Fallecidos por Covid-19'
     }
   }

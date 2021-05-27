@@ -245,7 +245,7 @@
           const allLabels = Object.keys(casesComunas[0]).slice(5,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
           // we keep only monday date
           allLabels.forEach(d => {
-            // if it is a monday
+            // if it is a monday or a friday
             if(dayjs(d,"DD-MM-YYYY").get("day") === 1) {
               this.cases.labels.push(dayjs(d,"DD-MM-YYYY").format("DD-MM-YYYY"))
               if(! (this.listOfMonths.includes(dayjs(d,"DD-MM-YYYY").format('MMMM YYYY')))) {
