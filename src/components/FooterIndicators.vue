@@ -7,7 +7,8 @@
 
 <style lang="css" scoped>
 footer{
-  display:flex;
+  /* display:flex;
+  flex-direction:column; */
   width:80%;
   border-top: 1px solid;
   margin-top: 10px;

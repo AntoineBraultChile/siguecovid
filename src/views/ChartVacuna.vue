@@ -70,6 +70,10 @@
           </div>
           <footer-indicators>
             <p>
+              Los datos vienen del repository github de <a href="https://github.com/juancri/covid19-vaccination">COVID-19 Vaccination (JC Olivares)</a> y
+              del <a href="https://www.minciencia.gob.cl/covid19/">Ministerio de Ciencia, Technología, Conocimiento e Innovación</a>.
+            </p>
+            <p>
               Calculamos los porcentajes a partir de las proyecciones de población del <a href="https://www.ine.cl/docs/default-source/proyecciones-de-poblacion/cuadros-estadisticos/base-2017/ine_estimaciones-y-proyecciones-2002-2035_base-2017_region_base.csv?sfvrsn=1c01d705_8&download=true">INE</a> para el año 2021.
               Se calcula que la población chilena es de {{populationChile['Total']}}.
             </p>
@@ -536,22 +540,38 @@
 
 
                 // vaccine type
-                let vaccineType = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/fabricante.csv')
+                let vaccineType = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination-type.csv')
                 this.vaccineType.labels = Object.keys(vaccineType[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
                 vaccineType.forEach(d=>{
-                  if(d['Dosis']=='Primera' && d['Fabricante']!='Total'){
+                  if(d['Dose']=='First' && d['Type']!='Total'){
                     this.vaccineType.firstDoses.proportion.push(Number(Object.values(d).slice(-1)[0]))
-                    this.vaccineType.firstDoses[d['Fabricante']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
-                  } else if (d['Dosis']=='Segunda' && d['Fabricante']!='Total'){
+                    this.vaccineType.firstDoses[d['Type']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
+                  } else if (d['Dose']=='Second' && d['Type']!='Total'){
                     this.vaccineType.secondDoses.proportion.push(Number(Object.values(d).slice(-1)[0]))
-                    this.vaccineType.secondDoses[d['Fabricante']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
+                    this.vaccineType.secondDoses[d['Type']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
                   }
                 })
                 let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return (Math.round(d/sum*1000)/10)})
                 sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
-              }
 
+                // vaccine type with minciencia !
+                // let vaccineType = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/fabricante.csv')
+                // this.vaccineType.labels = Object.keys(vaccineType[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+                // vaccineType.forEach(d=>{
+                //   if(d['Dosis']=='Primera' && d['Fabricante']!='Total'){
+                //     this.vaccineType.firstDoses.proportion.push(Number(Object.values(d).slice(-1)[0]))
+                //     this.vaccineType.firstDoses[d['Fabricante']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
+                //   } else if (d['Dosis']=='Segunda' && d['Fabricante']!='Total'){
+                //     this.vaccineType.secondDoses.proportion.push(Number(Object.values(d).slice(-1)[0]))
+                //     this.vaccineType.secondDoses[d['Fabricante']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
+                //   }
+                // })
+                // let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
+                // this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return (Math.round(d/sum*1000)/10)})
+                // sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
+                // this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
+              }
             }
             </script>
