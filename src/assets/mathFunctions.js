@@ -16,6 +16,15 @@ function derivate(cumulativeValues){
   return derivative;
 }
 
+// return the derivative of an array
+function derivateEachTwoDays(cumulativeValues){
+  let derivative = []
+  for ( let i=0; i < cumulativeValues.length-2;i++){
+    derivative.push(cumulativeValues[i+2]-cumulativeValues[i])
+  }
+  return derivative;
+}
+
 // return the sum of the two array, if the first array is empty it returns the second Array
 function sumArray(firstArray, secondArray){
   if (firstArray.length == 0){
@@ -29,4 +38,4 @@ function sumArray(firstArray, secondArray){
   }
 }
 
-export  {meanWeek,derivate,sumArray}
+export  {meanWeek,derivate,sumArray, derivateEachTwoDays}

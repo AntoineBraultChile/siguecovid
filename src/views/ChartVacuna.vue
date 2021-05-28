@@ -552,10 +552,8 @@
                     this.vaccineType.secondDoses[d['Type']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
                   }
                 })
-                console.log(this.vaccineType.firstDoses.proportion)
                 let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
-                console.log(this.vaccineType.firstDoses.proportion)
                 sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
 

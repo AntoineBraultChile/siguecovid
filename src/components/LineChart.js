@@ -1,6 +1,7 @@
 // import VueCharts from 'vue-chartjs'
 import {Line, mixins} from 'vue-chartjs'
 import chartjsPluginAnnotation from 'chartjs-plugin-annotation';
+import 'chartjs-adapter-dayjs';
 
 const { reactiveProp } = mixins
 
