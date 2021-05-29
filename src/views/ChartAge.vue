@@ -7,20 +7,20 @@
       </box-container>
 
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0"> -->
-      <div id='block_graph' v-if="casesChile.labels.length > 0">
+      <div id='block_graph' v-if="uciChile.labels.length > 0">
         <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
           <div class='graphUci'>
             <title-graphic>Incidencia por edad en Chile</title-graphic>
             <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
             <update :labels="casesChile.labels"> </update>
-            <line-chart  :chartData="renderChileCases()" :options='optionsByAge(true,true,false)'> </line-chart>
+            <line-chart  :chartData="renderChileCases()" :options='optionsByAge(true,true,false, true)'> </line-chart>
           </div>
           <div class='graphUci'>
             <title-graphic>Personas en UCI por Covid-19 por edad en Chile</title-graphic>
             <span style='font-size:1rem'>La UCI es la sigla de unidad de cuidados intensivos</span> <br>
 
             <update :labels="uciChile.labels"> </update>
-            <line-chart  :chartData="renderChileUciChart()" :options='optionsByAge(true,true,false)'> </line-chart>
+            <line-chart  :chartData="renderChileUciChart()" :options='optionsByAge(true,true,false,true)'> </line-chart>
           </div>
 
           <div class='graphUci'>
@@ -28,13 +28,13 @@
             <span style='font-size:1rem'>Los fallecidos confirmados por PCR en media móvil de 7 días</span> <br>
 
             <update :labels="uciChile.labels"> </update>
-            <line-chart  :chartData="renderChartDeathsByAge()" :options='optionsByAge(true,true,false)'> </line-chart>
+            <line-chart  :chartData="renderChartDeathsByAge()" :options='optionsByAge(true,true,false,true)'> </line-chart>
           </div>
           <div class='graphUci'>
             <title-graphic> Edad media de las personas en UCI y fallecidos por Covid-19 en Chile</title-graphic>
             <span style='font-size:1rem'>La UCI es la sigla de unidad de cuidados intensivos</span> <br>
             <update :labels="meanAgeDeathsChile.labels"> </update>
-            <line-chart  :chartData="renderChartMeanAgeUciChile()" :options='optionsByAge(true,false,true)'> </line-chart>
+            <line-chart  :chartData="renderChartMeanAgeUciChile()" :options='optionsByAge(true,false,true,true)'> </line-chart>
           </div>
           <div class='graphUci'>
             <title-graphic>Total fallecidos por Covid-19 por edad en Chile</title-graphic>
@@ -129,7 +129,7 @@
   </style>
 
   <script>
-  import  {derivate, sumArray, meanWeek} from '@/assets/mathFunctions'
+  import  {derivate, sumArray, meanWeek, derivateEachTwoDays} from '@/assets/mathFunctions'
 
   import LineChart from '../components/LineChart'
   import BarChart from '../components/BarChart'
@@ -227,9 +227,10 @@
       }
     },
     methods:{
-      optionsByAge(legend, beginAtZero, annotate){
+      optionsByAge(legend, beginAtZero, annotate, time =false){
         let options={
           scales: {
+
             yAxes: [{
               ticks: {
                 beginAtZero: beginAtZero
@@ -248,6 +249,15 @@
           },
           responsive:true,
           maintainAspectRatio:false
+        }
+        if(time){
+          options.scales['xAxes']=[{
+            type: 'time',
+            time: {
+              parser:'DD-MM-YYYY',
+              unit: 'month',
+            }
+          }]
         }
         if (annotate==true){
           options.annotation={
@@ -450,7 +460,7 @@
 
         // fetch cases by age and gender, we want to convert it to cases by age groups
         let dataCases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto16/CasosGeneroEtario.csv')
-        this.casesChile.labels = Object.keys(dataCases[0]).slice(2).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+        let allLabels = Object.keys(dataCases[0]).slice(2).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
 
         // initialize value cases by age and group age and sum Male and Female
         for (let cases of dataCases){
@@ -476,32 +486,56 @@
         this.casesChile.ageGroup = [...Array(7).keys()].map(i => String((i+1)*10))
         this.casesChile.ageGroup.push(">=70")
 
-        // generate of list of date which start week from '04-05-2020' to today
-        let dateWeekStart = ['20-04-2020'];
-        let addDate =dateWeekStart[0]
-        // while(dayjs(addDate, 'DD-MM-YYYY') <= dayjs(this.casesChile.labels.slice(-1), 'DD-MM-YYYY')) {
-        do {
-          // console.log(dayjs(this.casesChile.labels.slice(-1), 'YYYY-MM-DD'))
-          addDate = dayjs(addDate, 'DD-MM-YYYY').add(7,'d').format('DD-MM-YYYY')
-          dateWeekStart.push(addDate)
-        }while(dayjs(this.casesChile.labels.slice(-1)[0], 'DD-MM-YYYY').isAfter(dayjs(addDate, 'DD-MM-YYYY')));
 
-        let weekCasesValues =[]
-        this.casesChile.values.forEach((casesAge,indxCasesAge) =>{
-          let weekCasesValuesAge=[]
-          casesAge.forEach((d,indx) =>  {
-            if(dateWeekStart.includes(this.casesChile.labels[indx])){
-              weekCasesValuesAge.push(this.casesChile.values[indxCasesAge][indx])
+        // fill value cases only monday and friday
+        let allValues =  this.casesChile.values
+        this.casesChile.values = []
+        allValues.forEach((casesAge, indexCasesAge)=>{
+          let selectMondayAndFridayValues = []
+          casesAge.forEach((value, ind)=>{
+            // if monday or friday
+            if(dayjs(allLabels[ind],'DD-MM-YYYY').get("day")===1 || dayjs(allLabels[ind],'DD-MM-YYYY').get("day")=== 5){
+              selectMondayAndFridayValues.push(value)
             }
           })
-          weekCasesValues.push(derivate(weekCasesValuesAge).map(d => d/this.casesChile.agePopulation[indxCasesAge]*100000))
+          this.casesChile.values.push(derivateEachTwoDays(selectMondayAndFridayValues).map(d => Math.round(d/this.casesChile.agePopulation[indexCasesAge]*100000)))
         })
-        this.casesChile.values = weekCasesValues.map(d => {return d.map(dd => {return Math.round(dd)})})
 
-        // set new labels by week
-        let labelsByWeek =[]
-        this.casesChile.labels.forEach(d=> {if(dateWeekStart.includes(d)) {labelsByWeek.push(d)}})
-        this.casesChile.labels = labelsByWeek
+        // fill labels only monday and friday
+        allLabels.forEach((date)=>{
+          if(dayjs(date,'DD-MM-YYYY').get("day")===1 || dayjs(date,'DD-MM-YYYY').get("day")=== 5){
+            this.casesChile.labels.push(date)
+          }
+        })
+
+        // because we compute a derivative each two days, we delete the first two date in labels
+        this.casesChile.labels = this.casesChile.labels.slice(2)
+        console.log(this.casesChile.labels)
+
+        // // generate of list of date which start week from '04-05-2020' to today
+        // let dateWeekStart = ['20-04-2020'];
+        // let addDate =dateWeekStart[0]
+        // do {
+        //   addDate = dayjs(addDate, 'DD-MM-YYYY').add(7,'d').format('DD-MM-YYYY')
+        //   dateWeekStart.push(addDate)
+        // }while(dayjs(allLabels.slice(-1)[0], 'DD-MM-YYYY').isAfter(dayjs(addDate, 'DD-MM-YYYY')));
+        //
+        // let weekCasesValues =[]
+        // this.casesChile.values.forEach((casesAge,indxCasesAge) =>{
+        //   let weekCasesValuesAge=[]
+        //   casesAge.forEach((d,indx) =>  {
+        //     if(dateWeekStart.includes(allLabels[indx])){
+        //       weekCasesValuesAge.push(this.casesChile.values[indxCasesAge][indx])
+        //     }
+        //   })
+        //   weekCasesValues.push(derivate(weekCasesValuesAge).map(d => d/this.casesChile.agePopulation[indxCasesAge]*100000))
+        // })
+        // this.casesChile.values = weekCasesValues.map(d => {return d.map(dd => {return Math.round(dd)})})
+        //
+        // // set new labels by week
+        // let labelsByWeek =[]
+        // allLabels.forEach(d=> {if(dateWeekStart.includes(d)) {labelsByWeek.push(d)}})
+        // this.casesChile.labels = labelsByWeek
 
         // create a dictionary between first day of each month in listOfMonths and first day of a month in casesChile.labels
         let dic ={}

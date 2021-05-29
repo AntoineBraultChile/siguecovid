@@ -15,18 +15,18 @@
             </div>
             <div class='graph' v-if='positivity.labels.length>0'>
               <title-graphic>Positividad semanal de los test PCR en la comuna de {{currentComuna}}</title-graphic>
-              <update :labels="cases.labels"> </update>
+              <update :labels="positivity.labels"> </update>
               <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity')"/>
             </div>
             <div class='graph' v-if='cases.labels.length>0'>
               <title-graphic>Fallecidos semanal por Covid-19 en la comuna de {{currentComuna}}</title-graphic>
               <span style='font-size:1rem'>Son sólo los fallecidos confirmados con un test PCR positivo</span> <br>
-              <update :labels="cases.labels"> </update>
+              <update :labels="deaths.labels"> </update>
               <bar-chart  :chartData="ChartDeaths(currentComuna)" :options="options('deaths')"></bar-chart>
             </div>
             <div class='graph' v-if='positivity.labels.length>0'>
               <title-graphic>Proporción de la población vacunada en la comuna de {{currentComuna}}</title-graphic>
-              <update :labels="cases.labels"> </update>
+              <update :labels="firstDoses.labels"> </update>
               <line-chart :chartData="ChartVaccin(currentComuna)" :options="options('vaccine')"/>
             </div>
           </div>
