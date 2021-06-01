@@ -7,19 +7,7 @@
   </box-container>
 
     <region-choice :currentRegion='currentRegion' :regionName='regionName' v-on:new-region="changeCurrentRegion" v-if='regionName.length>0'/>
-      <!-- <div class="subtitleContainer" v-if='regionName.length>0'>
-        <h2><span class='subtitle'>Región {{currentRegion}}</span></h2>
-        <div class="optionsGraph">
-          <p>
-            <label for="region">Elija otra región  </label>
-            <select name="region" id="region" v-on:change="changeCurrentRegion($event)">
-              <option v-for="region in regionName"  :key='region' :value='region' :selected='currentRegion==region'> {{region}} </option>
-            </select>
-          </p>
-        </div>
-      </div> -->
 
-      <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="dataCovid.labelsCases.length > 0" > -->
       <div id='block_graph'  v-if="dataCovid.labelsCases.length > 0" >
 
         <indicators
@@ -31,14 +19,6 @@
           type='epidemic'
           :region='currentRegion'
           />
-<!--
-          <div class="slideBarContainer" >
-            Gráficos a partir de {{fromMonth}}
-            <div class="slideBar" v-if="dataCovid.labelsCases.length > 0">
-
-              <vue-slider :data="listOfMonths" :adsorb="true" v-model="fromMonth"  :marks='true' :hideLabel='true' :tooltip="'active'"  :use-keyboard="false" v-on:change="updateCurrentDate()"></vue-slider>
-            </div>
-          </div> -->
           <slide-bar  v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
 
           <charts-epidemic :region="currentRegion" :fromDate="fromDate" :dataCovid="dataCovid"/>
@@ -69,26 +49,6 @@
       align-items: center;
       justify-content: center;
     }
-    /* .subtitleContainer{
-      display:flex;
-      flex-direction:column;
-      justify-content: center;
-      align-items: center;
-      width:100%;
-      box-shadow: 0px 0px 2px 2px #e8e8e8;
-      border-radius: 7px;
-      background-color: white;
-      padding-top:5px;
-      margin-bottom:5px;
-      margin-top:5px;
-
-    }
-    .subtitleContainer h2{
-      text-align:center;
-      font-size:25px;
-      font-weight:normal;
-
-    } */
 
     .optionsGraph label{
       padding-right: 5px;
@@ -121,13 +81,8 @@
 
     import  {meanWeek, derivate} from '@/assets/mathFunctions'
 
-    // import VueSlider from 'vue-slider-component'
-    // import 'vue-slider-component/theme/default.css'
-
     import * as d3 from 'd3-fetch'
-    // const moment = require('moment');
-    // require('moment/locale/es');
-    // moment.locale('es');
+
 
     import * as dayjs from 'dayjs'
     var customParseFormat = require('dayjs/plugin/customParseFormat')
@@ -138,7 +93,6 @@
     export default {
       name:'ChartRegions',
       components:{
-        // 'vue-slider': VueSlider,
         'charts-epidemic': ChartsEpidemic,
         'title-container':TitleContainer,
         'indicators': Indicators,
@@ -171,7 +125,15 @@
               MetropolitanaCases:[],
               MetropolitanaDeaths:[],
               MetropolitanaMeanCases:[],
-              MetropolitanaPos:[]
+              MetropolitanaPos:[],
+              incidence:{
+                lastUpdate:[],
+                Metropolitana:{
+                  names:[],
+                  values:[],
+                  variations:[]
+                }
+            }
             },
           fromDate: "01-02-2021",
           fromMonth: '',
@@ -251,7 +213,9 @@
           // Cases
           let dataCases = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true, true,true, true)
 
-
+          // update fromMonth from fromDate
+          this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+          
           // compute the positivity
           for (let region of this.regionName){
             const Cases = dataCases[region+'Cases']
@@ -264,8 +228,31 @@
             this.$set(this.dataCovid, region+'Pos', Pos);
           }
 
-          // update fromMonth from fromDate
-          this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
+          // fetching data cases by comune in Chile
+          const casesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv');
+          const allLabels = Object.keys(casesComunas[0]).slice(5,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
+          this.dataCovid.incidence.lastUpdate.push(allLabels.pop())
+          casesComunas.forEach(comuna =>{
+            if(this.dataCovid.incidence[comuna['Region']] === undefined){
+              this.dataCovid.incidence[comuna['Region']] = {
+                names:[],
+                values:[],
+                variations:[]
+              }
+            }else{
+              if(!comuna['Comuna'].includes('Desconocido')){
+                let last4Values = Object.values(comuna).slice(-5,-1).map(i => {return Number(i)})
+                let values = last4Values[3]-last4Values[1]
+                let variation = values - (last4Values[2]-last4Values[0])
+                this.dataCovid.incidence[comuna['Region']]['names'].push(comuna['Comuna'])
+                this.dataCovid.incidence[comuna['Region']].values.push(Math.round(values/comuna['Poblacion']*100000))
+                this.dataCovid.incidence[comuna['Region']].variations.push(variation)
+              }
+            }
+          })
+
+
+
         }
       }
 

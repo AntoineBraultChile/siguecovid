@@ -61,7 +61,7 @@
             <div class='wrapper'>
               <title-graphic> Proporción de población vacunada por región en Chile</title-graphic>
               <update :labels="vacunaChile.labels"> </update>
-              <bar-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="optionsByAge()"> </bar-chart>
+                <bar-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="optionsByAge()"> </bar-chart>
             </div>
           </div>
 

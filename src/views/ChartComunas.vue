@@ -4,7 +4,7 @@
       <box-container>
         <title-container titleName='La pandemia de Covid-19 en las comunas de Chile'> </title-container>
       </box-container>
-      <div id='block_graph' v-if="cases.labels.length > 0">
+      <div id='block_graph' v-if="firstDoses.labels.length > 0">
         <comuna-choice :currentComuna='currentComuna' :comunaNames='comunaNames' v-on:new-comuna="changeCurrentComuna" v-if='comunaNames.length>0'/>
           <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
             <div class='graph' v-if='cases.labels.length>0'>
@@ -208,15 +208,6 @@
                       if(type=='deaths'){
                         opt.scales.xAxes[0]['offset'] = true
                       }
-                      // if(type=='cases'){
-                      //   opt.scales['xAxes']= [{
-                      //     type: 'time',
-                      //     time: {
-                      //       unit: 'month',
-                      //       parser:'DD-MM-YYYY'
-                      //     }
-                      //   }]
-                      // }
                       return opt
                     }
                   },

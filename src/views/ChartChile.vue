@@ -76,19 +76,7 @@
       import TitleContainer from '@/components/TitleContainer'
       import FooterIndicators from '@/components/FooterIndicators'
       import SlideBar from '@/components/SlideBar'
-      // import BarChart from '@/components/BarChart'
-
-
-      // import VueSlider from 'vue-slider-component'
-      // import 'vue-slider-component/theme/default.css'
-
-
       import * as d3 from 'd3-fetch'
-
-
-      // const moment = require('moment');
-      // require('moment/locale/es');
-      // moment.locale('es');
 
       import * as dayjs from 'dayjs'
       var customParseFormat = require('dayjs/plugin/customParseFormat')
@@ -153,9 +141,12 @@
                 ChileMeanCases:[],
                 ChilePos:[],
                 incidence:{
-                  regionName:[],
-                  values:[],
-                  variations:[]
+                  lastUpdate:[],
+                  Chile:{
+                    names:[],
+                    values:[],
+                    variations:[]
+                }
                 }
               },
               fromDate: "01-02-2021",
@@ -249,15 +240,16 @@
               this.$set(this.dataCovid, 'ChileCases', dayCases);
               this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(data[0][0]).slice(3+1+7).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
               this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
-              this.dataCovid.incidence.regionName
+              // this.dataCovid.incidence.Chile.regionName
+              this.dataCovid.incidence.lastUpdate.push(this.dataCovid['labelsCases'].pop())
               data[0].forEach(d =>{
-                this.dataCovid.incidence.regionName.push(d['Region']);
+                this.dataCovid.incidence.Chile.names.push(d['Region']);
                 let incidence = Object.values(d).slice(-8).map(i => Number(i))
                 incidence = Math.round((incidence.slice(-1)[0]-incidence[0])/this.populationChile[d['Region']]*100000)
                 let incidenceOneDayBefore = Object.values(d).slice(-15,-7).map(i => Number(i))
                 incidenceOneDayBefore = Math.round((incidenceOneDayBefore.slice(-1)[0]-incidenceOneDayBefore[0])/this.populationChile[d['Region']]*100000)
-                this.dataCovid.incidence.values.push(incidence);
-                this.dataCovid.incidence.variations.push(incidence-incidenceOneDayBefore)
+                this.dataCovid.incidence.Chile.values.push(incidence);
+                this.dataCovid.incidence.Chile.variations.push(incidence-incidenceOneDayBefore)
               })
               // console.log(data[0])
 

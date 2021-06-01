@@ -9,7 +9,6 @@
     <div class='graph' v-if='dataCovid.labelsPcr.length>0'>
       <title-graphic> {{title['Pcr']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsPcr"> </update>
-
       <bar-chart  :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
     </div>
     <div class='graph' v-if='dataCovid.labelsUci.length>0'>
@@ -22,19 +21,23 @@
       <update :labels="dataCovid.labelsDeaths"> </update>
       <bar-chart  :chartData="plotBarChartWithMean(region,'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
     </div>
-    <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
-      <title-graphic> Incidencia en Chile por región</title-graphic>
+
+    <div class='graph' v-if="dataCovid.incidence.lastUpdate.length>0" >
+      <title-graphic v-if="region=='Chile'"> Incidencia en las regiones de Chile</title-graphic>
+      <title-graphic v-else> Incidencia en las comunas de la región {{region}} </title-graphic>
       <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
-
-      <update :labels="dataCovid.labelsCases"> </update>
-      <bar-chart :chartData="getChartIncidence(dataCovid.incidence.values)" :options="chartOptions('Incidence')"></bar-chart>
+      <update :labels="dataCovid.incidence.lastUpdate"> </update>
+      <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region)" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
-    <div class='graph' v-if="dataCovid.labelsDeaths.length>0 && region=='Chile'">
-      <title-graphic> Variación de la incidencia en Chile por región</title-graphic>
-      <span style='font-size:1rem'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span> <br>
 
-      <update :labels="dataCovid.labelsCases"> </update>
-      <bar-chart :chartData="getChartIncidence(dataCovid.incidence.variations, 'variations')" :options="chartOptions('Incidence')"></bar-chart>
+    <div class='graph' v-if="dataCovid.incidence.lastUpdate.length>0">
+      <title-graphic v-if="region=='Chile'"> Variación de la incidencia en las regiones de Chile</title-graphic>
+      <title-graphic v-else> Variación de la incidencia en las comunas de la región {{region}}</title-graphic>
+      <span style='font-size:1rem'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span> <br>
+      <update :labels="dataCovid.incidence.lastUpdate"> </update>
+      <!-- <div class="horizontalBar"> -->
+        <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region, 'variations')" :options="chartOptions('Incidence')"></horizontal-bar-chart>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -50,6 +53,7 @@ dayjs.locale('es') // use Spanish locale globally
 
 
 import BarChart from '../components/BarChart'
+import HorizontalBarChart from '../components/HorizontalBarChart'
 import Update from '../components/Update'
 
 
@@ -59,6 +63,7 @@ export default {
   props:['region','fromDate','dataCovid'],
   components:{
     'bar-chart': BarChart,
+    'horizontal-bar-chart':HorizontalBarChart,
     'update': Update,
     'title-graphic':TitleGraphic
   },
@@ -73,21 +78,25 @@ export default {
   }
 },
 methods:{
-  getChartIncidence(values, type){
+  getChartIncidence(region, type){
+    let values = type=='variations'? this.dataCovid.incidence[region].variations: this.dataCovid.incidence[region].values
+
+
+    let [labelsSort, valuesSort] = order(this.dataCovid.incidence[region].names, values)
     let colors = [];
     if (type=='variations'){
-    values.forEach(d => {d<0 ? colors.push(this.backgroundColor['Cases']): colors.push(this.backgroundColor['Uci'])})
-  }else{
-    colors = this.backgroundColor['Pcr']
-  }
+      valuesSort.forEach(d => {d<0 ? colors.push(this.backgroundColor['Cases']): colors.push(this.backgroundColor['Uci'])})
+    }else{
+      colors = this.backgroundColor['Pcr']
+    }
     return {
-      labels: this.dataCovid.incidence.regionName,
+      labels: labelsSort,
       datasets: [{
-        type:'bar',
+        type: "horizontalBar",
         label:'',
         borderColor: colors,
         backgroundColor: colors,
-        data:values
+        data:valuesSort
       }],
       borderWidth:1
     }
@@ -132,7 +141,7 @@ methods:{
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
             }
           }]
         },
@@ -149,6 +158,16 @@ methods:{
         responsive:true,
         maintainAspectRatio:false
       }
+      if (type =='Incidence'){
+        options.responsive = true
+        options.maintainAspectRatio = false
+        options.scales['xAxes']=[{
+        ticks: {
+          beginAtZero: true,
+        }
+      }]
+      }
+
       if(type == 'Pcr'){
         options.scales ={
           yAxes: [{
@@ -174,6 +193,28 @@ methods:{
       },
 
     }
+
+  }
+  // function ordering values of bar plot with the corresponding labels
+  function order(labels, values){
+    let object = []
+    values.forEach((value,index) => {
+      object.push({
+        label : labels[index],
+        val : value
+      })
+    })
+    object.sort((a,b)=> {
+      return b.val-a.val
+    })
+    let labelsSort = []
+    let valuesSort = []
+    object.forEach(d => {
+      labelsSort.push(d.label)
+      valuesSort.push(d.val)
+    })
+    // return {labels:labelsSort, values: valuesSort}
+     return [labelsSort, valuesSort]
   }
 
   </script>
@@ -185,6 +226,10 @@ methods:{
     flex-direction:row;
     flex-wrap: wrap;
     justify-content: space-between;
+  }
+  .horizontalBar{
+    width: 200px;
+    height:4000px;
   }
   .graph{
     width:49.5%;
