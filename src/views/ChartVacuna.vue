@@ -6,7 +6,6 @@
         <title-container titleName='Avances de la campaña de vacunación contra el Covid-19 en Chile' />
       </box-container>
 
-      <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="vacunaChile.labels.length > 0"> -->
       <div id='block_graph'  v-if="vacunaChile.labels.length > 0 && listOfMonths.length > 0">
         <indicators
           :labels="vacunaChile.labels"
@@ -249,7 +248,7 @@
                       var currentValue = dataset.data[tooltipItem.index];
                       //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
                       // var percentage = Math.floor(((currentValue/total) * 100)+0.5);
-                      var percentage = currentValue/total*100 ;
+                      var percentage = Math.round(currentValue/total*1000)/10 ;
                       return ' '+percentage + "%";
                     }
                   }
@@ -553,7 +552,9 @@
                   }
                 })
                 let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
+                console.log(this.vaccineType.firstDoses.proportion)
                 this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
+                console.log(this.vaccineType.firstDoses.proportion)
                 sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
 
