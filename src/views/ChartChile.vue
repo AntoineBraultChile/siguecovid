@@ -241,7 +241,7 @@
               this.$set(this.dataCovid, 'LabelsMeanCases' ,Object.keys(data[0][0]).slice(3+1+7).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")}));
               this.$set(this.dataCovid, 'ChileMeanCases' ,meanWeek(dayCases).map((d)=>{return Math.round(d)}));
               // this.dataCovid.incidence.Chile.regionName
-              this.dataCovid.incidence.lastUpdate.push(this.dataCovid['labelsCases'].pop())
+              this.dataCovid.incidence.lastUpdate.push(this.dataCovid['labelsCases'][this.dataCovid['labelsCases'].length-1])
               data[0].forEach(d =>{
                 this.dataCovid.incidence.Chile.names.push(d['Region']);
                 let incidence = Object.values(d).slice(-8).map(i => Number(i))
