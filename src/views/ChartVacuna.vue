@@ -283,11 +283,11 @@
               optionsPorDia:{
                 tooltips: {
                   mode: 'index',
-                  intersect: false
+                  intersect: true
                 },
                 hover: {
                   mode: 'index',
-                  intersect: false
+                  intersect: true
                 },
                 responsive:true,
                 maintainAspectRatio:false,
@@ -318,10 +318,11 @@
               },
               tooltips: {
                 mode: 'index',
-                intersect: false
-              },   hover: {
+                intersect: true
+              },
+               hover: {
                 mode: 'index',
-                intersect: false
+                intersect: true
               },
               lineTension: 1,
               responsive:true,

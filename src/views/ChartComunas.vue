@@ -187,11 +187,11 @@
                         },
                         tooltips: {
                           mode: 'index',
-                          intersect: false
+                          intersect: true
                         },
                         hover: {
                           mode: 'index',
-                          intersect: false
+                          intersect: true
                         },
                         responsive:true,
                         maintainAspectRatio:false

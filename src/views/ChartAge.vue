@@ -242,10 +242,11 @@
           },
           tooltips: {
             mode: 'index',
-            intersect: false
-          },   hover: {
+            intersect: true
+          },
+          hover: {
             mode: 'index',
-            intersect: false
+            intersect: true
           },
           responsive:true,
           maintainAspectRatio:false
