@@ -510,32 +510,6 @@
 
         // because we compute a derivative each two days, we delete the first two date in labels
         this.casesChile.labels = this.casesChile.labels.slice(2)
-        console.log(this.casesChile.labels)
-
-        // // generate of list of date which start week from '04-05-2020' to today
-        // let dateWeekStart = ['20-04-2020'];
-        // let addDate =dateWeekStart[0]
-        // do {
-        //   addDate = dayjs(addDate, 'DD-MM-YYYY').add(7,'d').format('DD-MM-YYYY')
-        //   dateWeekStart.push(addDate)
-        // }while(dayjs(allLabels.slice(-1)[0], 'DD-MM-YYYY').isAfter(dayjs(addDate, 'DD-MM-YYYY')));
-        //
-        // let weekCasesValues =[]
-        // this.casesChile.values.forEach((casesAge,indxCasesAge) =>{
-        //   let weekCasesValuesAge=[]
-        //   casesAge.forEach((d,indx) =>  {
-        //     if(dateWeekStart.includes(allLabels[indx])){
-        //       weekCasesValuesAge.push(this.casesChile.values[indxCasesAge][indx])
-        //     }
-        //   })
-        //   weekCasesValues.push(derivate(weekCasesValuesAge).map(d => d/this.casesChile.agePopulation[indxCasesAge]*100000))
-        // })
-        // this.casesChile.values = weekCasesValues.map(d => {return d.map(dd => {return Math.round(dd)})})
-        //
-        // // set new labels by week
-        // let labelsByWeek =[]
-        // allLabels.forEach(d=> {if(dateWeekStart.includes(d)) {labelsByWeek.push(d)}})
-        // this.casesChile.labels = labelsByWeek
 
         // create a dictionary between first day of each month in listOfMonths and first day of a month in casesChile.labels
         let dic ={}

@@ -38,4 +38,26 @@ function sumArray(firstArray, secondArray){
   }
 }
 
-export  {meanWeek,derivate,sumArray, derivateEachTwoDays}
+// function ordering values of bar plot with the corresponding labels
+function order(labels, values){
+  let object = []
+  values.forEach((value,index) => {
+    object.push({
+      label : labels[index],
+      val : value
+    })
+  })
+  object.sort((a,b)=> {
+    return b.val-a.val
+  })
+  let labelsSort = []
+  let valuesSort = []
+  object.forEach(d => {
+    labelsSort.push(d.label)
+    valuesSort.push(d.val)
+  })
+  // return {labels:labelsSort, values: valuesSort}
+   return [labelsSort, valuesSort]
+}
+
+export  {meanWeek,derivate,sumArray, derivateEachTwoDays, order}

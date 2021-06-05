@@ -4,6 +4,15 @@
       <box-container>
 
         <title-container titleName='Avances de la campaña de vacunación contra el Covid-19 en Chile' />
+
+
+      </box-container>
+
+      <box-container class='explication'>
+        <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">Actualmente hay cuatro vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y Astra-Zeneca
+          requieren dos inyecciones, mientras que CanSino sólo requiere una. Se considerará que una persona está
+          parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o Astra-Zeneca, y totalmente
+           vacunada si ha recibido dos dosis o una dosis de CanSino.</p>
       </box-container>
 
       <div id='block_graph'  v-if="vacunaChile.labels.length > 0 && listOfMonths.length > 0">
@@ -21,46 +30,52 @@
             <div class='wrapper'>
               <title-graphic> Proporción de la población chilena vacunada</title-graphic>
               <update :labels="vacunaChile.labels"> </update>
-              <line-chart  :chartData="renderChartVacuna()" :options='options'> </line-chart>
+              <line-chart  :chartData="renderChartVacuna()" :options="options('vertical')"> </line-chart>
             </div>
+
             <div class='wrapper'>
               <title-graphic> Número de personas vacunadas cada dia en Chile</title-graphic>
               <update :labels="vacunaChile.labels"> </update>
-
               <bar-chart  :chartData="renderChartVacunaPorDia()" :options='optionsPorDia'> </bar-chart>
             </div>
-            <div class='wrapper'>
-              <title-graphic> Personas vacunadas con al menos una dosis por edad en Chile</title-graphic>
-              <update :labels="vacunaChile.labels"> </update>
 
-              <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="optionsByAge()"> </line-chart>
-            </div>
             <div class='wrapper'>
-              <title-graphic> Personas vacunadas con dos dosis por edad en Chile</title-graphic>
+              <title-graphic> Personas parcialmente vacunadas por edad en Chile</title-graphic>
+              <!-- <span style='font-size:1rem'> Estar parcialmente vacunado significa tener una dosis de Sinovac, Astra-Zeneca, Pfizer.</span> <br> -->
               <update :labels="vacunaChile.labels"> </update>
-
-              <line-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="optionsByAge()"> </line-chart>
+              <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
             </div>
+
             <div class='wrapper'>
-              <title-graphic> Primera dosis por tipo de vacuna en Chile</title-graphic>
+              <title-graphic> Personas completamente vacunadas por edad en Chile</title-graphic>
+              <!-- <span style='font-size:1rem'> Estar completamente vacunado significa tener dos dosis de Sinovac, Astra-Zeneca, Pfizer o una dosis de CanSino.</span> <br> -->
+              <update :labels="vacunaChile.labels"> </update>
+              <line-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
+            </div>
+
+            <div class='wrapper'>
+              <title-graphic> Personas parcialmente vacunadas cada día por tipo de vacuna en Chile</title-graphic>
               <update :labels="vaccineType.labels"> </update>
-
               <bar-chart  :chartData="renderChartTypeVaccine('first')" :options='optionsPorDia'> </bar-chart>
             </div>
+
             <div class='wrapper'>
-              <title-graphic> Segunda dosis por tipo de vacuna en Chile</title-graphic>
+              <title-graphic> Personas completamente vacunadas cada día por tipo de vacuna en Chile</title-graphic>
               <update :labels="vaccineType.labels"> </update>
               <bar-chart  :chartData="renderChartTypeVaccine('second')" :options='optionsPorDia'> </bar-chart>
             </div>
+
             <div class='wrapper'>
               <title-graphic> Proporción de cada tipo de vacuna utilizada en Chile</title-graphic>
+              <span style='font-size:1rem'> Sólo se tienen en cuenta las personas totalmente vacunadas. </span> <br>
               <update :labels="vaccineType.labels"> </update>
               <doughnut-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut()" :options="optionsDoughnut"> </doughnut-chart>
               </div>
+
             <div class='wrapper'>
-              <title-graphic> Proporción de población vacunada por región en Chile</title-graphic>
+              <title-graphic> Proporción de población vacunada en las regiones de Chile</title-graphic>
               <update :labels="vacunaChile.labels"> </update>
-                <bar-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="optionsByAge()"> </bar-chart>
+                <horizontal-bar-chart   v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="options('horizontal')"> </horizontal-bar-chart>
             </div>
           </div>
 
@@ -103,6 +118,11 @@
         padding:0px 0px 10px 0px;
 
       }
+      .explication{
+        display:flex;
+        flex-direction:row;
+        justify-content: center;
+      }
 
       @media all and (max-width: 1100px) {
 
@@ -115,10 +135,11 @@
       </style>
 
       <script>
-      import  {derivate, sumArray} from '@/assets/mathFunctions'
+      import  {derivate, sumArray, order} from '@/assets/mathFunctions'
       import DoughnutChart from '../components/DoughnutChart'
       import LineChart from '../components/LineChart'
       import BarChart from '../components/BarChart'
+      import HorizontalBarChart from '../components/HorizontalBarChart'
       import Update from '../components/Update'
       import TitleContainer from '@/components/TitleContainer'
       import Indicators from '@/components/Indicators'
@@ -139,13 +160,14 @@
         components:{
           'line-chart': LineChart,
           'bar-chart': BarChart,
+          'horizontal-bar-chart':HorizontalBarChart,
           'doughnut-chart':DoughnutChart,
           'title-container': TitleContainer,
           'title-graphic': TitleGraphic,
           'indicators':Indicators,
           'footer-indicators': FooterIndicators,
           'update':Update,
-          'slide-bar':SlideBar
+          'slide-bar':SlideBar,
           // 'choose-date': ChooseDate
         },
         metaInfo() {
@@ -256,27 +278,7 @@
                 responsive:true,
                 maintainAspectRatio:false
               },
-              options:{
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      callback: function(tick) {
-                        return tick.toString() + '%';
-                      }
-                    }
-                  }]
-                },
-                tooltips: {
-                  mode: 'index',
-                  intersect: false
-                },   hover: {
-                  mode: 'index',
-                  intersect: false
-                },
-                lineTension: 1,
-                responsive:true,
-                maintainAspectRatio:false
-              },
+
 
               optionsPorDia:{
                 tooltips: {
@@ -301,6 +303,54 @@
             }
           },
           methods:{
+            options(position){
+              let opt ={
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true,
+
+                    callback: function(tick) {
+                      return tick.toString() + '%';
+                    }
+                  }
+                }]
+              },
+              tooltips: {
+                mode: 'index',
+                intersect: false
+              },   hover: {
+                mode: 'index',
+                intersect: false
+              },
+              lineTension: 1,
+              responsive:true,
+              maintainAspectRatio:false
+            }
+            if (position=='horizontal'){
+              opt['scales']={
+                xAxes: [{
+                  ticks: {
+                    beginAtZero: true,
+                    callback: function(tick) {
+                      return tick.toString() + '%';
+                    }
+                  }
+                }]
+              }
+            }else if (position=='vertical'){
+              opt['scales']={
+                yAxes: [{
+                  ticks: {
+                    callback: function(tick) {
+                      return tick.toString() + '%';
+                    }
+                  }
+                }]
+              }
+            }
+            return opt
+          },
             updateCurrentDate(payload){
               this.fromMonth = payload
               this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
@@ -310,15 +360,19 @@
                 labels: [
                   'Pfizer',
                   'Sinovac',
-                  'Astra-Zeneca'
+                  'CanSino',
+                  'Astra-Zeneca',
+
                 ],
                 datasets: [{
                   label: 'My First Dataset',
-                  data: this.vaccineType.firstDoses.proportion,
+                  data: this.vaccineType.secondDoses.proportion,
                   backgroundColor: [
                     '#82CFFD',
                     '#f87979',
+                    '#93DB70',
                     '#eba434',
+
                   ],
                   hoverOffset: 4
                 }]
@@ -326,26 +380,34 @@
             },
             renderChartTypeVaccine(doses){
               let indexDate = this.vaccineType.labels.indexOf(this.fromDate)
+              let datasets = [
+                {
+                  label: "Pfizer",
+                  backgroundColor: '#82CFFD',
+                  data: (doses=='first') ? this.vaccineType.firstDoses['Pfizer'].slice(indexDate): this.vaccineType.secondDoses['Pfizer'].slice(indexDate)
+                },
+                {
+                  label: "Sinovac",
+                  backgroundColor: '#f87979',
+                  data: (doses=='first') ? this.vaccineType.firstDoses['Sinovac'].slice(indexDate): this.vaccineType.secondDoses['Sinovac'].slice(indexDate)
+                },
+                {
+                  label: "Astra-Zeneca",
+                  backgroundColor: '#eba434',
+                  data: (doses=='first')? this.vaccineType.firstDoses['Astra-Zeneca'].slice(indexDate): this.vaccineType.secondDoses['Astra-Zeneca'].slice(indexDate)
+                },
 
+              ]
+              if(doses=='second'){
+                datasets.push({
+                  label: "CanSino",
+                  backgroundColor: '#93DB70',
+                  data: (doses=='first')? this.vaccineType.firstDoses['CanSino'].slice(indexDate): this.vaccineType.secondDoses['CanSino'].slice(indexDate)
+                })
+              }
               return {
                 labels:this.vaccineType.labels.filter((x) => {return  dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY')}).slice(1),
-                datasets: [
-                  {
-                    label: "Pfizer",
-                    backgroundColor: '#82CFFD',
-                    data: (doses=='first') ? this.vaccineType.firstDoses['Pfizer'].slice(indexDate): this.vaccineType.secondDoses['Pfizer'].slice(indexDate)
-                  },
-                  {
-                    label: "Sinovac",
-                    backgroundColor: '#f87979',
-                    data: (doses=='first') ? this.vaccineType.firstDoses['Sinovac'].slice(indexDate): this.vaccineType.secondDoses['Sinovac'].slice(indexDate)
-                  },
-                  {
-                    label: "Astra-Zeneca",
-                    backgroundColor: '#eba434',
-                    data: (doses=='first')? this.vaccineType.firstDoses['Astra-Zeneca'].slice(indexDate): this.vaccineType.secondDoses['Astra-Zeneca'].slice(indexDate)
-                  }
-                ]
+                datasets: datasets
               }
             },
             renderChartVacuna(){
@@ -354,14 +416,14 @@
                 labels:this.vacunaChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
                 datasets: [
                   {
-                    label: "primera dosis",
+                    label: "partialmente",
                     borderColor: '#82CFFD',
                     backgroundColor: '#82CFFD',
                     fill: false,
                     data: this.vacunaChile["primera dosis"].slice(indexDate)
                   },
                   {
-                    label: "segunda dosis",
+                    label: "completamente",
                     borderColor: '#eba434',
                     backgroundColor:'#eba434',
                     fill: false,
@@ -376,12 +438,12 @@
                 labels:this.vacunaChile.labels.filter((x) => {return  dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY')}).slice(1),
                 datasets: [
                   {
-                    label: "con primera dosis",
+                    label: "partialmente",
                     backgroundColor: '#82CFFD',
                     data: this.vacunaChile["primera dosis por dia"].slice(indexDate)
                   },
                   {
-                    label: "con segunda dosis",
+                    label: "completamente",
                     backgroundColor: '#eba434',
                     data: this.vacunaChile["segunda dosis por dia"].slice(indexDate)
                   }
@@ -393,12 +455,12 @@
                 labels:this.vacunaRegions.regionName,
                 datasets: [
                   {
-                    label: "con primera dosis",
+                    label: "partialmente",
                     backgroundColor: '#82CFFD',
                     data: this.vacunaRegions.firstDoses
                   },
                   {
-                    label: "con segunda dosis",
+                    label: "completamente",
                     backgroundColor: '#eba434',
                     data: this.vacunaRegions.secondDoses
                   }
@@ -449,30 +511,6 @@
                 ]
               }
             },
-            optionsByAge(){
-              return{
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero: true,
-                      callback: function(tick) {
-                        return tick.toString() + '%';
-                      }
-                    }
-                  }]
-                },
-                tooltips: {
-                  mode: 'index',
-                  intersect: false
-                },   hover: {
-                  mode: 'index',
-                  intersect: false
-                },
-                lineTension: 1,
-                responsive:true,
-                maintainAspectRatio:false
-              }
-            }
           },
 
           async created(){
@@ -485,6 +523,17 @@
               let value = Math.round(Object.values(d).slice(-1)[0]/this.populationChile[d['Region']]*1000)/10;
               (d['Dosis']=='Primera' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
             })
+
+            // order percentage vaccined by region
+            let [labelsSort, firstDosesSort] = order(this.vacunaRegions.regionName, this.vacunaRegions.firstDoses)
+            let secondDosesSort = []
+            firstDosesSort.forEach(value =>{
+              let index = this.vacunaRegions.firstDoses.indexOf(value)
+              secondDosesSort.push(this.vacunaRegions.secondDoses[index])
+            })
+            this.vacunaRegions.regionName = labelsSort
+            this.vacunaRegions.firstDoses = firstDosesSort
+            this.vacunaRegions.secondDoses = secondDosesSort
 
             this.vacunaChile.labels = Object.keys(data[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
             Object.values(data[0]).slice(2).map(i => Number(i)).forEach(d => {this.vacunaChile['primera dosis'].push(Math.round(d/this.populationChile['Total']*1000)/10)})
@@ -541,6 +590,7 @@
 
                 // vaccine type
                 let vaccineType = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination-type.csv')
+                console.log(vaccineType)
                 this.vaccineType.labels = Object.keys(vaccineType[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
                 vaccineType.forEach(d=>{
                   if(d['Dose']=='First' && d['Type']!='Total'){
@@ -552,28 +602,11 @@
                   }
                 })
                 let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
-                console.log(this.vaccineType.firstDoses.proportion)
                 this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
-                console.log(this.vaccineType.firstDoses.proportion)
                 sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
-
-                // vaccine type with minciencia !
-                // let vaccineType = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/fabricante.csv')
-                // this.vaccineType.labels = Object.keys(vaccineType[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-                // vaccineType.forEach(d=>{
-                //   if(d['Dosis']=='Primera' && d['Fabricante']!='Total'){
-                //     this.vaccineType.firstDoses.proportion.push(Number(Object.values(d).slice(-1)[0]))
-                //     this.vaccineType.firstDoses[d['Fabricante']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
-                //   } else if (d['Dosis']=='Segunda' && d['Fabricante']!='Total'){
-                //     this.vaccineType.secondDoses.proportion.push(Number(Object.values(d).slice(-1)[0]))
-                //     this.vaccineType.secondDoses[d['Fabricante']] = derivate(Object.values(d).slice(2).map(i => {return Number(i)}));
-                //   }
-                // })
-                // let sum = this.vaccineType.firstDoses.proportion.reduce((total, element)=> {return total+element})
-                // this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return (Math.round(d/sum*1000)/10)})
-                // sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
-                // this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
+                console.log(this.vaccineType.labels)
+                console.log(this.vaccineType.secondDoses.proportion)
               }
             }
             </script>

@@ -133,7 +133,8 @@
                   values:[],
                   variations:[]
                 }
-            }
+            },
+            pasoAPaso:{            }
             },
           fromDate: "01-02-2021",
           fromMonth: '',
@@ -215,7 +216,7 @@
 
           // update fromMonth from fromDate
           this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
-          
+
           // compute the positivity
           for (let region of this.regionName){
             const Cases = dataCases[region+'Cases']
@@ -227,6 +228,17 @@
             Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
             this.$set(this.dataCovid, region+'Pos', Pos);
           }
+
+          // function to delete accent
+          function deleteAccent(string){
+            return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          }
+
+          // datos plan paso a paso
+          const pasoAPaso = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv')
+          pasoAPaso.forEach(d=>{
+            this.dataCovid.pasoAPaso[deleteAccent(d['comuna_residencia'])] = Object.values(d).slice(-1)
+          })
 
           // fetching data cases by comune in Chile
           const casesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv');
@@ -250,6 +262,7 @@
               }
             }
           })
+
 
 
 

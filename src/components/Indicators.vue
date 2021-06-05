@@ -89,14 +89,14 @@ methods: {
   }
   },
   numberToStringFormat(number){
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
   }
 },
 created(){
   if(this.typeIndicator=='epidemic'){
     this.text = [' nuevos casos diarios ', ' % de positividad', ' personas en UCI', ' total fallecidos']
   }else if(this.typeIndicator=='vaccin'){
-    this.text = ['% con una dosis', '% con dos dosis', ' primera dosis', ' segunda dosis']
+    this.text = ['% parcialmente vacunada', '% totalmente vacunada', '  personas parcialmente vacunadas', ' personas totalmente vacunadas']
   }else{
     console.log('Error type does not exist, choose epidemic or vaccin !')
   }

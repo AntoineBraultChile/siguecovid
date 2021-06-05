@@ -1,21 +1,24 @@
 <template lang="html">
   <div class="ChartsEpidemic" >
+
     <div class='graph' v-if='dataCovid.labelsCases.length>0'>
       <title-graphic> {{title['Cases']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsCases"> </update>
-
       <bar-chart  :chartData="plotBarChartWithMean(region,'Cases')" :options="chartOptions('Cases')"> </bar-chart>
     </div>
+
     <div class='graph' v-if='dataCovid.labelsPcr.length>0'>
       <title-graphic> {{title['Pcr']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsPcr"> </update>
       <bar-chart  :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
     </div>
+
     <div class='graph' v-if='dataCovid.labelsUci.length>0'>
       <title-graphic> {{title['Uci']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsUci"> </update>
       <bar-chart  :chartData="plotBar(region,'Uci')" :options="chartOptions('Uci')"> </bar-chart>
     </div>
+
     <div class='graph' v-if='dataCovid.labelsDeaths.length>0'>
       <title-graphic> {{title['Deaths']}} en {{region}} </title-graphic>
       <update :labels="dataCovid.labelsDeaths"> </update>
@@ -27,6 +30,12 @@
       <title-graphic v-else> Incidencia en las comunas de la región {{region}} </title-graphic>
       <span style='font-size:1rem'>Incidencia: número semanal de casos por cada 100.000 habitantes</span> <br>
       <update :labels="dataCovid.incidence.lastUpdate"> </update>
+      <div class="legend" v-if="this.dataCovid['pasoAPaso'] != undefined">
+        <div class="rectangle red"></div> <span>Paso 1</span>
+        <div class="rectangle orange"></div> <span>Paso 2</span>
+        <div class="rectangle blue"></div> <span>Paso 3</span>
+        <div class="rectangle green"></div> <span>Paso 4</span>
+      </div>
       <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region)" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
 
@@ -35,10 +44,9 @@
       <title-graphic v-else> Variación de la incidencia en las comunas de la región {{region}}</title-graphic>
       <span style='font-size:1rem'>Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span> <br>
       <update :labels="dataCovid.incidence.lastUpdate"> </update>
-      <!-- <div class="horizontalBar"> -->
-        <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region, 'variations')" :options="chartOptions('Incidence')"></horizontal-bar-chart>
-      <!-- </div> -->
+      <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region, 'variations')" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
+
   </div>
 </template>
 
@@ -51,6 +59,7 @@ dayjs.extend(customParseFormat)
 import 'dayjs/locale/es' // load on demand
 dayjs.locale('es') // use Spanish locale globally
 
+import {order} from '../assets/mathFunctions'
 
 import BarChart from '../components/BarChart'
 import HorizontalBarChart from '../components/HorizontalBarChart'
@@ -69,6 +78,7 @@ export default {
   },
   data(){
     return{
+      colorsPasoAPaso:{'1':'#dd4b39','2': '#eba434','3':'#82CFFD','4':'#93DB70'},
       backgroundColor :{'Uci':'#dd4b39', 'Pcr':'#82CFFD', 'Cases':'#93DB70', 'Deaths': '#232b2b'},
       title:{'Uci':'Personas en unidad de cuidados intensivos por Covid-19',
       'Pcr':'Positividad y PCR en ',
@@ -84,16 +94,25 @@ methods:{
 
     let [labelsSort, valuesSort] = order(this.dataCovid.incidence[region].names, values)
     let colors = [];
+    let label = '';
     if (type=='variations'){
       valuesSort.forEach(d => {d<0 ? colors.push(this.backgroundColor['Cases']): colors.push(this.backgroundColor['Uci'])})
+      label = 'Variación incidencia'
     }else{
-      colors = this.backgroundColor['Pcr']
+      label='Incidencia'
+      if(this.dataCovid['pasoAPaso'] == undefined){
+        colors = this.backgroundColor['Pcr']
+      }else{
+        labelsSort.forEach(comuna => {
+          colors.push(this.colorsPasoAPaso[this.dataCovid.pasoAPaso[comuna]])
+        })
+      }
     }
     return {
       labels: labelsSort,
       datasets: [{
         type: "horizontalBar",
-        label:'',
+        label:label,
         borderColor: colors,
         backgroundColor: colors,
         data:valuesSort
@@ -195,27 +214,6 @@ methods:{
     }
 
   }
-  // function ordering values of bar plot with the corresponding labels
-  function order(labels, values){
-    let object = []
-    values.forEach((value,index) => {
-      object.push({
-        label : labels[index],
-        val : value
-      })
-    })
-    object.sort((a,b)=> {
-      return b.val-a.val
-    })
-    let labelsSort = []
-    let valuesSort = []
-    object.forEach(d => {
-      labelsSort.push(d.label)
-      valuesSort.push(d.val)
-    })
-    // return {labels:labelsSort, values: valuesSort}
-     return [labelsSort, valuesSort]
-  }
 
   </script>
 
@@ -238,6 +236,34 @@ methods:{
     border-radius: 7px;
     background-color: white;
     padding:0px 0px 10px 0px;
+  }
+
+  .legend{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+    font-size:0.9rem;
+    color:gray;
+  }
+  .rectangle{
+    height: 15px;
+    width: 40px;
+    margin:5px 10px 5px 10px;
+  }
+  .red{
+    background-color: #dd4b39;
+  }
+  .orange{
+    background-color: #eba434;
+  }
+  .blue{
+    background-color:#82CFFD;
+  }
+  .green{
+    background-color:#93DB70;
+
   }
 
   @media all and (max-width: 1100px) {
