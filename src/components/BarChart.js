@@ -1,4 +1,6 @@
 import { Bar, mixins } from 'vue-chartjs'
+import 'chartjs-adapter-dayjs';
+
 const { reactiveProp } = mixins
 
 export default {

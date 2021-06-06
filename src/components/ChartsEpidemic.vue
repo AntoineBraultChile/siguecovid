@@ -74,6 +74,7 @@ dayjs.extend(customParseFormat)
 import 'dayjs/locale/es' // load on demand
 dayjs.locale('es') // use Spanish locale globally
 
+
 import {order} from '../assets/mathFunctions'
 
 import BarChart from '../components/BarChart'
@@ -225,11 +226,17 @@ methods:{
       if(type=='Paso'){
         options.scales.yAxes[0].ticks={
           beginAtZero: true,
-
-        callback: function(tick) {
+         callback: function(tick) {
           return tick.toString() + '%';
         }
         }
+        options.scales['xAxes']=[{
+          type: 'time',
+          time: {
+            parser:'DD-MM-YYYY',
+            unit: 'month',
+          }
+        }]
       }
 
       if(type == 'Pcr'){
