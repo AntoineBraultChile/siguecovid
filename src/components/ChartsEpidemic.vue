@@ -230,6 +230,7 @@ methods:{
           return tick.toString() + '%';
         }
         }
+        options.legend.display = true
         options.scales['xAxes']=[{
           type: 'time',
           time: {
