@@ -59,7 +59,7 @@
     <div class='graph' v-if="region=='Chile'">
       <title-graphic > Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
-      <bar-chart :height="600" :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>
+      <bar-chart  :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>
     </div>
 
   </div>
