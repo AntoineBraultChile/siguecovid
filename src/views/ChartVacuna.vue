@@ -591,7 +591,6 @@
 
                 // vaccine type
                 let vaccineType = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination-type.csv')
-                console.log(vaccineType)
                 this.vaccineType.labels = Object.keys(vaccineType[0]).slice(2).map(d =>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
                 vaccineType.forEach(d=>{
                   if(d['Dose']=='First' && d['Type']!='Total'){
@@ -606,8 +605,6 @@
                 this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
                 sum = this.vaccineType.secondDoses.proportion.reduce((total, element)=> {return total+element})
                 this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(d=>{return Math.round(d/sum*1000)/10})
-                console.log(this.vaccineType.labels)
-                console.log(this.vaccineType.secondDoses.proportion)
               }
             }
             </script>

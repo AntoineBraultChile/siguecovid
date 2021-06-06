@@ -3,7 +3,7 @@
     <div class="containerSection">
       <box-container>
         <title-container titleName='La pandemia de Covid-19 en Chile' :update='false'/>
-        <p id='description'>Sigue Covid facilita el seguimiento y la visualización de la evolución de la pandemia de Covid-19 en Chile
+        <p id='description'>Sigue Covid es un visor que facilita el seguimiento y la visualización de la evolución de la pandemia de Covid-19 en Chile
           basado en  <a href="https://www.minciencia.gob.cl/covid19/" target='_blank'>datos del Ministerio de Ciencia</a>.</p>
         </box-container>
 
@@ -97,10 +97,10 @@
         },
         metaInfo() {
           return {
-            title: "Sigue Covid en Chile - Visualizador de la pandemia de Covid-19 y el proceso de vacunación en Chile y en las regiones",
+            title: "Sigue Covid en Chile - Visualizador de la pandemia de Covid-19 y del proceso de vacunación en Chile y en las regiones",
             meta: [
               { name: 'description',
-              content:  `Visualizador de datos sobre la pandemia de Covid-19 en Chile. Encontra información actualizada diariamente sobre
+              content:  `Visor de los datos sobre la pandemia de Covid-19 en Chile. Encontra información actualizada diariamente sobre
               el número de  casos nuevos, pruebas de PCR,
               personas en  unidad de cuidados intensivos y fallecidos.`},
               {name: 'robots', content: 'index,follow'}
@@ -146,8 +146,16 @@
                     names:[],
                     values:[],
                     variations:[]
+                  }
+                },
+                pasoAPaso:{
+                  labels:[],
+                  fase1:[],
+                  fase2:[],
+                  fase3:[],
+                  fase4:[]
                 }
-                }
+
               },
               fromDate: "01-02-2021",
               fromMonth:'',
@@ -268,9 +276,37 @@
 
             })
 
+            // plan paso a paso
+            let paso = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv')
+            let population = await d3.json("populationComunasChile.json")
+            let pop = population['Poblacion 2021']
+            this.dataCovid.pasoAPaso.labels = Object.keys(paso[0]).slice(5).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
+            let fase1 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
+            let fase2 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
+            let fase3 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
+            let fase4 =  new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
+            paso.forEach(comuna => {
+              let comunaName = comuna['comuna_residencia']
+              let comunaValuesPasoAPaso = Object.values(comuna).slice(5)
+              if(! (pop[comunaName]== undefined)){
+              comunaValuesPasoAPaso.forEach((value,index)=>{
+                if (value === '1'){
+                  fase1[Number(index)] += pop[comunaName]
+                }else if(value === '2'){
+                  fase2[Number(index)] += pop[comunaName]
+                }else if(value === '3'){
+                  fase3[Number(index)] += pop[comunaName]
+                }else if(value === '4'){
+                  fase4[Number(index)] += pop[comunaName]
+                }
+              })
+            }
+            })
 
-
-
+            this.dataCovid.pasoAPaso['fase1'] = fase1.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
+            this.dataCovid.pasoAPaso['fase2'] = fase2.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
+            this.dataCovid.pasoAPaso['fase3'] = fase3.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
+            this.dataCovid.pasoAPaso['fase4'] = fase4.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
           }
         }
 

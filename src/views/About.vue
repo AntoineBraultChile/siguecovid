@@ -7,7 +7,8 @@
         <p>
           Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19
           y el progreso de la vacunación en Chile. Los datos epidemiológicos proceden del
-          <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>
+          <a  href='https://www.minciencia.gob.cl/covid19/' target="_blank"> Ministerio de Ciencia, Tecnología, Conocimiento e Innovacíon</a>, los datos de vacunación proceden
+         de <a href="https://github.com/juancri/covid19-vaccination">COVID-19 Vaccination (JC Olivares)</a>
           y los  datos demográficos del <a href="https://www.ine.cl/" target="_blank"> Instituto Nacional de Estadísticas</a>.
         </p>
 
@@ -18,12 +19,17 @@
             <a href="https://www.icovidchile.cl/" target="_blank">icovid</a>.
         </p>
 
+        <p>
+          El código fuente de este sitio web está disponible <a href="https://github.com/AntoineBraultChile/siguecovid">aquí</a>.
+        </p>
+
         <h2>Quién soy</h2>
       <p>
         Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile.
         Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.
         Estoy abierto a sus comentarios y observaciones para mejorar la página web.
       </p>
+
 
 
     </div>
