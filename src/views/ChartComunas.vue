@@ -324,6 +324,10 @@
                         function deleteAccent(string){
                           return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                         }
+                        // 
+                        //
+                        // let paso = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv')
+                        // console.log(paso)
                       }
                     }
                     </script>

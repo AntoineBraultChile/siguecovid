@@ -195,6 +195,7 @@
                   'Pfizer':[],
                   'Sinovac':[],
                   "Astra-Zeneca":[],
+                  'CanSino':[],
                   proportion:[]
                 }
               },
@@ -373,7 +374,6 @@
                     '#f87979',
                     '#93DB70',
                     '#eba434',
-
                   ],
                   hoverOffset: 4
                 }]
@@ -403,7 +403,7 @@
                 datasets.push({
                   label: "CanSino",
                   backgroundColor: '#93DB70',
-                  data: (doses=='first')? this.vaccineType.firstDoses['CanSino'].slice(indexDate): this.vaccineType.secondDoses['CanSino'].slice(indexDate)
+                  data: this.vaccineType.secondDoses['CanSino'].slice(indexDate)
                 })
               }
               return {
