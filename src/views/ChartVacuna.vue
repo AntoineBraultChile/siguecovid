@@ -417,7 +417,7 @@
                 labels:this.vacunaChile.labels.filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(this.fromDate,'DD-MM-YYYY') }),
                 datasets: [
                   {
-                    label: "partialmente",
+                    label: "al menos una dosis",
                     borderColor: '#82CFFD',
                     backgroundColor: '#82CFFD',
                     fill: false,
@@ -517,12 +517,12 @@
           async created(){
 
             // fetching datas vaccination first and second doses in Chile
-            let  data = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv')
-
+            // let  data = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv')
+            let  data = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination.csv')
             data.forEach(d => {
               (!this.vacunaRegions.regionName.includes(d['Region']))?this.vacunaRegions.regionName.push(d['Region']):'';
               let value = Math.round(Object.values(d).slice(-1)[0]/this.populationChile[d['Region']]*1000)/10;
-              (d['Dosis']=='Primera' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
+              (d['Dose']=='First' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
             })
 
             // order percentage vaccined by region
