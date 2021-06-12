@@ -282,6 +282,9 @@
 
 
               optionsPorDia:{
+                animation: {
+                  duration: 0
+                },
                 tooltips: {
                   mode: 'index',
                   intersect: true
@@ -306,6 +309,9 @@
           methods:{
             options(position){
               let opt ={
+                animation: {
+                  duration: 0
+                },
               scales: {
                 yAxes: [{
                   ticks: {

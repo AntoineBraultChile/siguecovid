@@ -229,8 +229,10 @@
     methods:{
       optionsByAge(legend, beginAtZero, annotate, time =false){
         let options={
+          animation: {
+            duration: 0
+          },
           scales: {
-
             yAxes: [{
               ticks: {
                 beginAtZero: beginAtZero

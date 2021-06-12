@@ -193,6 +193,9 @@ methods:{
     },
     chartOptions(type){
       let options={
+        animation: {
+          duration: 0
+        },
         scales: {
           yAxes: [{
             ticks: {

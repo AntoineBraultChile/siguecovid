@@ -9,7 +9,7 @@ export default {
   extends: Line,
   // mixins: [VueCharts.mixins.reactiveProp],
   mixins: [reactiveProp],
-  props:['options'],
+  props:['chartData', 'options'],
   // props:{
   //   options:{
   //     type: Object,
@@ -21,6 +21,11 @@ export default {
   //       this.renderChart(this.chartData, this.options);
   //   }
   // },
+  watch: {
+    options() {
+      this.renderChart(this.chartData, this.options)
+    }
+  },
   mounted(){
     this.addPlugin([chartjsPluginAnnotation]),
     this.renderChart(this.chartData,this.options)
