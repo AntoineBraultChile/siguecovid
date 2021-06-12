@@ -261,6 +261,8 @@
                   }
                 },
                 async created(){
+                  // fromDate 3 months before today
+                  this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
 
                   //fetch deaths by comuna
                   const deathsComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto61/serie_fallecidos_comuna.csv')

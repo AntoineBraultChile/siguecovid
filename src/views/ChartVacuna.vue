@@ -521,6 +521,8 @@
           },
 
           async created(){
+            // fromDate 3 months before today
+            this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
 
             // fetching datas vaccination first and second doses in Chile
             // let  data = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv')

@@ -169,6 +169,9 @@
             }
           },
           async created(){
+            // fromDate 3 months before today
+            this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
+            
             // fetching data
             const getDataCsv =  async (path, type, derivative,  initializeMonths = false) => {
               let data = await d3.csv(path)
@@ -307,6 +310,9 @@
             this.dataCovid.pasoAPaso['fase2'] = fase2.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
             this.dataCovid.pasoAPaso['fase3'] = fase3.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
             this.dataCovid.pasoAPaso['fase4'] = fase4.map((value,index)=>{ return Math.round(value/(fase1[index]+fase2[index]+fase3[index]+fase4[index])*1000)/10 })
+
+
+
           }
         }
 

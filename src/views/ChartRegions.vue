@@ -158,6 +158,10 @@
         },
 
         async created(){
+
+          // fromDate 3 months before today
+          this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
+          
           //fetching data
           const getDataCsv = async (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
             let data = await d3.csv(path)

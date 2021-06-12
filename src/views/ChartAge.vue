@@ -413,6 +413,10 @@
       },
 
       async created(){
+        // fromDate 3 months before today
+        this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
+
+        // UCI by age
         d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto9/HospitalizadosUCIEtario.csv').then(data => {
           this.uciChile.labels = Object.keys(data[0]).slice(1).map(d=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")});
           for (let index in data){
