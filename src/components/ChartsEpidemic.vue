@@ -11,8 +11,7 @@
 
     <div class='graph' v-if='dataCovid.labelsPcr.length>0'>
       <title-graphic> {{title['Pcr']}} en {{region}} </title-graphic>
-      <span style='font-size:1rem'>La positividad es el porcentaje de casos detectados sobre el numero de pruebas PCR realizadas cada día.
-        Por el momento, no se tienen en cuenta las pruebas antigénicas.</span> <br>
+      <span style='font-size:1rem'>La positividad es el porcentaje de casos detectados sobre el numero de test PCR y de antigenos realizados cada día.</span> <br>
 
       <update :labels="dataCovid.labelsPcr"> </update>
       <bar-chart  :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
@@ -187,7 +186,8 @@ methods:{
         labels:this.dataCovid['labelsPcr'].filter((x) => { return dayjs(x,'DD-MM-YYYY') >= dayjs(fromDate,'DD-MM-YYYY')  }),
         datasets:[
           {type:'line', label:'Positividad (media móvil de 7 días)', yAxisID: 'Pos',borderColor:'#dd4b39', backgroundColor:'#dd4b39', fill: false, data:this.dataCovid[name+'Pos'].slice(indexDatePos)},
-          {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)}
+          {type:'bar',label:'Numero de test PCR ', yAxisID: 'Pcr', backgroundColor:this.backgroundColor['Pcr'],fill: false, data:this.dataCovid[name+'Pcr'].slice(indexDate)},
+          {type:'bar', label:'Numero de test de antigenos', yAxisID: 'Pcr',  backgroundColor:this.colorsPasoAPaso[2] , fill:false, data:this.dataCovid[name+'Antigeno'].slice(indexDate) },
         ]
       }
     },
@@ -245,6 +245,9 @@ methods:{
 
       if(type == 'Pcr'){
         options.scales ={
+          xAxes: [{
+    stacked: true
+}],
           yAxes: [{
             id: 'Pos',
             type: 'linear',
@@ -258,7 +261,7 @@ methods:{
             id: 'Pcr',
             type: 'linear',
             position: 'right',
-
+            stacked:true
           }]}
         }
         if (type == 'Pcr' || type=='Cases' || type=='Deaths'){

@@ -69,7 +69,7 @@
       </style>
 
       <script>
-      import  {meanWeek, derivate} from '@/assets/mathFunctions'
+      import  {meanWeek, derivate, sumArray} from '@/assets/mathFunctions'
 
       import Indicators from '@/components/Indicators'
       import ChartsEpidemic from '@/components/ChartsEpidemic'
@@ -132,6 +132,7 @@
                 labelsPcr:[],
                 labelsCases:[],
                 labelsDeaths:[],
+                labelsAntigeno:[],
                 // labelsPos:[],
                 ChileUci:[],
                 ChilePcr:[],
@@ -140,6 +141,7 @@
                 ChileTotalDeaths:[],
                 ChileMeanCases:[],
                 ChilePos:[],
+                ChileAntigeno:[],
                 incidence:{
                   lastUpdate:[],
                   Chile:{
@@ -171,7 +173,7 @@
           async created(){
             // fromDate 3 months before today
             this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
-            
+
             // fetching data
             const getDataCsv =  async (path, type, derivative,  initializeMonths = false) => {
               let data = await d3.csv(path)
@@ -206,19 +208,6 @@
               return this.dataCovid['Chile'+type]
             }
 
-            // return the sum of the two array, if the first array is empty it returns the second Array
-            function sumArray(firstArray, secondArray){
-              if (firstArray.length == 0){
-                return secondArray;
-              }else{
-                if (firstArray.length != secondArray.length){
-                  console.log('ERROR: the two arrays need to have the same length or the first array need to be empty !');
-                }else{
-                  return firstArray.map((el,indx) => {return el + secondArray[indx]});
-                }
-              }
-            }
-
 
             async function requests() {
               try {
@@ -226,12 +215,13 @@
                   d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv'),
                   getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false,false),
                   d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv'),
-                  getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true)
+                  getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false, true),
+                  getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto87/Ag.csv', 'Antigeno', false,false),
+                  // d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto87/Ag.csv')
                 ]);
                 return getResults
               } catch (error) {
                 console.log(error)
-
                 throw (error)
               }
             }
@@ -262,14 +252,28 @@
                 this.dataCovid.incidence.Chile.values.push(incidence);
                 this.dataCovid.incidence.Chile.variations.push(incidence-incidenceOneDayBefore)
               })
-              // console.log(data[0])
+
+              // test Antigeno
+              let antigeno = [];
+              let count = 0;
+              this.dataCovid['labelsPcr'].forEach(d =>{
+                // console.log(this.dataCovid['labelsAntigeno'])
+                if(!this.dataCovid['labelsAntigeno'].includes(d)){
+                  antigeno.push(0)
+                }else{
+                  antigeno.push(this.dataCovid['ChileAntigeno'][count])
+                  count+=1;
+                }
+              })
+              this.dataCovid['ChileAntigeno'] = antigeno;
 
               // compute the positivity
               let Cases = this.dataCovid['ChileCases'];
               let Pcr = this.dataCovid['ChilePcr'];
+              let Ant = this.dataCovid['ChileAntigeno'];
               let Pos=[]
               for (let i=0;i<Pcr.length;i++){
-                Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
+                Pos.push(Cases[Cases.length-i-1]/(Pcr[Pcr.length-i-1]+Ant[Ant.length-i-1])*100)
               }
               Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
               this.dataCovid.ChilePos = Pos;

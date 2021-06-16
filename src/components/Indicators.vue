@@ -17,7 +17,7 @@
             <font-awesome-icon v-if="incrementLastDay(cases)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:1.1rem' title='Está aumentando'/>
                 {{incrementLastDay(cases)}}  en 24 horas
                </span>
-                <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de los casos diarios detectados por PCR </span>
+                <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de los casos diarios detectados por test PCR o de antigenos.</span>
         <!-- <update :labels='labels'> </update> -->
       </div>
       <div class='dosis indicator2' :class='colorsIndicator[1]' v-if='positivity.length>0'>
@@ -26,7 +26,7 @@
         <font-awesome-icon v-if="incrementLastDay(positivity)<0 && type=='epidemic' " icon='angle-double-down'  class='fa-fw' color='green' style='font-size:1.1rem' title='Está bajando'/>
             <font-awesome-icon v-if="incrementLastDay(positivity)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw'  color='red' style='font-size:1.1rem' title='Está aumentando'/>
            {{incrementLastDay(positivity)}} en 24 horas </span>
-           <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de la positividad que es la proporcion de test PCR que salen positivos al SARS-CoV-2</span>
+           <span  class='legend' v-if="type=='epidemic'"> La media móvil de 7 días de la positividad que es la proporcion de test PCR o de antigenos que salen positivos al SARS-CoV-2</span>
         <!-- <update :labels='labels'> </update> -->
       </div>
     </div>
@@ -36,7 +36,7 @@
         <span class='en24horas'>
           <font-awesome-icon v-if="incrementLastDay(uci)<0 && type=='epidemic' " icon='angle-double-down' class='fa-fw' color='green' style='font-size:1.1rem' title='Está bajando'/>
             <font-awesome-icon v-if="incrementLastDay(uci)>0 && type=='epidemic' " icon='angle-double-up' class='fa-fw' color='red' style='font-size:1.1rem' title='Está aumentando'/>
-          {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}} en 24 horas </span>
+          {{incrementLastDay(uci).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}} en 24 horas </span>
         <span class='legend' v-if="type=='epidemic'"> La UCI es la sigla de unidad de cuidados intensivos </span>
         <!-- <update :labels='labels'> </update> -->
       </div>

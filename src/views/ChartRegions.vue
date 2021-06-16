@@ -8,7 +8,7 @@
 
     <region-choice :currentRegion='currentRegion' :regionName='regionName' v-on:new-region="changeCurrentRegion" v-if='regionName.length>0'/>
 
-      <div id='block_graph'  v-if="dataCovid.labelsCases.length > 0" >
+      <div id='block_graph'  v-if="dataCovid.labelsAntigeno.length > 0" >
 
         <indicators
           :labels="dataCovid['labelsCases']"
@@ -120,12 +120,14 @@
               labelsPcr:[],
               labelsCases:[],
               labelsDeaths:[],
+              labelsAntigeno:[],
               MetropolitanaUci:[],
               MetropolitanaPcr:[],
               MetropolitanaCases:[],
               MetropolitanaDeaths:[],
               MetropolitanaMeanCases:[],
               MetropolitanaPos:[],
+              MetropolitanaAntigeno:[],
               incidence:{
                 lastUpdate:[],
                 Metropolitana:{
@@ -161,7 +163,7 @@
 
           // fromDate 3 months before today
           this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
-          
+
           //fetching data
           const getDataCsv = async (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
             let data = await d3.csv(path)
@@ -195,7 +197,7 @@
                 this.$set(this.dataCovid, data[index].Region+type, Object.values(data[index]).slice(3).map(i => Number(i)));
               }
             }
-            if (type=='Cases' || type=='Pcr'){
+            if (type=='Cases' || type=='Pcr' || type=='Antigeno'){
               return this.dataCovid
             }
           }
@@ -217,17 +219,34 @@
           let dataPcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false);
           // Cases
           let dataCases = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true, true,true, true)
+          //Antigeno
+          let dataAntigeno = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto87/Ag.csv', 'Antigeno', false);
 
           // update fromMonth from fromDate
           this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
 
+
+          console.log(dataAntigeno)
           // compute the positivity
           for (let region of this.regionName){
+            let antigeno = []
+            let count = 0;
+            this.dataCovid['labelsPcr'].forEach(d =>{
+              // console.log(this.dataCovid['labelsAntigeno'])
+              if(!this.dataCovid['labelsAntigeno'].includes(d)){
+                antigeno.push(0)
+              }else{
+                antigeno.push(dataAntigeno[region+'Antigeno'][count])
+                count+=1;
+              }
+            })
+            this.dataCovid[region+'Antigeno'] = antigeno;
+
             const Cases = dataCases[region+'Cases']
             const Pcr = dataPcr[region+'Pcr']
             let Pos=[]
             for (let i=0;i<Pcr.length;i++){
-              Pos.push(Cases[Cases.length-i-1]/Pcr[Pcr.length-i-1]*100)
+              Pos.push(Cases[Cases.length-i-1]/(Pcr[Pcr.length-i-1]+antigeno[antigeno.length-i-1])*100)
             }
             Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
             this.$set(this.dataCovid, region+'Pos', Pos);
