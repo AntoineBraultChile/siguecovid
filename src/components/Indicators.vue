@@ -96,7 +96,7 @@ created(){
   if(this.typeIndicator=='epidemic'){
     this.text = [' nuevos casos diarios ', ' % de positividad', ' personas en UCI', ' total fallecidos']
   }else if(this.typeIndicator=='vaccin'){
-    this.text = ['% parcialmente vacunada', '% totalmente vacunada', '  personas parcialmente vacunadas', ' personas totalmente vacunadas']
+    this.text = ['% con al menos una dosis', '% totalmente vacunada', '  personas con al menos una dosis', ' personas totalmente vacunadas']
   }else{
     console.log('Error type does not exist, choose epidemic or vaccin !')
   }
