@@ -41,7 +41,7 @@
     <style src='../assets/chartChileAndRegion.css'>
     </style>
 
-    <style >
+    <style>
     .ChartRegion{
       display:flex;
       width:100%;

@@ -9,8 +9,6 @@
 </template>
 
 <script>
-
-
 export default {
   name:'bottom-bar',
   data(){

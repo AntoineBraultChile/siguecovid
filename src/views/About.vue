@@ -2,7 +2,6 @@
   <div class="about">
     <div class="aboutMe">
         <h1 id='slogan'>Contacto</h1>
-
         <h2>Información sobre Sigue Covid</h2>
         <p>
           Sigue Covid  permite una visualización sencilla y clara  sobre el estado de la pandemia de Covid-19

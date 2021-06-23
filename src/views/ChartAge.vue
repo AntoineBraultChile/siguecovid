@@ -70,64 +70,6 @@
     </div>
   </template>
 
-  <style scoped>
-  .ChartAge{
-    display:flex;
-    flex-direction:column;
-    align-items: center;
-    justify-content: center;
-  }
-  .containerSection{
-    max-width:1400px;
-    padding:0px 10px 0px 10px;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction:column;
-  }
-
-
-  .graphUci{
-    margin-top:5px;
-    margin-bottom:5px;
-    width:49.4%;
-    box-shadow: 0px 0px 2px 2px #e8e8e8;
-    border-radius:7px;
-    background-color: white;
-  }
-
-  #block_graph{
-    width:100%;
-    display:flex;
-    flex-direction:row;
-    justify-content: center;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  @media all and (max-width: 1100px) {
-    .containerSection{
-      width:100%;
-    }
-
-    #block_graph{
-      flex-direction:column;
-      padding:0px 0px 0px 0px;
-      font-size:16px;
-    }
-
-    .graphUci{
-      width:100%;
-      margin-top:5px;
-    }
-    .optionsGraph{
-      display:flex;
-      flex-direction:column;
-      justify-content: center;
-    }
-  }
-  </style>
-
   <script>
   import  {derivate, sumArray, meanWeek, derivateEachTwoDays} from '@/assets/mathFunctions'
 
@@ -535,3 +477,62 @@
       }
     }
     </script>
+
+
+  <style scoped>
+  .ChartAge{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+  }
+  .containerSection{
+    max-width:1400px;
+    padding:0px 10px 0px 10px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+  }
+
+
+  .graphUci{
+    margin-top:5px;
+    margin-bottom:5px;
+    width:49.4%;
+    box-shadow: 0px 0px 2px 2px #e8e8e8;
+    border-radius:7px;
+    background-color: white;
+  }
+
+  #block_graph{
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  @media all and (max-width: 1100px) {
+    .containerSection{
+      width:100%;
+    }
+
+    #block_graph{
+      flex-direction:column;
+      padding:0px 0px 0px 0px;
+      font-size:16px;
+    }
+
+    .graphUci{
+      width:100%;
+      margin-top:5px;
+    }
+    .optionsGraph{
+      display:flex;
+      flex-direction:column;
+      justify-content: center;
+    }
+  }
+  </style>
