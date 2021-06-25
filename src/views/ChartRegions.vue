@@ -3,12 +3,23 @@
     <div class="containerSection">
       <box-container>
 
-    <title-container titleName='La pandemia de Covid-19 en las regiones de Chile' :update='false'/>
-  </box-container>
+        <title-container
+          titleName='La pandemia de Covid-19 en las regiones de Chile'
+          :update='false'
+        />
+      </box-container>
 
-    <region-choice :currentRegion='currentRegion' :regionName='regionName' v-on:new-region="changeCurrentRegion" v-if='regionName.length>0'/>
+      <region-choice
+        :currentRegion='currentRegion'
+        :regionName='regionName'
+        v-on:new-region="changeCurrentRegion"
+        v-if='regionName.length>0'
+      />
 
-      <div id='block_graph'  v-if="dataCovid.labelsAntigeno.length > 0" >
+      <div
+        id='block_graph'
+        v-if="dataCovid.labelsAntigeno.length > 0"
+      >
 
         <indicators
           :labels="dataCovid['labelsCases']"
@@ -18,278 +29,391 @@
           :deaths="dataCovid[currentRegion+'TotalDeaths']"
           type='epidemic'
           :region='currentRegion'
-          />
-          <slide-bar  v-if="fromMonth.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
+        />
+        <slide-bar
+          v-if="fromMonth.length > 0"
+          :listOfMonths='listOfMonths'
+          :fromMonth='fromMonth'
+          v-on:newdate='updateCurrentDate'
+        />
 
-          <charts-epidemic :region="currentRegion" :fromDate="fromDate" :dataCovid="dataCovid"/>
-          </div>
-          <spinner size='massive' v-else ></spinner>
-
-        </div>
-        <footer-indicators><p>
-          Como se calculan los indicatores :
-          <ul>
-            <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
-            <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
-            da el número de fallecidos por Covid-19 sospechosos. </li>
-          </ul>
-        </p>
-        </footer-indicators>
+        <charts-epidemic
+          :region="currentRegion"
+          :fromDate="fromDate"
+          :dataCovid="dataCovid"
+        />
       </div>
-    </template>
+      <spinner
+        size='massive'
+        v-else
+      ></spinner>
 
-    <style src='../assets/chartChileAndRegion.css'>
-    </style>
+    </div>
+    <footer-indicators>
+      <p>
+        Como se calculan los indicatores :
+      <ul>
+        <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
+        <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
+          da el número de fallecidos por Covid-19 sospechosos. </li>
+      </ul>
+      </p>
+    </footer-indicators>
+  </div>
+</template>
 
-    <style>
-    .ChartRegion{
-      display:flex;
-      width:100%;
-      flex-direction:column;
-      align-items: center;
-      justify-content: center;
-    }
+<script>
+import Indicators from "@/components/Indicators";
+import ChartsEpidemic from "@/components/ChartsEpidemic";
+import TitleContainer from "@/components/TitleContainer";
+import FooterIndicators from "@/components/FooterIndicators";
+import SlideBar from "@/components/SlideBar";
 
-    .optionsGraph label{
-      padding-right: 5px;
-    }
+import RegionChoice from "@/components/RegionChoice";
 
-    @media all and (max-width: 1100px) {
-      .subtitleContainer{
-        margin-top:5px;
-      }
+import { meanWeek, derivate } from "@/assets/mathFunctions";
 
-      .subtitle{
-        font-size: 20px;
-        font-weight:normal;
-      }
+import * as d3 from "d3-fetch";
 
-      .optionsGraph p{
-        font-size:16px;
-      }
-    }
-    </style>
+import * as dayjs from "dayjs";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+import "dayjs/locale/es"; // load on demand
+dayjs.locale("es"); // use Spanish locale globally
 
-    <script>
-    import Indicators from '@/components/Indicators'
-    import ChartsEpidemic from '@/components/ChartsEpidemic'
-    import TitleContainer from '@/components/TitleContainer'
-    import FooterIndicators from '@/components/FooterIndicators'
-    import SlideBar from '@/components/SlideBar'
-
-    import RegionChoice from '@/components/RegionChoice'
-
-    import  {meanWeek, derivate} from '@/assets/mathFunctions'
-
-    import * as d3 from 'd3-fetch'
-
-
-    import * as dayjs from 'dayjs'
-    var customParseFormat = require('dayjs/plugin/customParseFormat')
-    dayjs.extend(customParseFormat)
-    import 'dayjs/locale/es' // load on demand
-    dayjs.locale('es') // use Spanish locale globally
-
-    export default {
-      name:'ChartRegions',
-      components:{
-        'charts-epidemic': ChartsEpidemic,
-        'title-container':TitleContainer,
-        'indicators': Indicators,
-        'slide-bar': SlideBar,
-        'region-choice':RegionChoice,
-        'footer-indicators': FooterIndicators
-
-      },
-      metaInfo() {
-        return {
-          title: "Evolución de la pandemia de Covid-19 en las regiones de Chile",
-          meta: [
-            { name: 'description',
-            content:  `Graficos y indicatores de los casos nuevos, positividad, numero de test Pcr, numero de personas actualmente en unidad de cuidados intensivos,
-            fallecidos en las regiones de Chile `},
-            {name: 'robots', content: 'index,follow'}
-          ]
-        }},
-        data () {
-          return{
-            currentRegion:'Metropolitana',
-            regionName:[],
-            dataCovid:{
-              labelsUci:[],
-              labelsPcr:[],
-              labelsCases:[],
-              labelsDeaths:[],
-              labelsAntigeno:[],
-              MetropolitanaUci:[],
-              MetropolitanaPcr:[],
-              MetropolitanaCases:[],
-              MetropolitanaDeaths:[],
-              MetropolitanaMeanCases:[],
-              MetropolitanaPos:[],
-              MetropolitanaAntigeno:[],
-              incidence:{
-                lastUpdate:[],
-                Metropolitana:{
-                  names:[],
-                  values:[],
-                  variations:[]
-                }
-            },
-            pasoAPaso:{            }
-            },
-          fromDate: "01-02-2021",
-          fromMonth: '',
-          listOfMonths:[]
-        }
-      },
-      methods:{
-        // variationCases(region){
-        //   return Math.round(-(1-this.dataCovid[region+'MeanCases'].slice(-1)[0]/this.dataCovid[region+'MeanCases'].slice(-8)[0])*1000)/10;
-        // },
-          changeCurrentRegion(payload){
-            this.currentRegion = payload.target.value;
-          },
-          // changeFromDate(event){
-          //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
-          // },
-          updateCurrentDate(payload){
-            this.fromMonth = payload
-            this.fromDate = dayjs(payload, 'MMMM YYYY').format('01-MM-YYYY')
-          }
+export default {
+  name: "ChartRegions",
+  components: {
+    "charts-epidemic": ChartsEpidemic,
+    "title-container": TitleContainer,
+    indicators: Indicators,
+    "slide-bar": SlideBar,
+    "region-choice": RegionChoice,
+    "footer-indicators": FooterIndicators,
+  },
+  metaInfo() {
+    return {
+      title: "Evolución de la pandemia de Covid-19 en las regiones de Chile",
+      meta: [
+        {
+          name: "description",
+          content: `Graficos y indicatores de los casos nuevos, positividad, numero de test Pcr, numero de personas actualmente en unidad de cuidados intensivos,
+            fallecidos en las regiones de Chile `,
         },
+        { name: "robots", content: "index,follow" },
+      ],
+    };
+  },
+  data() {
+    return {
+      currentRegion: "Metropolitana",
+      regionName: [],
+      dataCovid: {
+        labelsUci: [],
+        labelsPcr: [],
+        labelsCases: [],
+        labelsDeaths: [],
+        labelsAntigeno: [],
+        MetropolitanaUci: [],
+        MetropolitanaPcr: [],
+        MetropolitanaCases: [],
+        MetropolitanaDeaths: [],
+        MetropolitanaMeanCases: [],
+        MetropolitanaPos: [],
+        MetropolitanaAntigeno: [],
+        incidence: {
+          lastUpdate: [],
+          Metropolitana: {
+            names: [],
+            values: [],
+            variations: [],
+          },
+        },
+        pasoAPaso: {},
+      },
+      fromDate: "01-02-2021",
+      fromMonth: "",
+      listOfMonths: [],
+    };
+  },
+  methods: {
+    // variationCases(region){
+    //   return Math.round(-(1-this.dataCovid[region+'MeanCases'].slice(-1)[0]/this.dataCovid[region+'MeanCases'].slice(-8)[0])*1000)/10;
+    // },
+    changeCurrentRegion(payload) {
+      this.currentRegion = payload.target.value;
+    },
+    // changeFromDate(event){
+    //   this.fromDate = dayjs(event.target.value, 'MMMM-YYYY').format('01-MM-YYYY')
+    // },
+    updateCurrentDate(payload) {
+      this.fromMonth = payload;
+      this.fromDate = dayjs(payload, "MMMM YYYY").format("01-MM-YYYY");
+    },
+  },
 
-        async created(){
+  async created() {
+    // fromDate 3 months before today
+    this.fromDate = dayjs().subtract(3, "month").format("01-MM-YYYY");
 
-          // fromDate 3 months before today
-          this.fromDate = dayjs().subtract(3, 'month').format('01-MM-YYYY')
-
-          //fetching data
-          const getDataCsv = async (path, type, derivative, initializeRegionName = false, initializeMonths = false, mean = false) => {
-            let data = await d3.csv(path)
-            if (derivative==true){
-              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3+1).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-            }else{
-              this.dataCovid['labels'+type] = Object.keys(data[0]).slice(3).map((d)=>  {return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")})
-            }
-
-            if(initializeMonths == true){
-              generateListOfMonths();
-            }
-
-            // get data for each region
-            for (let index=0; index < data.length; index++){
-              if (initializeRegionName == true && data[index].Region!=undefined && data[index].Region!='Total'){
-                this.regionName.push(data[index].Region)
-              }
-              if(type=='Deaths'){
-                this.$set(this.dataCovid, data[index].Region+'TotalDeaths', Object.values(data[index]).map(i => Number(i)))
-              }
-              // if we ask the derivative of the time serie (use to convert cumulative time serie to daily time serie)
-              if(derivative==true){
-                let dayCases = derivate(Object.values(data[index]).slice(3).map(i => Number(i)))
-                this.$set(this.dataCovid, data[index].Region+type, dayCases);
-                // chileValues = sumArray(chileValues,dayCases)
-                if(mean==true){
-                  this.$set(this.dataCovid, data[index].Region+'Mean'+type, meanWeek(dayCases).map((d)=>{return Math.round(d)}))
-                }
-              }else{
-                this.$set(this.dataCovid, data[index].Region+type, Object.values(data[index]).slice(3).map(i => Number(i)));
-              }
-            }
-            if (type=='Cases' || type=='Pcr' || type=='Antigeno'){
-              return this.dataCovid
-            }
-          }
-
-          // function to generate list of months
-          let generateListOfMonths  =  () => {
-            let currentDate = dayjs('05-2020', 'MM-YYYY')
-            while(currentDate < dayjs(this.dataCovid.labelsCases[this.dataCovid.labelsCases.length-1],'DD-MM-YYYY')){
-              this.listOfMonths.push(currentDate.format('MMMM YYYY'))
-              currentDate = dayjs(currentDate,'MM-YYYY').add(1,'M')
-            }
-          }
-
-          // Uci
-          getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv', 'Uci', false,false,false);
-          // Deaths
-          getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv', 'Deaths', true, false, false, true)
-          // PCR number each day
-          let dataPcr = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv', 'Pcr', false);
-          // Cases
-          let dataCases = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv', 'Cases', true, true,true, true)
-          //Antigeno
-          let dataAntigeno = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto87/Ag.csv', 'Antigeno', false);
-
-          // update fromMonth from fromDate
-          this.fromMonth = dayjs(this.fromDate, '01-MM-YYYY').format('MMMM YYYY')
-
-
-          console.log(dataAntigeno)
-          // compute the positivity
-          for (let region of this.regionName){
-            let antigeno = []
-            let count = 0;
-            this.dataCovid['labelsPcr'].forEach(d =>{
-              // console.log(this.dataCovid['labelsAntigeno'])
-              if(!this.dataCovid['labelsAntigeno'].includes(d)){
-                antigeno.push(0)
-              }else{
-                antigeno.push(dataAntigeno[region+'Antigeno'][count])
-                count+=1;
-              }
-            })
-            this.dataCovid[region+'Antigeno'] = antigeno;
-
-            const Cases = dataCases[region+'Cases']
-            const Pcr = dataPcr[region+'Pcr']
-            let Pos=[]
-            for (let i=0;i<Pcr.length;i++){
-              Pos.push(Cases[Cases.length-i-1]/(Pcr[Pcr.length-i-1]+antigeno[antigeno.length-i-1])*100)
-            }
-            Pos = meanWeek(Pos.reverse()).map(d =>{return Math.round(d*10)/10});
-            this.$set(this.dataCovid, region+'Pos', Pos);
-          }
-
-          // function to delete accent
-          function deleteAccent(string){
-            return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-          }
-
-          // datos plan paso a paso
-          const pasoAPaso = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv')
-          pasoAPaso.forEach(d=>{
-            this.dataCovid.pasoAPaso[deleteAccent(d['comuna_residencia'])] = Object.values(d).slice(-1)
-          })
-
-          // fetching data cases by comune in Chile
-          const casesComunas = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv');
-          const allLabels = Object.keys(casesComunas[0]).slice(5,-1).map(date => {return dayjs(date,"YYYY-MM-DD").format("DD-MM-YYYY")})
-          this.dataCovid.incidence.lastUpdate.push(allLabels.pop())
-          casesComunas.forEach(comuna =>{
-            if(this.dataCovid.incidence[comuna['Region']] === undefined){
-              this.dataCovid.incidence[comuna['Region']] = {
-                names:[],
-                values:[],
-                variations:[]
-              }
-            }else{
-              if(!comuna['Comuna'].includes('Desconocido')){
-                let last4Values = Object.values(comuna).slice(-5,-1).map(i => {return Number(i)})
-                let values = last4Values[3]-last4Values[1]
-                let variation = values - (last4Values[2]-last4Values[0])
-                this.dataCovid.incidence[comuna['Region']]['names'].push(comuna['Comuna'])
-                this.dataCovid.incidence[comuna['Region']].values.push(Math.round(values/comuna['Poblacion']*100000))
-                this.dataCovid.incidence[comuna['Region']].variations.push(variation)
-              }
-            }
-          })
-
-
-
-
-        }
+    //fetching data
+    const getDataCsv = async (
+      path,
+      type,
+      derivative,
+      initializeRegionName = false,
+      initializeMonths = false,
+      mean = false
+    ) => {
+      let data = await d3.csv(path);
+      if (derivative == true) {
+        this.dataCovid["labels" + type] = Object.keys(data[0])
+          .slice(3 + 1)
+          .map((d) => {
+            return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
+          });
+      } else {
+        this.dataCovid["labels" + type] = Object.keys(data[0])
+          .slice(3)
+          .map((d) => {
+            return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
+          });
       }
 
-      </script>
+      if (initializeMonths == true) {
+        generateListOfMonths();
+      }
+
+      // get data for each region
+      for (let index = 0; index < data.length; index++) {
+        if (
+          initializeRegionName == true &&
+          data[index].Region != undefined &&
+          data[index].Region != "Total"
+        ) {
+          this.regionName.push(data[index].Region);
+        }
+        if (type == "Deaths") {
+          this.$set(
+            this.dataCovid,
+            data[index].Region + "TotalDeaths",
+            Object.values(data[index]).map((i) => Number(i))
+          );
+        }
+        // if we ask the derivative of the time serie (use to convert cumulative time serie to daily time serie)
+        if (derivative == true) {
+          let dayCases = derivate(
+            Object.values(data[index])
+              .slice(3)
+              .map((i) => Number(i))
+          );
+          this.$set(this.dataCovid, data[index].Region + type, dayCases);
+          // chileValues = sumArray(chileValues,dayCases)
+          if (mean == true) {
+            this.$set(
+              this.dataCovid,
+              data[index].Region + "Mean" + type,
+              meanWeek(dayCases).map((d) => {
+                return Math.round(d);
+              })
+            );
+          }
+        } else {
+          this.$set(
+            this.dataCovid,
+            data[index].Region + type,
+            Object.values(data[index])
+              .slice(3)
+              .map((i) => Number(i))
+          );
+        }
+      }
+      if (type == "Cases" || type == "Pcr" || type == "Antigeno") {
+        return this.dataCovid;
+      }
+    };
+
+    // function to generate list of months
+    let generateListOfMonths = () => {
+      let currentDate = dayjs("05-2020", "MM-YYYY");
+      while (
+        currentDate <
+        dayjs(
+          this.dataCovid.labelsCases[this.dataCovid.labelsCases.length - 1],
+          "DD-MM-YYYY"
+        )
+      ) {
+        this.listOfMonths.push(currentDate.format("MMMM YYYY"));
+        currentDate = dayjs(currentDate, "MM-YYYY").add(1, "M");
+      }
+    };
+
+    // Uci
+    getDataCsv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto8/UCI.csv",
+      "Uci",
+      false,
+      false,
+      false
+    );
+    // Deaths
+    getDataCsv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto14/FallecidosCumulativo.csv",
+      "Deaths",
+      true,
+      false,
+      false,
+      true
+    );
+    // PCR number each day
+    let dataPcr = await getDataCsv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv",
+      "Pcr",
+      false
+    );
+    // Cases
+    let dataCases = await getDataCsv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv",
+      "Cases",
+      true,
+      true,
+      true,
+      true
+    );
+    //Antigeno
+    let dataAntigeno = await getDataCsv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto87/Ag.csv",
+      "Antigeno",
+      false
+    );
+
+    // update fromMonth from fromDate
+    this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
+
+    // compute the positivity
+    for (let region of this.regionName) {
+      let antigeno = [];
+      let count = 0;
+      this.dataCovid["labelsPcr"].forEach((d) => {
+        // console.log(this.dataCovid['labelsAntigeno'])
+        if (!this.dataCovid["labelsAntigeno"].includes(d)) {
+          antigeno.push(0);
+        } else {
+          antigeno.push(dataAntigeno[region + "Antigeno"][count]);
+          count += 1;
+        }
+      });
+      this.dataCovid[region + "Antigeno"] = antigeno;
+
+      const Cases = dataCases[region + "Cases"];
+      const Pcr = dataPcr[region + "Pcr"];
+      let Pos = [];
+      for (let i = 0; i < Pcr.length; i++) {
+        Pos.push(
+          (Cases[Cases.length - i - 1] /
+            (Pcr[Pcr.length - i - 1] + antigeno[antigeno.length - i - 1])) *
+            100
+        );
+      }
+      Pos = meanWeek(Pos.reverse()).map((d) => {
+        return Math.round(d * 10) / 10;
+      });
+      this.$set(this.dataCovid, region + "Pos", Pos);
+    }
+
+    // function to delete accent
+    function deleteAccent(string) {
+      return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    // datos plan paso a paso
+    const pasoAPaso = await d3.csv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv"
+    );
+    pasoAPaso.forEach((d) => {
+      this.dataCovid.pasoAPaso[deleteAccent(d["comuna_residencia"])] =
+        Object.values(d).slice(-1);
+    });
+
+    // let test = [10, 21, 1, 9, 8, 0, 12];
+    // console.log(test);
+    // console.log(test.slice(-5, -1));
+
+    // fetching data cases by comune in Chile
+    const casesComunas = await d3.csv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv"
+    );
+    const allLabels = Object.keys(casesComunas[0])
+      .slice(5, -1)
+      .map((date) => {
+        return dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY");
+      });
+    this.dataCovid.incidence.lastUpdate.push(allLabels.pop());
+    casesComunas.forEach((comuna) => {
+      if (this.dataCovid.incidence[comuna["Region"]] === undefined) {
+        this.dataCovid.incidence[comuna["Region"]] = {
+          names: [],
+          values: [],
+          variations: [],
+        };
+      } else {
+        if (!comuna["Comuna"].includes("Desconocido")) {
+          // console.log(Object.values(comuna));
+          let last4Values = Object.values(comuna)
+            .slice(-5, -1)
+            .map((i) => {
+              return Number(i);
+            });
+          let values = last4Values[3] - last4Values[1];
+          let variation = values - (last4Values[2] - last4Values[0]);
+          // console.log(comuna["Comuna"]);
+          // console.log("variation", variation);
+
+          this.dataCovid.incidence[comuna["Region"]]["names"].push(
+            comuna["Comuna"]
+          );
+          this.dataCovid.incidence[comuna["Region"]].values.push(
+            Math.round((values / comuna["Poblacion"]) * 100000)
+          );
+          this.dataCovid.incidence[comuna["Region"]].variations.push(
+            Math.round((variation / comuna["Poblacion"]) * 100000)
+          );
+        }
+      }
+    });
+  },
+};
+</script>
+
+
+<style lang="css" scoped>
+.ChartRegion {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.optionsGraph label {
+  padding-right: 5px;
+}
+
+@media all and (max-width: 1100px) {
+  .subtitleContainer {
+    margin-top: 5px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  .optionsGraph p {
+    font-size: 16px;
+  }
+}
+</style>
+
+
+<style src='../assets/chartChileAndRegion.css'></style>
