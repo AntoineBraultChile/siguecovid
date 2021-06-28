@@ -56,7 +56,7 @@
     </div>
 
     <div class='graph' v-if="dataCovid.labelsVaccine.length>0">
-      <title-graphic > Proporción de la poblacion vacunada en {{region}}</title-graphic>
+      <title-graphic > Proporción de la población vacunada en {{region}}</title-graphic>
       <update :labels="dataCovid.labelsVaccine"> </update>
       <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Paso')"></line-chart>
     </div>
