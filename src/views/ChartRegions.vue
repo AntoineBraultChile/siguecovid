@@ -79,6 +79,7 @@ import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 import "dayjs/locale/es"; // load on demand
+import { sumArray } from "../assets/mathFunctions";
 dayjs.locale("es"); // use Spanish locale globally
 
 export default {
@@ -108,12 +109,33 @@ export default {
     return {
       currentRegion: "Metropolitana",
       regionName: [],
+      populationChile: {
+        // projection 2021 https://es.wikipedia.org/wiki/Anexo:Regiones_de_Chile_por_poblaci%C3%B3n
+        Total: 19678363,
+        Metropolitana: 8242459,
+        Aysén: 107158,
+        Antofagasta: 703534,
+        "Arica y Parinacota": 316168,
+        Atacama: 316168,
+        Coquimbo: 848079,
+        Araucanía: 1019548,
+        "Los Lagos": 897708,
+        "Los Ríos": 407837,
+        Magallanes: 179533,
+        Tarapacá: 391558,
+        Valparaíso: 1979373,
+        Ñuble: 514609,
+        Biobío: 1670590,
+        "O’Higgins": 1000959,
+        Maule: 1143012,
+      },
       dataCovid: {
         labelsUci: [],
         labelsPcr: [],
         labelsCases: [],
         labelsDeaths: [],
         labelsAntigeno: [],
+        labelsVaccine: [],
         MetropolitanaUci: [],
         MetropolitanaPcr: [],
         MetropolitanaCases: [],
@@ -121,6 +143,11 @@ export default {
         MetropolitanaMeanCases: [],
         MetropolitanaPos: [],
         MetropolitanaAntigeno: [],
+        MetropolitanaVaccine: {
+          // unica dosis are in both first and second doses
+          firstDoses: [],
+          secondDoses: [],
+        },
         incidence: {
           lastUpdate: [],
           Metropolitana: {
@@ -335,10 +362,6 @@ export default {
         Object.values(d).slice(-1);
     });
 
-    // let test = [10, 21, 1, 9, 8, 0, 12];
-    // console.log(test);
-    // console.log(test.slice(-5, -1));
-
     // fetching data cases by comune in Chile
     const casesComunas = await d3.csv(
       "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv"
@@ -380,6 +403,49 @@ export default {
           );
         }
       }
+    });
+
+    // fetching vaccine by region
+    const vaccine = await d3.csv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv"
+    );
+    this.dataCovid.labelsVaccine = Object.keys(vaccine[0])
+      .slice(2)
+      .map((date) => dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY"));
+
+    let firstDoses = {};
+    let secondDoses = {};
+    let uniqueDoses = {};
+
+    vaccine.forEach((region) => {
+      if (region["Dosis"] == "Primera") {
+        firstDoses[region["Region"]] = Object.values(region)
+          .slice(2)
+          .map((i) => Number(i));
+      } else if (region["Dosis"] == "Segunda") {
+        secondDoses[region["Region"]] = Object.values(region)
+          .slice(2)
+          .map((i) => Number(i));
+      } else if (region["Dosis"] == "Unica") {
+        uniqueDoses[region["Region"]] = Object.values(region)
+          .slice(2)
+          .map((i) => Number(i));
+      }
+    });
+
+    Object.keys(firstDoses).forEach((region) => {
+      const firstValues = firstDoses[region];
+      const uniqueValues = uniqueDoses[region];
+      const secondValues = secondDoses[region];
+
+      this.dataCovid[region + "Vaccine"] = {
+        firstDoses: sumArray(firstValues, uniqueValues).map(
+          (d) => Math.round((d / this.populationChile[region]) * 1000) / 10
+        ),
+        secondDoses: sumArray(secondValues, uniqueValues).map(
+          (d) => Math.round((d / this.populationChile[region]) * 1000) / 10
+        ),
+      };
     });
   },
 };

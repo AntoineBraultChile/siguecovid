@@ -158,6 +158,7 @@ export default {
         labelsCases: [],
         labelsDeaths: [],
         labelsAntigeno: [],
+        labelsVaccine: [],
         // labelsPos:[],
         ChileUci: [],
         ChilePcr: [],
@@ -167,6 +168,10 @@ export default {
         ChileMeanCases: [],
         ChilePos: [],
         ChileAntigeno: [],
+        ChileVaccine: {
+          firstDoses: [],
+          secondDoses: [],
+        },
         incidence: {
           lastUpdate: [],
           Chile: {
@@ -490,6 +495,46 @@ export default {
         ) / 10
       );
     });
+
+    // fetching vaccine by region
+    const vaccine = await d3.csv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv"
+    );
+    this.dataCovid.labelsVaccine = Object.keys(vaccine[0])
+      .slice(2)
+      .map((date) => dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY"));
+
+    let firstDoses = [];
+    let secondDoses = [];
+    let uniqueDoses = [];
+
+    vaccine.forEach((region) => {
+      if (region["Region"] == "Total") {
+        if (region["Dosis"] == "Primera") {
+          firstDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        } else if (region["Dosis"] == "Segunda") {
+          secondDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        } else if (region["Dosis"] == "Unica") {
+          uniqueDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        }
+      }
+    });
+
+    this.dataCovid.ChileVaccine.firstDoses = sumArray(
+      firstDoses,
+      uniqueDoses
+    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+
+    this.dataCovid.ChileVaccine.secondDoses = sumArray(
+      secondDoses,
+      uniqueDoses
+    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
   },
 };
 </script>
