@@ -122,6 +122,8 @@ export default {
       // console.log(this.dataCovid[region + "Vaccine"].firstDoses);
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labelsVaccine"].indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
       return {
         labels: this.dataCovid["labelsVaccine"].filter((x) => {
           return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
