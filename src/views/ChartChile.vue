@@ -138,7 +138,7 @@ export default {
         Metropolitana: 8242459,
         Aysén: 107158,
         Antofagasta: 703534,
-        "Arica y Parinacota": 316168,
+        "Arica y Parinacota": 255068,
         Atacama: 316168,
         Coquimbo: 848079,
         Araucanía: 1019548,
