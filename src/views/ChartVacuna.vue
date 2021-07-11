@@ -271,6 +271,7 @@ export default {
         "total segunda dosis": "",
         labelsByAge: [],
         populationByAge: {
+          18: 1480623,
           30: 3614461, // 18 to 39
           40: 3031451, // 40 to 49
           50: 2618520,
@@ -279,6 +280,7 @@ export default {
           300: 1544008,
         },
         firstDosesByAgeGroup: {
+          18: [],
           30: [],
           40: [],
           50: [],
@@ -287,6 +289,7 @@ export default {
           300: [],
         },
         secondDosesByAgeGroup: {
+          18: [],
           30: [],
           40: [],
           50: [],
@@ -295,6 +298,7 @@ export default {
           300: [],
         },
         uniqueDosesByAgeGroup: {
+          18: [],
           30: [],
           40: [],
           50: [],
@@ -550,11 +554,16 @@ export default {
         }),
         datasets: [
           {
+            label: "12-17",
+            borderColor: "#D2E6EE",
+            backgroundColor: "#D2E6EE",
+            fill: false,
+            data: this.vacunaChile[dosesType]["18"].slice(indexDate),
+          },
+          {
             label: "18-29",
             borderColor: "#82CFFD",
             backgroundColor: "#82CFFD",
-            // borderColor: '#845EC2',
-            // backgroundColor:'#845EC2',
             fill: false,
             data: this.vacunaChile[dosesType]["30"].slice(indexDate),
           },
@@ -716,11 +725,11 @@ export default {
       .map((d) => {
         return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
-    let ageGroup = ["16"];
+    let ageGroup = ["12"];
     Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((d) =>
       ageGroup.push(d)
     );
-
+    console.log(ageGroup);
     let getVaccinByAge = async (dosis, typeDosis) => {
       dosis.map((data) => {
         for (let i = 0; i < ageGroup.length - 1; i++) {
