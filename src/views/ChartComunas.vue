@@ -2,54 +2,116 @@
   <div class="ChartComunas">
     <div class="containerSection">
       <box-container>
-        <title-container titleName='La pandemia de Covid-19 en las comunas de Chile'> </title-container>
+        <title-container
+          titleName="La pandemia de Covid-19 en las comunas de Chile"
+        >
+        </title-container>
       </box-container>
-      <div id='block_graph' v-if="firstDoses.labels.length > 0">
-        <comuna-choice :currentComuna='currentComuna' :comunaNames='comunaNames' v-on:new-comuna="changeCurrentComuna" v-if='comunaNames.length>0'/>
-          <slide-bar  v-if="listOfMonths.length > 0" :listOfMonths='listOfMonths' :fromMonth='fromMonth' v-on:newdate='updateCurrentDate'/>
-            <div class='graph' v-if="cases.labels.length>0 & pasoAPaso.Arica.dateChangePaso.length>0" >
-              <title-graphic>Incidencia  en la comuna de {{currentComuna}}</title-graphic>
-              <span style='font-size:1rem'>Incidencia: número de casos en 7 días por cada 100.000 habitantes</span> <br>
-              <div class="legend">
-                <div class="rectangle red"></div> <span>Paso 1</span>
-                <div class="rectangle orange"></div> <span>Paso 2</span>
-                <div class="rectangle blue"></div> <span>Paso 3</span>
-                <div class="rectangle green"></div> <span>Paso 4</span>
-              </div>
-              <update :labels="cases.labels"> </update>
-              <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)"/>
-            </div>
-
-            <div class='graph' v-if="positivity.labels.length>0  & pasoAPaso.Arica.dateChangePaso.length>0">
-              <title-graphic>Positividad semanal de los test PCR en la comuna de {{currentComuna}}</title-graphic>
-              <update :labels="positivity.labels"> </update>
-              <div class="legend">
-                <div class="rectangle red"></div> <span>Paso 1</span>
-                <div class="rectangle orange"></div> <span>Paso 2</span>
-                <div class="rectangle blue"></div> <span>Paso 3</span>
-                <div class="rectangle green"></div> <span>Paso 4</span>
-              </div>
-              <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)"/>
-
-            </div>
-            <div class='graph' v-if='cases.labels.length>0'>
-              <title-graphic>Fallecidos semanal por Covid-19 en la comuna de {{currentComuna}}</title-graphic>
-              <span style='font-size:1rem'>Son sólo los fallecidos confirmados con un test PCR positivo</span> <br>
-              <update :labels="deaths.labels"> </update>
-              <bar-chart  :chartData="ChartDeaths(currentComuna)" :options="options('deaths')"></bar-chart>
-            </div>
-            <div class='graph' v-if='positivity.labels.length>0'>
-              <title-graphic>Proporción de la población vacunada en la comuna de {{currentComuna}}</title-graphic>
-              <update :labels="firstDoses.labels"> </update>
-              <line-chart :chartData="ChartVaccin(currentComuna)" :options="options('vaccine')"/>
-            </div>
+      <div id="block_graph" v-if="firstDoses.labels.length > 0">
+        <comuna-choice
+          :currentComuna="currentComuna"
+          :comunaNames="comunaNames"
+          v-on:new-comuna="changeCurrentComuna"
+          v-if="comunaNames.length > 0"
+        />
+        <slide-bar
+          v-if="listOfMonths.length > 0"
+          :listOfMonths="listOfMonths"
+          :fromMonth="fromMonth"
+          v-on:newdate="updateCurrentDate"
+        />
+        <div
+          class="graph"
+          v-if="
+            (cases.labels.length > 0) &
+              (pasoAPaso.Arica.dateChangePaso.length > 0)
+          "
+        >
+          <title-graphic
+            >Incidencia en la comuna de {{ currentComuna }}</title-graphic
+          >
+          <span style="font-size:1rem"
+            >Incidencia: número de casos en 7 días por cada 100.000
+            habitantes</span
+          >
+          <br />
+          <div class="legend">
+            <div class="rectangle red"></div>
+            <span>Paso 1</span>
+            <div class="rectangle orange"></div>
+            <span>Paso 2</span>
+            <div class="rectangle blue"></div>
+            <span>Paso 3</span>
+            <div class="rectangle green"></div>
+            <span>Paso 4</span>
           </div>
-          <spinner size='massive' v-else ></spinner>
+          <update :labels="cases.labels"> </update>
+          <line-chart
+            :chartData="ChartIncidence(currentComuna)"
+            :options="options('cases', currentComuna)"
+          />
+        </div>
+
+        <div
+          class="graph"
+          v-if="
+            (positivity.labels.length > 0) &
+              (pasoAPaso.Arica.dateChangePaso.length > 0)
+          "
+        >
+          <title-graphic
+            >Positividad semanal de los test PCR en la comuna de
+            {{ currentComuna }}</title-graphic
+          >
+          <update :labels="positivity.labels"> </update>
+          <div class="legend">
+            <div class="rectangle red"></div>
+            <span>Paso 1</span>
+            <div class="rectangle orange"></div>
+            <span>Paso 2</span>
+            <div class="rectangle blue"></div>
+            <span>Paso 3</span>
+            <div class="rectangle green"></div>
+            <span>Paso 4</span>
+          </div>
+          <line-chart
+            :chartData="ChartPositivity(currentComuna)"
+            :options="options('positivity', currentComuna)"
+          />
+        </div>
+        <div class="graph" v-if="cases.labels.length > 0">
+          <title-graphic
+            >Fallecidos semanal por Covid-19 en la comuna de
+            {{ currentComuna }}</title-graphic
+          >
+          <span style="font-size:1rem"
+            >Son sólo los fallecidos confirmados con un test PCR positivo</span
+          >
+          <br />
+          <update :labels="deaths.labels"> </update>
+          <bar-chart
+            :chartData="ChartDeaths(currentComuna)"
+            :options="options('deaths')"
+          ></bar-chart>
+        </div>
+        <div class="graph" v-if="positivity.labels.length > 0">
+          <title-graphic
+            >Proporción de la población vacunada en la comuna de
+            {{ currentComuna }}</title-graphic
+          >
+          <update :labels="firstDoses.labels"> </update>
+          <line-chart
+            :chartData="ChartVaccin(currentComuna)"
+            :options="options('vaccine')"
+          />
         </div>
       </div>
+      <spinner size="massive" v-else></spinner>
+    </div>
+  </div>
 </template>
 
-    <script>
+<script>
 import * as d3 from "d3-fetch";
 import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -273,7 +335,7 @@ export default {
       };
 
       if (type === "positivity" || type == "vaccine") {
-        opt.scales.yAxes[0].ticks["callback"] = function (tick) {
+        opt.scales.yAxes[0].ticks["callback"] = function(tick) {
           return tick.toString() + "%";
         };
       }
@@ -295,10 +357,9 @@ export default {
               // yScaleID: 'y-axis-1',
               xMin: dateChangePaso[index],
               xMax: dateChangePaso[index + 1],
-              backgroundColor:
-                this.colorsPaso[
-                  this.pasoAPaso[comuna].numeroDelPaso[index] - 1
-                ],
+              backgroundColor: this.colorsPaso[
+                this.pasoAPaso[comuna].numeroDelPaso[index] - 1
+              ],
               //borderColor: 'rgb(255, 0, 0)',
               borderWidth: 1,
             });
@@ -312,7 +373,9 @@ export default {
   },
   async created() {
     // fromDate 3 months before today
-    this.fromDate = dayjs().subtract(3, "month").format("01-MM-YYYY");
+    this.fromDate = dayjs()
+      .subtract(3, "month")
+      .format("01-MM-YYYY");
 
     //fetch deaths by comuna
     const deathsComunas = await d3.csv(
@@ -329,9 +392,10 @@ export default {
 
       if (dayjs(d, "DD-MM-YYYY").get("day") === 1) {
         this.deaths.labels.push(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"));
+        console.log(dayjs(d, "DD-MM-YYYY"));
         if (
-          !Object.values(this.dicMonth2).includes(
-            dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY")
+          !Object.keys(this.dicMonth2).includes(
+            dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")
           )
         ) {
           this.dicMonth2[dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")] = dayjs(
@@ -376,6 +440,12 @@ export default {
     delete this.dicComunaNamesAccentWithoutWith["Aisen"];
     this.dicComunaNamesAccentWithoutWith["Aysen"] = "Aisén";
 
+    // accent missing in some comunas
+    this.dicComunaNamesAccentWithoutWith["Maria Pinto"] = "María Pinto";
+    this.deaths.comuna["María Pinto"] = this.deaths.comuna["Maria Pinto"];
+    this.dicComunaNamesAccentWithoutWith["Maria Elena"] = "María Elena";
+    this.deaths.comuna["María Elena"] = this.deaths.comuna["Maria Elena"];
+
     // we set comuna names with accents
     this.comunaNames = Object.values(this.dicComunaNamesAccentWithoutWith);
 
@@ -383,11 +453,13 @@ export default {
     const casesComunas = await d3.csv(
       "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv"
     );
+
     const allLabels = Object.keys(casesComunas[0])
       .slice(5, -1)
       .map((date) => {
         return dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
+
     // we keep only monday date
     allLabels.forEach((d) => {
       // if it is a monday or a friday
@@ -441,6 +513,7 @@ export default {
         this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]
       ] = derivateEachTwoDays(valuesEachMonday);
     });
+
     // this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
     this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
 
@@ -568,7 +641,7 @@ export default {
 };
 </script>
 
-                  <style lang="css" scoped>
+<style lang="css" scoped>
 .ChartComunas {
   width: 100%;
   display: flex;
