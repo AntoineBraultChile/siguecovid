@@ -392,7 +392,6 @@ export default {
 
       if (dayjs(d, "DD-MM-YYYY").get("day") === 1) {
         this.deaths.labels.push(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"));
-        console.log(dayjs(d, "DD-MM-YYYY"));
         if (
           !Object.keys(this.dicMonth2).includes(
             dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")
@@ -445,6 +444,9 @@ export default {
     this.deaths.comuna["María Pinto"] = this.deaths.comuna["Maria Pinto"];
     this.dicComunaNamesAccentWithoutWith["Maria Elena"] = "María Elena";
     this.deaths.comuna["María Elena"] = this.deaths.comuna["Maria Elena"];
+
+    this.dicComunaNamesAccentWithoutWith["Chepica"] = "Chépica";
+    this.deaths.comuna["Chépica"] = this.deaths.comuna["Chepica"];
 
     // we set comuna names with accents
     this.comunaNames = Object.values(this.dicComunaNamesAccentWithoutWith);
