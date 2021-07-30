@@ -60,4 +60,16 @@ function order(labels, values){
    return [labelsSort, valuesSort]
 }
 
-export  {meanWeek,derivate,sumArray, derivateEachTwoDays, order}
+// remove outlier
+function removeSenselessValues(values, senselessMultiplier = 5) {
+	return values.map((value, index) => {
+		const previousValue = index === 0 ? value : values[index - 1];
+		const nextValue = index === values.length - 1 ? value : values[index + 1];
+
+		if (value > senselessMultiplier * previousValue) return null;
+		if (value > senselessMultiplier * nextValue) return null;
+		return value;
+	});
+}
+
+export  {meanWeek,derivate,sumArray, derivateEachTwoDays, order, removeSenselessValues}

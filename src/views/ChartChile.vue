@@ -89,7 +89,7 @@
 </style>
 
 <script>
-import { meanWeek, derivate, sumArray } from "@/assets/mathFunctions";
+import { meanWeek, derivate, sumArray , removeSenselessValues} from "@/assets/mathFunctions";
 
 import Indicators from "@/components/Indicators";
 import ChartsEpidemic from "@/components/ChartsEpidemic";
@@ -259,6 +259,7 @@ export default {
           );
         }
       }
+      chileValues = removeSenselessValues(chileValues);
       this.$set(this.dataCovid, "Chile" + type, chileValues);
       //   if (type =='Pcr'){
       //   return this.dataCovid['ChilePcr']
@@ -317,6 +318,8 @@ export default {
           .slice(3)
           .map((i) => Number(i))
       );
+      dayCases = removeSenselessValues(dayCases,10);
+
       this.$set(this.dataCovid, "ChileDeaths", dayCases);
       this.$set(
         this.dataCovid,
@@ -346,6 +349,8 @@ export default {
           .slice(3)
           .map((i) => Number(i))
       );
+      dayCases = removeSenselessValues(dayCases);
+
       this.$set(this.dataCovid, "ChileCases", dayCases);
       this.$set(
         this.dataCovid,
