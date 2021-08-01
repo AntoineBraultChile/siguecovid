@@ -667,7 +667,7 @@ export default {
 .graphUci {
   margin-top: 5px;
   margin-bottom: 5px;
-  width: 49.4%;
+  width: 49.65%;
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
   background-color: white;

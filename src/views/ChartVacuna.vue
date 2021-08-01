@@ -65,8 +65,8 @@
 
         <div class="wrapper">
           <title-graphic>
-            Personas con al menos una dosis por edad en Chile</title-graphic
-          >
+            Personas con al menos una dosis por edad en Chile
+          </title-graphic>
           <!-- <span style='font-size:1rem'> Estar parcialmente vacunado significa tener una dosis de Sinovac, Astra-Zeneca, Pfizer.</span> <br> -->
           <update :labels="vacunaChile.labels"> </update>
           <line-chart
@@ -79,8 +79,8 @@
 
         <div class="wrapper">
           <title-graphic>
-            Personas completamente vacunadas por edad en Chile</title-graphic
-          >
+            Personas completamente vacunadas por edad en Chile
+          </title-graphic>
           <!-- <span style='font-size:1rem'> Estar completamente vacunado significa tener dos dosis de Sinovac, Astra-Zeneca, Pfizer o una dosis de CanSino.</span> <br> -->
           <update :labels="vacunaChile.labels"> </update>
           <line-chart
@@ -93,9 +93,8 @@
 
         <div class="wrapper">
           <title-graphic>
-            Personas parcialmente vacunadas cada día por tipo de vacuna en
-            Chile</title-graphic
-          >
+            Personas parcialmente vacunadas cada día por tipo de vacuna en Chile
+          </title-graphic>
           <update :labels="vaccineType.labels"> </update>
           <bar-chart
             :chartData="renderChartTypeVaccine('first')"
@@ -107,8 +106,8 @@
         <div class="wrapper">
           <title-graphic>
             Personas completamente vacunadas cada día por tipo de vacuna en
-            Chile</title-graphic
-          >
+            Chile
+          </title-graphic>
           <update :labels="vaccineType.labels"> </update>
           <bar-chart
             :chartData="renderChartTypeVaccine('second')"
@@ -119,8 +118,8 @@
 
         <div class="wrapper">
           <title-graphic>
-            Proporción de cada tipo de vacuna utilizada en Chile</title-graphic
-          >
+            Proporción de cada tipo de vacuna utilizada en Chile
+          </title-graphic>
           <span style="font-size:1rem">
             Sólo se tienen en cuenta las personas totalmente vacunadas.
           </span>
@@ -186,7 +185,7 @@
 }
 
 .wrapper {
-  width: 49.4%;
+  width: 49.65%;
   margin: 5px 0px 5px 0px;
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
@@ -473,7 +472,7 @@ export default {
         labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
         datasets: [
           {
-            label: "My First Dataset",
+            label: "",
             data: this.vaccineType.secondDoses.proportion,
             backgroundColor: ["#eba434", "#82CFFD", "#f87979", "#93DB70"],
             hoverOffset: 4,
@@ -854,7 +853,7 @@ export default {
       });
 
     vaccineTypeFirstDoses.forEach((d) => {
-      if (d["Fabricante"] != "CanSino") {
+      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "") {
         this.vaccineType.firstDoses.proportion.push(
           Object.values(d)
             .slice(1)
@@ -870,7 +869,7 @@ export default {
     });
 
     vaccineTypeSecondDoses.forEach((d) => {
-      if (d["Fabricante"] != "CanSino") {
+      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "") {
         this.vaccineType.secondDoses.proportion.push(
           Object.values(d)
             .slice(1)

@@ -661,7 +661,7 @@ export default {
 }
 
 .graph {
-  width: 49.5%;
+  width: 49.65%;
   margin: 5px 0px 5px 0px;
   box-shadow: 0px 0px 2px 2px #e8e8e8;
   border-radius: 7px;
