@@ -33,8 +33,8 @@
 
     <div class="graph" v-if="dataCovid.labelsUci.length > 0">
       <title-graphic> {{ title["Uci"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem"
-        >La UCI es la sigla de unidad de cuidados intensivos.</span
+      <span style="font-size:1rem">
+        La UCI es la sigla de unidad de cuidados intensivos.</span
       >
       <br />
 
@@ -110,6 +110,20 @@
         :options="chartOptions('Incidence')"
       ></horizontal-bar-chart>
     </div>
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
+      <span style="font-size:1rem">
+        La UCI es la sigla de unidad de cuidados intensivos.</span
+      >
+      <br />
+
+      <update :labels="dataCovid.labelsIngresoUCI"> </update>
+      <bar-chart
+        :chartData="getChartIngresoUCI(region)"
+        :options="chartOptions('IngresoUCI')"
+      >
+      </bar-chart>
+    </div>
 
     <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
       <title-graphic>
@@ -176,6 +190,7 @@ export default {
         Deaths: "#232b2b",
       },
       title: {
+        IngresoUCI: "Media móvil 7 días de ingresos a UCI por COVID-19",
         Uci: "Personas en UCI por Covid-19",
         Pcr: "Positividad y PCR en ",
         Cases: "Nuevos casos diarios",
@@ -184,6 +199,27 @@ export default {
     };
   },
   methods: {
+    getChartIngresoUCI(region) {
+      let fromDate = this.fromDate;
+      let indexDate = this.dataCovid["labelsIngresoUCI"].indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
+      return {
+        labels: this.dataCovid["labelsIngresoUCI"].filter((x) => {
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+        }),
+        datasets: [
+          {
+            type: "line",
+            label: "",
+            borderColor: this.colorsPasoAPaso[1],
+            backgroundColor: this.colorsPasoAPaso[1],
+            fill: false,
+            data: this.dataCovid[region + "IngresoUCI"].slice(indexDate),
+          },
+        ],
+      };
+    },
     getChartVaccine(region) {
       // console.log(this.dataCovid[region + "Vaccine"].firstDoses);
       let fromDate = this.fromDate;
@@ -406,6 +442,17 @@ export default {
           {
             ticks: {
               beginAtZero: true,
+            },
+          },
+        ];
+      }
+      if (type == "IngresoUCI") {
+        options.scales["xAxes"] = [
+          {
+            type: "time",
+            time: {
+              parser: "DD-MM-YYYY",
+              unit: "month",
             },
           },
         ];

@@ -153,6 +153,7 @@ export default {
         Maule: 1143012,
       },
       dataCovid: {
+        labelsIngresoUCI:[],
         labelsUci: [],
         labelsPcr: [],
         labelsCases: [],
@@ -160,6 +161,7 @@ export default {
         labelsAntigeno: [],
         labelsVaccine: [],
         // labelsPos:[],
+        ChileIngresoUCI:[],
         ChileUci: [],
         ChilePcr: [],
         ChileCases: [],
@@ -202,6 +204,9 @@ export default {
   async created() {
     // fromDate 3 months before today
     this.fromDate = dayjs().subtract(3, "month").format("01-MM-YYYY");
+
+
+
 
     // fetching data
     const getDataCsv = async (
@@ -427,14 +432,24 @@ export default {
       });
       this.dataCovid.ChilePos = Pos;
 
+
+
       // update fromMonth
       this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
     });
 
-    // plan paso a paso
-    let paso = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv"
-    );
+    // ingreso UCI en chile
+    const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');
+
+    this.dataCovid.labelsIngresoUCI = Object.keys(ingresoUCI[0]).slice(1).map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
+    this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Number(i))
+
+
+
+
+
+  // plan paso a paso
+    let paso = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv");
     let population = await d3.json("populationComunasChile.json");
     let pop = population["Poblacion 2021"];
     this.dataCovid.pasoAPaso.labels = Object.keys(paso[0])

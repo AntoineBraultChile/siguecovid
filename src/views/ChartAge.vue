@@ -3,7 +3,7 @@
     <div class="containerSection">
       <box-container>
 
-        <title-container titleName='La pandemia de Covid-19 por edad en Chile.' />
+        <title-container titleName='La pandemia de Covid-19 por edad en Chile' />
       </box-container>
 
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0"> -->
