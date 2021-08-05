@@ -54,6 +54,11 @@
           da el número de fallecidos por Covid-19 sospechosos. </li>
       </ul>
       </p>
+
+      <p>
+        Datos sobre los variantes en Chile son proporcionados por 
+        Emma B. Hodcroft. 2021. "CoVariants: SARS-CoV-2 Mutations and Variants of Interest." <a href='https://covariants.org/'>https://covariants.org/ </a>.
+      </p>
     </footer-indicators>
   </div>
 </template>
@@ -153,6 +158,7 @@ export default {
         Maule: 1143012,
       },
       dataCovid: {
+        labelsVariant:[],
         labelsIngresoUCI:[],
         labelsUci: [],
         labelsPcr: [],
@@ -161,6 +167,7 @@ export default {
         labelsAntigeno: [],
         labelsVaccine: [],
         // labelsPos:[],
+        ChileVariant:{},
         ChileIngresoUCI:[],
         ChileUci: [],
         ChilePcr: [],
@@ -204,10 +211,6 @@ export default {
   async created() {
     // fromDate 3 months before today
     this.fromDate = dayjs().subtract(3, "month").format("01-MM-YYYY");
-
-
-
-
     // fetching data
     const getDataCsv = async (
       path,
@@ -445,10 +448,68 @@ export default {
     this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Number(i))
 
 
+  //  Covid variant
+  const response = await fetch('https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json')
+  const variant = await response.json()
+  const variantChile = await variant.countries['Chile']
+  this.dataCovid.labelsVariant = variantChile.week.map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
+  const dicVariant = {"20I (Alpha, V1)":'Alpha', "20H (Beta, V2)":'Beta',"20J (Gamma, V3)": 'Gamma', "21A (Delta)":'Delta',  "21C (Epsilon)":'Epsilon',  "21G (Lambda)":'Lambda', "21F (Iota)":'Iota'}
+  const nameVariant = Object.keys(variantChile).slice(2)
+  let othersVariant = []
+  nameVariant.forEach(name =>{
+    if(dicVariant[name] == undefined){
+        othersVariant = sumArray(othersVariant, variantChile[name])
+    }else{
+    this.dataCovid.ChileVariant[dicVariant[name]] = variantChile[name]
+    }
+  })
+  this.dataCovid.ChileVariant['Otros'] = othersVariant
 
 
 
-  // plan paso a paso
+  
+
+    // fetching vaccine by region
+    const vaccine = await d3.csv(
+      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv"
+    );
+    this.dataCovid.labelsVaccine = Object.keys(vaccine[0])
+      .slice(2)
+      .map((date) => dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY"));
+
+    let firstDoses = [];
+    let secondDoses = [];
+    let uniqueDoses = [];
+
+    vaccine.forEach((region) => {
+      if (region["Region"] == "Total") {
+        if (region["Dosis"] == "Primera") {
+          firstDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        } else if (region["Dosis"] == "Segunda") {
+          secondDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        } else if (region["Dosis"] == "Unica") {
+          uniqueDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        }
+      }
+    });
+
+    this.dataCovid.ChileVaccine.firstDoses = sumArray(
+      firstDoses,
+      uniqueDoses
+    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+
+    this.dataCovid.ChileVaccine.secondDoses = sumArray(
+      secondDoses,
+      uniqueDoses
+    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+
+    // plan paso a paso
     let paso = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv");
     let population = await d3.json("populationComunasChile.json");
     let pop = population["Poblacion 2021"];
@@ -515,46 +576,8 @@ export default {
         ) / 10
       );
     });
-
-    // fetching vaccine by region
-    const vaccine = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv"
-    );
-    this.dataCovid.labelsVaccine = Object.keys(vaccine[0])
-      .slice(2)
-      .map((date) => dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY"));
-
-    let firstDoses = [];
-    let secondDoses = [];
-    let uniqueDoses = [];
-
-    vaccine.forEach((region) => {
-      if (region["Region"] == "Total") {
-        if (region["Dosis"] == "Primera") {
-          firstDoses = Object.values(region)
-            .slice(2)
-            .map((i) => Number(i));
-        } else if (region["Dosis"] == "Segunda") {
-          secondDoses = Object.values(region)
-            .slice(2)
-            .map((i) => Number(i));
-        } else if (region["Dosis"] == "Unica") {
-          uniqueDoses = Object.values(region)
-            .slice(2)
-            .map((i) => Number(i));
-        }
-      }
-    });
-
-    this.dataCovid.ChileVaccine.firstDoses = sumArray(
-      firstDoses,
-      uniqueDoses
-    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
-
-    this.dataCovid.ChileVaccine.secondDoses = sumArray(
-      secondDoses,
-      uniqueDoses
-    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
   },
+
+  
 };
 </script>

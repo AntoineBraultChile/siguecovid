@@ -110,6 +110,7 @@
         :options="chartOptions('Incidence')"
       ></horizontal-bar-chart>
     </div>
+
     <div class="graph" v-if="region == 'Chile'">
       <title-graphic> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem">
@@ -121,6 +122,24 @@
       <bar-chart
         :chartData="getChartIngresoUCI(region)"
         :options="chartOptions('IngresoUCI')"
+      >
+      </bar-chart>
+    </div>
+
+    <div
+      class="graph"
+      v-if="(region == 'Chile') & (dataCovid.labelsVariant.length > 0)"
+    >
+      <title-graphic> {{ title["Variant"] }} en {{ region }} </title-graphic>
+      <!-- <span style="font-size:1rem">
+        La UCI es la sigla de unidad de cuidados intensivos.</span
+      >
+      <br /> -->
+
+      <update :labels="dataCovid.labelsVariant"> </update>
+      <bar-chart
+        :chartData="getChartVariant(region)"
+        :options="chartOptions('Variant')"
       >
       </bar-chart>
     </div>
@@ -177,6 +196,26 @@ export default {
   },
   data() {
     return {
+      colorsVariant: [
+        "rgba(210,230,238,1.0)",
+        "rgba(130,207,253,1.0)",
+        "rgba(147,219,112,1.0)",
+        "rgba(248,121,121,1.0)",
+        "rgba(235,164,52,1.0)",
+        "rgba(36,129,156,1.0)",
+        "rgba(132,94,194,1.0)",
+        "rgba(35,43,43,1.0)",
+      ],
+      colorsVariantTransparent: [
+        "rgba(210,230,238,1)",
+        "rgba(130,207,253,1)",
+        "rgba(147,219,112,1)",
+        "rgba(248,121,121,1)",
+        "rgba(235,164,52,1)",
+        "rgba(36,129,156,1)",
+        "rgba(132,94,194,1)",
+        "rgba(35,43,43,1)",
+      ],
       colorsPasoAPaso: {
         1: "#dd4b39",
         2: "#eba434",
@@ -190,6 +229,7 @@ export default {
         Deaths: "#232b2b",
       },
       title: {
+        Variant: "Variantes secuenciadas cada semana ",
         IngresoUCI: "Media móvil 7 días de ingresos a UCI por Covid-19",
         Uci: "Personas en UCI por Covid-19",
         Pcr: "Positividad y PCR en ",
@@ -199,6 +239,29 @@ export default {
     };
   },
   methods: {
+    getChartVariant(region) {
+      let fromDate = this.fromDate;
+      let indexDate = this.dataCovid["labelsVariant"].indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
+      let datasets = [];
+
+      let nameVariant = Object.keys(this.dataCovid.ChileVariant);
+      nameVariant.forEach((name, index) => {
+        datasets.push({
+          type: "line",
+          label: name,
+          borderColor: this.colorsVariant[index],
+          backgroundColor: this.colorsVariantTransparent[index],
+          fill: true,
+          data: this.dataCovid[region + "Variant"][name].slice(indexDate),
+        });
+      });
+      return {
+        labels: this.dataCovid.labelsVariant.slice(indexDate),
+        datasets: datasets,
+      };
+    },
     getChartIngresoUCI(region) {
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labelsIngresoUCI"].indexOf(fromDate);
@@ -446,6 +509,35 @@ export default {
           },
         ];
       }
+      if (type == "Variant") {
+        options["tooltip"] = {
+          mode: "dataset",
+          intersect: true,
+        };
+        options["interaction"] = {
+          mode: "nearest",
+          axis: "x",
+          intersect: false,
+        };
+        options.scales["xAxes"] = [
+          {
+            type: "time",
+            time: {
+              parser: "DD-MM-YYYY",
+              unit: "month",
+            },
+          },
+        ];
+        options.scales["yAxes"] = [
+          {
+            stacked: true,
+            title: {
+              display: true,
+              text: "Value",
+            },
+          },
+        ];
+      }
       if (type == "IngresoUCI") {
         options.scales["xAxes"] = [
           {
@@ -504,7 +596,12 @@ export default {
           ],
         };
       }
-      if (type == "Pcr" || type == "Cases" || type == "Deaths") {
+      if (
+        type == "Pcr" ||
+        type == "Cases" ||
+        type == "Deaths" ||
+        type == "Variant"
+      ) {
         options.legend = { display: true };
       }
       return options;
@@ -566,5 +663,5 @@ export default {
     width: 100%;
     margin: 5px 0px 5px 0px;
   }
-}
-</style>
+}</style
+>641

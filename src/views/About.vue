@@ -16,7 +16,10 @@
         y los datos demográficos del
         <a href="https://www.ine.cl/" target="_blank">
           Instituto Nacional de Estadísticas</a
-        >.
+        >. Los datos sobre los variantes en Chile son proporcionados por Emma B.
+        Hodcroft. 2021. "CoVariants: SARS-CoV-2 Mutations and Variants of
+        Interest."
+        <a href="https://covariants.org/">https://covariants.org/ </a>.
       </p>
 
       <p>
