@@ -190,7 +190,7 @@ export default {
         Deaths: "#232b2b",
       },
       title: {
-        IngresoUCI: "Media móvil 7 días de ingresos a UCI por COVID-19",
+        IngresoUCI: "Media móvil 7 días de ingresos a UCI por Covid-19",
         Uci: "Personas en UCI por Covid-19",
         Pcr: "Positividad y PCR en ",
         Cases: "Nuevos casos diarios",
