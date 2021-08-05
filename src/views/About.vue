@@ -99,6 +99,11 @@ h2 {
   line-height: 150%;
 }
 
+h2 {
+  color: black;
+  font-weight: 200;
+}
+
 /* a, a:hover{
   color: #4285F4;
   text-decoration:none;
