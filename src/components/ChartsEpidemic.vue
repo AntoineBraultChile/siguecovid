@@ -126,10 +126,7 @@
       </bar-chart>
     </div>
 
-    <div
-      class="graph"
-      v-if="(region == 'Chile') & (dataCovid.labelsVariant.length > 0)"
-    >
+    <div class="graph" v-if="region == 'Chile'">
       <title-graphic> {{ title["Variant"] }} en {{ region }} </title-graphic>
       <!-- <span style="font-size:1rem">
         La UCI es la sigla de unidad de cuidados intensivos.</span
@@ -196,6 +193,8 @@ export default {
   },
   data() {
     return {
+      pointRadius: 1.5,
+      pointHoverRadius: 4,
       colorsVariant: [
         "rgba(210,230,238,1.0)",
         "rgba(130,207,253,1.0)",
@@ -250,6 +249,8 @@ export default {
       nameVariant.forEach((name, index) => {
         datasets.push({
           type: "line",
+          pointRadius: 2,
+          pointHoverRadius: this.pointHoverRadius,
           label: name,
           borderColor: this.colorsVariant[index],
           backgroundColor: this.colorsVariantTransparent[index],
@@ -274,6 +275,8 @@ export default {
         datasets: [
           {
             type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "",
             borderColor: this.colorsPasoAPaso[1],
             backgroundColor: this.colorsPasoAPaso[1],
@@ -296,7 +299,9 @@ export default {
         datasets: [
           {
             type: "line",
-            label: "al menos una dosis",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Al menos una dosis",
             borderColor: this.colorsPasoAPaso[3],
             backgroundColor: this.colorsPasoAPaso[3],
             fill: false,
@@ -306,7 +311,9 @@ export default {
           },
           {
             type: "line",
-            label: "completamente vacunado",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Completamente vacunado",
             borderColor: this.colorsPasoAPaso[2],
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
@@ -333,6 +340,8 @@ export default {
       pasos.forEach((paso, index) => {
         datasets.push({
           type: "line",
+          pointRadius: this.pointRadius,
+          pointHoverRadius: this.pointHoverRadius,
           label: labels[index],
           borderColor: this.colorsPasoAPaso[paso],
           backgroundColor: this.colorsPasoAPaso[paso],
@@ -416,6 +425,8 @@ export default {
         datasets: [
           {
             type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "Media móvil de 7  días",
             borderColor: "#dd4b39",
             backgroundColor: "#dd4b39",
@@ -444,6 +455,8 @@ export default {
         datasets: [
           {
             type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "Positividad (media móvil de 7 días)",
             yAxisID: "Pos",
             borderColor: "#dd4b39",
@@ -510,9 +523,13 @@ export default {
         ];
       }
       if (type == "Variant") {
-        options["tooltip"] = {
-          mode: "dataset",
-          intersect: true,
+        options["tooltips"] = {
+          mode: "index",
+          intersect: false,
+        };
+        options["hover"] = {
+          mode: "index",
+          intersect: false,
         };
         options["interaction"] = {
           mode: "nearest",

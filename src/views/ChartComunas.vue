@@ -154,6 +154,8 @@ export default {
   },
   data() {
     return {
+      pointRadius: 1.5,
+      pointHoverRadius: 4,
       backgroundColor: {
         Uci: "#dd4b39",
         Pcr: "#82CFFD",
@@ -279,14 +281,18 @@ export default {
         labels: this.firstDoses.labels.slice(index),
         datasets: [
           {
-            label: "primera dosis",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Primera dosis",
             borderColor: this.backgroundColor["Pcr"],
             backgroundColor: this.backgroundColor["Pcr"],
             fill: false,
             data: this.firstDoses.comuna[comuna].slice(index),
           },
           {
-            label: "segunda dosis",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Segunda dosis",
             borderColor: "#eba434",
             backgroundColor: "#eba434",
             fill: false,

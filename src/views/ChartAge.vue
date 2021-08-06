@@ -157,6 +157,8 @@ export default {
   },
   data() {
     return {
+      pointRadius: 1.5,
+      pointHoverRadius: 4,
       // colors:['#82CFFD','#eba434','#93DB70','#232b2b', '#f87979', 'rgb(153, 102, 255)', 'rgb(255, 205, 86)'],
       // backgroundColor: ["rgb(35, 43, 100)","rgb(35, 43, 43)","rgb(35, 43, 43)","rgb(35, 43, 43)", "rgb(35, 43, 43)", "rgb(35, 43, 43)", "rgb(35, 43, 43)"],
       colors: "rgb(35, 43, 100)",
@@ -291,6 +293,8 @@ export default {
         }),
         datasets: [
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "<=39",
             borderColor: "#82CFFD",
             backgroundColor: "#82CFFD",
@@ -298,6 +302,8 @@ export default {
             data: this.uciChile["<=39"].slice(indexDate),
           },
           {
+                        pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "40-49",
             borderColor: "#eba434",
             backgroundColor: "#eba434",
@@ -305,20 +311,24 @@ export default {
             data: this.uciChile["40-49"].slice(indexDate),
           },
           {
+                        pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "50-59",
             borderColor: "#93DB70",
             backgroundColor: "#93DB70",
             fill: false,
             data: this.uciChile["50-59"].slice(indexDate),
           },
-          {
+          {            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "60-69",
             borderColor: "#232b2b",
             backgroundColor: "#232b2b",
             fill: false,
             data: this.uciChile["60-69"].slice(indexDate),
           },
-          {
+          {            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: ">=70",
             borderColor: "#f87979",
             backgroundColor: "#f87979",
@@ -339,6 +349,8 @@ export default {
         }),
         datasets: [
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "Uci",
             borderColor: "#dd4b39",
             backgroundColor: "#dd4b39",
@@ -346,6 +358,8 @@ export default {
             data: this.meanAgeUciChile.values.slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "Fallecidos",
             borderColor: "#232b2b",
             backgroundColor: "#232b2b",
@@ -362,6 +376,8 @@ export default {
       let index = 0;
       for (let age of ageGroup) {
         myDataSet.push({
+          pointRadius: this.pointRadius,
+          pointHoverRadius: this.pointHoverRadius,
           label: age,
           borderColor: this.casesChile.colors[index],
           backgroundColor: this.casesChile.colors[index],
@@ -399,6 +415,8 @@ export default {
       let mydatasets = [];
       this.casesChile.values.forEach((d, indx) => {
         mydatasets.push({
+          pointRadius: this.pointRadius,
+          pointHoverRadius: this.pointHoverRadius,
           label: this.casesChile.ageGroup[indx],
           borderColor: this.casesChile.colors[indx],
           backgroundColor: this.casesChile.colors[indx],

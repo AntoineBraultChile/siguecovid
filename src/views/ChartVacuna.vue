@@ -258,6 +258,8 @@ export default {
   },
   data() {
     return {
+      pointRadius: 1.5,
+      pointHoverRadius: 4,
       colorsIndicator: ["blue", "orange", "blue", "orange"],
       vaccineType: {
         labels: [],
@@ -530,14 +532,18 @@ export default {
         }),
         datasets: [
           {
-            label: "al menos una dosis",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Al menos una dosis",
             borderColor: "#82CFFD",
             backgroundColor: "#82CFFD",
             fill: false,
             data: this.vacunaChile["primera dosis"].slice(indexDate),
           },
           {
-            label: "completamente",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Completamente",
             borderColor: "#eba434",
             backgroundColor: "#eba434",
             fill: false,
@@ -594,6 +600,8 @@ export default {
         }),
         datasets: [
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "12-17",
             borderColor: "#D2E6EE",
             backgroundColor: "#D2E6EE",
@@ -601,6 +609,8 @@ export default {
             data: this.vacunaChile[dosesType]["18"].slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "18-29",
             borderColor: "#82CFFD",
             backgroundColor: "#82CFFD",
@@ -608,6 +618,8 @@ export default {
             data: this.vacunaChile[dosesType]["30"].slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "30-39",
             borderColor: "#eba434",
             backgroundColor: "#eba434",
@@ -615,6 +627,8 @@ export default {
             data: this.vacunaChile[dosesType]["40"].slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "40-49",
             borderColor: "#93DB70",
             backgroundColor: "#93DB70",
@@ -622,6 +636,8 @@ export default {
             data: this.vacunaChile[dosesType]["50"].slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "50-59",
             borderColor: "#f87979",
             backgroundColor: "#f87979",
@@ -629,6 +645,8 @@ export default {
             data: this.vacunaChile[dosesType]["60"].slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: "60-69",
             borderColor: "#845EC2",
             backgroundColor: "#845EC2",
@@ -636,6 +654,8 @@ export default {
             data: this.vacunaChile[dosesType]["70"].slice(indexDate),
           },
           {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
             label: ">=70",
             borderColor: "#232b2b",
             backgroundColor: "#232b2b",

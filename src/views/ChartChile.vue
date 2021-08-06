@@ -463,7 +463,7 @@ export default {
     this.dataCovid.ChileVariant[dicVariant[name]] = variantChile[name]
     }
   })
-  this.dataCovid.ChileVariant['Otros'] = othersVariant
+  this.dataCovid.ChileVariant['Otras'] = othersVariant
 
 
 
