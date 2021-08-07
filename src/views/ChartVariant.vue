@@ -2,12 +2,12 @@
   <div class="ChartVariant">
     <div class="containerSection">
       <box-container>
-        <title-container titleName="Variantes secuenciadas en Chile" />
+        <title-container titleName="Variantes del SARS-CoV-2 secuenciadas en Chile" />
       </box-container>
 
       <box-container class="explication">
         <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
-          Gráficos que representan las variantes secuenciadas en Chile cada semana.
+          Gráficos que representan las variantes del SARS-CoV-2 secuenciadas en Chile cada semana.
         </p>
       </box-container>
 
@@ -33,7 +33,7 @@
         </div>
 
         <div class="wrapper">
-          <title-graphic> Número total de secuencias realizadas cada dos semanas</title-graphic>
+          <title-graphic> Número total de secuencias realizadas cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
           <bar-chart :chartData="getChart(variantChile.totalSequences, colorsVariant[7], 'line')" :options="chartOptions((percentage = false), (NoLegend = true))"> </bar-chart>
         </div>
@@ -297,7 +297,13 @@ export default {
 
     const totalSequences = await variantChile.total_sequences;
     this.variantChile.totalSequences = totalSequences;
-    const allLabels = await variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"));
+    const allLabels = await variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")).slice(1);
+    const lastDate = await allLabels[allLabels.length - 1];
+    allLabels.push(
+      dayjs(lastDate, "DD-MM-YYYY")
+        .add(14, "d")
+        .format("DD-MM-YYYY")
+    ); // add 2 weeks
     this.variantChile.labels = await allLabels;
 
     const dicVariant = {
