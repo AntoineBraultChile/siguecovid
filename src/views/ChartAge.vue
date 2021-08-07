@@ -287,6 +287,7 @@ export default {
     },
     renderChileUciChart() {
       let indexDate = this.uciChile.labels.indexOf(this.fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
       return {
         labels: this.uciChile.labels.filter((x) => {
           return dayjs(x, "DD-MM-YYYY") >= dayjs(this.fromDate, "DD-MM-YYYY");
@@ -340,9 +341,11 @@ export default {
     },
     renderChartMeanAgeUciChile() {
       let indexDate = this.meanAgeUciChile.labels.indexOf(this.fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
       let indexDateDeath = this.meanAgeDeathsChile.labels.indexOf(
         this.fromDate
       );
+      indexDateDeath = indexDateDeath > 0 ? indexDateDeath : 0;
       return {
         labels: this.meanAgeUciChile.labels.filter((x) => {
           return dayjs(x, "DD-MM-YYYY") >= dayjs(this.fromDate, "DD-MM-YYYY");
@@ -371,6 +374,7 @@ export default {
     },
     renderChartDeathsByAge() {
       let indexDate = this.meanAgeDeathsChile.labels.indexOf(this.fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
       let ageGroup = Object.keys(this.meanAgeDeathsChile).slice(2);
       let myDataSet = [];
       let index = 0;
@@ -412,6 +416,8 @@ export default {
       let indexDate = this.casesChile.labels.indexOf(
         this.dicMonth[this.fromDate]
       );
+      indexDate = indexDate > 1 ? indexDate : 1;
+
       let mydatasets = [];
       this.casesChile.values.forEach((d, indx) => {
         mydatasets.push({
@@ -484,7 +490,7 @@ export default {
     });
     // function to generate list of months
     let generateListOfMonths = () => {
-      let currentDate = dayjs("05-2020", "MM-YYYY");
+      let currentDate = dayjs("04-2020", "MM-YYYY");
       while (
         currentDate <
         dayjs(

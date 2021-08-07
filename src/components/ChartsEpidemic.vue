@@ -400,6 +400,7 @@ export default {
       let fromDate = this.fromDate;
       // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
       let indexDate = this.dataCovid["labels" + type].indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
       return {
         labels: this.dataCovid["labels" + type].filter((x) => {
           return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
@@ -417,6 +418,8 @@ export default {
     plotBarChartWithMean(name, type) {
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labels" + type].indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       return {
         labels: this.dataCovid["labels" + type].filter((x) => {
@@ -447,7 +450,8 @@ export default {
     getChartPosPcr(name) {
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labelsPcr"].indexOf(fromDate);
-      let indexDatePos = indexDate - 6;
+      indexDate = indexDate > 0 ? indexDate : 0;
+      let indexDatePos = indexDate - 0;
       return {
         labels: this.dataCovid["labelsPcr"].filter((x) => {
           return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");

@@ -263,7 +263,7 @@ export default {
 
     // function to generate list of months
     let generateListOfMonths = () => {
-      let currentDate = dayjs("05-2020", "MM-YYYY");
+      let currentDate = dayjs("04-2020", "MM-YYYY");
       while (
         currentDate <
         dayjs(
@@ -346,7 +346,9 @@ export default {
       Pos = meanWeek(Pos.reverse()).map((d) => {
         return Math.round(d * 10) / 10;
       });
-      this.$set(this.dataCovid, region + "Pos", Pos);
+      const firstNullValues = [null,null,null,null,null,null]
+
+      this.$set(this.dataCovid, region + "Pos", [...firstNullValues,...Pos]);
     }
 
     // function to delete accent
