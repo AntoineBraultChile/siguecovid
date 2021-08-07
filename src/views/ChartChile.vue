@@ -465,10 +465,6 @@ export default {
   })
   this.dataCovid.ChileVariant['Otras'] = othersVariant
 
-
-
-  
-
     // fetching vaccine by region
     const vaccine = await d3.csv(
       "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv"
