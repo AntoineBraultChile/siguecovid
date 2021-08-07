@@ -2,75 +2,44 @@
   <div class="ChartsEpidemic">
     <div class="graph" v-if="dataCovid.labelsCases.length > 0">
       <title-graphic> {{ title["Cases"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem"
-        >Los casos se detectan por PCR o prueba antigénica.
-      </span>
+      <span style="font-size:1rem">Los casos se detectan por PCR o prueba antigénica. </span>
       <br />
 
       <update :labels="dataCovid.labelsCases"> </update>
-      <bar-chart
-        :chartData="plotBarChartWithMean(region, 'Cases')"
-        :options="chartOptions('Cases')"
-      >
-      </bar-chart>
+      <bar-chart :chartData="plotBarChartWithMean(region, 'Cases')" :options="chartOptions('Cases')"> </bar-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.labelsPcr.length > 0">
       <title-graphic> {{ title["Pcr"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem"
-        >La positividad es el porcentaje de casos detectados sobre el numero de
-        test PCR y de antigenos realizados cada día.</span
-      >
+      <span style="font-size:1rem">La positividad es el porcentaje de casos detectados sobre el numero de test PCR y de antigenos realizados cada día.</span>
       <br />
 
       <update :labels="dataCovid.labelsPcr"> </update>
-      <bar-chart
-        :chartData="getChartPosPcr(region)"
-        :options="chartOptions('Pcr')"
-      >
-      </bar-chart>
+      <bar-chart :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.labelsUci.length > 0">
       <title-graphic> {{ title["Uci"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem">
-        La UCI es la sigla de unidad de cuidados intensivos.</span
-      >
+      <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
       <br />
 
       <update :labels="dataCovid.labelsUci"> </update>
-      <bar-chart
-        :chartData="plotBar(region, 'Uci')"
-        :options="chartOptions('Uci')"
-      >
-      </bar-chart>
+      <bar-chart :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.labelsDeaths.length > 0">
       <title-graphic> {{ title["Deaths"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem"
-        >Son los fallecidos por Covid-19 confirmados con un test PCR.</span
-      >
+      <span style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR.</span>
       <br />
 
       <update :labels="dataCovid.labelsDeaths"> </update>
-      <bar-chart
-        :chartData="plotBarChartWithMean(region, 'Deaths')"
-        :options="chartOptions('Deaths')"
-      >
-      </bar-chart>
+      <bar-chart :chartData="plotBarChartWithMean(region, 'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
-      <title-graphic v-if="region == 'Chile'">
-        Incidencia en las regiones de Chile</title-graphic
-      >
-      <title-graphic v-else>
-        Incidencia en las comunas de la región {{ region }}
-      </title-graphic>
-      <span style="font-size:1rem"
-        >Incidencia: número semanal de casos por cada 100.000 habitantes</span
-      >
+      <title-graphic v-if="region == 'Chile'"> Incidencia en las regiones de Chile</title-graphic>
+      <title-graphic v-else> Incidencia en las comunas de la región {{ region }} </title-graphic>
+      <span style="font-size:1rem">Incidencia: número semanal de casos por cada 100.000 habitantes</span>
       <br />
       <update :labels="dataCovid.incidence.lastUpdate"> </update>
       <div class="legend" v-if="!(region == 'Chile')">
@@ -83,55 +52,32 @@
         <div class="rectangle green"></div>
         <span>Paso 4</span>
       </div>
-      <horizontal-bar-chart
-        :height="600"
-        :chartData="getChartIncidence(region)"
-        :options="chartOptions('Incidence')"
-      ></horizontal-bar-chart>
+      <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region)" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
-      <title-graphic v-if="region == 'Chile'">
-        Variación de la incidencia en las regiones de Chile</title-graphic
-      >
+      <title-graphic v-if="region == 'Chile'"> Variación de la incidencia en las regiones de Chile</title-graphic>
       <title-graphic v-else>
         Variación de la incidencia en las comunas de la región
         {{ region }}</title-graphic
       >
-      <span style="font-size:1rem"
-        >Variación de la incidencia corresponde a la incidencia de hoy menos la
-        incidencia 7 días atras</span
-      >
+      <span style="font-size:1rem">Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span>
       <br />
       <update :labels="dataCovid.incidence.lastUpdate"> </update>
-      <horizontal-bar-chart
-        :height="600"
-        :chartData="getChartIncidence(region, 'variations')"
-        :options="chartOptions('Incidence')"
-      ></horizontal-bar-chart>
+      <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region, 'variations')" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
 
     <div class="graph" v-if="region == 'Chile'">
       <title-graphic> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem">
-        La UCI es la sigla de unidad de cuidados intensivos.</span
-      >
+      <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
       <br />
 
       <update :labels="dataCovid.labelsIngresoUCI"> </update>
-      <bar-chart
-        :chartData="getChartIngresoUCI(region)"
-        :options="chartOptions('IngresoUCI')"
-      >
-      </bar-chart>
+      <bar-chart :chartData="getChartIngresoUCI(region)" :options="chartOptions('IngresoUCI')"> </bar-chart>
     </div>
 
-    <div class="graph" v-if="region == 'Chile'">
+    <!-- <div class="graph" v-if="region == 'Chile'">
       <title-graphic> {{ title["Variant"] }} en {{ region }} </title-graphic>
-      <!-- <span style="font-size:1rem">
-        La UCI es la sigla de unidad de cuidados intensivos.</span
-      >
-      <br /> -->
 
       <update :labels="dataCovid.labelsVariant"> </update>
       <bar-chart
@@ -139,29 +85,18 @@
         :options="chartOptions('Variant')"
       >
       </bar-chart>
-    </div>
+    </div> -->
 
     <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
-      <title-graphic>
-        Proporción de la población vacunada en {{ region }}</title-graphic
-      >
+      <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
       <update :labels="dataCovid.labelsVaccine"> </update>
-      <line-chart
-        :chartData="getChartVaccine(region)"
-        :options="chartOptions('Paso')"
-      ></line-chart>
+      <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Paso')"></line-chart>
     </div>
 
     <div class="graph" v-if="region == 'Chile'">
-      <title-graphic>
-        Proporción de la población chilena en las diferentes fases del plan Paso
-        a Paso</title-graphic
-      >
+      <title-graphic> Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
-      <bar-chart
-        :chartData="getChartPasoAPaso()"
-        :options="chartOptions('Paso')"
-      ></bar-chart>
+      <bar-chart :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>
     </div>
   </div>
 </template>
@@ -195,26 +130,26 @@ export default {
     return {
       pointRadius: 1.5,
       pointHoverRadius: 4,
-      colorsVariant: [
-        "rgba(210,230,238,1.0)",
-        "rgba(130,207,253,1.0)",
-        "rgba(147,219,112,1.0)",
-        "rgba(248,121,121,1.0)",
-        "rgba(235,164,52,1.0)",
-        "rgba(36,129,156,1.0)",
-        "rgba(132,94,194,1.0)",
-        "rgba(35,43,43,1.0)",
-      ],
-      colorsVariantTransparent: [
-        "rgba(210,230,238,1)",
-        "rgba(130,207,253,1)",
-        "rgba(147,219,112,1)",
-        "rgba(248,121,121,1)",
-        "rgba(235,164,52,1)",
-        "rgba(36,129,156,1)",
-        "rgba(132,94,194,1)",
-        "rgba(35,43,43,1)",
-      ],
+      // colorsVariant: [
+      //   "rgba(210,230,238,1.0)",
+      //   "rgba(130,207,253,1.0)",
+      //   "rgba(147,219,112,1.0)",
+      //   "rgba(248,121,121,1.0)",
+      //   "rgba(235,164,52,1.0)",
+      //   "rgba(36,129,156,1.0)",
+      //   "rgba(132,94,194,1.0)",
+      //   "rgba(35,43,43,1.0)",
+      // ],
+      // colorsVariantTransparent: [
+      //   "rgba(210,230,238,1)",
+      //   "rgba(130,207,253,1)",
+      //   "rgba(147,219,112,1)",
+      //   "rgba(248,121,121,1)",
+      //   "rgba(235,164,52,1)",
+      //   "rgba(36,129,156,1)",
+      //   "rgba(132,94,194,1)",
+      //   "rgba(35,43,43,1)",
+      // ],
       colorsPasoAPaso: {
         1: "#dd4b39",
         2: "#eba434",
@@ -228,7 +163,7 @@ export default {
         Deaths: "#232b2b",
       },
       title: {
-        Variant: "Variantes secuenciadas cada semana ",
+        // Variant: "Variantes secuenciadas cada semana ",
         IngresoUCI: "Media móvil 7 días de ingresos a UCI por Covid-19",
         Uci: "Personas en UCI por Covid-19",
         Pcr: "Positividad y PCR en ",
@@ -238,31 +173,31 @@ export default {
     };
   },
   methods: {
-    getChartVariant(region) {
-      let fromDate = this.fromDate;
-      let indexDate = this.dataCovid["labelsVariant"].indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
+    // getChartVariant(region) {
+    //   let fromDate = this.fromDate;
+    //   let indexDate = this.dataCovid["labelsVariant"].indexOf(fromDate);
+    //   indexDate = indexDate > 0 ? indexDate : 0;
 
-      let datasets = [];
+    //   let datasets = [];
 
-      let nameVariant = Object.keys(this.dataCovid.ChileVariant);
-      nameVariant.forEach((name, index) => {
-        datasets.push({
-          type: "line",
-          pointRadius: 2,
-          pointHoverRadius: this.pointHoverRadius,
-          label: name,
-          borderColor: this.colorsVariant[index],
-          backgroundColor: this.colorsVariantTransparent[index],
-          fill: true,
-          data: this.dataCovid[region + "Variant"][name].slice(indexDate),
-        });
-      });
-      return {
-        labels: this.dataCovid.labelsVariant.slice(indexDate),
-        datasets: datasets,
-      };
-    },
+    //   let nameVariant = Object.keys(this.dataCovid.ChileVariant);
+    //   nameVariant.forEach((name, index) => {
+    //     datasets.push({
+    //       type: "line",
+    //       pointRadius: 2,
+    //       pointHoverRadius: this.pointHoverRadius,
+    //       label: name,
+    //       borderColor: this.colorsVariant[index],
+    //       backgroundColor: this.colorsVariantTransparent[index],
+    //       fill: true,
+    //       data: this.dataCovid[region + "Variant"][name].slice(indexDate),
+    //     });
+    //   });
+    //   return {
+    //     labels: this.dataCovid.labelsVariant.slice(indexDate),
+    //     datasets: datasets,
+    //   };
+    // },
     getChartIngresoUCI(region) {
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labelsIngresoUCI"].indexOf(fromDate);
@@ -305,9 +240,7 @@ export default {
             borderColor: this.colorsPasoAPaso[3],
             backgroundColor: this.colorsPasoAPaso[3],
             fill: false,
-            data: this.dataCovid[region + "Vaccine"].firstDoses.slice(
-              indexDate
-            ),
+            data: this.dataCovid[region + "Vaccine"].firstDoses.slice(indexDate),
           },
           {
             type: "line",
@@ -317,9 +250,7 @@ export default {
             borderColor: this.colorsPasoAPaso[2],
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
-            data: this.dataCovid[region + "Vaccine"].secondDoses.slice(
-              indexDate
-            ),
+            data: this.dataCovid[region + "Vaccine"].secondDoses.slice(indexDate),
           },
         ],
       };
@@ -330,12 +261,7 @@ export default {
       indexDate = indexDate > 0 ? indexDate : 0;
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       let datasets = [];
-      let labels = [
-        "Cuarentena (Fase 1)",
-        "Transición (Fase 2)",
-        "Preparación (Fase 3)",
-        "Apertura inicial (Fase 4)",
-      ];
+      let labels = ["Cuarentena (Fase 1)", "Transición (Fase 2)", "Preparación (Fase 3)", "Apertura inicial (Fase 4)"];
       let pasos = Object.keys(this.colorsPasoAPaso);
       pasos.forEach((paso, index) => {
         datasets.push({
@@ -355,21 +281,13 @@ export default {
       };
     },
     getChartIncidence(region, type) {
-      let values =
-        type == "variations"
-          ? this.dataCovid.incidence[region].variations
-          : this.dataCovid.incidence[region].values;
-      let [labelsSort, valuesSort] = order(
-        this.dataCovid.incidence[region].names,
-        values
-      );
+      let values = type == "variations" ? this.dataCovid.incidence[region].variations : this.dataCovid.incidence[region].values;
+      let [labelsSort, valuesSort] = order(this.dataCovid.incidence[region].names, values);
       let colors = [];
       let label = "";
       if (type == "variations") {
         valuesSort.forEach((d) => {
-          d < 0
-            ? colors.push(this.backgroundColor["Cases"])
-            : colors.push(this.backgroundColor["Uci"]);
+          d < 0 ? colors.push(this.backgroundColor["Cases"]) : colors.push(this.backgroundColor["Uci"]);
         });
         label = "Variación incidencia";
       } else {
@@ -617,12 +535,7 @@ export default {
           ],
         };
       }
-      if (
-        type == "Pcr" ||
-        type == "Cases" ||
-        type == "Deaths" ||
-        type == "Variant"
-      ) {
+      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant") {
         options.legend = { display: true };
       }
       return options;

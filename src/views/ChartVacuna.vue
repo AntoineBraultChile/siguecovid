@@ -2,28 +2,17 @@
   <div class="ChartVacuna">
     <div class="containerSection">
       <box-container>
-        <title-container
-          titleName="Avances de la campaña de vacunación contra el Covid-19 en Chile"
-        />
+        <title-container titleName="Avances de la campaña de vacunación contra el Covid-19 en Chile" />
       </box-container>
 
       <box-container class="explication">
-        <p
-          style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px"
-        >
-          Actualmente hay cuatro vacunas autorizadas en Chile. Las vacunas de
-          Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que
-          CanSino sólo requiere una. Se considerará que una persona está
-          parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer
-          o AstraZeneca, y totalmente vacunada si ha recibido dos dosis o una
-          dosis de CanSino.
+        <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
+          Actualmente hay cuatro vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que CanSino sólo requiere una. Se considerará que una
+          persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y totalmente vacunada si ha recibido dos dosis o una dosis de CanSino.
         </p>
       </box-container>
 
-      <div
-        id="block_graph"
-        v-if="vacunaChile.labels.length > 0 && listOfMonths.length > 0"
-      >
+      <div id="block_graph" v-if="vacunaChile.labels.length > 0 && listOfMonths.length > 0">
         <indicators
           :labels="vacunaChile.labels"
           :cases="vacunaChile['primera dosis']"
@@ -34,33 +23,17 @@
           type="vaccin"
         />
 
-        <slide-bar
-          :listOfMonths="listOfMonths"
-          :fromMonth="fromMonth"
-          v-on:newdate="updateCurrentDate"
-        />
+        <slide-bar :listOfMonths="listOfMonths" :fromMonth="fromMonth" v-on:newdate="updateCurrentDate" />
         <div class="wrapper">
-          <title-graphic>
-            Proporción de la población chilena vacunada</title-graphic
-          >
+          <title-graphic> Proporción de la población chilena vacunada</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
-          <line-chart
-            :chartData="renderChartVacuna()"
-            :options="options('vertical')"
-          >
-          </line-chart>
+          <line-chart :chartData="renderChartVacuna()" :options="options('vertical')"> </line-chart>
         </div>
 
         <div class="wrapper">
-          <title-graphic>
-            Número de personas vacunadas cada dia en Chile</title-graphic
-          >
+          <title-graphic> Número de personas vacunadas cada dia en Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
-          <bar-chart
-            :chartData="renderChartVacunaPorDia()"
-            :options="optionsPorDia"
-          >
-          </bar-chart>
+          <bar-chart :chartData="renderChartVacunaPorDia()" :options="optionsPorDia"> </bar-chart>
         </div>
 
         <div class="wrapper">
@@ -69,12 +42,7 @@
           </title-graphic>
           <!-- <span style='font-size:1rem'> Estar parcialmente vacunado significa tener una dosis de Sinovac, Astra-Zeneca, Pfizer.</span> <br> -->
           <update :labels="vacunaChile.labels"> </update>
-          <line-chart
-            v-if="vacunaChile.labelsByAge.length > 0"
-            :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')"
-            :options="options('vertical')"
-          >
-          </line-chart>
+          <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
         </div>
 
         <div class="wrapper">
@@ -83,12 +51,7 @@
           </title-graphic>
           <!-- <span style='font-size:1rem'> Estar completamente vacunado significa tener dos dosis de Sinovac, Astra-Zeneca, Pfizer o una dosis de CanSino.</span> <br> -->
           <update :labels="vacunaChile.labels"> </update>
-          <line-chart
-            v-if="vacunaChile.labelsByAge.length > 0"
-            :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')"
-            :options="options('vertical')"
-          >
-          </line-chart>
+          <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
         </div>
 
         <div class="wrapper">
@@ -96,24 +59,15 @@
             Personas parcialmente vacunadas cada día por tipo de vacuna en Chile
           </title-graphic>
           <update :labels="vaccineType.labels"> </update>
-          <bar-chart
-            :chartData="renderChartTypeVaccine('first')"
-            :options="optionsPorDia"
-          >
-          </bar-chart>
+          <bar-chart :chartData="renderChartTypeVaccine('first')" :options="optionsPorDia"> </bar-chart>
         </div>
 
         <div class="wrapper">
           <title-graphic>
-            Personas completamente vacunadas cada día por tipo de vacuna en
-            Chile
+            Personas completamente vacunadas cada día por tipo de vacuna en Chile
           </title-graphic>
           <update :labels="vaccineType.labels"> </update>
-          <bar-chart
-            :chartData="renderChartTypeVaccine('second')"
-            :options="optionsPorDia"
-          >
-          </bar-chart>
+          <bar-chart :chartData="renderChartTypeVaccine('second')" :options="optionsPorDia"> </bar-chart>
         </div>
 
         <div class="wrapper">
@@ -125,26 +79,13 @@
           </span>
           <br />
           <update :labels="vaccineType.labels"> </update>
-          <doughnut-chart
-            v-if="vacunaChile.labelsByAge.length > 0"
-            :chartData="renderChartDoughnut()"
-            :options="optionsDoughnut"
-          >
-          </doughnut-chart>
+          <doughnut-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut()" :options="optionsDoughnut"> </doughnut-chart>
         </div>
 
         <div class="wrapper">
-          <title-graphic>
-            Proporción de población vacunada en las regiones de
-            Chile</title-graphic
-          >
+          <title-graphic> Proporción de población vacunada en las regiones de Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
-          <horizontal-bar-chart
-            v-if="vacunaChile.labelsByAge.length > 0"
-            :chartData="renderChartVacunaPorRegion()"
-            :options="options('horizontal')"
-          >
-          </horizontal-bar-chart>
+          <horizontal-bar-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="options('horizontal')"> </horizontal-bar-chart>
         </div>
       </div>
 
@@ -153,13 +94,9 @@
     <footer-indicators>
       <p>
         Los datos vienen del repository github de
-        <a href="https://github.com/juancri/covid19-vaccination"
-          >COVID-19 Vaccination (JC Olivares)</a
-        >
+        <a href="https://github.com/juancri/covid19-vaccination">COVID-19 Vaccination (JC Olivares)</a>
         y del
-        <a href="https://www.minciencia.gob.cl/covid19/"
-          >Ministerio de Ciencia, Technología, Conocimiento e Innovación</a
-        >.
+        <a href="https://www.minciencia.gob.cl/covid19/">Ministerio de Ciencia, Technología, Conocimiento e Innovación</a>.
       </p>
       <p>
         Calculamos los porcentajes a partir de las proyecciones de población del
@@ -358,10 +295,7 @@ export default {
               //get the concerned dataset
               var dataset = data.datasets[tooltipItem.datasetIndex];
               //calculate the total of this data set
-              var total = dataset.data.reduce(function(
-                previousValue,
-                currentValue
-              ) {
+              var total = dataset.data.reduce(function(previousValue, currentValue) {
                 return previousValue + currentValue;
               });
               //get the current items value
@@ -417,7 +351,6 @@ export default {
             {
               ticks: {
                 beginAtZero: true,
-
                 callback: function(tick) {
                   return tick.toString() + "%";
                 },
@@ -488,26 +421,17 @@ export default {
         {
           label: "Pfizer",
           backgroundColor: "#82CFFD",
-          data:
-            doses == "first"
-              ? this.vaccineType.firstDoses["Pfizer"].slice(indexDate)
-              : this.vaccineType.secondDoses["Pfizer"].slice(indexDate),
+          data: doses == "first" ? this.vaccineType.firstDoses["Pfizer"].slice(indexDate) : this.vaccineType.secondDoses["Pfizer"].slice(indexDate),
         },
         {
           label: "Sinovac",
           backgroundColor: "#f87979",
-          data:
-            doses == "first"
-              ? this.vaccineType.firstDoses["Sinovac"].slice(indexDate)
-              : this.vaccineType.secondDoses["Sinovac"].slice(indexDate),
+          data: doses == "first" ? this.vaccineType.firstDoses["Sinovac"].slice(indexDate) : this.vaccineType.secondDoses["Sinovac"].slice(indexDate),
         },
         {
           label: "AstraZeneca",
           backgroundColor: "#eba434",
-          data:
-            doses == "first"
-              ? this.vaccineType.firstDoses["AstraZeneca"].slice(indexDate)
-              : this.vaccineType.secondDoses["AstraZeneca"].slice(indexDate),
+          data: doses == "first" ? this.vaccineType.firstDoses["AstraZeneca"].slice(indexDate) : this.vaccineType.secondDoses["AstraZeneca"].slice(indexDate),
         },
       ];
       if (doses == "second") {
@@ -674,22 +598,15 @@ export default {
       .format("01-MM-YYYY");
 
     // fetching datas vaccination first and second doses in Chile
-    let data = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv"
-    );
+    let data = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv");
     // let  data = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination.csv')
     let firstDoses = [];
     let secondDoses = [];
     let uniqueDoses = [];
+
     data.forEach((d) => {
-      !this.vacunaRegions.regionName.includes(d["Region"])
-        ? this.vacunaRegions.regionName.push(d["Region"])
-        : "";
-      let value =
-        Math.round(
-          (Object.values(d).slice(-1)[0] / this.populationChile[d["Region"]]) *
-            1000
-        ) / 10;
+      !this.vacunaRegions.regionName.includes(d["Region"]) ? this.vacunaRegions.regionName.push(d["Region"]) : "";
+      let value = Math.round((Object.values(d).slice(-1)[0] / this.populationChile[d["Region"]]) * 1000) / 10;
       if (d["Dosis"] == "Primera") {
         firstDoses.push(value);
       } else if (d["Dosis"] == "Segunda") {
@@ -703,10 +620,7 @@ export default {
     this.vacunaRegions.secondDoses = sumArray(secondDoses, uniqueDoses);
 
     // order percentage vaccined by region
-    let [labelsSort, firstDosesSort] = order(
-      this.vacunaRegions.regionName,
-      this.vacunaRegions.firstDoses
-    );
+    let [labelsSort, firstDosesSort] = order(this.vacunaRegions.regionName, this.vacunaRegions.firstDoses);
     let secondDosesSort = [];
     firstDosesSort.forEach((value) => {
       let index = this.vacunaRegions.firstDoses.indexOf(value);
@@ -743,46 +657,22 @@ export default {
       .forEach((d) => {
         uniqueDosesChile.push(d);
       });
-    this.vacunaChile["primera dosis"] = sumArray(
-      firstDosesChile,
-      uniqueDosesChile
-    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
-    this.vacunaChile["segunda dosis"] = sumArray(
-      secondDosesChile,
-      uniqueDosesChile
-    ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
-    this.vacunaChile["total primera dosis"] = sumArray(
-      firstDosesChile,
-      uniqueDosesChile
-    )
+    this.vacunaChile["primera dosis"] = sumArray(firstDosesChile, uniqueDosesChile).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+    this.vacunaChile["segunda dosis"] = sumArray(secondDosesChile, uniqueDosesChile).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+    this.vacunaChile["total primera dosis"] = sumArray(firstDosesChile, uniqueDosesChile)
       .slice(1)
       .slice(-2);
-    this.vacunaChile["total segunda dosis"] = sumArray(
-      secondDosesChile,
-      uniqueDosesChile
-    )
+    this.vacunaChile["total segunda dosis"] = sumArray(secondDosesChile, uniqueDosesChile)
       .slice(1)
       .slice(-2);
     this.vacunaChile["primera dosis por dia"] = derivate(firstDosesChile);
-    this.vacunaChile["segunda dosis por dia"] = derivate(
-      sumArray(secondDosesChile, uniqueDosesChile)
-    );
+    this.vacunaChile["segunda dosis por dia"] = derivate(sumArray(secondDosesChile, uniqueDosesChile));
 
     // feching data vaccination by age in chile
-    const [
-      firstDosesByAge,
-      secondDosesByAge,
-      uniqueDosesByAge,
-    ] = await Promise.all([
-      d3.csv(
-        "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_1eraDosis.csv"
-      ),
-      d3.csv(
-        "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_2daDosis.csv"
-      ),
-      d3.csv(
-        "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_UnicaDosis.csv"
-      ),
+    const [firstDosesByAge, secondDosesByAge, uniqueDosesByAge] = await Promise.all([
+      d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_1eraDosis.csv"),
+      d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_2daDosis.csv"),
+      d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_UnicaDosis.csv"),
     ]);
 
     this.vacunaChile.labelsByAge = Object.keys(firstDosesByAge[0])
@@ -791,17 +681,12 @@ export default {
         return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
     let ageGroup = ["12"];
-    Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((d) =>
-      ageGroup.push(d)
-    );
+    Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((d) => ageGroup.push(d));
 
     let getVaccinByAge = async (dosis, typeDosis) => {
       dosis.map((data) => {
         for (let i = 0; i < ageGroup.length - 1; i++) {
-          if (
-            Number(ageGroup[i]) <= Number(data.Edad) &&
-            Number(data.Edad) < Number(ageGroup[i + 1])
-          ) {
+          if (Number(ageGroup[i]) <= Number(data.Edad) && Number(data.Edad) < Number(ageGroup[i + 1])) {
             this.vacunaChile[typeDosis][ageGroup[i + 1]] = sumArray(
               this.vacunaChile[typeDosis][ageGroup[i + 1]],
               Object.values(data)
@@ -818,11 +703,7 @@ export default {
         }, 0);
         this.vacunaChile[typeDosis][ageGroup[i + 1]] = cumulSum;
         this.vacunaChile[typeDosis][ageGroup[i + 1]] = cumulSum.map((d) => {
-          return (
-            Math.round(
-              (d / this.vacunaChile.populationByAge[ageGroup[i + 1]]) * 1000
-            ) / 10
-          );
+          return Math.round((d / this.vacunaChile.populationByAge[ageGroup[i + 1]]) * 1000) / 10;
         });
       }
     };
@@ -833,14 +714,8 @@ export default {
 
     // add unique doses and second doses in second doses
     Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((age) => {
-      this.vacunaChile["firstDosesByAgeGroup"][age] = sumArray(
-        this.vacunaChile["uniqueDosesByAgeGroup"][age],
-        this.vacunaChile["firstDosesByAgeGroup"][age]
-      ).map((i) => Math.round(i * 10) / 10);
-      this.vacunaChile["secondDosesByAgeGroup"][age] = sumArray(
-        this.vacunaChile["uniqueDosesByAgeGroup"][age],
-        this.vacunaChile["secondDosesByAgeGroup"][age]
-      ).map((i) => Math.round(i * 10) / 10);
+      this.vacunaChile["firstDosesByAgeGroup"][age] = sumArray(this.vacunaChile["uniqueDosesByAgeGroup"][age], this.vacunaChile["firstDosesByAgeGroup"][age]).map((i) => Math.round(i * 10) / 10);
+      this.vacunaChile["secondDosesByAgeGroup"][age] = sumArray(this.vacunaChile["uniqueDosesByAgeGroup"][age], this.vacunaChile["secondDosesByAgeGroup"][age]).map((i) => Math.round(i * 10) / 10);
     });
 
     // function to generate list of months
@@ -857,15 +732,9 @@ export default {
     this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
 
     // vaccine type
-    let vaccineTypeFirstDoses = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_1eraDosis.csv"
-    );
-    let vaccineTypeSecondDoses = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv"
-    );
-    let vaccineTypeUniqueDoses = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv"
-    );
+    let vaccineTypeFirstDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_1eraDosis.csv");
+    let vaccineTypeSecondDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv");
+    let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
     this.vaccineType.labels = Object.keys(vaccineTypeFirstDoses[0])
       .slice(1)
       .map((d) => {
@@ -920,24 +789,18 @@ export default {
       }
     });
 
-    let sum = this.vaccineType.firstDoses.proportion.reduce(
-      (total, element) => {
-        return total + element;
-      }
-    );
-    this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map(
-      (d) => {
-        return Math.round((d / sum) * 1000) / 10;
-      }
-    );
+    let sum = this.vaccineType.firstDoses.proportion.reduce((total, element) => {
+      return total + element;
+    });
+    this.vaccineType.firstDoses.proportion = this.vaccineType.firstDoses.proportion.map((d) => {
+      return Math.round((d / sum) * 1000) / 10;
+    });
     sum = this.vaccineType.secondDoses.proportion.reduce((total, element) => {
       return total + element;
     });
-    this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map(
-      (d) => {
-        return Math.round((d / sum) * 1000) / 10;
-      }
-    );
+    this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map((d) => {
+      return Math.round((d / sum) * 1000) / 10;
+    });
   },
 };
 </script>

@@ -377,6 +377,7 @@ export default {
       return opt;
     },
   },
+
   async created() {
     // fromDate 3 months before today
     this.fromDate = dayjs()

@@ -1,0 +1,356 @@
+<template>
+  <div class="ChartVariant">
+    <div class="containerSection">
+      <box-container>
+        <title-container titleName="Variantes secuenciadas en Chile" />
+      </box-container>
+
+      <box-container class="explication">
+        <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
+          Gráficos que representan las variantes secuenciadas en Chile cada semana.
+        </p>
+      </box-container>
+
+      <div id="block_graph" v-if="variantChile.labels.length > 0 && listOfMonths.length > 0">
+        <slide-bar :listOfMonths="listOfMonths" :fromMonth="fromMonth" v-on:newdate="updateCurrentDate" />
+
+        <div class="wrapper">
+          <title-graphic> Variantes secuenciadas cada dos semanas en Chile</title-graphic>
+          <update :labels="variantChile.labels"> </update>
+          <line-chart :chartData="getChartVariant(variantChile.valuesForTheVariants)" :options="chartOptions()"> </line-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic> Proporción de cada variante secuenciada cada dos semanas en Chile</title-graphic>
+          <update :labels="variantChile.labels"> </update>
+          <line-chart :chartData="getChartVariant(variantChile.porportionVariants)" :options="chartOptions((percentage = true))"> </line-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic> Casos de la variante Delta detectados cada dos semanas en Chile</title-graphic>
+          <update :labels="variantChile.labels"> </update>
+          <bar-chart :chartData="getChart(variantChile.valuesForTheVariants.Delta, colorsVariant[3], 'line')" :options="chartOptions((percentage = false), (NoLegend = true))"> </bar-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic> Número total de secuencias realizadas cada dos semanas</title-graphic>
+          <update :labels="variantChile.labels"> </update>
+          <bar-chart :chartData="getChart(variantChile.totalSequences, colorsVariant[7], 'line')" :options="chartOptions((percentage = false), (NoLegend = true))"> </bar-chart>
+        </div>
+      </div>
+      <spinner size="massive" v-else></spinner>
+    </div>
+    <footer-indicators>
+      <p>
+        Los datos son proporcionados por Emma B. Hodcroft. 2021. "CoVariants: SARS-CoV-2 Mutations and Variants of Interest."
+        <a href="https://covariants.org/">https://covariants.org/ </a>.
+      </p>
+    </footer-indicators>
+  </div>
+</template>
+
+<style src="../assets/chartChileAndRegion.css"></style>
+
+<style lang="css" scoped>
+.ChartVariant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.wrapper {
+  width: 49.65%;
+  /* width: 100%; */
+  margin: 5px 0px 5px 0px;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
+  border-radius: 7px;
+  background-color: white;
+  padding: 0px 0px 10px 0px;
+}
+.explication {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+@media all and (max-width: 1100px) {
+  .wrapper {
+    width: 100%;
+    margin: 5px 0px 5px 0px;
+  }
+}
+</style>
+
+<script>
+import { sumArray } from "@/assets/mathFunctions";
+// import DoughnutChart from "../components/DoughnutChart";
+import LineChart from "../components/LineChart";
+import BarChart from "../components/BarChart";
+// import HorizontalBarChart from "../components/HorizontalBarChart";
+import Update from "../components/Update";
+import TitleContainer from "@/components/TitleContainer";
+// import Indicators from "@/components/Indicators";
+import TitleGraphic from "@/components/TitleGraphic";
+import FooterIndicators from "@/components/FooterIndicators";
+import SlideBar from "../components/SlideBar";
+
+// import * as d3 from "d3-fetch";
+
+import * as dayjs from "dayjs";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+import "dayjs/locale/es"; // load on demand
+dayjs.locale("es"); // use Spanish locale globally
+
+export default {
+  name: "ChartVacuna",
+  components: {
+    "line-chart": LineChart,
+    "bar-chart": BarChart,
+    // "horizontal-bar-chart": HorizontalBarChart,
+    // "doughnut-chart": DoughnutChart,
+    "title-container": TitleContainer,
+    "title-graphic": TitleGraphic,
+    // indicators: Indicators,
+    "footer-indicators": FooterIndicators,
+    update: Update,
+    "slide-bar": SlideBar,
+    // 'choose-date': ChooseDate
+  },
+  metaInfo() {
+    return {
+      title: "Variantes secuenciadas en Chile",
+      meta: [
+        {
+          name: "description",
+          content: `Gráficos que representan las variantes secuenciadas en Chile cada
+          semana.`,
+        },
+        { name: "robots", content: "index,follow" },
+      ],
+    };
+  },
+  data() {
+    return {
+      pointRadius: 1.5,
+      pointHoverRadius: 4,
+      colorsVariant: [
+        "rgba(210,230,238,1.0)",
+        "rgba(130,207,253,1.0)",
+        "rgba(147,219,112,1.0)",
+        "rgba(248,121,121,1.0)",
+        "rgba(235,164,52,1.0)",
+        "rgba(36,129,156,1.0)",
+        "rgba(132,94,194,1.0)",
+        "rgba(35,43,43,1.0)",
+      ],
+      colorsVariantTransparent: [
+        "rgba(210,230,238,1)",
+        "rgba(130,207,253,1)",
+        "rgba(147,219,112,1)",
+        "rgba(248,121,121,1)",
+        "rgba(235,164,52,1)",
+        "rgba(36,129,156,1)",
+        "rgba(132,94,194,1)",
+        "rgba(35,43,43,1)",
+      ],
+      variantChile: {
+        labels: [],
+        valuesForTheVariants: {},
+        porportionVariants: [],
+        totalSequences: [],
+      },
+      fromDate: "01-02-2021",
+      fromMonth: "",
+      listOfMonths: [],
+      dicMonth: {},
+    };
+  },
+  methods: {
+    updateCurrentDate(payload) {
+      this.fromMonth = payload;
+      this.fromDate = dayjs(payload, "MMMM YYYY").format("01-MM-YYYY");
+    },
+    getChartVariant(dataVariant) {
+      let indexDate = this.variantChile.labels.indexOf(this.dicMonth[this.fromDate]);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
+      let datasets = [];
+
+      let nameVariant = Object.keys(dataVariant);
+      nameVariant.forEach((name, index) => {
+        datasets.push({
+          type: "line",
+          pointRadius: 2,
+          pointHoverRadius: this.pointHoverRadius,
+          label: name,
+          borderColor: this.colorsVariant[index],
+          backgroundColor: this.colorsVariantTransparent[index],
+          fill: true,
+          data: dataVariant[name].slice(indexDate),
+        });
+      });
+      return {
+        labels: this.variantChile.labels.slice(indexDate),
+        datasets: datasets,
+      };
+    },
+    getChart(data, color, type) {
+      let indexDate = this.variantChile.labels.indexOf(this.dicMonth[this.fromDate]);
+      indexDate = indexDate > 0 ? indexDate : 0;
+      const datasets = [
+        {
+          type: type,
+          pointRadius: 2,
+          pointHoverRadius: this.pointHoverRadius,
+          borderColor: color,
+          backgroundColor: color,
+          fill: false,
+          data: data.slice(indexDate),
+        },
+      ];
+      return {
+        labels: this.variantChile.labels.slice(indexDate),
+        datasets: datasets,
+      };
+    },
+
+    chartOptions(percentage = false, NoLegend = false) {
+      let options = {
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                parser: "DD-MM-YYYY",
+                unit: "month",
+              },
+            },
+          ],
+          yAxes: [
+            {
+              stacked: true,
+              title: {
+                display: true,
+                text: "Value",
+              },
+            },
+          ],
+        },
+        animation: {
+          duration: 0,
+        },
+        legend: {
+          display: true,
+        },
+        tooltips: {
+          mode: "index",
+          intersect: false,
+        },
+        hover: {
+          mode: "index",
+          intersect: false,
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      };
+
+      options["interaction"] = {
+        mode: "nearest",
+        axis: "x",
+        intersect: false,
+      };
+      if (percentage) {
+        options.scales["yAxes"] = [
+          {
+            stacked: true,
+            ticks: {
+              max: 100,
+              beginAtZero: true,
+              callback: function(tick) {
+                return tick.toString() + "%";
+              },
+            },
+          },
+        ];
+      }
+      if (NoLegend) {
+        options.legend = {
+          display: false,
+        };
+      }
+      return options;
+    },
+  },
+
+  async created() {
+    // fromDate 3 months before today
+    this.fromDate = dayjs()
+      .subtract(3, "month")
+      .format("01-MM-YYYY");
+
+    //  Covid variant
+    const response = await fetch("https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json");
+    const variant = await response.json();
+    const variantChile = await variant.countries["Chile"];
+
+    const totalSequences = await variantChile.total_sequences;
+    this.variantChile.totalSequences = totalSequences;
+    const allLabels = await variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"));
+    this.variantChile.labels = await allLabels;
+
+    const dicVariant = {
+      "20I (Alpha, V1)": "Alpha",
+      "20H (Beta, V2)": "Beta",
+      "20J (Gamma, V3)": "Gamma",
+      "21A (Delta)": "Delta",
+      "21C (Epsilon)": "Epsilon",
+      "21G (Lambda)": "Lambda",
+      "21F (Iota)": "Iota",
+    };
+
+    const nameVariant = await Object.keys(variantChile).slice(2);
+
+    let sumVariant = [];
+    nameVariant.forEach((name) => {
+      if (dicVariant[name] != undefined) {
+        this.variantChile.valuesForTheVariants[dicVariant[name]] = variantChile[name];
+        this.variantChile.porportionVariants[dicVariant[name]] = variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10);
+        sumVariant = sumArray(sumVariant, this.variantChile.valuesForTheVariants[dicVariant[name]]);
+      }
+    });
+
+    const otherVariants = sumArray(
+      sumVariant.map((v) => -v),
+      totalSequences
+    );
+
+    this.variantChile.valuesForTheVariants["Otras"] = otherVariants;
+    this.variantChile.porportionVariants["Otras"] = otherVariants.map((d, index) => Math.round((d / totalSequences[index]) * 1000) / 10);
+
+    // we keep only monday date
+    allLabels.forEach((d) => {
+      if (!this.listOfMonths.includes(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"))) {
+        this.listOfMonths.push(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"));
+        if (!Object.values(this.dicMonth).includes(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"))) {
+          this.dicMonth[dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")] = dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY");
+        }
+      }
+    });
+
+    // // function to generate list of months
+    // let generateListOfMonths = async (labels) => {
+    //   let currentDate = dayjs("02-2021", "MM-YYYY");
+    //   let listOfMonths = [];
+    //   while (currentDate < dayjs(labels[labels.length - 1], "DD-MM-YYYY")) {
+    //     listOfMonths.push(currentDate.format("MMMM YYYY"));
+    //     currentDate = dayjs(currentDate, "MM-YYYY").add(1, "M");
+    //   }
+    //   return listOfMonths;
+    // };
+    // this.listOfMonths = await generateListOfMonths(this.variantChile.labels);
+    this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
+  },
+};
+</script>
