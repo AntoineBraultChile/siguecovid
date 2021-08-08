@@ -7,7 +7,8 @@
 
       <box-container class="explication">
         <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
-          Gráficos que representan las variantes del SARS-CoV-2 secuenciadas en Chile cada semana.
+          Gráficos que representan las variantes del SARS-CoV-2 secuenciadas en Chile. La actualización se hace cada dos semanas. Cada punto de los gráficos corresponde a los datos de secuenciación de
+          las dos semanas anteriores.
         </p>
       </box-container>
 

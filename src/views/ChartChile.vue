@@ -50,15 +50,14 @@
         Como se calculan los indicatores :
       <ul>
         <li> La media móvil de 7 días de una cantidad (casos, positividad...) del día n es la medía de la cantidad entre los días n y n-7. </li>
+        <li>La variación semanal de casos se calcula a partir de la sucesión de medias móviles de 7 días de los nuevos casos M(1),...,M(i),... de la siguiente manera:
+          (M(i+7)-M(i))/M(i)*100.
+        </li>
         <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
           da el número de fallecidos por Covid-19 sospechosos. </li>
       </ul>
       </p>
 
-      <p>
-        Datos sobre los variantes en Chile son proporcionados por 
-        Emma B. Hodcroft. 2021. "CoVariants: SARS-CoV-2 Mutations and Variants of Interest." <a href='https://covariants.org/'>https://covariants.org/ </a>.
-      </p>
     </footer-indicators>
   </div>
 </template>

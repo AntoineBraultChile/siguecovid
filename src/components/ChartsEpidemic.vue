@@ -4,16 +4,22 @@
       <title-graphic> {{ title["Cases"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem">Los casos se detectan por PCR o prueba antigénica. </span>
       <br />
-
       <update :labels="dataCovid.labelsCases"> </update>
       <bar-chart :chartData="plotBarChartWithMean(region, 'Cases')" :options="chartOptions('Cases')"> </bar-chart>
+    </div>
+
+    <div class="graph" v-if="dataCovid.labelsCases.length > 0">
+      <title-graphic> Variación semanal de los nuevos casos detectados en {{ region }} </title-graphic>
+      <span style="font-size:1rem">Los casos se detectan por PCR o prueba antigénica. </span>
+      <br />
+      <update :labels="dataCovid.labelsCases"> </update>
+      <bar-chart :chartData="plotVariantions(this.dataCovid['labelsCases'].slice(5), this.dataCovid[region + 'MeanCases'])" :options="chartOptions('Variations')"> </bar-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.labelsPcr.length > 0">
       <title-graphic> {{ title["Pcr"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem">La positividad es el porcentaje de casos detectados sobre el numero de test PCR y de antigenos realizados cada día.</span>
       <br />
-
       <update :labels="dataCovid.labelsPcr"> </update>
       <bar-chart :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
     </div>
@@ -34,6 +40,11 @@
 
       <update :labels="dataCovid.labelsDeaths"> </update>
       <bar-chart :chartData="plotBarChartWithMean(region, 'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
+    </div>
+    <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
+      <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
+      <update :labels="dataCovid.labelsVaccine"> </update>
+      <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Vaccine')"></line-chart>
     </div>
 
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
@@ -76,23 +87,6 @@
       <bar-chart :chartData="getChartIngresoUCI(region)" :options="chartOptions('IngresoUCI')"> </bar-chart>
     </div>
 
-    <!-- <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> {{ title["Variant"] }} en {{ region }} </title-graphic>
-
-      <update :labels="dataCovid.labelsVariant"> </update>
-      <bar-chart
-        :chartData="getChartVariant(region)"
-        :options="chartOptions('Variant')"
-      >
-      </bar-chart>
-    </div> -->
-
-    <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
-      <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
-      <update :labels="dataCovid.labelsVaccine"> </update>
-      <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Paso')"></line-chart>
-    </div>
-
     <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
@@ -130,26 +124,6 @@ export default {
     return {
       pointRadius: 1.5,
       pointHoverRadius: 4,
-      // colorsVariant: [
-      //   "rgba(210,230,238,1.0)",
-      //   "rgba(130,207,253,1.0)",
-      //   "rgba(147,219,112,1.0)",
-      //   "rgba(248,121,121,1.0)",
-      //   "rgba(235,164,52,1.0)",
-      //   "rgba(36,129,156,1.0)",
-      //   "rgba(132,94,194,1.0)",
-      //   "rgba(35,43,43,1.0)",
-      // ],
-      // colorsVariantTransparent: [
-      //   "rgba(210,230,238,1)",
-      //   "rgba(130,207,253,1)",
-      //   "rgba(147,219,112,1)",
-      //   "rgba(248,121,121,1)",
-      //   "rgba(235,164,52,1)",
-      //   "rgba(36,129,156,1)",
-      //   "rgba(132,94,194,1)",
-      //   "rgba(35,43,43,1)",
-      // ],
       colorsPasoAPaso: {
         1: "#dd4b39",
         2: "#eba434",
@@ -163,7 +137,6 @@ export default {
         Deaths: "#232b2b",
       },
       title: {
-        // Variant: "Variantes secuenciadas cada semana ",
         IngresoUCI: "Media móvil 7 días de ingresos a UCI por Covid-19",
         Uci: "Personas en UCI por Covid-19",
         Pcr: "Positividad y PCR en ",
@@ -173,31 +146,29 @@ export default {
     };
   },
   methods: {
-    // getChartVariant(region) {
-    //   let fromDate = this.fromDate;
-    //   let indexDate = this.dataCovid["labelsVariant"].indexOf(fromDate);
-    //   indexDate = indexDate > 0 ? indexDate : 0;
+    plotVariantions(labels, data) {
+      const labelsDerivative = labels.slice(1);
+      let indexDate = labelsDerivative.indexOf(this.fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
 
-    //   let datasets = [];
-
-    //   let nameVariant = Object.keys(this.dataCovid.ChileVariant);
-    //   nameVariant.forEach((name, index) => {
-    //     datasets.push({
-    //       type: "line",
-    //       pointRadius: 2,
-    //       pointHoverRadius: this.pointHoverRadius,
-    //       label: name,
-    //       borderColor: this.colorsVariant[index],
-    //       backgroundColor: this.colorsVariantTransparent[index],
-    //       fill: true,
-    //       data: this.dataCovid[region + "Variant"][name].slice(indexDate),
-    //     });
-    //   });
-    //   return {
-    //     labels: this.dataCovid.labelsVariant.slice(indexDate),
-    //     datasets: datasets,
-    //   };
-    // },
+      const variations = data.map((d, index) => (index > 6 ? Math.round(((data[index] - data[index - 7]) / data[index - 7]) * 1000) / 10 : null));
+      const colors = variations.map((d) => (d <= 0 ? this.backgroundColor["Cases"] : this.backgroundColor["Uci"]));
+      return {
+        labels: labelsDerivative.slice(indexDate),
+        datasets: [
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "",
+            borderColor: colors.slice(indexDate),
+            backgroundColor: colors.slice(indexDate),
+            fill: false,
+            data: variations.slice(indexDate),
+          },
+        ],
+      };
+    },
     getChartIngresoUCI(region) {
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labelsIngresoUCI"].indexOf(fromDate);
@@ -488,13 +459,25 @@ export default {
           },
         ];
       }
-      if (type == "Paso") {
+      if (type == "Vaccine") {
         options.scales.yAxes[0].ticks = {
           beginAtZero: true,
           callback: function(tick) {
             return tick.toString() + "%";
           },
         };
+        options.legend.display = true;
+        options.scales["xAxes"] = [
+          {
+            type: "time",
+            time: {
+              parser: "DD-MM-YYYY",
+              unit: "month",
+            },
+          },
+        ];
+      }
+      if (type == "Paso") {
         options.legend.display = true;
         options.scales["xAxes"] = [
           {
@@ -555,6 +538,20 @@ export default {
               type: "linear",
               position: "right",
               stacked: true,
+            },
+          ],
+        };
+      }
+      if (type == "Variations") {
+        options.scales = {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+                callback: function(tick) {
+                  return tick.toString() + "%";
+                },
+              },
             },
           ],
         };
