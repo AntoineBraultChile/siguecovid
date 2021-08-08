@@ -271,7 +271,7 @@ export default {
           label: labels[index],
           borderColor: this.colorsPasoAPaso[paso],
           backgroundColor: this.colorsPasoAPaso[paso],
-          fill: false,
+          fill: true,
           data: this.dataCovid.pasoAPaso["fase" + paso].slice(indexDate),
         });
       });
@@ -505,6 +505,30 @@ export default {
             },
           },
         ];
+        options.scales["yAxes"] = [
+          {
+            stacked: true,
+            ticks: {
+              max: 100,
+              beginAtZero: true,
+              callback: function(tick) {
+                return tick.toString() + "%";
+              },
+            },
+            title: {
+              display: true,
+              text: "Value",
+            },
+          },
+        ];
+        options.tooltips = {
+          mode: "index",
+          intersect: false,
+        };
+        options.hover = {
+          mode: "index",
+          intersect: false,
+        };
       }
 
       if (type == "Pcr") {
