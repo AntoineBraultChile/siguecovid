@@ -24,7 +24,7 @@
         <div class="wrapper">
           <title-graphic> Proporción de cada variante secuenciada cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
-          <line-chart :chartData="getChartVariant(variantChile.porportionVariants)" :options="chartOptions((percentage = true))"> </line-chart>
+          <line-chart :chartData="getChartVariant(variantChile.proportionVariants)" :options="chartOptions((percentage = false), (NoLegend = false), (max100 = true))"> </line-chart>
         </div>
 
         <div class="wrapper">
@@ -37,6 +37,11 @@
           <title-graphic> Número total de secuencias realizadas cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
           <bar-chart :chartData="getChart(variantChile.totalSequences, colorsVariant[7], 'line')" :options="chartOptions((percentage = false), (NoLegend = true))"> </bar-chart>
+        </div>
+        <div class="wrapper">
+          <title-graphic> Porcentaje de casos detectados secuenciados cada dos semanas en Chile</title-graphic>
+          <update :labels="variantChile.labels"> </update>
+          <bar-chart :chartData="getChart(variantChile.proportionSequencedByCases, colorsVariant[7], 'line')" :options="chartOptions((percentage = true), (NoLegend = true))"> </bar-chart>
         </div>
       </div>
       <spinner size="massive" v-else></spinner>
@@ -84,7 +89,7 @@
 </style>
 
 <script>
-import { sumArray } from "@/assets/mathFunctions";
+import { sumArray, derivate } from "@/assets/mathFunctions";
 // import DoughnutChart from "../components/DoughnutChart";
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
@@ -96,7 +101,7 @@ import TitleGraphic from "@/components/TitleGraphic";
 import FooterIndicators from "@/components/FooterIndicators";
 import SlideBar from "../components/SlideBar";
 
-// import * as d3 from "d3-fetch";
+import * as d3 from "d3-fetch";
 
 import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -159,8 +164,9 @@ export default {
       variantChile: {
         labels: [],
         valuesForTheVariants: {},
-        porportionVariants: [],
+        proportionVariants: [],
         totalSequences: [],
+        proportionSequencedByCases: [],
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -217,7 +223,7 @@ export default {
       };
     },
 
-    chartOptions(percentage = false, NoLegend = false) {
+    chartOptions(percentage = false, NoLegend = false, max100 = false) {
       let options = {
         scales: {
           xAxes: [
@@ -232,6 +238,7 @@ export default {
           yAxes: [
             {
               stacked: true,
+              ticks: {},
               title: {
                 display: true,
                 text: "Value",
@@ -262,12 +269,35 @@ export default {
         axis: "x",
         intersect: false,
       };
-      if (percentage) {
+      if (max100) {
+        options.tooltips["callbacks"] = {
+          label: function(tooltipItem, data) {
+            return data.labels[tooltipItem.index] + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+          },
+        };
         options.scales["yAxes"] = [
           {
             stacked: true,
             ticks: {
               max: 100,
+              beginAtZero: true,
+              callback: function(tick) {
+                return tick.toString() + "%";
+              },
+            },
+          },
+        ];
+      }
+      if (percentage) {
+        options.tooltips["callbacks"] = {
+          label: function(tooltipItem, data) {
+            return data.labels[tooltipItem.index] + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+          },
+        };
+        options.scales["yAxes"] = [
+          {
+            stacked: true,
+            ticks: {
               beginAtZero: true,
               callback: function(tick) {
                 return tick.toString() + "%";
@@ -290,6 +320,7 @@ export default {
     this.fromDate = dayjs()
       .subtract(3, "month")
       .format("01-MM-YYYY");
+    this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
 
     //  Covid variant
     const response = await fetch("https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json");
@@ -297,15 +328,20 @@ export default {
     const variantChile = await variant.countries["Chile"];
 
     const totalSequences = await variantChile.total_sequences;
-    this.variantChile.totalSequences = totalSequences;
-    const allLabels = await variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")).slice(1);
+    this.variantChile.totalSequences = await totalSequences;
+    let allLabels = await variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"));
+    const firstDate = await allLabels[0];
     const lastDate = await allLabels[allLabels.length - 1];
+
     allLabels.push(
       dayjs(lastDate, "DD-MM-YYYY")
         .add(14, "d")
         .format("DD-MM-YYYY")
     ); // add 2 weeks
-    this.variantChile.labels = await allLabels;
+
+    const labelsWihtoutFirstTwoWeeks = await allLabels.slice(1);
+
+    this.variantChile.labels = await labelsWihtoutFirstTwoWeeks;
 
     const dicVariant = {
       "20I (Alpha, V1)": "Alpha",
@@ -323,7 +359,7 @@ export default {
     nameVariant.forEach((name) => {
       if (dicVariant[name] != undefined) {
         this.variantChile.valuesForTheVariants[dicVariant[name]] = variantChile[name];
-        this.variantChile.porportionVariants[dicVariant[name]] = variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10);
+        this.variantChile.proportionVariants[dicVariant[name]] = variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10);
         sumVariant = sumArray(sumVariant, this.variantChile.valuesForTheVariants[dicVariant[name]]);
       }
     });
@@ -334,10 +370,10 @@ export default {
     );
 
     this.variantChile.valuesForTheVariants["Otras"] = otherVariants;
-    this.variantChile.porportionVariants["Otras"] = otherVariants.map((d, index) => Math.round((d / totalSequences[index]) * 1000) / 10);
+    this.variantChile.proportionVariants["Otras"] = otherVariants.map((d, index) => Math.round((d / totalSequences[index]) * 1000) / 10);
 
-    // we keep only monday date
-    allLabels.forEach((d) => {
+    // list of months and dictionary between date and months
+    labelsWihtoutFirstTwoWeeks.forEach((d) => {
       if (!this.listOfMonths.includes(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"))) {
         this.listOfMonths.push(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"));
         if (!Object.values(this.dicMonth).includes(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"))) {
@@ -346,18 +382,43 @@ export default {
       }
     });
 
-    // // function to generate list of months
-    // let generateListOfMonths = async (labels) => {
-    //   let currentDate = dayjs("02-2021", "MM-YYYY");
-    //   let listOfMonths = [];
-    //   while (currentDate < dayjs(labels[labels.length - 1], "DD-MM-YYYY")) {
-    //     listOfMonths.push(currentDate.format("MMMM YYYY"));
-    //     currentDate = dayjs(currentDate, "MM-YYYY").add(1, "M");
-    //   }
-    //   return listOfMonths;
-    // };
-    // this.listOfMonths = await generateListOfMonths(this.variantChile.labels);
-    this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
+    // compute number of cases detected each 2 weeks
+    let casesCumultative = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv");
+    let labelsCases = [];
+    let cases = [];
+    casesCumultative.forEach((d) => {
+      if (d["Region"] == "Total") {
+        labelsCases = Object.keys(d)
+          .slice(2)
+          .map((date) => dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY"));
+
+        cases = derivate(
+          Object.values(d)
+            .slice(1)
+            .map((values) => Number(values))
+        );
+      }
+    });
+
+    // group cases by 2 weeks
+
+    const lastDate2 = allLabels[allLabels.length - 1];
+    const indexFirstDate = labelsCases.indexOf(firstDate);
+    const indexLastDate = labelsCases.indexOf(lastDate2);
+    const labelsFirstLastDate = labelsCases.slice(indexFirstDate, indexLastDate + 1);
+    const casesFirstLastDate = cases.slice(indexFirstDate, indexLastDate + 1);
+
+    let casesByTwoWeeks = [];
+
+    let week = 0;
+    while (week < allLabels.length - 1) {
+      let indexLabels = labelsFirstLastDate.indexOf(allLabels[week]);
+      let indexLabels2 = labelsFirstLastDate.indexOf(allLabels[week + 1]);
+      casesByTwoWeeks.push(casesFirstLastDate.slice(indexLabels, indexLabels2).reduce((value, res) => value + res));
+      week += 1;
+    }
+    const proportionSequencedByCases = casesByTwoWeeks.map((d, index) => Math.round((this.variantChile.totalSequences[index] / d) * 1000) / 10);
+    this.variantChile["proportionSequencedByCases"] = proportionSequencedByCases;
   },
 };
 </script>

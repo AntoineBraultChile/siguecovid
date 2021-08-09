@@ -460,6 +460,11 @@ export default {
         ];
       }
       if (type == "Vaccine") {
+        options.tooltips["callbacks"] = {
+          label: function(tooltipItem, data) {
+            return data.labels[tooltipItem.index] + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+          },
+        };
         options.scales.yAxes[0].ticks = {
           beginAtZero: true,
           callback: function(tick) {
@@ -507,6 +512,11 @@ export default {
         options.tooltips = {
           mode: "index",
           intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return data.labels[tooltipItem.index] + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+            },
+          },
         };
         options.hover = {
           mode: "index",

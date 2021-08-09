@@ -2,38 +2,14 @@
   <div class="ChartComunas">
     <div class="containerSection">
       <box-container>
-        <title-container
-          titleName="La pandemia de Covid-19 en las comunas de Chile"
-        >
-        </title-container>
+        <title-container titleName="La pandemia de Covid-19 en las comunas de Chile"> </title-container>
       </box-container>
       <div id="block_graph" v-if="firstDoses.labels.length > 0">
-        <comuna-choice
-          :currentComuna="currentComuna"
-          :comunaNames="comunaNames"
-          v-on:new-comuna="changeCurrentComuna"
-          v-if="comunaNames.length > 0"
-        />
-        <slide-bar
-          v-if="listOfMonths.length > 0"
-          :listOfMonths="listOfMonths"
-          :fromMonth="fromMonth"
-          v-on:newdate="updateCurrentDate"
-        />
-        <div
-          class="graph"
-          v-if="
-            (cases.labels.length > 0) &
-              (pasoAPaso.Arica.dateChangePaso.length > 0)
-          "
-        >
-          <title-graphic
-            >Incidencia en la comuna de {{ currentComuna }}</title-graphic
-          >
-          <span style="font-size:1rem"
-            >Incidencia: número de casos en 7 días por cada 100.000
-            habitantes</span
-          >
+        <comuna-choice :currentComuna="currentComuna" :comunaNames="comunaNames" v-on:new-comuna="changeCurrentComuna" v-if="comunaNames.length > 0" />
+        <slide-bar v-if="listOfMonths.length > 0" :listOfMonths="listOfMonths" :fromMonth="fromMonth" v-on:newdate="updateCurrentDate" />
+        <div class="graph" v-if="(cases.labels.length > 0) & (pasoAPaso.Arica.dateChangePaso.length > 0)">
+          <title-graphic>Incidencia en la comuna de {{ currentComuna }}</title-graphic>
+          <span style="font-size:1rem">Incidencia: número de casos en 7 días por cada 100.000 habitantes</span>
           <br />
           <div class="legend">
             <div class="rectangle red"></div>
@@ -46,23 +22,11 @@
             <span>Paso 4</span>
           </div>
           <update :labels="cases.labels"> </update>
-          <line-chart
-            :chartData="ChartIncidence(currentComuna)"
-            :options="options('cases', currentComuna)"
-          />
+          <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
         </div>
 
-        <div
-          class="graph"
-          v-if="
-            (positivity.labels.length > 0) &
-              (pasoAPaso.Arica.dateChangePaso.length > 0)
-          "
-        >
-          <title-graphic
-            >Positividad semanal de los test PCR en la comuna de
-            {{ currentComuna }}</title-graphic
-          >
+        <div class="graph" v-if="(positivity.labels.length > 0) & (pasoAPaso.Arica.dateChangePaso.length > 0)">
+          <title-graphic>Positividad semanal de los test PCR en la comuna de {{ currentComuna }}</title-graphic>
           <update :labels="positivity.labels"> </update>
           <div class="legend">
             <div class="rectangle red"></div>
@@ -74,36 +38,19 @@
             <div class="rectangle green"></div>
             <span>Paso 4</span>
           </div>
-          <line-chart
-            :chartData="ChartPositivity(currentComuna)"
-            :options="options('positivity', currentComuna)"
-          />
+          <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)" />
         </div>
         <div class="graph" v-if="cases.labels.length > 0">
-          <title-graphic
-            >Fallecidos semanal por Covid-19 en la comuna de
-            {{ currentComuna }}</title-graphic
-          >
-          <span style="font-size:1rem"
-            >Son sólo los fallecidos confirmados con un test PCR positivo</span
-          >
+          <title-graphic>Fallecidos semanal por Covid-19 en la comuna de {{ currentComuna }}</title-graphic>
+          <span style="font-size:1rem">Son sólo los fallecidos confirmados con un test PCR positivo</span>
           <br />
           <update :labels="deaths.labels"> </update>
-          <bar-chart
-            :chartData="ChartDeaths(currentComuna)"
-            :options="options('deaths')"
-          ></bar-chart>
+          <bar-chart :chartData="ChartDeaths(currentComuna)" :options="options('deaths')"></bar-chart>
         </div>
         <div class="graph" v-if="positivity.labels.length > 0">
-          <title-graphic
-            >Proporción de la población vacunada en la comuna de
-            {{ currentComuna }}</title-graphic
-          >
+          <title-graphic>Proporción de la población vacunada en la comuna de {{ currentComuna }}</title-graphic>
           <update :labels="firstDoses.labels"> </update>
-          <line-chart
-            :chartData="ChartVaccin(currentComuna)"
-            :options="options('vaccine')"
-          />
+          <line-chart :chartData="ChartVaccin(currentComuna)" :options="options('vaccine')" />
         </div>
       </div>
       <spinner size="massive" v-else></spinner>
@@ -163,12 +110,7 @@ export default {
         Deaths: "#232b2b",
       },
       // colorsPaso : {'Fase 1':'rgb(221,75,57,0.1)', 'Fase 2': 'rgb( 235, 164, 52, 0.1)', 'Fase 3': 'rgb(130,207,253,0.1)','Fase 4':'rgb(147,219,112,0.1)'},
-      colorsPaso: [
-        "rgb(221,75,57,0.1)",
-        "rgb( 235, 164, 52, 0.1)",
-        "rgb(130,207,253,0.1)",
-        "rgb(147,219,112,0.1)",
-      ],
+      colorsPaso: ["rgb(221,75,57,0.1)", "rgb( 235, 164, 52, 0.1)", "rgb(130,207,253,0.1)", "rgb(147,219,112,0.1)"],
       fromDate: "01-02-2021",
       fromMonth: "",
       listOfMonths: [],
@@ -344,6 +286,11 @@ export default {
         opt.scales.yAxes[0].ticks["callback"] = function(tick) {
           return tick.toString() + "%";
         };
+        opt.tooltips["callbacks"] = {
+          label: function(tooltipItem, data) {
+            return data.labels[tooltipItem.index] + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+          },
+        };
       }
       if (type == "vaccine") {
         opt.legend.display = true;
@@ -363,9 +310,7 @@ export default {
               // yScaleID: 'y-axis-1',
               xMin: dateChangePaso[index],
               xMax: dateChangePaso[index + 1],
-              backgroundColor: this.colorsPaso[
-                this.pasoAPaso[comuna].numeroDelPaso[index] - 1
-              ],
+              backgroundColor: this.colorsPaso[this.pasoAPaso[comuna].numeroDelPaso[index] - 1],
               //borderColor: 'rgb(255, 0, 0)',
               borderWidth: 1,
             });
@@ -385,9 +330,7 @@ export default {
       .format("01-MM-YYYY");
 
     //fetch deaths by comuna
-    const deathsComunas = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto61/serie_fallecidos_comuna.csv"
-    );
+    const deathsComunas = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto61/serie_fallecidos_comuna.csv");
     let allLabelsDeaths = Object.keys(deathsComunas[0])
       .slice(5)
       .map((date) => {
@@ -399,15 +342,8 @@ export default {
 
       if (dayjs(d, "DD-MM-YYYY").get("day") === 1) {
         this.deaths.labels.push(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"));
-        if (
-          !Object.keys(this.dicMonth2).includes(
-            dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")
-          )
-        ) {
-          this.dicMonth2[dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")] = dayjs(
-            d,
-            "DD-MM-YYYY"
-          ).format("DD-MM-YYYY");
+        if (!Object.keys(this.dicMonth2).includes(dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY"))) {
+          this.dicMonth2[dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")] = dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY");
         }
       }
     });
@@ -418,13 +354,8 @@ export default {
     deathsComunas.forEach((comuna) => {
       // only deaths confirmed by PCR
       if (comuna["CIE 10"] == "U07.1" || comuna["CIE 10"] == "") {
-        if (
-          !Object.keys(this.dicComunaNamesAccentWithoutWith).includes(
-            comuna["Comuna"]
-          )
-        ) {
-          this.dicComunaNamesAccentWithoutWith[deleteAccent(comuna["Comuna"])] =
-            comuna["Comuna"];
+        if (!Object.keys(this.dicComunaNamesAccentWithoutWith).includes(comuna["Comuna"])) {
+          this.dicComunaNamesAccentWithoutWith[deleteAccent(comuna["Comuna"])] = comuna["Comuna"];
         }
         let allValues = Object.values(comuna)
           .slice(5)
@@ -459,9 +390,7 @@ export default {
     this.comunaNames = Object.values(this.dicComunaNamesAccentWithoutWith);
 
     // fetch cases
-    const casesComunas = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv"
-    );
+    const casesComunas = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto1/Covid-19.csv");
 
     const allLabels = Object.keys(casesComunas[0])
       .slice(5, -1)
@@ -472,26 +401,12 @@ export default {
     // we keep only monday date
     allLabels.forEach((d) => {
       // if it is a monday or a friday
-      if (
-        dayjs(d, "DD-MM-YYYY").get("day") === 1 ||
-        dayjs(d, "DD-MM-YYYY").get("day") === 5
-      ) {
+      if (dayjs(d, "DD-MM-YYYY").get("day") === 1 || dayjs(d, "DD-MM-YYYY").get("day") === 5) {
         this.cases.labels.push(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"));
-        if (
-          !this.listOfMonths.includes(
-            dayjs(d, "DD-MM-YYYY").format("MMMM YYYY")
-          )
-        ) {
+        if (!this.listOfMonths.includes(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"))) {
           this.listOfMonths.push(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"));
-          if (
-            !Object.values(this.dicMonth).includes(
-              dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY")
-            )
-          ) {
-            this.dicMonth[dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")] = dayjs(
-              d,
-              "DD-MM-YYYY"
-            ).format("DD-MM-YYYY");
+          if (!Object.values(this.dicMonth).includes(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"))) {
+            this.dicMonth[dayjs(d, "DD-MM-YYYY").format("01-MM-YYYY")] = dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY");
           }
         }
       }
@@ -511,34 +426,25 @@ export default {
       let valuesEachMonday = [];
       allValues.forEach((d, index) => {
         // if monday or friday
-        if (
-          dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 1 ||
-          dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 5
-        ) {
+        if (dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 1 || dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 5) {
           valuesEachMonday.push(Math.round((d / comuna["Poblacion"]) * 100000));
         }
       });
-      this.cases.comuna[
-        this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]
-      ] = derivateEachTwoDays(valuesEachMonday);
+      this.cases.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = derivateEachTwoDays(valuesEachMonday);
     });
 
     // this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
     this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
 
     // fetch positivity by comune
-    const positivityComunas = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto65/PositividadPorComuna.csv"
-    );
+    const positivityComunas = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto65/PositividadPorComuna.csv");
     this.positivity.labels = Object.keys(positivityComunas[0])
       .slice(5)
       .map((date) => {
         return dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
     positivityComunas.forEach((comuna) => {
-      this.positivity.comuna[
-        this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]
-      ] = Object.values(comuna)
+      this.positivity.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = Object.values(comuna)
         .slice(5)
         .map((i) => {
           return Number(i);
@@ -546,9 +452,7 @@ export default {
     });
 
     // Plan Paso a Paso en las comunas de Chile from scrapping data covid chile
-    let paso = await fetch(
-      "https://raw.githubusercontent.com/AntoineBraultChile/scrapping-covid-data-chile/main/output/pasoAPasoComunas.json"
-    );
+    let paso = await fetch("https://raw.githubusercontent.com/AntoineBraultChile/scrapping-covid-data-chile/main/output/pasoAPasoComunas.json");
     let pasoObject = await paso.json();
     this.pasoAPaso = pasoObject;
 
@@ -591,9 +495,7 @@ export default {
     // });
 
     // fetch first vaccine doses by comune
-    const firstDosesComunas = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_1eraDosis.csv"
-    );
+    const firstDosesComunas = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_1eraDosis.csv");
 
     this.firstDoses.labels = Object.keys(firstDosesComunas[0])
       .slice(5)
@@ -609,17 +511,13 @@ export default {
         });
       let accumulativeValue = [];
       valueEachDay.reduce((acc, el, i) => (accumulativeValue[i] = acc + el), 0);
-      this.firstDoses.comuna[
-        this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]
-      ] = accumulativeValue.map((d) => {
+      this.firstDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = accumulativeValue.map((d) => {
         return Math.round((d / comuna["Poblacion"]) * 1000) / 10;
       });
     });
 
     // fetch second vaccine doses by comune
-    const secondDosesComunas = await d3.csv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_2daDosis.csv"
-    );
+    const secondDosesComunas = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_2daDosis.csv");
     this.secondDoses.labels = Object.keys(secondDosesComunas[0])
       .slice(5)
       .map((date) => {
@@ -633,13 +531,10 @@ export default {
         });
       let accumulativeValue = [];
       valueEachDay.reduce((acc, el, i) => (accumulativeValue[i] = acc + el), 0);
-      this.secondDoses.comuna[
-        this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]
-      ] = accumulativeValue.map((d) => {
+      this.secondDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = accumulativeValue.map((d) => {
         return Math.round((d / comuna["Poblacion"]) * 1000) / 10;
       });
-      this.population[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] =
-        comuna["Poblacion"];
+      this.population[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = comuna["Poblacion"];
     });
 
     // function to delete accent
