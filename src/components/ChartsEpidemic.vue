@@ -565,6 +565,15 @@ export default {
             },
           ],
         };
+        options.tooltips = {
+          mode: "index",
+          intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return data.labels[tooltipItem.index] + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+            },
+          },
+        };
       }
       if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant") {
         options.legend = { display: true };
