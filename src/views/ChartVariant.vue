@@ -291,7 +291,7 @@ export default {
       if (percentage) {
         options.tooltips["callbacks"] = {
           label: function(tooltipItem, data) {
-            return data.datasets[tooltipItem.datasetIndex].label + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+            return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
           },
         };
         options.scales["yAxes"] = [
