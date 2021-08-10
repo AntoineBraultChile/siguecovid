@@ -206,6 +206,7 @@ export default {
           Sinovac: [],
           AstraZeneca: [],
           CanSino: [],
+          Janssen: [],
           proportion: [],
         },
         secondDoses: {
@@ -213,6 +214,7 @@ export default {
           Sinovac: [],
           AstraZeneca: [],
           CanSino: [],
+          Janssen: [],
           proportion: [],
         },
       },
