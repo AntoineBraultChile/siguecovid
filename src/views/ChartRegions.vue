@@ -367,6 +367,8 @@ export default {
       this.dataCovid.pasoAPaso[deleteAccent(d["comuna_residencia"])] =
         Object.values(d).slice(-1);
     });
+this.dataCovid.pasoAPaso['Tiltil'] = this.dataCovid.pasoAPaso['Til Til']
+
 
     // fetching data cases by comune in Chile
     const casesComunas = await d3.csv(

@@ -457,6 +457,7 @@ export default {
     let paso = await fetch("https://raw.githubusercontent.com/AntoineBraultChile/scrapping-covid-data-chile/main/output/pasoAPasoComunas.json");
     let pasoObject = await paso.json();
     this.pasoAPaso = pasoObject;
+    this.pasoAPaso["Tiltil"] = this.pasoAPaso["Til Til"];
 
     // // Plan Paso a Paso en las comunas de Chile
     // let paso = await d3.csv(
