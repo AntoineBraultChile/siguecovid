@@ -7,8 +7,9 @@
 
       <box-container class="explication">
         <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
-          Actualmente hay cuatro vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que CanSino sólo requiere una. Se considerará que una
-          persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y totalmente vacunada si ha recibido dos dosis o una dosis de CanSino.
+          Actualmente hay cinco vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que CanSino y Janssen sólo requieren una. Se considerará
+          que una persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y totalmente vacunada si ha recibido dos dosis con Sinovac, Pfizer o AstraZeneca, o
+          una dosis de CanSino o Janssen.
         </p>
       </box-container>
 
@@ -409,12 +410,12 @@ export default {
     },
     renderChartDoughnut() {
       return {
-        labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
+        labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
         datasets: [
           {
             label: "",
             data: this.vaccineType.secondDoses.proportion,
-            backgroundColor: ["#eba434", "#82CFFD", "#f87979", "#93DB70"],
+            backgroundColor: ["#eba434", "#82CFFD", "#f87979", "#93DB70", "#845EC2"],
             hoverOffset: 4,
           },
         ],
@@ -440,11 +441,18 @@ export default {
         },
       ];
       if (doses == "second") {
-        datasets.push({
-          label: "CanSino",
-          backgroundColor: "#93DB70",
-          data: this.vaccineType.secondDoses["CanSino"].slice(indexDate),
-        });
+        datasets.push(
+          {
+            label: "CanSino",
+            backgroundColor: "#93DB70",
+            data: this.vaccineType.secondDoses["CanSino"].slice(indexDate),
+          },
+          {
+            label: "Janssen",
+            backgroundColor: "#845EC2",
+            data: this.vaccineType.secondDoses["Janssen"].slice(indexDate),
+          }
+        );
       }
       return {
         labels: this.vaccineType.labels.filter((x) => {
@@ -740,6 +748,18 @@ export default {
     let vaccineTypeFirstDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_1eraDosis.csv");
     let vaccineTypeSecondDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv");
     let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
+
+    console.log(vaccineTypeFirstDoses);
+    console.log(vaccineTypeSecondDoses);
+    console.log(vaccineTypeUniqueDoses);
+    const dicVac = {
+      "Campaña SARS-CoV-2 (AstraZeneca)": "AstraZeneca",
+      CanSino: "CanSino",
+      "Campaña SARS-CoV-2 (Janssen)": "Janssen",
+      "Campaña SARS-CoV-2 (Pfizer)": "Pfizer",
+      "Campaña SARS-CoV-2 (Sinovac)": "Sinovac",
+    };
+
     this.vaccineType.labels = Object.keys(vaccineTypeFirstDoses[0])
       .slice(1)
       .map((d) => {
@@ -747,14 +767,14 @@ export default {
       });
 
     vaccineTypeFirstDoses.forEach((d) => {
-      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "") {
+      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "Campaña SARS-CoV-2 (Janssen)") {
         this.vaccineType.firstDoses.proportion.push(
           Object.values(d)
             .slice(1)
             .map((i) => Number(i))
             .reduce((total, element) => total + element)
         );
-        this.vaccineType.firstDoses[d["Fabricante"]] = Object.values(d)
+        this.vaccineType.firstDoses[dicVac[d["Fabricante"]]] = Object.values(d)
           .slice(1)
           .map((i) => {
             return Number(i);
@@ -763,14 +783,14 @@ export default {
     });
 
     vaccineTypeSecondDoses.forEach((d) => {
-      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "") {
+      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "Campaña SARS-CoV-2 (Janssen)") {
         this.vaccineType.secondDoses.proportion.push(
           Object.values(d)
             .slice(1)
             .map((i) => Number(i))
             .reduce((total, element) => total + element)
         );
-        this.vaccineType.secondDoses[d["Fabricante"]] = Object.values(d)
+        this.vaccineType.secondDoses[dicVac[d["Fabricante"]]] = Object.values(d)
           .slice(1)
           .map((i) => {
             return Number(i);
@@ -779,14 +799,14 @@ export default {
     });
 
     vaccineTypeUniqueDoses.forEach((d) => {
-      if (d["Fabricante"] == "CanSino") {
+      if (d["Fabricante"] == "CanSino" || d["Fabricante"] == "Campaña SARS-CoV-2 (Janssen)") {
         this.vaccineType.secondDoses.proportion.push(
           Object.values(d)
             .slice(1)
             .map((i) => Number(i))
             .reduce((total, element) => total + element)
         );
-        this.vaccineType.secondDoses[d["Fabricante"]] = Object.values(d)
+        this.vaccineType.secondDoses[dicVac[d["Fabricante"]]] = Object.values(d)
           .slice(1)
           .map((i) => {
             return Number(i);
