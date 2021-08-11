@@ -386,8 +386,6 @@ export default {
     this.dicComunaNamesAccentWithoutWith["Chepica"] = "Chépica";
     this.deaths.comuna["Chépica"] = this.deaths.comuna["Chepica"];
 
-    console.log(this.deaths.comuna);
-
     // we set comuna names with accents
     this.comunaNames = Object.values(this.dicComunaNamesAccentWithoutWith);
 

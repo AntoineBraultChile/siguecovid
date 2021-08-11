@@ -380,12 +380,20 @@ this.dataCovid.pasoAPaso['Tiltil'] = this.dataCovid.pasoAPaso['Til Til']
         return dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
     this.dataCovid.incidence.lastUpdate.push(allLabels.pop());
-    casesComunas.forEach((comuna) => {
+
+casesComunas.forEach((comuna) => {
       if (this.dataCovid.incidence[comuna["Region"]] === undefined) {
+          let last4Values = Object.values(comuna)
+            .slice(-5, -1)
+            .map((i) => {
+              return Number(i);
+            });
+          let values = last4Values[3] - last4Values[1];
+          let variation = values - (last4Values[2] - last4Values[0]);
         this.dataCovid.incidence[comuna["Region"]] = {
-          names: [],
-          values: [],
-          variations: [],
+          names: [comuna["Comuna"]],
+          values: [Math.round((values / comuna["Poblacion"]) * 100000)],
+          variations: [Math.round((variation / comuna["Poblacion"]) * 100000)],
         };
       } else {
         if (!comuna["Comuna"].includes("Desconocido")) {
