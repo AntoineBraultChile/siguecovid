@@ -10,12 +10,8 @@
               <span style="font-weight:bold; color:black;font-family:Avenir">
                 Sigue
               </span>
-              <span style="color:black;opacity:0.4;font-weight:300;"
-                >Covid
-              </span>
-              <span style="color:black;font-weight:350;font-size:1.5rem;">
-                en Chile</span
-              >
+              <span style="color:black;opacity:0.4;font-weight:300;">Covid </span>
+              <span style="color:black;font-weight:350;font-size:1.5rem;"> en Chile</span>
             </router-link>
           </div>
         </div>
@@ -63,7 +59,7 @@ header {
   align-items: center;
   box-shadow: 1px 1px 1px 1px #e8e8e8;
   background-color: white;
-  z-index: 100;
+  z-index: 1000;
 }
 #nav {
   display: flex;
