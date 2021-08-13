@@ -488,6 +488,15 @@ export default {
             fill: false,
             data: this.vacunaChile["segunda dosis"].slice(indexDate),
           },
+          {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Dosis de refuerzo",
+            borderColor: "#232b2b",
+            backgroundColor: "#232b2b",
+            fill: false,
+            data: this.vacunaChile["Dosis de refuerzo"].slice(indexDate),
+          },
         ],
       };
     },
@@ -501,14 +510,19 @@ export default {
           .slice(1),
         datasets: [
           {
-            label: "primera dosis",
+            label: "Primera dosis",
             backgroundColor: "#82CFFD",
             data: this.vacunaChile["primera dosis por dia"].slice(indexDate),
           },
           {
-            label: "única o segunda dosis",
+            label: "Ùnica o segunda dosis",
             backgroundColor: "#eba434",
             data: this.vacunaChile["segunda dosis por dia"].slice(indexDate),
+          },
+          {
+            label: "Dosis de refuerzo",
+            backgroundColor: "#232b2b",
+            data: this.vacunaChile["Dosis de refuerzo por dia"].slice(indexDate),
           },
         ],
       };
@@ -518,14 +532,19 @@ export default {
         labels: this.vacunaRegions.regionName,
         datasets: [
           {
-            label: "con al menos una dosis",
+            label: "Con al menos una dosis",
             backgroundColor: "#82CFFD",
             data: this.vacunaRegions.firstDoses,
           },
           {
-            label: "completamente",
+            label: "Completamente",
             backgroundColor: "#eba434",
             data: this.vacunaRegions.secondDoses,
+          },
+          {
+            label: "Dosis de refuerzo",
+            backgroundColor: "#232b2b",
+            data: this.vacunaRegions.boostDoses,
           },
         ],
       };
@@ -614,10 +633,13 @@ export default {
 
     // fetching datas vaccination first and second doses in Chile
     let data = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv");
+    console.log(data);
     // let  data = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination.csv')
     let firstDoses = [];
     let secondDoses = [];
     let uniqueDoses = [];
+
+    let boostDoses = [];
 
     data.forEach((d) => {
       !this.vacunaRegions.regionName.includes(d["Region"]) ? this.vacunaRegions.regionName.push(d["Region"]) : "";
@@ -628,6 +650,8 @@ export default {
         secondDoses.push(value);
       } else if (d["Dosis"] == "Unica") {
         uniqueDoses.push(value);
+      } else if (d["Dosis"] == "Refuerzo") {
+        boostDoses.push(value);
       }
       // (d['Dosis']=='Primera' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
     });
@@ -637,13 +661,16 @@ export default {
     // order percentage vaccined by region
     let [labelsSort, firstDosesSort] = order(this.vacunaRegions.regionName, this.vacunaRegions.firstDoses);
     let secondDosesSort = [];
+    let boostDosesSort = [];
     firstDosesSort.forEach((value) => {
       let index = this.vacunaRegions.firstDoses.indexOf(value);
       secondDosesSort.push(this.vacunaRegions.secondDoses[index]);
+      boostDosesSort.push(boostDoses[index]);
     });
     this.vacunaRegions.regionName = labelsSort;
     this.vacunaRegions.firstDoses = firstDosesSort;
     this.vacunaRegions.secondDoses = secondDosesSort;
+    this.vacunaRegions.boostDoses = boostDosesSort;
 
     // time serie vacuna Chile
     this.vacunaChile.labels = Object.keys(data[0])
@@ -654,6 +681,8 @@ export default {
     let firstDosesChile = [];
     let secondDosesChile = [];
     let uniqueDosesChile = [];
+    let boostDosesChile = [];
+
     Object.values(data[0])
       .slice(2)
       .map((i) => Number(i))
@@ -672,8 +701,16 @@ export default {
       .forEach((d) => {
         uniqueDosesChile.push(d);
       });
+    Object.values(data[3])
+      .slice(2)
+      .map((i) => Number(i))
+      .forEach((d) => {
+        boostDosesChile.push(d);
+      });
     this.vacunaChile["primera dosis"] = sumArray(firstDosesChile, uniqueDosesChile).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
     this.vacunaChile["segunda dosis"] = sumArray(secondDosesChile, uniqueDosesChile).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+    this.vacunaChile["Dosis de refuerzo"] = boostDosesChile.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+
     this.vacunaChile["total primera dosis"] = sumArray(firstDosesChile, uniqueDosesChile)
       .slice(1)
       .slice(-2);
@@ -682,6 +719,7 @@ export default {
       .slice(-2);
     this.vacunaChile["primera dosis por dia"] = derivate(firstDosesChile);
     this.vacunaChile["segunda dosis por dia"] = derivate(sumArray(secondDosesChile, uniqueDosesChile));
+    this.vacunaChile["Dosis de refuerzo por dia"] = derivate(boostDosesChile);
 
     // feching data vaccination by age in chile
     const [firstDosesByAge, secondDosesByAge, uniqueDosesByAge] = await Promise.all([
