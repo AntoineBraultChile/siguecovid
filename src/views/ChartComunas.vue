@@ -11,17 +11,27 @@
           <title-graphic>Incidencia en la comuna de {{ currentComuna }}</title-graphic>
           <span style="font-size:1rem">Incidencia: número de casos en 7 días por cada 100.000 habitantes</span>
           <br />
-          <div class="legend">
-            <div class="rectangle red"></div>
-            <span>Paso 1</span>
-            <div class="rectangle orange"></div>
-            <span>Paso 2</span>
-            <div class="rectangle blue"></div>
-            <span>Paso 3</span>
-            <div class="rectangle green"></div>
-            <span>Paso 4</span>
-          </div>
+
           <update :labels="cases.labels"> </update>
+
+          <div class="legend">
+            <span class="label">
+              <div class="rectangle red"></div>
+              <span>Paso 1</span>
+            </span>
+            <span class="label">
+              <div class="rectangle orange"></div>
+              <span>Paso 2</span>
+            </span>
+            <span class="label">
+              <div class="rectangle blue"></div>
+              <span>Paso 3</span>
+            </span>
+            <span class="label">
+              <div class="rectangle green"></div>
+              <span>Paso 4</span>
+            </span>
+          </div>
           <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
         </div>
 
@@ -29,14 +39,22 @@
           <title-graphic>Positividad semanal de los test PCR en la comuna de {{ currentComuna }}</title-graphic>
           <update :labels="positivity.labels"> </update>
           <div class="legend">
-            <div class="rectangle red"></div>
-            <span>Paso 1</span>
-            <div class="rectangle orange"></div>
-            <span>Paso 2</span>
-            <div class="rectangle blue"></div>
-            <span>Paso 3</span>
-            <div class="rectangle green"></div>
-            <span>Paso 4</span>
+            <span class="label">
+              <div class="rectangle red"></div>
+              <span>Paso 1</span>
+            </span>
+            <span class="label">
+              <div class="rectangle orange"></div>
+              <span>Paso 2</span>
+            </span>
+            <span class="label">
+              <div class="rectangle blue"></div>
+              <span>Paso 3</span>
+            </span>
+            <span class="label">
+              <div class="rectangle green"></div>
+              <span>Paso 4</span>
+            </span>
           </div>
           <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)" />
         </div>
@@ -594,6 +612,12 @@ export default {
   align-items: center;
   font-size: 0.9rem;
   color: gray;
+}
+
+.label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .rectangle {
   height: 15px;

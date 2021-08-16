@@ -442,29 +442,7 @@ export default {
       this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
     });
 
-    // ingreso UCI en chile
-    const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');
 
-    this.dataCovid.labelsIngresoUCI = Object.keys(ingresoUCI[0]).slice(1).map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
-    this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Number(i))
-
-
-  // //  Covid variant
-  // const response = await fetch('https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json')
-  // const variant = await response.json()
-  // const variantChile = await variant.countries['Chile']
-  // this.dataCovid.labelsVariant = variantChile.week.map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
-  // const dicVariant = {"20I (Alpha, V1)":'Alpha', "20H (Beta, V2)":'Beta',"20J (Gamma, V3)": 'Gamma', "21A (Delta)":'Delta',  "21C (Epsilon)":'Epsilon',  "21G (Lambda)":'Lambda', "21F (Iota)":'Iota'}
-  // const nameVariant = Object.keys(variantChile).slice(2)
-  // let othersVariant = []
-  // nameVariant.forEach(name =>{
-  //   if(dicVariant[name] == undefined){
-  //       othersVariant = sumArray(othersVariant, variantChile[name])
-  //   }else{
-  //   this.dataCovid.ChileVariant[dicVariant[name]] = variantChile[name]
-  //   }
-  // })
-  // this.dataCovid.ChileVariant['Otras'] = othersVariant
 
     // fetching vaccine by region
     const vaccine = await d3.csv(
@@ -477,6 +455,7 @@ export default {
     let firstDoses = [];
     let secondDoses = [];
     let uniqueDoses = [];
+    let boostDoses = [];
 
     vaccine.forEach((region) => {
       if (region["Region"] == "Total") {
@@ -492,6 +471,10 @@ export default {
           uniqueDoses = Object.values(region)
             .slice(2)
             .map((i) => Number(i));
+        } else if (region["Dosis"] == "Refuerzo"){
+          boostDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
         }
       }
     });
@@ -505,6 +488,15 @@ export default {
       secondDoses,
       uniqueDoses
     ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+
+    this.dataCovid.ChileVaccine.boostDoses = boostDoses.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+
+
+    // ingreso UCI en chile
+    const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');
+
+    this.dataCovid.labelsIngresoUCI = Object.keys(ingresoUCI[0]).slice(1).map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
+    this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Number(i))
 
     // plan paso a paso
     let paso = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv");

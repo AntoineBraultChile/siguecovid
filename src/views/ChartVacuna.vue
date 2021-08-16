@@ -790,7 +790,6 @@ export default {
     let vaccineTypeSecondDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv");
     let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
 
-    console.log(vaccineTypeFirstDoses);
     const dicVac = {
       "Campaña SARS-CoV-2 (AstraZeneca)": "AstraZeneca",
       CanSino: "CanSino",

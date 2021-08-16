@@ -54,14 +54,22 @@
       <br />
       <update :labels="dataCovid.incidence.lastUpdate"> </update>
       <div class="legend" v-if="!(region == 'Chile')">
-        <div class="rectangle red"></div>
-        <span>Paso 1</span>
-        <div class="rectangle orange"></div>
-        <span>Paso 2</span>
-        <div class="rectangle blue"></div>
-        <span>Paso 3</span>
-        <div class="rectangle green"></div>
-        <span>Paso 4</span>
+        <span class="label">
+          <div class="rectangle red"></div>
+          <span>Paso 1</span>
+        </span>
+        <span class="label">
+          <div class="rectangle orange"></div>
+          <span>Paso 2</span>
+        </span>
+        <span class="label">
+          <div class="rectangle blue"></div>
+          <span>Paso 3</span>
+        </span>
+        <span class="label">
+          <div class="rectangle green"></div>
+          <span>Paso 4</span>
+        </span>
       </div>
       <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region)" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
@@ -222,6 +230,16 @@ export default {
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
             data: this.dataCovid[region + "Vaccine"].secondDoses.slice(indexDate),
+          },
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Dosis de refuerzo",
+            borderColor: this.backgroundColor["Deaths"],
+            backgroundColor: this.backgroundColor["Deaths"],
+            fill: false,
+            data: this.dataCovid[region + "Vaccine"].boostDoses.slice(indexDate),
           },
         ],
       };
@@ -613,6 +631,12 @@ export default {
   align-items: center;
   font-size: 0.9rem;
   color: gray;
+}
+
+.label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .rectangle {
   height: 15px;
