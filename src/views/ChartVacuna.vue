@@ -412,7 +412,8 @@ export default {
     },
     renderChartDoughnut() {
       return {
-        labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
+        // labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
+        labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
         datasets: [
           {
             label: "",
@@ -633,7 +634,7 @@ export default {
 
     // fetching datas vaccination first and second doses in Chile
     let data = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto76/vacunacion.csv");
-    console.log(data);
+
     // let  data = await d3.csv('https://raw.githubusercontent.com/juancri/covid19-vaccination/master/output/chile-vaccination.csv')
     let firstDoses = [];
     let secondDoses = [];
@@ -789,6 +790,7 @@ export default {
     let vaccineTypeSecondDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv");
     let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
 
+    console.log(vaccineTypeFirstDoses);
     const dicVac = {
       "Campaña SARS-CoV-2 (AstraZeneca)": "AstraZeneca",
       CanSino: "CanSino",
