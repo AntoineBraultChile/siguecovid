@@ -456,6 +456,9 @@ export default {
     let pasoObject = await paso.json();
     this.pasoAPaso = pasoObject;
     this.pasoAPaso["Tiltil"] = this.pasoAPaso["Til Til"];
+    this.pasoAPaso["Calera"] = this.pasoAPaso["La Calera"];
+    this.pasoAPaso["Llaillay"] = this.pasoAPaso["Llay-Llay"];
+    this.pasoAPaso["Paiguano"] = this.pasoAPaso["Paihuano"];
 
     // // Plan Paso a Paso en las comunas de Chile
     // let paso = await d3.csv(

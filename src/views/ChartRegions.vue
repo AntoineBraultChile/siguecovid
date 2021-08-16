@@ -368,7 +368,9 @@ export default {
         Object.values(d).slice(-1);
     });
 this.dataCovid.pasoAPaso['Tiltil'] = this.dataCovid.pasoAPaso['Til Til']
-
+this.dataCovid.pasoAPaso['Calera'] = this.dataCovid.pasoAPaso['La Calera']
+this.dataCovid.pasoAPaso['Llaillay'] = this.dataCovid.pasoAPaso['Llay-Llay']
+this.dataCovid.pasoAPaso['Paiguano'] = this.dataCovid.pasoAPaso['Paihuano']
 
     // fetching data cases by comune in Chile
     const casesComunas = await d3.csv(
