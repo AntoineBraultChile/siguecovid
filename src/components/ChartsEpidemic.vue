@@ -41,11 +41,37 @@
       <update :labels="dataCovid.labelsDeaths"> </update>
       <bar-chart :chartData="plotBarChartWithMean(region, 'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
     </div>
+
     <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
       <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
       <update :labels="dataCovid.labelsVaccine"> </update>
       <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Vaccine')"></line-chart>
     </div>
+
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia semanal con respecto al esquema de vacunación en {{ region }}</title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo.</span>
+      <br />
+      <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update>
+      <line-chart :chartData="plotVaccinalSchemes(dataCovid.incidenceCompleteVaccinalScheme, dataCovid.incidenceUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
+    </div>
+
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia semanal de ingreso a UCI con respecto al esquema de vacunación en {{ region }}</title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica que van a ingresar en unidad de cuidados intensivos por cada 100.000 personas en cada grupo.</span>
+      <br />
+      <update :labels="Object.keys(dataCovid.uciCompleteVaccinalScheme)"> </update>
+      <line-chart :chartData="plotVaccinalSchemes(dataCovid.uciCompleteVaccinalScheme, dataCovid.uciUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
+    </div>
+
+    <!-- <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia de los fallecidos con respecto al esquema de vacunación en {{ region }}</title-graphic>
+      <update :labels="dataCovid.labelsVaccine"> </update>
+      <line-chart
+        :chartData="plotVaccinalSchemes(this.dataCovid.fallecidosCompleteVaccinalScheme, this.dataCovid.fallecidosUncompleteVaccinalScheme)"
+        :options="chartOptions('vaccinalSchemes')"
+      ></line-chart>
+    </div> -->
 
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
       <title-graphic v-if="region == 'Chile'"> Incidencia en las regiones de Chile</title-graphic>
@@ -154,6 +180,37 @@ export default {
     };
   },
   methods: {
+    plotVaccinalSchemes(vaccinated, nonVaccinated) {
+      let labels = Object.keys(vaccinated);
+      let indexDate = labels.indexOf(this.fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+      return {
+        labels: labels.slice(indexDate),
+        datasets: [
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Con esquema completo",
+            borderColor: this.colorsPasoAPaso[3],
+            backgroundColor: this.colorsPasoAPaso[3],
+            fill: false,
+            data: Object.values(vaccinated).slice(indexDate),
+          },
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Sin esquema completo",
+            borderColor: this.colorsPasoAPaso[1],
+            backgroundColor: this.colorsPasoAPaso[1],
+            fill: false,
+            data: Object.values(nonVaccinated).slice(indexDate),
+          },
+        ],
+      };
+    },
+
     plotVariantions(labels, data) {
       const labelsDerivative = labels.slice(1);
       let indexDate = labelsDerivative.indexOf(this.fromDate);
@@ -433,7 +490,7 @@ export default {
           },
         ];
       }
-      if (type == "Variant") {
+      if (type == "vaccinalSchemes") {
         options["tooltips"] = {
           mode: "index",
           intersect: false,
@@ -456,9 +513,10 @@ export default {
             },
           },
         ];
+        options.legend = { display: true };
         options.scales["yAxes"] = [
           {
-            stacked: true,
+            stacked: false,
             title: {
               display: true,
               text: "Value",
