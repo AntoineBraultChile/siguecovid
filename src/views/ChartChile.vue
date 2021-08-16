@@ -157,8 +157,10 @@ export default {
         Maule: 1143012,
       },
       dataCovid: {
-        incidenceCompleteVaccinalScheme:{},
-        incidenceuncompleteVaccinalScheme:{},
+        incidenceCompleteVaccinalScheme:{'09-01-2021':0},
+        incidenceUncompleteVaccinalScheme:{'09-01-2021':0},
+        uciCompleteVaccinalScheme:{'09-01-2021':0},
+        uciUncompleteVaccinalScheme:{'09-01-2021':0},
         // labelsVariant:[],
         labelsIngresoUCI:[],
         labelsUci: [],
