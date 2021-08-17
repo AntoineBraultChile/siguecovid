@@ -48,31 +48,6 @@
       <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Vaccine')"></line-chart>
     </div>
 
-    <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia semanal con respecto al esquema de vacunación en {{ region }}</title-graphic>
-      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo.</span>
-      <br />
-      <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update>
-      <line-chart :chartData="plotVaccinalSchemes(dataCovid.incidenceCompleteVaccinalScheme, dataCovid.incidenceUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
-    </div>
-
-    <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia semanal de ingreso a UCI con respecto al esquema de vacunación en {{ region }}</title-graphic>
-      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica que van a ingresar en unidad de cuidados intensivos por cada 100.000 personas en cada grupo.</span>
-      <br />
-      <update :labels="Object.keys(dataCovid.uciCompleteVaccinalScheme)"> </update>
-      <line-chart :chartData="plotVaccinalSchemes(dataCovid.uciCompleteVaccinalScheme, dataCovid.uciUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
-    </div>
-
-    <!-- <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia de los fallecidos con respecto al esquema de vacunación en {{ region }}</title-graphic>
-      <update :labels="dataCovid.labelsVaccine"> </update>
-      <line-chart
-        :chartData="plotVaccinalSchemes(this.dataCovid.fallecidosCompleteVaccinalScheme, this.dataCovid.fallecidosUncompleteVaccinalScheme)"
-        :options="chartOptions('vaccinalSchemes')"
-      ></line-chart>
-    </div> -->
-
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
       <title-graphic v-if="region == 'Chile'"> Incidencia en las regiones de Chile</title-graphic>
       <title-graphic v-else> Incidencia en las comunas de la región {{ region }} </title-graphic>
@@ -125,6 +100,69 @@
       <title-graphic> Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
       <bar-chart :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>
+    </div>
+    <!-- --------------------------------------------------------------------------------------------------------------------------------------- -->
+    <box-container>
+      <h2 id="description" style="font-size:1.5rem;">
+        Impacto de la vacunación en la epidemia de Covid-19 en Chile
+      </h2>
+      <p id="description">
+        Una persona tiene un esquema completo de vacunación 14 días después de una segunda dosis o 28 días después de una dosis única.
+      </p>
+    </box-container>
+
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia semanal con respecto al esquema de vacunación en {{ region }}</title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo.</span>
+      <br />
+      <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update>
+      <line-chart :chartData="plotVaccinalSchemes(dataCovid.incidenceCompleteVaccinalScheme, dataCovid.incidenceUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
+    </div>
+
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia semanal de ingreso a UCI con respecto al esquema de vacunación en {{ region }}</title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica que van a ingresar en unidad de cuidados intensivos por cada 100.000 personas en cada grupo.</span>
+      <br />
+      <update :labels="Object.keys(dataCovid.uciCompleteVaccinalScheme)"> </update>
+      <line-chart :chartData="plotVaccinalSchemes(dataCovid.uciCompleteVaccinalScheme, dataCovid.uciUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
+    </div>
+
+    <!-- <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia de los fallecidos con respecto al esquema de vacunación en {{ region }}</title-graphic>
+      <update :labels="dataCovid.labelsVaccine"> </update>
+      <line-chart
+        :chartData="plotVaccinalSchemes(this.dataCovid.fallecidosCompleteVaccinalScheme, this.dataCovid.fallecidosUncompleteVaccinalScheme)"
+        :options="chartOptions('vaccinalSchemes')"
+      ></line-chart>
+    </div> -->
+
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia por estado de vacunación y grupo de edad en Chile</title-graphic>
+      <span style="font-size:1rem">
+        Número de casos detectados entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000 personas en cada
+        grupo.</span
+      >
+      <br />
+      <bar-chart :chartData="plotVaccinalSchemeByAge('cases')" :options="chartOptions('IncidenceByVaccinalScheme')"></bar-chart>
+    </div>
+
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia en UCI por estado de vacunación y grupo de edad en Chile</title-graphic>
+      <span style="font-size:1rem">
+        Número de personas en UCI por Covid-19 entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000
+        personas en cada grupo.</span
+      >
+      <br />
+      <bar-chart :chartData="plotVaccinalSchemeByAge('uci')" :options="chartOptions('IncidenceByVaccinalScheme')"></bar-chart>
+    </div>
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Incidencia de casos fallecidos por estado de vacunación y grupo de edad en Chile</title-graphic>
+      <span style="font-size:1rem">
+        Número de personas fallecidos por Covid-19 entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000
+        personas en cada grupo.</span
+      >
+      <br />
+      <bar-chart :chartData="plotVaccinalSchemeByAge('deaths')" :options="chartOptions('IncidenceByVaccinalScheme')"></bar-chart>
     </div>
   </div>
 </template>
@@ -180,6 +218,36 @@ export default {
     };
   },
   methods: {
+    plotVaccinalSchemeByAge(type) {
+      const labels = Object.keys(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["con esquema completo"]);
+      const vaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["con esquema completo"]);
+      const nonVaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["sin esquema completo"]);
+      return {
+        labels: labels,
+        datasets: [
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Con esquema completo",
+            borderColor: this.colorsPasoAPaso[3],
+            backgroundColor: this.colorsPasoAPaso[3],
+            fill: false,
+            data: vaccinated,
+          },
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Sin esquema completo",
+            borderColor: this.colorsPasoAPaso[1],
+            backgroundColor: this.colorsPasoAPaso[1],
+            fill: false,
+            data: nonVaccinated,
+          },
+        ],
+      };
+    },
     plotVaccinalSchemes(vaccinated, nonVaccinated) {
       let labels = Object.keys(vaccinated);
       let indexDate = labels.indexOf(this.fromDate);
@@ -490,6 +558,17 @@ export default {
           },
         ];
       }
+      // if (type == "IncidenceByVaccinalScheme") {
+      //   options.responsive = true;
+      //   options.maintainAspectRatio = false;
+      //   options.scales["xAxes"] = [
+      //     {
+      //       ticks: {
+      //         beginAtZero: true,
+      //       },
+      //     },
+      //   ];
+      // }
       if (type == "vaccinalSchemes") {
         options["tooltips"] = {
           mode: "index",
@@ -651,7 +730,7 @@ export default {
           },
         };
       }
-      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant") {
+      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant" || type == "IncidenceByVaccinalScheme") {
         options.legend = { display: true };
       }
       return options;

@@ -67,6 +67,9 @@
 
 
 <style >
+h2{
+  font-weight: normal;
+}
 .box-container {
   display: flex;
   align-items: center;
@@ -157,6 +160,7 @@ export default {
         Maule: 1143012,
       },
       dataCovid: {
+        incidenceByVaccinalSchemeByAge:{'week':[], 'cases':{'con esquema completo':{},'sin esquema completo':{}},'uci':{'con esquema completo':{},'sin esquema completo':{}},'deaths':{'con esquema completo':{},'sin esquema completo':{}}},
         incidenceCompleteVaccinalScheme:{'09-01-2021':0},
         incidenceUncompleteVaccinalScheme:{'09-01-2021':0},
         uciCompleteVaccinalScheme:{'09-01-2021':0},
@@ -558,10 +562,24 @@ export default {
 
 
   // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
-  // let incidenceByAgeByVaccinalScheme = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
-  // console.log(incidenceByAgeByVaccinalScheme)
+  let incidenceByAgeByVaccinalScheme = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme[0]['semana_epidemiologica'])]
+  let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
 
+  let incidenceCasesByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{} }
+  let incidenceUciByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{} }
+  let incidenceDeathsByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{} }
 
+  incidenceByAgeByVaccinalScheme.forEach(d => {
+    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_casos'])
+    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_uci'])
+    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_def'])
+  })
+
+  this.dataCovid.incidenceByVaccinalSchemeByAge["cases"] = incidenceCasesByVaccinalScheme
+  this.dataCovid.incidenceByVaccinalSchemeByAge["uci"] = incidenceUciByVaccinalScheme
+  this.dataCovid.incidenceByVaccinalSchemeByAge["deaths"] = incidenceDeathsByVaccinalScheme
+  this.dataCovid.incidenceByVaccinalSchemeByAge['week'] = [sundaySemana, saturdaySemana]
 
   // -------------------------------------------------------------------------------------------
 
