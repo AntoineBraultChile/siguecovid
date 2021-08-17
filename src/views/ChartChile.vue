@@ -555,6 +555,16 @@ export default {
 
 
   // ---------------------------------------------------------------------------------------
+
+
+  // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
+  // let incidenceByAgeByVaccinalScheme = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  // console.log(incidenceByAgeByVaccinalScheme)
+
+
+
+  // -------------------------------------------------------------------------------------------
+
     // ingreso UCI en chile
     const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');
 

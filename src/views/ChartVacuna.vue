@@ -20,6 +20,8 @@
           :positivity="vacunaChile['segunda dosis']"
           :uci="vacunaChile['total primera dosis']"
           :deaths="vacunaChile['total segunda dosis']"
+          :propRefuerzo="vacunaChile['Dosis de refuerzo']"
+          :refuerzo="vacunaChile['total dosis de refuerzo']"
           :colors="colorsIndicator"
           type="vaccin"
         />
@@ -718,6 +720,9 @@ export default {
     this.vacunaChile["total segunda dosis"] = sumArray(secondDosesChile, uniqueDosesChile)
       .slice(1)
       .slice(-2);
+
+    this.vacunaChile["total dosis de refuerzo"] = boostDosesChile.slice(1).slice(-2);
+
     this.vacunaChile["primera dosis por dia"] = derivate(firstDosesChile);
     this.vacunaChile["segunda dosis por dia"] = derivate(sumArray(secondDosesChile, uniqueDosesChile));
     this.vacunaChile["Dosis de refuerzo por dia"] = derivate(boostDosesChile);
