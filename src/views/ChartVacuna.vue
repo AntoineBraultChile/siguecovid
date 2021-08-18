@@ -59,6 +59,15 @@
 
         <div class="wrapper">
           <title-graphic>
+            Personas con dosis de refuerzo por edad en Chile
+          </title-graphic>
+          <!-- <span style='font-size:1rem'> Estar completamente vacunado significa tener dos dosis de Sinovac, Astra-Zeneca, Pfizer o una dosis de CanSino.</span> <br> -->
+          <update :labels="vacunaChile.labels"> </update>
+          <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('boostDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic>
             Personas parcialmente vacunadas cada día por tipo de vacuna en Chile
           </title-graphic>
           <update :labels="vaccineType.labels"> </update>
@@ -282,6 +291,15 @@ export default {
           300: [],
         },
         uniqueDosesByAgeGroup: {
+          18: [],
+          30: [],
+          40: [],
+          50: [],
+          60: [],
+          70: [],
+          300: [],
+        },
+        boostDosesByAgeGroup: {
           18: [],
           30: [],
           40: [],
@@ -770,6 +788,9 @@ export default {
     getVaccinByAge(firstDosesByAge, "firstDosesByAgeGroup");
     getVaccinByAge(secondDosesByAge, "secondDosesByAgeGroup");
     getVaccinByAge(uniqueDosesByAge, "uniqueDosesByAgeGroup");
+
+    const boostDosesByAge = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_Refuerzo.csv");
+    getVaccinByAge(boostDosesByAge, "boostDosesByAgeGroup");
 
     // add unique doses and second doses in second doses
     Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((age) => {

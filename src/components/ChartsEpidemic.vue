@@ -156,9 +156,9 @@
       <bar-chart :chartData="plotVaccinalSchemeByAge('uci')" :options="chartOptions('IncidenceByVaccinalScheme')"></bar-chart>
     </div>
     <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia de casos fallecidos por estado de vacunación y grupo de edad en Chile</title-graphic>
+      <title-graphic> Incidencia de fallecidos por estado de vacunación y grupo de edad en Chile</title-graphic>
       <span style="font-size:1rem">
-        Número de personas fallecidos por Covid-19 entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000
+        Número de personas fallecidas por Covid-19 entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000
         personas en cada grupo.</span
       >
       <br />
