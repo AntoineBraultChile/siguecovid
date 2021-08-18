@@ -6,7 +6,7 @@
           titleName='La pandemia de Covid-19 en Chile'
           :update='false'
         />
-        <p id='description'>Sigue Covid es un visor que facilita el seguimiento y la visualización de la evolución de la pandemia de Covid-19 en Chile
+        <p class='description'>Sigue Covid es un visor que facilita el seguimiento y la visualización de la evolución de la pandemia de Covid-19 en Chile
           basado en <a
             href="https://www.minciencia.gob.cl/covid19/"
             target='_blank'
@@ -81,7 +81,8 @@ h2{
   align-items: center;
   justify-content: center;
 }
-#description {
+.description {
+
   font-size: 20px;
   text-align: justify;
   line-height: 150%;
@@ -89,7 +90,7 @@ h2{
 }
 
 @media all and (max-width: 1100px) {
-  #description {
+  .description {
     font-size: 16px;
   }
 }

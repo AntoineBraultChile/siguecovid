@@ -106,8 +106,11 @@
       <h2 id="description" style="font-size:1.5rem;">
         Impacto de la vacunación en la epidemia de Covid-19 en Chile
       </h2>
-      <p id="description">
-        Una persona tiene un esquema completo de vacunación 14 días después de una segunda dosis o 28 días después de una dosis única.
+      <p class="two-columns">
+        Una persona tiene un esquema completo de vacunación 14 días después de una segunda dosis o 28 días después de una dosis única. Los gráficos deben interpretarse teniendo en cuenta que puede
+        haber sesgos significativos. Por ejemplo, como la cobertura de las vacunas no es la misma en todos los grupos de edad y el riesgo aumenta fuertamente con la edad, la eficacia de las vacunas
+        contra el ingreso en UCI y la muerte puede parecer menor que la eficacia real (ver
+        <a href="https://es.wikipedia.org/wiki/Paradoja_de_Simpson"> paradoja de Simpson</a>).
       </p>
     </box-container>
 
@@ -793,6 +796,15 @@ export default {
   background-color: #93db70;
 }
 
+.two-columns {
+  display: inline-block;
+  column-count: 2;
+  font-size: 1.1rem;
+
+  text-align: justify;
+  line-height: 150%;
+  padding: 0px 10px 0px 10px;
+}
 @media all and (max-width: 1100px) {
   .graph {
     width: 100%;
