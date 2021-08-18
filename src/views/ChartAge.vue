@@ -265,7 +265,7 @@ export default {
               scaleID: "x-axis-0",
               value: "01-02-2021",
               borderColor: "#f87979",
-              borderWidth: 5,
+              borderWidth: 3,
               label: {
                 content: "Inicio vacunación",
                 color: "#fff",
@@ -273,9 +273,26 @@ export default {
                 enabled: true,
                 position: "center",
                 xAdjust: 60,
-                yAdjust: -60,
+                yAdjust: -25,
               },
-            },
+            },{
+              drawTime: "afterDraw",
+              type: "line",
+              mode: "vertical",
+              scaleID: "x-axis-0",
+              value: "11-08-2021",
+              borderColor: "#f87979",
+              borderWidth: 3,
+              label: {
+                content: "Inicio refuerzo",
+                color: "#fff",
+                backgroundColor: "#f87979",
+                enabled: true,
+                position: "end",
+                xAdjust: -50,
+                yAdjust: -30,
+              },
+            }
           ],
         };
       }
