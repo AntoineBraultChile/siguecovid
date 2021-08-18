@@ -8,8 +8,8 @@
       <box-container class="explication">
         <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
           Actualmente hay cinco vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que CanSino y Janssen sólo requieren una. Se considerará
-          que una persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y totalmente vacunada si ha recibido dos dosis con Sinovac, Pfizer o AstraZeneca, o
-          una dosis de CanSino o Janssen.
+          que una persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y completamente vacunada si ha recibido dos dosis con Sinovac, Pfizer o
+          AstraZeneca, o una dosis de CanSino o Janssen.
         </p>
       </box-container>
 
@@ -37,6 +37,12 @@
           <title-graphic> Número de personas vacunadas cada dia en Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
           <bar-chart :chartData="renderChartVacunaPorDia()" :options="optionsPorDia"> </bar-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic> Cobertura de vacunación por edad en Chile</title-graphic>
+          <update :labels="vacunaChile.labels"> </update>
+          <bar-chart :chartData="barChartVacunaPorEdad()" :options="options('vertical')"> </bar-chart>
         </div>
 
         <div class="wrapper">
@@ -87,7 +93,7 @@
             Proporción de cada tipo de vacuna utilizada en Chile
           </title-graphic>
           <span style="font-size:1rem">
-            Sólo se tienen en cuenta las personas totalmente vacunadas.
+            Sólo se tienen en cuenta las personas completamente (dosis dosis o dosis única) vacunadas.
           </span>
           <br />
           <update :labels="vaccineType.labels"> </update>
@@ -430,6 +436,40 @@ export default {
       this.fromMonth = payload;
       this.fromDate = dayjs(payload, "MMMM YYYY").format("01-MM-YYYY");
     },
+    barChartVacunaPorEdad() {
+      let atLeastOneDose = [];
+      let completeVaccination = [];
+      let boost = [];
+      Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((age) => {
+        atLeastOneDose.push(this.vacunaChile.firstDosesByAgeGroup[age].slice(-1)[0]);
+        completeVaccination.push(this.vacunaChile.secondDosesByAgeGroup[age].slice(-1)[0]);
+        boost.push(this.vacunaChile.boostDosesByAgeGroup[age].slice(-1)[0]);
+      });
+
+      return {
+        labels: ["12-17 años", "18-29 años", "30-39 años", "40-49 años", "50-59 años", "60-69 años", ">= 70 años"],
+        datasets: [
+          {
+            label: "Al menos una dosis",
+            data: atLeastOneDose,
+            backgroundColor: "#82CFFD",
+            hoverOffset: 4,
+          },
+          {
+            label: "Completamente vacunado",
+            data: completeVaccination,
+            backgroundColor: "#eba434",
+            hoverOffset: 4,
+          },
+          {
+            label: "Dosis de refuerzo",
+            data: boost,
+            backgroundColor: "#232b2b",
+            hoverOffset: 4,
+          },
+        ],
+      };
+    },
     renderChartDoughnut() {
       return {
         // labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
@@ -503,7 +543,7 @@ export default {
           {
             pointRadius: this.pointRadius,
             pointHoverRadius: this.pointHoverRadius,
-            label: "Completamente",
+            label: "Completamente vacunado",
             borderColor: "#eba434",
             backgroundColor: "#eba434",
             fill: false,
@@ -789,14 +829,15 @@ export default {
     getVaccinByAge(secondDosesByAge, "secondDosesByAgeGroup");
     getVaccinByAge(uniqueDosesByAge, "uniqueDosesByAgeGroup");
 
-    const boostDosesByAge = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_Refuerzo.csv");
-    getVaccinByAge(boostDosesByAge, "boostDosesByAgeGroup");
-
     // add unique doses and second doses in second doses
     Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((age) => {
       this.vacunaChile["firstDosesByAgeGroup"][age] = sumArray(this.vacunaChile["uniqueDosesByAgeGroup"][age], this.vacunaChile["firstDosesByAgeGroup"][age]).map((i) => Math.round(i * 10) / 10);
       this.vacunaChile["secondDosesByAgeGroup"][age] = sumArray(this.vacunaChile["uniqueDosesByAgeGroup"][age], this.vacunaChile["secondDosesByAgeGroup"][age]).map((i) => Math.round(i * 10) / 10);
     });
+
+    // boost
+    const boostDosesByAge = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_Refuerzo.csv");
+    getVaccinByAge(boostDosesByAge, "boostDosesByAgeGroup");
 
     // function to generate list of months
     let generateListOfMonths = async (labels) => {
