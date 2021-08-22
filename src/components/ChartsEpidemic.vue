@@ -108,9 +108,12 @@
       </h2>
       <p class="two-columns">
         Una persona tiene un esquema completo de vacunación 14 días después de una segunda dosis o 28 días después de una dosis única. Los gráficos deben interpretarse teniendo en cuenta que puede
-        haber sesgos significativos. Por ejemplo, como la cobertura de las vacunas no es la misma en todos los grupos de edad y el riesgo aumenta fuertamente con la edad, la eficacia de las vacunas
+        haber sesgos significativos. De hecho, la cobertura de vacunación y las tasas de infección no son uniformes en toda la población. La situación económica, el lugar de residencia y los factores
+        de riesgo de Covid-19 son variables importantes para medir adecuadamente la eficacia de la vacunación. Por el momento, sólo la estratificación por edad está disponible en los datos abiertos.
+
+        <!-- Por ejemplo, como la cobertura de las vacunas no es la misma en todos los grupos de edad y el riesgo aumenta fuertamente con la edad, la eficacia de las vacunas
         contra el ingreso en UCI y la muerte puede parecer menor que la eficacia real (ver
-        <a href="https://es.wikipedia.org/wiki/Paradoja_de_Simpson"> paradoja de Simpson</a>).
+        <a href="https://es.wikipedia.org/wiki/Paradoja_de_Simpson"> paradoja de Simpson</a>). -->
       </p>
     </box-container>
 
@@ -809,6 +812,10 @@ export default {
   .graph {
     width: 100%;
     margin: 5px 0px 5px 0px;
+  }
+
+  .two-columns {
+    column-count: 1;
   }
 }</style
 >641
