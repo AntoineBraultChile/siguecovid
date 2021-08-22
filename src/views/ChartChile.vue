@@ -564,7 +564,7 @@ export default {
 
   // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
   let incidenceByAgeByVaccinalScheme = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
-  let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme[0]['semana_epidemiologica'])]
+  let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])]
   let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
 
   let incidenceCasesByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{} }
@@ -572,9 +572,11 @@ export default {
   let incidenceDeathsByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{} }
 
   incidenceByAgeByVaccinalScheme.forEach(d => {
+    if(d['grupo_edad']!='Total'){
     incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_casos'])
     incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_uci'])
     incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_def'])
+    }
   })
 
   this.dataCovid.incidenceByVaccinalSchemeByAge["cases"] = incidenceCasesByVaccinalScheme

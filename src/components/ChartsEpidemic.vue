@@ -102,7 +102,7 @@
       <bar-chart :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>
     </div>
     <!-- --------------------------------------------------------------------------------------------------------------------------------------- -->
-    <box-container>
+    <box-container v-if="region == 'Chile'">
       <h2 id="description" style="font-size:1.5rem;">
         Impacto de la vacunación en la epidemia de Covid-19 en Chile
       </h2>
@@ -114,21 +114,21 @@
       </p>
     </box-container>
 
-    <div class="graph" v-if="region == 'Chile'">
+    <!-- <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia semanal con respecto al esquema de vacunación en {{ region }}</title-graphic>
       <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo.</span>
       <br />
       <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update>
       <line-chart :chartData="plotVaccinalSchemes(dataCovid.incidenceCompleteVaccinalScheme, dataCovid.incidenceUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
-    </div>
+    </div> -->
 
-    <div class="graph" v-if="region == 'Chile'">
+    <!-- <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia semanal de ingreso a UCI con respecto al esquema de vacunación en {{ region }}</title-graphic>
       <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica que van a ingresar en unidad de cuidados intensivos por cada 100.000 personas en cada grupo.</span>
       <br />
       <update :labels="Object.keys(dataCovid.uciCompleteVaccinalScheme)"> </update>
       <line-chart :chartData="plotVaccinalSchemes(dataCovid.uciCompleteVaccinalScheme, dataCovid.uciUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
-    </div>
+    </div> -->
 
     <!-- <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia de los fallecidos con respecto al esquema de vacunación en {{ region }}</title-graphic>
