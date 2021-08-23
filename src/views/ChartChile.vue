@@ -392,25 +392,27 @@ export default {
       );
       data[0].forEach((d) => {
         this.dataCovid.incidence.Chile.names.push(d["Region"]);
-        let incidence = Object.values(d)
-          .slice(-8)
+        let casesLast7days = Object.values(d)
+          .slice(-7)
           .map((i) => Number(i));
-        incidence = Math.round(
-          ((incidence.slice(-1)[0] - incidence[0]) /
-            this.populationChile[d["Region"]]) *
-            100000
-        );
-        let incidenceOneDayBefore = Object.values(d)
-          .slice(-15, -7)
+          let incidence = Math.round(casesLast7days.reduce((acc,val)=> acc+val)/((this.populationChile[d["Region"]]))*100000)
+        // incidence = Math.round(
+        //   ((incidence.slice(-1)[0] - incidence[0]) /
+        //     this.populationChile[d["Region"]]) *
+        //     100000
+        // );
+        
+
+
+        let casesLastWeeBefore = Object.values(d)
+          .slice(-14, -7)
           .map((i) => Number(i));
-        incidenceOneDayBefore = Math.round(
-          ((incidenceOneDayBefore.slice(-1)[0] - incidenceOneDayBefore[0]) /
-            this.populationChile[d["Region"]]) *
-            100000
-        );
+
+        let incidenceWeekDayBefore = Math.round(casesLastWeeBefore.reduce((acc,val)=> acc+val)/((this.populationChile[d["Region"]]))*100000)
+        
         this.dataCovid.incidence.Chile.values.push(incidence);
         this.dataCovid.incidence.Chile.variations.push(
-          incidence - incidenceOneDayBefore
+          incidence - incidenceWeekDayBefore
         );
       });
 
