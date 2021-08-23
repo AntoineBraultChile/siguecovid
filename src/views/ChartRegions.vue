@@ -250,13 +250,24 @@ export default {
             );
           }
         } else {
-          this.$set(
-            this.dataCovid,
-            data[index].Region + type,
-            Object.values(data[index])
+          let values = Object.values(data[index])
               .slice(3)
               .map((i) => Number(i))
+          this.$set(
+            this.dataCovid,
+            data[index].Region + type,values
+            
           );
+
+          if (mean == true) {
+            this.$set(
+              this.dataCovid,
+              data[index].Region + "Mean" + type,
+              meanWeek(values).map((d) => {
+                return Math.round(d);
+              })
+            );
+          }
         }
       }
       if (type == "Cases" || type == "Pcr" || type == "Antigeno") {
@@ -302,15 +313,24 @@ export default {
       "Pcr",
       false
     );
-    // Cases
-    let dataCases = await getDataCsv(
-      "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv",
-      "Cases",
+
+    // // Cases
+    // let dataCases = await getDataCsv(
+    //   "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv",
+    //   "Cases",
+    //   true,
+    //   true,
+    //   true,
+    //   true
+    // );
+      let dataCases = await getDataCsv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto13/CasosNuevosCumulativo.csv',   "Cases",
+      false,
       true,
       true,
-      true,
-      true
-    );
+      true);
+
+
+
     //Antigeno
     let dataAntigeno = await getDataCsv(
       "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto87/Ag.csv",

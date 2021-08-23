@@ -286,9 +286,10 @@ export default {
     async function requests() {
       try {
         var getResults = await Promise.all([
-          d3.csv(
-            "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv"
-          ),
+          // d3.csv(
+          //   "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv"
+          // ),
+          d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto13/CasosNuevosCumulativo.csv'),
           getDataCsv(
             "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto7/PCR.csv",
             "Pcr",
@@ -360,11 +361,12 @@ export default {
         .map((d) => {
           return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
         });
-      dayCases = derivate(
-        Object.values(data[0][16])
-          .slice(3)
-          .map((i) => Number(i))
-      );
+      // dayCases = derivate(
+      //   Object.values(data[0][16])
+      //     .slice(3)
+      //     .map((i) => Number(i))
+      // );
+      dayCases = Object.values(data[0][16]).slice(3+1).map((i) => Number(i))
       dayCases = removeSenselessValues(dayCases);
 
       this.$set(this.dataCovid, "ChileCases", dayCases);
