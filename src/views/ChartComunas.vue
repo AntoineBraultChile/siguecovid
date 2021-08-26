@@ -168,6 +168,12 @@ export default {
           Arica: [],
         },
       },
+      boostDoses: {
+        labels: [],
+        comuna: {
+          Arica: [],
+        },
+      },
       pasoAPaso: {
         Arica: {
           dateChangePaso: [],
@@ -257,6 +263,15 @@ export default {
             backgroundColor: "#eba434",
             fill: false,
             data: this.secondDoses.comuna[comuna].slice(index),
+          },
+          {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Dosis de refuerzo",
+            borderColor: this.backgroundColor["Deaths"],
+            backgroundColor: this.backgroundColor["Deaths"],
+            fill: false,
+            data: this.boostDoses.comuna[comuna].slice(index),
           },
         ],
       };
@@ -557,6 +572,27 @@ export default {
       let accumulativeValue = [];
       valueEachDay.reduce((acc, el, i) => (accumulativeValue[i] = acc + el), 0);
       this.secondDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = accumulativeValue.map((d) => {
+        return Math.round((d / comuna["Poblacion"]) * 1000) / 10;
+      });
+      this.population[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = comuna["Poblacion"];
+    });
+
+    // fetch boost vaccine doses by comune
+    const boostDosesComunas = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto80/vacunacion_comuna_Refuerzo.csv");
+    this.boostDoses.labels = Object.keys(boostDosesComunas[0])
+      .slice(5)
+      .map((date) => {
+        return dayjs(date, "YYYY-MM-DD").format("DD-MM-YYYY");
+      });
+    boostDosesComunas.forEach((comuna) => {
+      let valueEachDay = Object.values(comuna)
+        .slice(5)
+        .map((i) => {
+          return Number(i);
+        });
+      let accumulativeValue = [];
+      valueEachDay.reduce((acc, el, i) => (accumulativeValue[i] = acc + el), 0);
+      this.boostDoses.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = accumulativeValue.map((d) => {
         return Math.round((d / comuna["Poblacion"]) * 1000) / 10;
       });
       this.population[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = comuna["Poblacion"];
