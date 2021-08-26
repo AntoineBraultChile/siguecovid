@@ -409,7 +409,6 @@ export default {
           .map((i) => Number(i));
 
         let incidenceWeekDayBefore = Math.round(casesLastWeeBefore.reduce((acc,val)=> acc+val)/((this.populationChile[d["Region"]]))*100000)
-        
         this.dataCovid.incidence.Chile.values.push(incidence);
         this.dataCovid.incidence.Chile.variations.push(
           incidence - incidenceWeekDayBefore

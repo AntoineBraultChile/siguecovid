@@ -102,7 +102,7 @@ import {
   derivate,
   sumArray,
   meanWeek,
-  derivateEachTwoDays,
+  // derivateEachTwoDays,
 } from "@/assets/mathFunctions";
 
 import LineChart from "../components/LineChart";
@@ -624,16 +624,19 @@ export default {
     allValues.forEach((casesAge, indexCasesAge) => {
       let selectMondayAndFridayValues = [];
       casesAge.forEach((value, ind) => {
-        // if monday or friday
-        if (
-          dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 1 ||
-          dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 5
-        ) {
+        // // if monday or friday
+        // if (
+        //   dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 1 ||
+        //   dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 5
+        // ) 
+                // if monday or friday
+        if (dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 1) 
+        {
           selectMondayAndFridayValues.push(value);
         }
       });
       this.casesChile.values.push(
-        derivateEachTwoDays(selectMondayAndFridayValues).map((d) =>
+        derivate(selectMondayAndFridayValues).map((d) =>
           Math.round(
             (d / this.casesChile.agePopulation[indexCasesAge]) * 100000
           )
@@ -644,15 +647,14 @@ export default {
     // fill labels only monday and friday
     allLabels.forEach((date) => {
       if (
-        dayjs(date, "DD-MM-YYYY").get("day") === 1 ||
-        dayjs(date, "DD-MM-YYYY").get("day") === 5
+        dayjs(date, "DD-MM-YYYY").get("day") === 1
       ) {
         this.casesChile.labels.push(date);
       }
     });
 
     // because we compute a derivative each two days, we delete the first two date in labels
-    this.casesChile.labels = this.casesChile.labels.slice(2);
+    this.casesChile.labels = this.casesChile.labels.slice(1);
 
     // create a dictionary between first day of each month in listOfMonths and first day of a month in casesChile.labels
     let dic = {};
