@@ -410,14 +410,9 @@ casesComunas.forEach((comuna) => {
             .map((i) => {
               return Number(i);
             });
-          // // update monday and friday
-          // let values = last4Values[3] - last4Values[1];
-          // let variation = values - (last4Values[2] - last4Values[0]);
-          
-          // update by week only
-          let values = last4Values[3] - last4Values[2];
-          let variation = values - (last4Values[1] - last4Values[0]);
-          this.dataCovid.incidence[comuna["Region"]] = {
+          let values = last4Values[3] - last4Values[1];
+          let variation = values - (last4Values[2] - last4Values[0]);
+        this.dataCovid.incidence[comuna["Region"]] = {
           names: [comuna["Comuna"]],
           values: [Math.round((values / comuna["Poblacion"]) * 100000)],
           variations: [Math.round((variation / comuna["Poblacion"]) * 100000)],
@@ -426,17 +421,14 @@ casesComunas.forEach((comuna) => {
         if (!comuna["Comuna"].includes("Desconocido")) {
           // console.log(Object.values(comuna));
           let last4Values = Object.values(comuna)
-            .slice(-6, -1)
+            .slice(-5, -1)
             .map((i) => {
               return Number(i);
             });
-          // // update monday and friday
-          // let values = last4Values[3] - last4Values[1];
-          // let variation = values - (last4Values[2] - last4Values[0]);
-
-          // update by week only
-          let values = last4Values[4] - last4Values[3];
+          let values = last4Values[3] - last4Values[1];
           let variation = values - (last4Values[2] - last4Values[0]);
+          // console.log(comuna["Comuna"]);
+          // console.log("variation", variation);
 
           this.dataCovid.incidence[comuna["Region"]]["names"].push(
             comuna["Comuna"]

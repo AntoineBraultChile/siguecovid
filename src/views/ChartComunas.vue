@@ -83,7 +83,7 @@ var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 import "dayjs/locale/es"; // load on demand
 dayjs.locale("es"); // use Spanish locale globally
-import { derivate } from "../assets/mathFunctions";
+import { derivateEachTwoDays, derivate } from "../assets/mathFunctions";
 import LineChart from "@/components/LineChart";
 import BarChart from "@/components/BarChart";
 import Update from "../components/Update";
@@ -434,8 +434,8 @@ export default {
     // we keep only monday date
     allLabels.forEach((d) => {
       // if it is a monday or a friday
-      // if (dayjs(d, "DD-MM-YYYY").get("day") === 1 || dayjs(d, "DD-MM-YYYY").get("day") === 5) {
-      if (dayjs(d, "DD-MM-YYYY").get("day") === 1) {
+      if (dayjs(d, "DD-MM-YYYY").get("day") === 1 || dayjs(d, "DD-MM-YYYY").get("day") === 5) {
+        // if (dayjs(d, "DD-MM-YYYY").get("day") === 1) {
         this.cases.labels.push(dayjs(d, "DD-MM-YYYY").format("DD-MM-YYYY"));
         if (!this.listOfMonths.includes(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"))) {
           this.listOfMonths.push(dayjs(d, "DD-MM-YYYY").format("MMMM YYYY"));
@@ -460,13 +460,13 @@ export default {
       let valuesEachMonday = [];
       allValues.forEach((d, index) => {
         // if monday or friday
-        // if (dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 1 || dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 5) {
-        if (dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 1) {
+        if (dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 1 || dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 5) {
+          // if (dayjs(allLabels[index], "DD-MM-YYYY").get("day") === 1 ) {
           valuesEachMonday.push(Math.round((d / comuna["Poblacion"]) * 100000));
         }
       });
-      // this.cases.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = derivateEachTwoDays(valuesEachMonday);
-      this.cases.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = derivate(valuesEachMonday);
+      this.cases.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = derivateEachTwoDays(valuesEachMonday);
+      // this.cases.comuna[this.dicComunaNamesAccentWithoutWith[comuna["Comuna"]]] = derivate(valuesEachMonday);
     });
 
     // this.comunaNames = Object.keys(this.cases.comuna).filter(comuna => !comuna.includes("Desconocido"))
