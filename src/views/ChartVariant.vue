@@ -148,6 +148,7 @@ export default {
         "rgba(248,121,121,1.0)",
         "rgba(235,164,52,1.0)",
         "rgba(36,129,156,1.0)",
+        "rgba(160,82,45,1)",
         "rgba(132,94,194,1.0)",
         "rgba(35,43,43,1.0)",
       ],
@@ -158,6 +159,7 @@ export default {
         "rgba(248,121,121,1)",
         "rgba(235,164,52,1)",
         "rgba(36,129,156,1)",
+        "rgba(160,82,45,1)",
         "rgba(132,94,194,1)",
         "rgba(35,43,43,1)",
       ],
@@ -325,13 +327,13 @@ export default {
     //  Covid variant
     const response = await fetch("https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json");
     const variant = await response.json();
-    const variantChile = await variant.countries["Chile"];
+    const variantChile = variant.countries["Chile"];
 
-    const totalSequences = await variantChile.total_sequences;
-    this.variantChile.totalSequences = await totalSequences;
-    let allLabels = await variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"));
-    const firstDate = await allLabels[0];
-    const lastDate = await allLabels[allLabels.length - 1];
+    const totalSequences = variantChile.total_sequences;
+    this.variantChile.totalSequences = totalSequences;
+    let allLabels = variantChile.week.map((d) => dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"));
+    const firstDate = allLabels[0];
+    const lastDate = allLabels[allLabels.length - 1];
 
     allLabels.push(
       dayjs(lastDate, "DD-MM-YYYY")
@@ -339,9 +341,9 @@ export default {
         .format("DD-MM-YYYY")
     ); // add 2 weeks
 
-    const labelsWihtoutFirstTwoWeeks = await allLabels.slice(1);
+    const labelsWihtoutFirstTwoWeeks = allLabels.slice(1);
 
-    this.variantChile.labels = await labelsWihtoutFirstTwoWeeks;
+    this.variantChile.labels = labelsWihtoutFirstTwoWeeks;
 
     const dicVariant = {
       "20I (Alpha, V1)": "Alpha",
@@ -351,9 +353,10 @@ export default {
       "21C (Epsilon)": "Epsilon",
       "21G (Lambda)": "Lambda",
       "21F (Iota)": "Iota",
+      "21H": "21H (Colombia)",
     };
 
-    const nameVariant = await Object.keys(variantChile).slice(2);
+    const nameVariant = Object.keys(variantChile).slice(2);
 
     let sumVariant = [];
     nameVariant.forEach((name) => {
