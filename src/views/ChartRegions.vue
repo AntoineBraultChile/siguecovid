@@ -425,9 +425,12 @@ casesComunas.forEach((comuna) => {
             .map((i) => {
               return Number(i);
             });
-          let values = last4Values[3] - last4Values[1];
+          let values = (last4Values[3] - last4Values[1]) > 0 ? (last4Values[3] - last4Values[1]) :0;
           let variation = values - (last4Values[2] - last4Values[0]);
+          
           // console.log(comuna["Comuna"]);
+          // console.log("last4values", last4Values)
+          // console.log("value", values);
           // console.log("variation", variation);
 
           this.dataCovid.incidence[comuna["Region"]]["names"].push(

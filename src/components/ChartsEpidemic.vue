@@ -153,10 +153,10 @@
     </div>
 
     <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia en UCI por estado de vacunación y grupo de edad en Chile</title-graphic>
+      <title-graphic> Incidencia de los ingresos a UCI por estado de vacunación y grupo de edad en Chile</title-graphic>
       <span style="font-size:1rem">
-        Número de personas en UCI por Covid-19 entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000
-        personas en cada grupo.</span
+        Número de personas que ingresaron a UCI por Covid-19 entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada
+        100.000 personas en cada grupo.</span
       >
       <br />
       <bar-chart :chartData="plotVaccinalSchemeByAge('uci')" :options="chartOptions('IncidenceByVaccinalScheme')"></bar-chart>
