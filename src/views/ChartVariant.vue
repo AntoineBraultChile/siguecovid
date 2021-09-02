@@ -353,7 +353,7 @@ export default {
       "21C (Epsilon)": "Epsilon",
       "21G (Lambda)": "Lambda",
       "21F (Iota)": "Iota",
-      "21H": "21H (Colombia)",
+      "21H (Mu)": "Mu",
     };
 
     const nameVariant = Object.keys(variantChile).slice(2);
