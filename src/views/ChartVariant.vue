@@ -328,6 +328,7 @@ export default {
     const response = await fetch("https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json");
     const variant = await response.json();
     const variantChile = variant.countries["Chile"];
+    // console.log(variantChile);
 
     const totalSequences = variantChile.total_sequences;
     this.variantChile.totalSequences = totalSequences;

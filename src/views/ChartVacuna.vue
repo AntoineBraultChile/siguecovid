@@ -270,7 +270,8 @@ export default {
         "total segunda dosis": "",
         labelsByAge: [],
         populationByAge: {
-          18: 1480623,
+          12: 1549683, // 6 to 11
+          18: 1480623, // 12 to 17
           30: 3614461, // 18 to 39
           40: 3031451, // 40 to 49
           50: 2618520,
@@ -279,6 +280,7 @@ export default {
           300: 1544008,
         },
         firstDosesByAgeGroup: {
+          12: [],
           18: [],
           30: [],
           40: [],
@@ -288,6 +290,7 @@ export default {
           300: [],
         },
         secondDosesByAgeGroup: {
+          12: [],
           18: [],
           30: [],
           40: [],
@@ -297,6 +300,7 @@ export default {
           300: [],
         },
         uniqueDosesByAgeGroup: {
+          12: [],
           18: [],
           30: [],
           40: [],
@@ -306,6 +310,7 @@ export default {
           300: [],
         },
         boostDosesByAgeGroup: {
+          12: [],
           18: [],
           30: [],
           40: [],
@@ -447,7 +452,7 @@ export default {
       });
 
       return {
-        labels: ["12-17 años", "18-29 años", "30-39 años", "40-49 años", "50-59 años", "60-69 años", ">= 70 años"],
+        labels: ["6-11 años", "12-17 años", "18-29 años", "30-39 años", "40-49 años", "50-59 años", "60-69 años", ">= 70 años"],
         datasets: [
           {
             label: "Al menos una dosis",
@@ -621,9 +626,19 @@ export default {
           {
             pointRadius: this.pointRadius,
             pointHoverRadius: this.pointHoverRadius,
-            label: "12-17",
+            label: "6-11",
             borderColor: "#D2E6EE",
             backgroundColor: "#D2E6EE",
+            fill: false,
+            data: this.vacunaChile[dosesType]["12"].slice(indexDate),
+          },
+          {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "12-17",
+
+            borderColor: "#82CFFD",
+            backgroundColor: "#82CFFD",
             fill: false,
             data: this.vacunaChile[dosesType]["18"].slice(indexDate),
           },
@@ -631,8 +646,9 @@ export default {
             pointRadius: this.pointRadius,
             pointHoverRadius: this.pointHoverRadius,
             label: "18-29",
-            borderColor: "#82CFFD",
-            backgroundColor: "#82CFFD",
+
+            borderColor: "#FFCD01",
+            backgroundColor: "#FFCD01",
             fill: false,
             data: this.vacunaChile[dosesType]["30"].slice(indexDate),
           },
@@ -797,7 +813,9 @@ export default {
       .map((d) => {
         return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
-    let ageGroup = ["12"];
+    // let ageGroup = ["12"];
+    let ageGroup = ["6"];
+
     Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((d) => ageGroup.push(d));
 
     let getVaccinByAge = async (dosis, typeDosis) => {
