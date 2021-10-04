@@ -111,9 +111,13 @@
     </div>
     <footer-indicators>
       <p>
-        Los datos vienen del repository github de
+        Los datos vienen del repository github
+
+        <!-- de
         <a href="https://github.com/juancri/covid19-vaccination">COVID-19 Vaccination (JC Olivares)</a>
-        y del
+        y  -->
+
+        del
         <a href="https://www.minciencia.gob.cl/covid19/">Ministerio de Ciencia, Technología, Conocimiento e Innovación</a>.
       </p>
       <p>
