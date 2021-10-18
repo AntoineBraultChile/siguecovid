@@ -504,7 +504,7 @@ export default {
 
     // ---------- incidence by vaccinated or non-vaccinated groups --------------------
     let incidenceVaccinated = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto90/incidencia_en_vacunados.csv')
-    const numberWeekEpidemiological = incidenceVaccinated.length
+    let numberWeekEpidemiological = incidenceVaccinated.length
 
     // dictionary between epidemiological week and date in 2021
     // each epidemiogical week start sunday and finish saturday
@@ -567,6 +567,17 @@ export default {
 
   // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
   let incidenceByAgeByVaccinalScheme = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
+
+    // dictionary between epidemiological week and date in 2021
+    // each epidemiogical week start sunday and finish saturday
+    dicEpiWeek = {1:'09-01-2021'}
+    k = 1
+    while(k < numberWeekEpidemiological){
+      dicEpiWeek[k+1] = dayjs(dicEpiWeek[k], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
+      k+=1
+    }
+
   let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])]
   let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
 
@@ -576,9 +587,9 @@ export default {
 
   incidenceByAgeByVaccinalScheme.forEach(d => {
     if(d['grupo_edad']!='Total'){
-    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_casos'])
-    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_uci'])
-    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_def'])
+    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_Casos'])
+    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_UCI'])
+    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_Fallecidos'])
     }
   })
 
