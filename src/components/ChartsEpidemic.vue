@@ -228,6 +228,8 @@ export default {
       const labels = Object.keys(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["con esquema completo"]);
       const vaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["con esquema completo"]);
       const nonVaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["sin esquema completo"]);
+      const boostedVaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type]["con dosis refuerzo > 14 dias"]);
+
       return {
         labels: labels,
         datasets: [
@@ -250,6 +252,16 @@ export default {
             backgroundColor: this.colorsPasoAPaso[1],
             fill: false,
             data: nonVaccinated,
+          },
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Con dosis refuerzo > 14 dias",
+            borderColor: this.colorsPasoAPaso[2],
+            backgroundColor: this.colorsPasoAPaso[2],
+            fill: false,
+            data: boostedVaccinated,
           },
         ],
       };
@@ -381,7 +393,7 @@ export default {
       indexDate = indexDate > 0 ? indexDate : 0;
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       let datasets = [];
-      let labels = ["Cuarentena (Fase 1)", "Transición (Fase 2)", "Preparación (Fase 3)", "Apertura inicial (Fase 4)"];
+      let labels = ["Fase 1", "Fase 2", "Fase 3", "Fase 4"];
       let pasos = Object.keys(this.colorsPasoAPaso);
       pasos.forEach((paso, index) => {
         datasets.push({

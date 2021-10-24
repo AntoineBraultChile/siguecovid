@@ -59,7 +59,7 @@
 
           <div class="dosis indicator2 black" v-if="type == 'vaccin'">
             <span> {{ numberToStringFormat(refuerzo.slice(-1)[0]) + " personas con una dosis de refuerzo" }} </span>
-            <span class="en24horas"> {{ incrementLastDay(refuerzo) }} en 24 horas </span>
+            <span class="en24horas"> {{ numberToStringFormat(incrementLastDay(refuerzo)) }} en 24 horas </span>
           </div>
         </div>
       </div>
