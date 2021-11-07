@@ -566,9 +566,9 @@ export default {
 
 
   // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
-  let incidenceByAgeByVaccinalScheme = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  let incidenceByAgeByVaccinalScheme = await d3.dsv(';', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
   numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
-
+  // console.log(incidenceByAgeByVaccinalScheme)
     // dictionary between epidemiological week and date in 2021
     // each epidemiogical week start sunday and finish saturday
     dicEpiWeek = {1:'09-01-2021'}

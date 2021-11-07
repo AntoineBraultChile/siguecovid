@@ -106,16 +106,22 @@
       <h2 id="description" style="font-size:1.5rem;">
         Impacto de la vacunación en la epidemia de Covid-19 en Chile
       </h2>
+      <p style="text-align: justify;padding:10px">
+        Los graficos sobre el impacto de la vacunación en Chile no están disponible por el momento. Esta semana hubo errores de formato en la publicación de los datos por parte de MinCiencia. Pero
+        volverán muy pronto !
+      </p>
+    </box-container>
+
+    <!-- <box-container v-if="region == 'Chile'">
+      <h2 id="description" style="font-size:1.5rem;">
+        Impacto de la vacunación en la epidemia de Covid-19 en Chile
+      </h2>
       <p class="two-columns">
         Una persona tiene un esquema completo de vacunación 14 días después de una segunda dosis o 28 días después de una dosis única. Los gráficos deben interpretarse teniendo en cuenta que puede
         haber sesgos significativos. De hecho, la cobertura de vacunación y las tasas de infección no son uniformes en toda la población. La situación económica, el lugar de residencia y los factores
         de riesgo de Covid-19 son variables importantes para medir adecuadamente la eficacia de la vacunación. Por el momento, sólo la estratificación por edad está disponible en los datos abiertos.
-
-        <!-- Por ejemplo, como la cobertura de las vacunas no es la misma en todos los grupos de edad y el riesgo aumenta fuertamente con la edad, la eficacia de las vacunas
-        contra el ingreso en UCI y la muerte puede parecer menor que la eficacia real (ver
-        <a href="https://es.wikipedia.org/wiki/Paradoja_de_Simpson"> paradoja de Simpson</a>). -->
       </p>
-    </box-container>
+    </box-container> -->
 
     <!-- <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia semanal con respecto al esquema de vacunación en {{ region }}</title-graphic>
@@ -142,7 +148,7 @@
       ></line-chart>
     </div> -->
 
-    <div class="graph" v-if="region == 'Chile'">
+    <!-- <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia por estado de vacunación y grupo de edad en Chile</title-graphic>
       <span style="font-size:1rem">
         Número de casos detectados entre el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][0] }} y el {{ dataCovid.incidenceByVaccinalSchemeByAge["week"][1] }} por cada 100.000 personas en cada
@@ -169,7 +175,7 @@
       >
       <br />
       <bar-chart :chartData="plotVaccinalSchemeByAge('deaths')" :options="chartOptions('IncidenceByVaccinalScheme')"></bar-chart>
-    </div>
+    </div> -->
   </div>
 </template>
 
