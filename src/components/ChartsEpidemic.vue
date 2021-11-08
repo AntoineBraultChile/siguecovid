@@ -97,7 +97,7 @@
     </div>
 
     <!-- Chart DEIS deaths -->
-    <div class="graph" vv-if="region == 'Chile'">
+    <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Muertes por Covid-19 en Chile por fecha de fallecimiento </title-graphic>
       <span style="font-size:1rem">A diferencia de las muertes sospechosas, las muertes confirmadas son las que se confirman mediante PCR o pruebas antigénicas. </span>
       <br />
