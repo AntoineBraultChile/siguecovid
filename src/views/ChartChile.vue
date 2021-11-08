@@ -510,7 +510,6 @@ export default {
 
   // fetching DEIS deaths in Chile
   let deis = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
-  // console.log(deis)
   let deisLabels = Object.keys(deis.slice(-1)[0]).slice(3).map(d=> dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")) 
   let deisConfirmed
   let deisSuspected
@@ -521,110 +520,14 @@ export default {
        deisSuspected = Object.values(d).slice(3).map(i => Number(i))
     }
   })
-  // console.log(deisConfirmed,deisSuspected, deisLabels)
-this.dataCovid.deis = {'labels':deisLabels, 'confirmed': deisConfirmed, 'suspected': deisSuspected, 'mediaMovil': meanWeek(sumArray(deisConfirmed, deisSuspected)) }
-    // ---------- incidence by vaccinated or non-vaccinated groups --------------------
-    let incidenceVaccinated = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto90/incidencia_en_vacunados.csv')
-    let numberWeekEpidemiological = incidenceVaccinated.length
+  let mediaMovilDeis = meanWeek(sumArray(deisConfirmed, deisSuspected)).map(d => Math.round(d))
+  this.dataCovid.deis = {'labels':deisLabels, 'confirmed': deisConfirmed, 'suspected': deisSuspected, 'mediaMovil': mediaMovilDeis}
 
-    // dictionary between epidemiological week and date in 2021
-    // each epidemiogical week start sunday and finish saturday
-    let dicEpiWeek = {1:'09-01-2021'}
-    let k = 1
-    while(k < numberWeekEpidemiological){
-      dicEpiWeek[k+1] = dayjs(dicEpiWeek[k], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
-      k+=1
-    }
-    const saturdayEpiWeek = Object.values(dicEpiWeek).map(i=> String(i))
-
-
-    // compute vaccinated by epidemiological week
-
-    let completeVaccinalSchemeByEpiWeek = {} // two dosis + two weeks or unica dosis + two weeks
-    let uncompleteVaccinalSchemeByEpiWeek = {} // others
-    
-    saturdayEpiWeek.forEach(date => {
-      const index = this.dataCovid.labelsVaccine.indexOf(date)
-       if(index>= 28){
-         completeVaccinalSchemeByEpiWeek[date] = secondDoses[index-14]+ uniqueDoses[index-28]
-         uncompleteVaccinalSchemeByEpiWeek[date] = this.populationChile['Total'] - completeVaccinalSchemeByEpiWeek[date]
-       }else if(index>= 14){
-        completeVaccinalSchemeByEpiWeek[date] = secondDoses[index-14]
-        uncompleteVaccinalSchemeByEpiWeek[date] = this.populationChile['Total'] - completeVaccinalSchemeByEpiWeek[date]
-       }
-       else {
-        completeVaccinalSchemeByEpiWeek[date] = 0
-        uncompleteVaccinalSchemeByEpiWeek[date] = this.populationChile['Total'] - completeVaccinalSchemeByEpiWeek[date]
-       }
-    })
-
-    let incidenceCompleteVaccinalScheme = {}
-    let incidenceUncompleteVaccinalScheme = {}
-    let uciCompleteVaccinalScheme = {}
-    let uciUncompleteVaccinalScheme = {}
-    let fallecidosCompleteVaccinalScheme = {}
-    let fallecidosUncompleteVaccinalScheme = {}
-
-    incidenceVaccinated.forEach(d =>{
-      let date = dicEpiWeek[Number(d['semana_epidemiologica'])]
-      incidenceCompleteVaccinalScheme[date] = (Number(d['dos_dosis_comp_casos'])+Number(d['dosis_unica_comp_casos']))/completeVaccinalSchemeByEpiWeek[date]*100000
-      incidenceUncompleteVaccinalScheme[date] =(Number(d['dos_dosis_casos'])+Number(d['dosis_unica_casos'])+Number(d['una_dosis_casos'])+ Number(d['sin_vac_casos']))/uncompleteVaccinalSchemeByEpiWeek[date]*100000
-      uciCompleteVaccinalScheme[date] = (Number(d['dos_dosis_comp_uci'])+Number(d['dosis_unica_comp_uci']))/completeVaccinalSchemeByEpiWeek[date]*100000
-      uciUncompleteVaccinalScheme[date] =(Number(d['dos_dosis_uci'])+Number(d['dosis_unica_uci'])+Number(d['una_dosis_uci'])+Number(d['sin_vac_uci']))/uncompleteVaccinalSchemeByEpiWeek[date]*100000
-      fallecidosCompleteVaccinalScheme[date] = (Number(d['dos_dosis_comp_fall'])+Number(d['dosis_unica_comp_fall']))/completeVaccinalSchemeByEpiWeek[date]*100000
-      fallecidosUncompleteVaccinalScheme[date] =(Number(d['dos_dosis_fall'])+Number(d['dosis_unica_fall'])+Number(d['una_dosis_fall'])+ Number(d['sin_vac_fall']))/uncompleteVaccinalSchemeByEpiWeek[date]*100000
-    })
-
-    this.dataCovid["incidenceCompleteVaccinalScheme"] = incidenceCompleteVaccinalScheme
-    this.dataCovid['incidenceUncompleteVaccinalScheme'] = incidenceUncompleteVaccinalScheme
-    this.dataCovid["uciCompleteVaccinalScheme"] = uciCompleteVaccinalScheme
-    this.dataCovid['uciUncompleteVaccinalScheme'] = uciUncompleteVaccinalScheme
-    this.dataCovid["fallecidosCompleteVaccinalScheme"] = fallecidosCompleteVaccinalScheme
-    this.dataCovid['fallecidosUncompleteVaccinalScheme'] = fallecidosUncompleteVaccinalScheme
-
-
-  // ---------------------------------------------------------------------------------------
-
-
-  // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
-  let incidenceByAgeByVaccinalScheme = await d3.dsv(';', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
-  numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
-  // console.log(incidenceByAgeByVaccinalScheme)
-    // dictionary between epidemiological week and date in 2021
-    // each epidemiogical week start sunday and finish saturday
-    dicEpiWeek = {1:'09-01-2021'}
-    k = 1
-    while(k < numberWeekEpidemiological){
-      dicEpiWeek[k+1] = dayjs(dicEpiWeek[k], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
-      k+=1
-    }
-
-  let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])]
-  let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
-
-  let incidenceCasesByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
-  let incidenceUciByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
-  let incidenceDeathsByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
-
-  incidenceByAgeByVaccinalScheme.forEach(d => {
-    if(d['grupo_edad']!='Total' & d['grupo_edad']!='06 - 11 años'){
-    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_casos'])
-    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_uci'])
-    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_def'])
-    }
-  })
-  this.dataCovid.incidenceByVaccinalSchemeByAge["cases"] = incidenceCasesByVaccinalScheme
-  this.dataCovid.incidenceByVaccinalSchemeByAge["uci"] = incidenceUciByVaccinalScheme
-  this.dataCovid.incidenceByVaccinalSchemeByAge["deaths"] = incidenceDeathsByVaccinalScheme
-  this.dataCovid.incidenceByVaccinalSchemeByAge['week'] = [sundaySemana, saturdaySemana]
-
-  // -------------------------------------------------------------------------------------------
-
-    // ingreso UCI en chile
+   // ingreso UCI en chile
     const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');
 
     this.dataCovid.labelsIngresoUCI = Object.keys(ingresoUCI[0]).slice(1).map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
-    this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Number(i))
+    this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Math.round(Number(i)))
 
     // plan paso a paso
     let paso = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv");
@@ -693,6 +596,100 @@ this.dataCovid.deis = {'labels':deisLabels, 'confirmed': deisConfirmed, 'suspect
         ) / 10
       );
     });
+
+    // ---------- incidence by vaccinated or non-vaccinated groups --------------------
+    let incidenceVaccinated = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto90/incidencia_en_vacunados.csv')
+    let numberWeekEpidemiological = incidenceVaccinated.length
+
+    // dictionary between epidemiological week and date in 2021
+    // each epidemiogical week start sunday and finish saturday
+    let dicEpiWeek = {1:'09-01-2021'}
+    let k = 1
+    while(k < numberWeekEpidemiological){
+      dicEpiWeek[k+1] = dayjs(dicEpiWeek[k], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
+      k+=1
+    }
+    const saturdayEpiWeek = Object.values(dicEpiWeek).map(i=> String(i))
+
+
+    // compute vaccinated by epidemiological week
+
+    let completeVaccinalSchemeByEpiWeek = {} // two dosis + two weeks or unica dosis + two weeks
+    let uncompleteVaccinalSchemeByEpiWeek = {} // others
+    
+    saturdayEpiWeek.forEach(date => {
+      const index = this.dataCovid.labelsVaccine.indexOf(date)
+       if(index>= 28){
+         completeVaccinalSchemeByEpiWeek[date] = secondDoses[index-14]+ uniqueDoses[index-28]
+         uncompleteVaccinalSchemeByEpiWeek[date] = this.populationChile['Total'] - completeVaccinalSchemeByEpiWeek[date]
+       }else if(index>= 14){
+        completeVaccinalSchemeByEpiWeek[date] = secondDoses[index-14]
+        uncompleteVaccinalSchemeByEpiWeek[date] = this.populationChile['Total'] - completeVaccinalSchemeByEpiWeek[date]
+       }
+       else {
+        completeVaccinalSchemeByEpiWeek[date] = 0
+        uncompleteVaccinalSchemeByEpiWeek[date] = this.populationChile['Total'] - completeVaccinalSchemeByEpiWeek[date]
+       }
+    })
+
+    let incidenceCompleteVaccinalScheme = {}
+    let incidenceUncompleteVaccinalScheme = {}
+    let uciCompleteVaccinalScheme = {}
+    let uciUncompleteVaccinalScheme = {}
+    let fallecidosCompleteVaccinalScheme = {}
+    let fallecidosUncompleteVaccinalScheme = {}
+
+    incidenceVaccinated.forEach(d =>{
+      let date = dicEpiWeek[Number(d['semana_epidemiologica'])]
+      incidenceCompleteVaccinalScheme[date] = (Number(d['dos_dosis_comp_casos'])+Number(d['dosis_unica_comp_casos']))/completeVaccinalSchemeByEpiWeek[date]*100000
+      incidenceUncompleteVaccinalScheme[date] =(Number(d['dos_dosis_casos'])+Number(d['dosis_unica_casos'])+Number(d['una_dosis_casos'])+ Number(d['sin_vac_casos']))/uncompleteVaccinalSchemeByEpiWeek[date]*100000
+      uciCompleteVaccinalScheme[date] = (Number(d['dos_dosis_comp_uci'])+Number(d['dosis_unica_comp_uci']))/completeVaccinalSchemeByEpiWeek[date]*100000
+      uciUncompleteVaccinalScheme[date] =(Number(d['dos_dosis_uci'])+Number(d['dosis_unica_uci'])+Number(d['una_dosis_uci'])+Number(d['sin_vac_uci']))/uncompleteVaccinalSchemeByEpiWeek[date]*100000
+      fallecidosCompleteVaccinalScheme[date] = (Number(d['dos_dosis_comp_fall'])+Number(d['dosis_unica_comp_fall']))/completeVaccinalSchemeByEpiWeek[date]*100000
+      fallecidosUncompleteVaccinalScheme[date] =(Number(d['dos_dosis_fall'])+Number(d['dosis_unica_fall'])+Number(d['una_dosis_fall'])+ Number(d['sin_vac_fall']))/uncompleteVaccinalSchemeByEpiWeek[date]*100000
+    })
+
+    this.dataCovid["incidenceCompleteVaccinalScheme"] = incidenceCompleteVaccinalScheme
+    this.dataCovid['incidenceUncompleteVaccinalScheme'] = incidenceUncompleteVaccinalScheme
+    this.dataCovid["uciCompleteVaccinalScheme"] = uciCompleteVaccinalScheme
+    this.dataCovid['uciUncompleteVaccinalScheme'] = uciUncompleteVaccinalScheme
+    this.dataCovid["fallecidosCompleteVaccinalScheme"] = fallecidosCompleteVaccinalScheme
+    this.dataCovid['fallecidosUncompleteVaccinalScheme'] = fallecidosUncompleteVaccinalScheme
+  // ---------------------------------------------------------------------------------------
+
+
+  // // --------------------------------   incidence by by vaccinated or non-vaccinated groups and by age ---------------------
+  let incidenceByAgeByVaccinalScheme = await d3.dsv(';', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
+  // console.log(incidenceByAgeByVaccinalScheme)
+    // dictionary between epidemiological week and date in 2021
+    // each epidemiogical week start sunday and finish saturday
+    dicEpiWeek = {1:'09-01-2021'}
+    k = 1
+    while(k < numberWeekEpidemiological){
+      dicEpiWeek[k+1] = dayjs(dicEpiWeek[k], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
+      k+=1
+    }
+
+  let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])]
+  let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
+
+  let incidenceCasesByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
+  let incidenceUciByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
+  let incidenceDeathsByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
+
+  incidenceByAgeByVaccinalScheme.forEach(d => {
+    if(d['grupo_edad']!='Total' & d['grupo_edad']!='06 - 11 años'){
+    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_casos'])
+    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_uci'])
+    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_def'])
+    }
+  })
+  this.dataCovid.incidenceByVaccinalSchemeByAge["cases"] = incidenceCasesByVaccinalScheme
+  this.dataCovid.incidenceByVaccinalSchemeByAge["uci"] = incidenceUciByVaccinalScheme
+  this.dataCovid.incidenceByVaccinalSchemeByAge["deaths"] = incidenceDeathsByVaccinalScheme
+  this.dataCovid.incidenceByVaccinalSchemeByAge['week'] = [sundaySemana, saturdaySemana]
+
   },
 
   
