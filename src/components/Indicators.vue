@@ -54,7 +54,7 @@
           <div class="dosis indicator4" :class="colorsIndicator[3]" v-if="deaths.length > 0">
             <span>{{ numberToStringFormat(deaths.slice(-1)[0]) + text[3] }} </span>
             <span class="en24horas"> {{ numberToStringFormat(incrementLastDay(deaths)) }} en 24 horas </span>
-            <span class="legend" v-if="type == 'epidemic'"> Corresponde a los fallecidos por Covid-19 confirmados con un test PCR positivo al SARS-CoV-2 </span>
+            <span class="legend" v-if="type == 'epidemic'"> Corresponde a los fallecidos por Covid-19 confirmados con un test PCR o antigénico positivo al SARS-CoV-2 </span>
           </div>
 
           <div class="dosis indicator2 black" v-if="type == 'vaccin'">

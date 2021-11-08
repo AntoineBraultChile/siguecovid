@@ -204,6 +204,12 @@ export default {
           fase3: [],
           fase4: [],
         },
+        deis:{
+          labels:[],
+          confirmed:[],
+          suspected:[],
+          mediaMovil:[]
+        }
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -502,6 +508,21 @@ export default {
 
     this.dataCovid.ChileVaccine.boostDoses = boostDoses.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
 
+  // fetching DEIS deaths in Chile
+  let deis = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
+  // console.log(deis)
+  let deisLabels = Object.keys(deis.slice(-1)[0]).slice(3).map(d=> dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY")) 
+  let deisConfirmed
+  let deisSuspected
+  deis.forEach(d => {
+    if(d['Serie'] == 'confirmados'){
+       deisConfirmed = Object.values(d).slice(3).map(i => Number(i))
+    } else if (d['Serie'] == 'sospechosos'){
+       deisSuspected = Object.values(d).slice(3).map(i => Number(i))
+    }
+  })
+  // console.log(deisConfirmed,deisSuspected, deisLabels)
+this.dataCovid.deis = {'labels':deisLabels, 'confirmed': deisConfirmed, 'suspected': deisSuspected, 'mediaMovil': meanWeek(sumArray(deisConfirmed, deisSuspected)) }
     // ---------- incidence by vaccinated or non-vaccinated groups --------------------
     let incidenceVaccinated = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto90/incidencia_en_vacunados.csv')
     let numberWeekEpidemiological = incidenceVaccinated.length

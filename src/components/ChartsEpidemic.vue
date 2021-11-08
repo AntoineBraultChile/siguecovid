@@ -35,7 +35,7 @@
 
     <div class="graph" v-if="dataCovid.labelsDeaths.length > 0">
       <title-graphic> {{ title["Deaths"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR.</span>
+      <span style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR o antigénico. La fecha de notificación puede ser diferente de la fecha de muerte.</span>
       <br />
 
       <update :labels="dataCovid.labelsDeaths"> </update>
@@ -87,15 +87,25 @@
       <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region, 'variations')" :options="chartOptions('Incidence')"></horizontal-bar-chart>
     </div>
 
+    <!-- Chart ICU entries en Chile -->
     <div class="graph" v-if="region == 'Chile'">
       <title-graphic> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
       <br />
-
       <update :labels="dataCovid.labelsIngresoUCI"> </update>
       <bar-chart :chartData="getChartIngresoUCI(region)" :options="chartOptions('IngresoUCI')"> </bar-chart>
     </div>
 
+    <!-- Chart DEIS deaths -->
+    <div class="graph" vv-if="region == 'Chile'">
+      <title-graphic> Muertes por Covid-19 en Chile por fecha de fallecimiento </title-graphic>
+      <span style="font-size:1rem">A diferencia de las muertes sospechosas, las muertes confirmadas son las que se confirman mediante PCR o pruebas antigénicas. </span>
+      <br />
+      <update :labels="dataCovid.deis.labels"> </update>
+      <bar-chart :chartData="plotDeis()" :options="chartOptions('Deis')"> </bar-chart>
+    </div>
+
+    <!-- chart plan Paso a Paso  -->
     <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
@@ -225,7 +235,7 @@ export default {
         Uci: "Personas en UCI por Covid-19",
         Pcr: "Positividad y PCR en ",
         Cases: "Nuevos casos diarios",
-        Deaths: "Fallecidos por Covid-19",
+        Deaths: "Fallecidos confirmados por Covid-19 por fecha de notificación",
       },
     };
   },
@@ -502,6 +512,44 @@ export default {
         ],
       };
     },
+    plotDeis() {
+      let fromDate = this.fromDate;
+      let indexDate = this.dataCovid.deis.labels.indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
+      // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
+      return {
+        labels: this.dataCovid.deis.labels.filter((x) => {
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+        }),
+        datasets: [
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Total muertes (media móvil de 7 días)",
+            borderColor: "#dd4b39",
+            backgroundColor: "#dd4b39",
+            fill: false,
+            data: this.dataCovid.deis.mediaMovil.slice(indexDate - 6),
+          },
+          {
+            type: "bar",
+            label: "Fallecidos confirmados",
+            backgroundColor: this.backgroundColor["Deaths"],
+            fill: false,
+            data: this.dataCovid.deis.confirmed.slice(indexDate),
+          },
+          {
+            type: "bar",
+            label: "Fallecidos sospechosos",
+            backgroundColor: this.colorsPasoAPaso[2],
+            fill: false,
+            data: this.dataCovid.deis.suspected.slice(indexDate),
+          },
+        ],
+      };
+    },
 
     getChartPosPcr(name) {
       let fromDate = this.fromDate;
@@ -702,7 +750,20 @@ export default {
           intersect: false,
         };
       }
-
+      if (type == "Deis") {
+        options.scales = {
+          xAxes: [
+            {
+              stacked: true,
+            },
+          ],
+          yAxes: [
+            {
+              stacked: true,
+            },
+          ],
+        };
+      }
       if (type == "Pcr") {
         options.scales = {
           xAxes: [
@@ -754,7 +815,7 @@ export default {
           },
         };
       }
-      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant" || type == "IncidenceByVaccinalScheme") {
+      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant" || type == "IncidenceByVaccinalScheme" || type == "Deis") {
         options.legend = { display: true };
       }
       return options;
