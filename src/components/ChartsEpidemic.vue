@@ -93,7 +93,7 @@
       <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
       <br />
       <update :labels="dataCovid.labelsIngresoUCI"> </update>
-      <bar-chart :chartData="getChartIngresoUCI(region)" :options="chartOptions('IngresoUCI')"> </bar-chart>
+      <bar-chart :chartData="plotLine(dataCovid.labelsIngresoUCI, dataCovid['ChileIngresoUCI'], this.colorsPasoAPaso[1])" :options="chartOptions('IngresoUCI')"> </bar-chart>
     </div>
 
     <!-- Chart DEIS deaths -->
@@ -103,6 +103,17 @@
       <br />
       <update :labels="dataCovid.deis.labels"> </update>
       <bar-chart :chartData="plotDeis()" :options="chartOptions('Deis')"> </bar-chart>
+    </div>
+
+    <!-- Case fatality rate -->
+    <div class="graph" v-if="region == 'Chile'">
+      <title-graphic> Tasa letalidad por Covid-19 en Chile </title-graphic>
+      <span style="font-size:1rem">
+        Tasa de casos detectados que fallecieron.
+      </span>
+      <br />
+      <update :labels="dataCovid.CFR.labels"> </update>
+      <bar-chart :chartData="plotLine(this.dataCovid.CFR.labels, this.dataCovid.CFR.values, this.backgroundColor['Deaths'])" :options="chartOptions('CFR')"> </bar-chart>
     </div>
 
     <!-- chart plan Paso a Paso  -->
@@ -139,17 +150,17 @@
       <br />
       <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update>
       <line-chart :chartData="plotVaccinalSchemes(dataCovid.incidenceCompleteVaccinalScheme, dataCovid.incidenceUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
-    </div> -->
+    </div>
 
-    <!-- <div class="graph" v-if="region == 'Chile'">
+    <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia semanal de ingreso a UCI con respecto al esquema de vacunación en {{ region }}</title-graphic>
       <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica que van a ingresar en unidad de cuidados intensivos por cada 100.000 personas en cada grupo.</span>
       <br />
       <update :labels="Object.keys(dataCovid.uciCompleteVaccinalScheme)"> </update>
       <line-chart :chartData="plotVaccinalSchemes(dataCovid.uciCompleteVaccinalScheme, dataCovid.uciUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
-    </div> -->
+    </div>
 
-    <!-- <div class="graph" v-if="region == 'Chile'">
+    <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia de los fallecidos con respecto al esquema de vacunación en {{ region }}</title-graphic>
       <update :labels="dataCovid.labelsVaccine"> </update>
       <line-chart
@@ -336,13 +347,13 @@ export default {
         ],
       };
     },
-    getChartIngresoUCI(region) {
+    plotLine(labels, values, color) {
       let fromDate = this.fromDate;
-      let indexDate = this.dataCovid["labelsIngresoUCI"].indexOf(fromDate);
+      let indexDate = labels.indexOf(fromDate);
       indexDate = indexDate > 0 ? indexDate : 0;
 
       return {
-        labels: this.dataCovid["labelsIngresoUCI"].filter((x) => {
+        labels: labels.filter((x) => {
           return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
         }),
         datasets: [
@@ -351,10 +362,10 @@ export default {
             pointRadius: this.pointRadius,
             pointHoverRadius: this.pointHoverRadius,
             label: "",
-            borderColor: this.colorsPasoAPaso[1],
-            backgroundColor: this.colorsPasoAPaso[1],
+            borderColor: color,
+            backgroundColor: color,
             fill: false,
-            data: this.dataCovid[region + "IngresoUCI"].slice(indexDate),
+            data: values.slice(indexDate),
           },
         ],
       };
@@ -686,10 +697,26 @@ export default {
           },
         ];
       }
+      if (type == "CFR") {
+        options.scales["xAxes"] = [
+          {
+            type: "time",
+            time: {
+              parser: "DD-MM-YYYY",
+              unit: "month",
+            },
+          },
+        ];
+        options.tooltips["callbacks"] = {
+          label: function(tooltipItem, data) {
+            return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+          },
+        };
+      }
       if (type == "Vaccine") {
         options.tooltips["callbacks"] = {
           label: function(tooltipItem, data) {
-            return data.datasets[tooltipItem.datasetIndex].label + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
+            return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
           },
         };
         options.scales.yAxes[0].ticks = {

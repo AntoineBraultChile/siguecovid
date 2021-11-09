@@ -53,8 +53,15 @@
         <li>La variación semanal de casos se calcula a partir de la sucesión de medias móviles de 7 días de los nuevos casos M(1),...,M(i),... de la siguiente manera:
           (M(i+7)-M(i))/M(i)*100.
         </li>
-        <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
-          da el número de fallecidos por Covid-19 sospechosos. </li>
+        <li>
+          La tasa de letalidad es el pocentaje de casos detectados con un test PCR o antigeno que fallecieron.
+          Se estima aquí de la siguiente manera: 
+                  (Media móvil 7 días de los muertos por Covid-19 (confirmados o sospechosos))/ (Media móvil 7 días de los casos detectados con un defase de 20 días)*100.
+         Cuidado, la tasa de letalidad es una sobreestimación de la tasa de letalidad por infección que el percentaje de casos reales (detectados o no) que fallecieron.
+
+        </li>
+        <!-- <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
+          da el número de fallecidos por Covid-19 sospechosos. </li> -->
       </ul>
       </p>
 
@@ -97,7 +104,7 @@ h2{
 </style>
 
 <script>
-import { meanWeek, derivate, sumArray , removeSenselessValues} from "@/assets/mathFunctions";
+import { meanWeek, derivate, sumArray , removeSenselessValues, toTimeSerie} from "@/assets/mathFunctions";
 
 import Indicators from "@/components/Indicators";
 import ChartsEpidemic from "@/components/ChartsEpidemic";
@@ -209,7 +216,8 @@ export default {
           confirmed:[],
           suspected:[],
           mediaMovil:[]
-        }
+        },
+        CFR:{labels:[], values: [] }
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -528,6 +536,26 @@ export default {
 
     this.dataCovid.labelsIngresoUCI = Object.keys(ingresoUCI[0]).slice(1).map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
     this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Math.round(Number(i)))
+
+    // Case fatality rate in Chile
+    let CFR = []
+    let labelsCFR = []
+    const delayCaseDeaths = 20;
+    let timeSerieDeaths = toTimeSerie(deisLabels.slice(6),mediaMovilDeis)
+    let timeSerieCases = toTimeSerie(this.dataCovid.labelsCases.slice(6), this.dataCovid.ChileMeanCases)
+    Object.keys(timeSerieDeaths).forEach((label) => {
+      const labelDelayed = dayjs(label,"DD-MM-YYYY").add(-delayCaseDeaths,"d").format("DD-MM-YYYY")
+      // console.log(timeSerieDeaths[label])
+      // console.log(timeSerieCases[labelDelayed])
+      // if(timeSerieCases[labelDelayed]!=undefined){
+      if(dayjs(label, "DD-MM-YYYY").isAfter(dayjs("30-04-2020","DD-MM-YYYY"))){
+        labelsCFR.push(label)
+        CFR.push(Math.round(timeSerieDeaths[label]/timeSerieCases[labelDelayed]*1000)/10)
+      }
+      })
+    // mediaMovilDeis.forEach((_,index)=> CFR.unshift(mediaMovilDeis[mediaMovilDeis.length-index-1-delayCaseDeaths]/this.dataCovid.ChileMeanCases[this.dataCovid.ChileMeanCases.length-index-1]*100))
+    this.dataCovid.CFR = {labels:labelsCFR, values: CFR }
+
 
     // plan paso a paso
     let paso = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv");
