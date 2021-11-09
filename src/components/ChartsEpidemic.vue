@@ -107,7 +107,7 @@
 
     <!-- Case fatality rate -->
     <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Tasa letalidad por Covid-19 en Chile </title-graphic>
+      <title-graphic> Tasa de letalidad por Covid-19 en Chile </title-graphic>
       <span style="font-size:1rem">
         Tasa de casos detectados que fallecieron.
       </span>
