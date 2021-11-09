@@ -10,7 +10,7 @@
           basado en <a
             href="https://www.minciencia.gob.cl/covid19/"
             target='_blank'
-          >datos del Ministerio de Ciencia</a>.</p>
+          >datos del Ministerio de Ciencia</a>. Puede seguir la cuenta de Twitter <a href='https://twitter.com/datos_19' target='_blank'> @datos_19</a> para obtener un análisis periódico de las cifras de la pandemia.</p>
       </box-container>
 
       <div
@@ -54,10 +54,10 @@
           (M(i+7)-M(i))/M(i)*100.
         </li>
         <li>
-          La tasa de letalidad es el pocentaje de casos detectados con un test PCR o antigeno que fallecieron.
+          La tasa de letalidad es el porcentaje de casos detectados con un test PCR o antigeno que fallecieron.
           Se estima aquí de la siguiente manera: 
                   (Media móvil 7 días de los muertos por Covid-19 (confirmados o sospechosos))/ (Media móvil 7 días de los casos detectados con un defase de 20 días)*100.
-         Cuidado, la tasa de letalidad es una sobreestimación de la tasa de letalidad por infección que el percentaje de casos reales (detectados o no) que fallecieron.
+         Cuidado, la tasa de letalidad es una sobreestimación de la tasa de letalidad por infección que el porcentaje de casos reales (detectados o no) que fallecieron.
 
         </li>
         <!-- <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
