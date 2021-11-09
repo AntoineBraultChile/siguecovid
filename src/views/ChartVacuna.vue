@@ -7,9 +7,9 @@
 
       <box-container class="explication">
         <p style="font-size:1.2rem;max-width:800px;text-align:justify;line-height: 150%;margin:20px 20px 20px 20px">
-          Actualmente hay cinco vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que CanSino y Janssen sólo requieren una. Se considerará
-          que una persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y completamente vacunada si ha recibido dos dosis con Sinovac, Pfizer o
-          AstraZeneca, o una dosis de CanSino o Janssen.
+          Actualmente hay cuatro vacunas autorizadas en Chile. Las vacunas de Sinovac, Pfizer y AstraZeneca requieren dos inyecciones, mientras que CanSino sólo requieren una. Se considerará que una
+          persona está parcialmente vacunada si ha recibido sólo una dosis de Sinovac, Pfizer o AstraZeneca, y completamente vacunada si ha recibido dos dosis con Sinovac, Pfizer o AstraZeneca, o una
+          dosis de CanSino.
         </p>
       </box-container>
 
