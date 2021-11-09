@@ -90,6 +90,14 @@
 
         <div class="wrapper">
           <title-graphic>
+            Dosis de refuerzo inyectados cada día por tipo de vacuna en Chile
+          </title-graphic>
+          <update :labels="vaccineType.labels"> </update>
+          <bar-chart :chartData="renderChartTypeVaccine('boost')" :options="optionsPorDia"> </bar-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic>
             Proporción de cada tipo de vacuna utilizada en Chile
           </title-graphic>
           <span style="font-size:1rem">
@@ -97,7 +105,16 @@
           </span>
           <br />
           <update :labels="vaccineType.labels"> </update>
-          <doughnut-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut()" :options="optionsDoughnut"> </doughnut-chart>
+          <doughnut-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut('second')" :options="optionsDoughnut"> </doughnut-chart>
+        </div>
+
+        <div class="wrapper">
+          <title-graphic>
+            Proporción de cada tipo de vacuna utilizada por la dosis de refuerzo en Chile
+          </title-graphic>
+          <br />
+          <update :labels="vaccineType.labels"> </update>
+          <doughnut-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut('boost')" :options="optionsDoughnut"> </doughnut-chart>
         </div>
 
         <div class="wrapper">
@@ -227,7 +244,7 @@ export default {
           Sinovac: [],
           AstraZeneca: [],
           CanSino: [],
-          Janssen: [],
+          // Janssen: [],
           proportion: [],
         },
         secondDoses: {
@@ -235,7 +252,14 @@ export default {
           Sinovac: [],
           AstraZeneca: [],
           CanSino: [],
-          Janssen: [],
+          // Janssen: [],
+          proportion: [],
+        },
+        boostDoses: {
+          Pfizer: [],
+          Sinovac: [],
+          AstraZeneca: [],
+          CanSino: [],
           proportion: [],
         },
       },
@@ -479,14 +503,14 @@ export default {
         ],
       };
     },
-    renderChartDoughnut() {
+    renderChartDoughnut(dose) {
       return {
         // labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
         labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
         datasets: [
           {
             label: "",
-            data: this.vaccineType.secondDoses.proportion,
+            data: this.vaccineType[dose + "Doses"].proportion,
             backgroundColor: ["#eba434", "#82CFFD", "#f87979", "#93DB70", "#845EC2"],
             hoverOffset: 4,
           },
@@ -499,17 +523,17 @@ export default {
         {
           label: "Pfizer",
           backgroundColor: "#82CFFD",
-          data: doses == "first" ? this.vaccineType.firstDoses["Pfizer"].slice(indexDate) : this.vaccineType.secondDoses["Pfizer"].slice(indexDate),
+          data: this.vaccineType[doses + "Doses"]["Pfizer"].slice(indexDate),
         },
         {
           label: "Sinovac",
           backgroundColor: "#f87979",
-          data: doses == "first" ? this.vaccineType.firstDoses["Sinovac"].slice(indexDate) : this.vaccineType.secondDoses["Sinovac"].slice(indexDate),
+          data: this.vaccineType[doses + "Doses"]["Sinovac"].slice(indexDate),
         },
         {
           label: "AstraZeneca",
           backgroundColor: "#eba434",
-          data: doses == "first" ? this.vaccineType.firstDoses["AstraZeneca"].slice(indexDate) : this.vaccineType.secondDoses["AstraZeneca"].slice(indexDate),
+          data: this.vaccineType[doses + "Doses"]["AstraZeneca"].slice(indexDate),
         },
       ];
       if (doses == "second") {
@@ -518,12 +542,12 @@ export default {
             label: "CanSino",
             backgroundColor: "#93DB70",
             data: this.vaccineType.secondDoses["CanSino"].slice(indexDate),
-          },
-          {
-            label: "Janssen",
-            backgroundColor: "#845EC2",
-            data: this.vaccineType.secondDoses["Janssen"].slice(indexDate),
           }
+          // {
+          //   label: "Janssen",
+          //   backgroundColor: "#845EC2",
+          //   data: this.vaccineType.secondDoses["Janssen"].slice(indexDate),
+          // }
         );
       }
       return {
@@ -878,11 +902,12 @@ export default {
     let vaccineTypeFirstDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_1eraDosis.csv");
     let vaccineTypeSecondDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv");
     let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
+    let vaccineTypeBoost = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_Refuerzo.csv");
 
     const dicVac = {
       "Campaña SARS-CoV-2 (AstraZeneca)": "AstraZeneca",
       CanSino: "CanSino",
-      "Campaña SARS-CoV-2 (Janssen)": "Janssen",
+      // "Campaña SARS-CoV-2 (Janssen)": "Janssen",
       "Campaña SARS-CoV-2 (Pfizer)": "Pfizer",
       "Campaña SARS-CoV-2 (Sinovac)": "Sinovac",
     };
@@ -941,6 +966,21 @@ export default {
       }
     });
 
+    vaccineTypeBoost.forEach((d) => {
+      this.vaccineType.boostDoses[dicVac[d["Fabricante"]]] = Object.values(d)
+        .slice(1)
+        .map((i) => {
+          return Number(i);
+        });
+
+      this.vaccineType.boostDoses.proportion.push(
+        Object.values(d)
+          .slice(1)
+          .map((i) => Number(i))
+          .reduce((total, element) => total + element)
+      );
+    });
+
     let sum = this.vaccineType.firstDoses.proportion.reduce((total, element) => {
       return total + element;
     });
@@ -953,6 +993,16 @@ export default {
     this.vaccineType.secondDoses.proportion = this.vaccineType.secondDoses.proportion.map((d) => {
       return Math.round((d / sum) * 1000) / 10;
     });
+
+    this.vaccineType.boostDoses.proportion = this.vaccineType.boostDoses.proportion.map((d) => {
+      return Math.round((d / sum) * 1000) / 10;
+    });
+    this.vaccineType.boostDoses.proportion = [
+      this.vaccineType.boostDoses.proportion[0],
+      this.vaccineType.boostDoses.proportion[2],
+      this.vaccineType.boostDoses.proportion[3],
+      this.vaccineType.boostDoses.proportion[1],
+    ];
   },
 };
 </script>
