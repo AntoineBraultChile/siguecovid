@@ -712,6 +712,12 @@ export default {
             return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
           },
         };
+        options.scales.yAxes[0].ticks = {
+          beginAtZero: true,
+          callback: function(tick) {
+            return tick.toString() + "%";
+          },
+        };
       }
       if (type == "Vaccine") {
         options.tooltips["callbacks"] = {
