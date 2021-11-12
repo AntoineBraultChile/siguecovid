@@ -154,14 +154,14 @@
 
     <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <title-graphic> Incidencia de ingresos en UCI según esquema de vacunación ajustada por edad en Chile </title-graphic>
-      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
+      <span style="font-size:1rem"> Número de personas que ingresaron cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
       <br />
       <!-- <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update> -->
       <line-chart :chartData="plotIncidenceVaccinalByAge('uci')" :options="chartOptions('vaccinalSchemes')"></line-chart>
     </div>
     <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <title-graphic> Incidencia de fallecidos según esquema de vacunación ajustada por edad en Chile </title-graphic>
-      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
+      <span style="font-size:1rem"> Número de personas que fallecieron cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
       <br />
       <!-- <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update> -->
       <line-chart :chartData="plotIncidenceVaccinalByAge('deaths')" :options="chartOptions('vaccinalSchemes')"></line-chart>
