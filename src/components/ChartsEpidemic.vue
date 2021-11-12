@@ -144,30 +144,28 @@
       </p>
     </box-container>
 
-    <!-- <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia semanal con respecto al esquema de vacunación en {{ region }}</title-graphic>
-      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo.</span>
+    <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
+      <title-graphic> Incidencia de casos según esquema de vacunación ajustada por edad en Chile</title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
       <br />
-      <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update>
-      <line-chart :chartData="plotVaccinalSchemes(dataCovid.incidenceCompleteVaccinalScheme, dataCovid.incidenceUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
+      <!-- <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update> -->
+      <line-chart :chartData="plotIncidenceVaccinalByAge('cases')" :options="chartOptions('vaccinalSchemes')"></line-chart>
     </div>
 
-    <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia semanal de ingreso a UCI con respecto al esquema de vacunación en {{ region }}</title-graphic>
-      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica que van a ingresar en unidad de cuidados intensivos por cada 100.000 personas en cada grupo.</span>
+    <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
+      <title-graphic> Incidencia de ingresos en UCI según esquema de vacunación ajustada por edad en Chile </title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
       <br />
-      <update :labels="Object.keys(dataCovid.uciCompleteVaccinalScheme)"> </update>
-      <line-chart :chartData="plotVaccinalSchemes(dataCovid.uciCompleteVaccinalScheme, dataCovid.uciUncompleteVaccinalScheme)" :options="chartOptions('vaccinalSchemes')"></line-chart>
+      <!-- <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update> -->
+      <line-chart :chartData="plotIncidenceVaccinalByAge('uci')" :options="chartOptions('vaccinalSchemes')"></line-chart>
     </div>
-
-    <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Incidencia de los fallecidos con respecto al esquema de vacunación en {{ region }}</title-graphic>
-      <update :labels="dataCovid.labelsVaccine"> </update>
-      <line-chart
-        :chartData="plotVaccinalSchemes(this.dataCovid.fallecidosCompleteVaccinalScheme, this.dataCovid.fallecidosUncompleteVaccinalScheme)"
-        :options="chartOptions('vaccinalSchemes')"
-      ></line-chart>
-    </div> -->
+    <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
+      <title-graphic> Incidencia de fallecidos según esquema de vacunación ajustada por edad en Chile </title-graphic>
+      <span style="font-size:1rem"> Número de casos detectados cada semana epidemiológica por cada 100.000 personas en cada grupo ajustada por edad.</span>
+      <br />
+      <!-- <update :labels="Object.keys(dataCovid.incidenceCompleteVaccinalScheme)"> </update> -->
+      <line-chart :chartData="plotIncidenceVaccinalByAge('deaths')" :options="chartOptions('vaccinalSchemes')"></line-chart>
+    </div>
 
     <div class="graph" v-if="region == 'Chile'">
       <title-graphic> Incidencia por estado de vacunación y grupo de edad en Chile</title-graphic>
@@ -602,6 +600,50 @@ export default {
         ],
       };
     },
+    plotIncidenceVaccinalByAge(type) {
+      let fromDate = this.fromDate;
+      let labels = Object.keys(this.dataCovid.incidenceVaccinalAjustedByAge[type]["sin esquema completo"]);
+      let indexDate = labels.indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+
+      return {
+        labels: labels.filter((x) => {
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+        }),
+        datasets: [
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Sin esquema completo",
+            borderColor: this.colorsPasoAPaso[1],
+            backgroundColor: this.colorsPasoAPaso[1],
+            fill: false,
+            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["sin esquema completo"]).slice(indexDate),
+          },
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Con esquema completo",
+            borderColor: this.colorsPasoAPaso[3],
+            backgroundColor: this.colorsPasoAPaso[3],
+            fill: false,
+            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["con esquema completo"]).slice(indexDate),
+          },
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Con dosis refuerzo > 14 días",
+            borderColor: this.colorsPasoAPaso[2],
+            backgroundColor: this.colorsPasoAPaso[2],
+            fill: false,
+            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["con dosis refuerzo > 14 dias"]).slice(indexDate),
+          },
+        ],
+      };
+    },
     chartOptions(type) {
       let options = {
         animation: {
@@ -641,17 +683,7 @@ export default {
           },
         ];
       }
-      // if (type == "IncidenceByVaccinalScheme") {
-      //   options.responsive = true;
-      //   options.maintainAspectRatio = false;
-      //   options.scales["xAxes"] = [
-      //     {
-      //       ticks: {
-      //         beginAtZero: true,
-      //       },
-      //     },
-      //   ];
-      // }
+
       if (type == "vaccinalSchemes") {
         options["tooltips"] = {
           mode: "index",
@@ -848,7 +880,7 @@ export default {
           },
         };
       }
-      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant" || type == "IncidenceByVaccinalScheme" || type == "Deis") {
+      if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant" || type == "IncidenceByVaccinalScheme" || type == "Deis" || type == "vaccinalSchemes") {
         options.legend = { display: true };
       }
       return options;

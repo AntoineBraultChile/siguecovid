@@ -80,4 +80,18 @@ function toTimeSerie(labels, values) {
   return timeSerie;
 }
 
-export { meanWeek, derivate, sumArray, derivateEachTwoDays, order, removeSenselessValues, toTimeSerie };
+function median(values) {
+  if (values.length === 0) throw new Error("No inputs");
+
+  values.sort(function(a, b) {
+    return a - b;
+  });
+
+  var half = Math.floor(values.length / 2);
+
+  if (values.length % 2) return values[half];
+
+  return (values[half - 1] + values[half]) / 2.0;
+}
+
+export { meanWeek, derivate, sumArray, derivateEachTwoDays, order, removeSenselessValues, toTimeSerie, median };
