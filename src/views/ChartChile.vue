@@ -746,11 +746,12 @@ export default {
       let data = incidenceByAgeByVaccinalScheme.filter(obj =>  {return obj['semana_epidemiologica'] === w && obj['estado_vacunacion'] === v})
       let dataRef = incidenceByAgeByVaccinalScheme.filter(obj =>  {return obj['semana_epidemiologica'] === w && obj['estado_vacunacion'] === 'sin esquema completo'})
       if(data.length > 0){
-        let totalPopulationRef = Number(dataRef.find(obj => obj.grupo_edad === 'Total').poblacion)
-        let data6_12anos = dataRef.find(obj => obj.grupo_edad === '06 - 11 años') 
-        if (data6_12anos != undefined){
-          totalPopulationRef = totalPopulationRef - data6_12anos.poblacion 
-        }
+        let totalPopulationRef = 0
+        dataRef.forEach(d =>{
+          if (ageGroup.includes(d['grupo_edad'])){
+            totalPopulationRef += Number(d['poblacion'])
+          }
+        })
         let incidenceCases = 0
         let incidenceUCI = 0
         let incidenceDeaths = 0
