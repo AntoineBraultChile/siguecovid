@@ -747,17 +747,20 @@ export default {
       let dataRef = incidenceByAgeByVaccinalScheme.filter(obj =>  {return obj['semana_epidemiologica'] === w && obj['estado_vacunacion'] === 'sin esquema completo'})
       if(data.length > 0){
         let totalPopulationRef = Number(dataRef.find(obj => obj.grupo_edad === 'Total').poblacion)
+        let data6_12anos = dataRef.find(obj => obj.grupo_edad === '06 - 11 años') 
+        if (data6_12anos != undefined){
+          totalPopulationRef = totalPopulationRef - data6_12anos.poblacion 
+        }
         let incidenceCases = 0
         let incidenceUCI = 0
         let incidenceDeaths = 0
-        for (let a of ageGroup){
-          
+        for (let a of ageGroup){       
           let dataAge = data.find(obj => obj.grupo_edad === a)
           let dataAgeRef = dataRef.find(obj => obj.grupo_edad === a)
           if (Number(dataAge['poblacion']) > 5000){
-          incidenceCases += Number(dataAge['incidencia_casos']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
-          incidenceUCI += Number(dataAge['incidencia_uci']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
-          incidenceDeaths += Number(dataAge['incidencia_def']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
+            incidenceCases += Number(dataAge['incidencia_casos']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
+            incidenceUCI += Number(dataAge['incidencia_uci']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
+            incidenceDeaths += Number(dataAge['incidencia_def']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
           }
         }
         incidenceAjustedCases[v][dicEpiWeek[w]] = Math.round(incidenceCases*100)/100
