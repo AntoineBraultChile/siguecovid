@@ -351,6 +351,8 @@ export default {
       "20H (Beta, V2)": "Beta",
       "20J (Gamma, V3)": "Gamma",
       "21A (Delta)": "Delta",
+      "21I (Delta)": "Delta",
+      "21J (Delta)": "Delta",
       "21C (Epsilon)": "Epsilon",
       "21G (Lambda)": "Lambda",
       "21F (Iota)": "Iota",
