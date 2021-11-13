@@ -17,19 +17,19 @@
           <div class="legend">
             <span class="label">
               <div class="rectangle red"></div>
-              <span>Paso 1</span>
+              <span>Fase 1</span>
             </span>
             <span class="label">
               <div class="rectangle orange"></div>
-              <span>Paso 2</span>
+              <span>Fase 2</span>
             </span>
             <span class="label">
               <div class="rectangle blue"></div>
-              <span>Paso 3</span>
+              <span>Fase 3</span>
             </span>
             <span class="label">
               <div class="rectangle green"></div>
-              <span>Paso 4</span>
+              <span>Fase 4</span>
             </span>
           </div>
           <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
@@ -41,19 +41,19 @@
           <div class="legend">
             <span class="label">
               <div class="rectangle red"></div>
-              <span>Paso 1</span>
+              <span>Fase 1</span>
             </span>
             <span class="label">
               <div class="rectangle orange"></div>
-              <span>Paso 2</span>
+              <span>Fase 2</span>
             </span>
             <span class="label">
               <div class="rectangle blue"></div>
-              <span>Paso 3</span>
+              <span>Fase 3</span>
             </span>
             <span class="label">
               <div class="rectangle green"></div>
-              <span>Paso 4</span>
+              <span>Fase 4</span>
             </span>
           </div>
           <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)" />

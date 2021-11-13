@@ -1,21 +1,11 @@
 <template lang="html">
   <div class="ChartsEpidemic">
+    <!-- Chart Cases -->
     <div class="graph" v-if="dataCovid.labelsCases.length > 0">
-      <title-graphic> {{ title["Cases"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem">Los casos se detectan por PCR o prueba antigénica. </span>
-      <br />
-      <update :labels="dataCovid.labelsCases"> </update>
-      <bar-chart :chartData="plotBarChartWithMean(region, 'Cases')" :options="chartOptions('Cases')"> </bar-chart>
+      <cases-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" />
     </div>
 
-    <div class="graph" v-if="dataCovid.labelsCases.length > 0">
-      <title-graphic> Variación semanal de los nuevos casos detectados en {{ region }} </title-graphic>
-      <span style="font-size:1rem">Los casos se detectan por PCR o prueba antigénica. </span>
-      <br />
-      <update :labels="dataCovid.labelsCases"> </update>
-      <bar-chart :chartData="plotVariantions(this.dataCovid['labelsCases'].slice(5), this.dataCovid[region + 'MeanCases'])" :options="chartOptions('Variations')"> </bar-chart>
-    </div>
-
+    <!-- Chart Positivity -->
     <div class="graph" v-if="dataCovid.labelsPcr.length > 0">
       <title-graphic> {{ title["Pcr"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem">La positividad es el porcentaje de casos detectados sobre el numero de test PCR y de antigenos realizados cada día.</span>
@@ -24,6 +14,7 @@
       <bar-chart :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
     </div>
 
+    <!-- Chart UCI -->
     <div class="graph" v-if="dataCovid.labelsUci.length > 0">
       <title-graphic> {{ title["Uci"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
@@ -33,58 +24,25 @@
       <bar-chart :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
     </div>
 
+    <!-- Chart Deaths -->
     <div class="graph" v-if="dataCovid.labelsDeaths.length > 0">
       <title-graphic> {{ title["Deaths"] }} en {{ region }} </title-graphic>
       <span style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR o antigénico. La fecha de notificación puede ser diferente de la fecha de muerte.</span>
       <br />
-
       <update :labels="dataCovid.labelsDeaths"> </update>
       <bar-chart :chartData="plotBarChartWithMean(region, 'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
     </div>
 
+    <!-- Chart Vaccine -->
     <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
       <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
       <update :labels="dataCovid.labelsVaccine"> </update>
       <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Vaccine')"></line-chart>
     </div>
 
+    <!-- Chart Incidence by Region -->
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
-      <title-graphic v-if="region == 'Chile'"> Incidencia en las regiones de Chile</title-graphic>
-      <title-graphic v-else> Incidencia en las comunas de la región {{ region }} </title-graphic>
-      <span style="font-size:1rem">Incidencia: número semanal de casos por cada 100.000 habitantes</span>
-      <br />
-      <update :labels="dataCovid.incidence.lastUpdate"> </update>
-      <div class="legend" v-if="!(region == 'Chile')">
-        <span class="label">
-          <div class="rectangle red"></div>
-          <span>Paso 1</span>
-        </span>
-        <span class="label">
-          <div class="rectangle orange"></div>
-          <span>Paso 2</span>
-        </span>
-        <span class="label">
-          <div class="rectangle blue"></div>
-          <span>Paso 3</span>
-        </span>
-        <span class="label">
-          <div class="rectangle green"></div>
-          <span>Paso 4</span>
-        </span>
-      </div>
-      <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region)" :options="chartOptions('Incidence')"></horizontal-bar-chart>
-    </div>
-
-    <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
-      <title-graphic v-if="region == 'Chile'"> Variación de la incidencia en las regiones de Chile</title-graphic>
-      <title-graphic v-else>
-        Variación de la incidencia en las comunas de la región
-        {{ region }}</title-graphic
-      >
-      <span style="font-size:1rem">Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span>
-      <br />
-      <update :labels="dataCovid.incidence.lastUpdate"> </update>
-      <horizontal-bar-chart :height="600" :chartData="getChartIncidence(region, 'variations')" :options="chartOptions('Incidence')"></horizontal-bar-chart>
+      <incidence-bar-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :colorsPasoAPaso="colorsPasoAPaso" />
     </div>
 
     <!-- Chart ICU entries en Chile -->
@@ -205,12 +163,13 @@ dayjs.extend(customParseFormat);
 import "dayjs/locale/es"; // load on demand
 dayjs.locale("es"); // use Spanish locale globally
 
-import { order } from "../assets/mathFunctions";
-
 import BarChart from "../components/BarChart";
 import LineChart from "../components/LineChart";
-import HorizontalBarChart from "../components/HorizontalBarChart";
+// import HorizontalBarChart from "../components/HorizontalBarChart";
 import Update from "../components/Update";
+
+import CasesChart from "@/components/CasesChart";
+import IncidenceBarChart from "@/components/IncidenceBarChart";
 
 import TitleGraphic from "../components/TitleGraphic";
 export default {
@@ -219,9 +178,10 @@ export default {
   components: {
     "line-chart": LineChart,
     "bar-chart": BarChart,
-    "horizontal-bar-chart": HorizontalBarChart,
+    "incidence-bar-chart": IncidenceBarChart,
     update: Update,
     "title-graphic": TitleGraphic,
+    "cases-chart": CasesChart,
   },
   data() {
     return {
@@ -322,29 +282,6 @@ export default {
       };
     },
 
-    plotVariantions(labels, data) {
-      const labelsDerivative = labels.slice(1);
-      let indexDate = labelsDerivative.indexOf(this.fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
-
-      const variations = data.map((d, index) => (index > 6 ? Math.round(((data[index] - data[index - 7]) / data[index - 7]) * 1000) / 10 : null));
-      const colors = variations.map((d) => (d <= 0 ? this.backgroundColor["Cases"] : this.backgroundColor["Uci"]));
-      return {
-        labels: labelsDerivative.slice(indexDate),
-        datasets: [
-          {
-            type: "bar",
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "",
-            borderColor: colors.slice(indexDate),
-            backgroundColor: colors.slice(indexDate),
-            fill: false,
-            data: variations.slice(indexDate),
-          },
-        ],
-      };
-    },
     plotLine(labels, values, color) {
       let fromDate = this.fromDate;
       let indexDate = labels.indexOf(fromDate);
@@ -437,40 +374,7 @@ export default {
         datasets: datasets,
       };
     },
-    getChartIncidence(region, type) {
-      let values = type == "variations" ? this.dataCovid.incidence[region].variations : this.dataCovid.incidence[region].values;
-      let [labelsSort, valuesSort] = order(this.dataCovid.incidence[region].names, values);
-      let colors = [];
-      let label = "";
-      if (type == "variations") {
-        valuesSort.forEach((d) => {
-          d < 0 ? colors.push(this.backgroundColor["Cases"]) : colors.push(this.backgroundColor["Uci"]);
-        });
-        label = "Variación incidencia";
-      } else {
-        label = "Incidencia";
-        if (this.region == "Chile") {
-          colors = this.backgroundColor["Pcr"];
-        } else {
-          labelsSort.forEach((comuna) => {
-            colors.push(this.colorsPasoAPaso[this.dataCovid.pasoAPaso[comuna]]);
-          });
-        }
-      }
-      return {
-        labels: labelsSort,
-        datasets: [
-          {
-            type: "horizontalBar",
-            label: label,
-            borderColor: colors,
-            backgroundColor: colors,
-            data: valuesSort,
-          },
-        ],
-        borderWidth: 1,
-      };
-    },
+
     plotBar(name, type) {
       let fromDate = this.fromDate;
       // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
@@ -672,18 +576,6 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       };
-      if (type == "Incidence") {
-        options.responsive = true;
-        options.maintainAspectRatio = false;
-        options.scales["xAxes"] = [
-          {
-            ticks: {
-              beginAtZero: true,
-            },
-          },
-        ];
-      }
-
       if (type == "vaccinalSchemes") {
         options["tooltips"] = {
           mode: "index",
@@ -910,7 +802,7 @@ export default {
   padding: 0px 0px 10px 0px;
 }
 
-.legend {
+/* .legend {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -918,9 +810,9 @@ export default {
   align-items: center;
   font-size: 0.9rem;
   color: gray;
-}
+} */
 
-.label {
+/* .label {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -941,7 +833,7 @@ export default {
 }
 .green {
   background-color: #93db70;
-}
+} */
 
 .two-columns {
   display: inline-block;
@@ -952,6 +844,7 @@ export default {
   line-height: 150%;
   padding: 0px 10px 0px 10px;
 }
+
 @media all and (max-width: 1100px) {
   .graph {
     width: 100%;
