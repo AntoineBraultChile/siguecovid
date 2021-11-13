@@ -16,21 +16,12 @@
 
     <!-- Chart UCI -->
     <div class="graph" v-if="dataCovid.labelsUci.length > 0">
-      <title-graphic> {{ title["Uci"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
-      <br />
-
-      <update :labels="dataCovid.labelsUci"> </update>
-      <bar-chart :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
+      <uci-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" :colorsPasoAPaso="colorsPasoAPaso" />
     </div>
 
     <!-- Chart Deaths -->
     <div class="graph" v-if="dataCovid.labelsDeaths.length > 0">
-      <title-graphic> {{ title["Deaths"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR o antigénico. La fecha de notificación puede ser diferente de la fecha de muerte.</span>
-      <br />
-      <update :labels="dataCovid.labelsDeaths"> </update>
-      <bar-chart :chartData="plotBarChartWithMean(region, 'Deaths')" :options="chartOptions('Deaths')"> </bar-chart>
+      <deaths-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" :colorsPasoAPaso="colorsPasoAPaso" />
     </div>
 
     <!-- Chart Vaccine -->
@@ -43,24 +34,6 @@
     <!-- Chart Incidence by Region -->
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
       <incidence-bar-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :colorsPasoAPaso="colorsPasoAPaso" />
-    </div>
-
-    <!-- Chart ICU entries en Chile -->
-    <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
-      <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
-      <br />
-      <update :labels="dataCovid.labelsIngresoUCI"> </update>
-      <bar-chart :chartData="plotLine(dataCovid.labelsIngresoUCI, dataCovid['ChileIngresoUCI'], this.colorsPasoAPaso[1])" :options="chartOptions('IngresoUCI')"> </bar-chart>
-    </div>
-
-    <!-- Chart DEIS deaths -->
-    <div class="graph" v-if="region == 'Chile'">
-      <title-graphic> Muertes por Covid-19 en Chile por fecha de fallecimiento </title-graphic>
-      <span style="font-size:1rem">A diferencia de las muertes sospechosas, las muertes confirmadas son las que se confirman mediante PCR o pruebas antigénicas. </span>
-      <br />
-      <update :labels="dataCovid.deis.labels"> </update>
-      <bar-chart :chartData="plotDeis()" :options="chartOptions('Deis')"> </bar-chart>
     </div>
 
     <!-- Case fatality rate -->
@@ -169,6 +142,9 @@ import LineChart from "../components/LineChart";
 import Update from "../components/Update";
 
 import CasesChart from "@/components/CasesChart";
+import UciChart from "@/components/UciChart";
+import DeathsChart from "@/components/DeathsChart";
+
 import IncidenceBarChart from "@/components/IncidenceBarChart";
 
 import TitleGraphic from "../components/TitleGraphic";
@@ -182,6 +158,8 @@ export default {
     update: Update,
     "title-graphic": TitleGraphic,
     "cases-chart": CasesChart,
+    "deaths-chart": DeathsChart,
+    "uci-chart": UciChart,
   },
   data() {
     return {
@@ -372,95 +350,6 @@ export default {
       return {
         labels: this.dataCovid.pasoAPaso.labels.slice(indexDate),
         datasets: datasets,
-      };
-    },
-
-    plotBar(name, type) {
-      let fromDate = this.fromDate;
-      // console.log(Math.max(this.dataCovid['labels'+type].reduce(function (a, b) { return a < b ? a : b; })))
-      let indexDate = this.dataCovid["labels" + type].indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
-      return {
-        labels: this.dataCovid["labels" + type].filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
-        }),
-        datasets: [
-          {
-            label: this.title[type] + " en " + name,
-            backgroundColor: this.backgroundColor[type],
-            fill: false,
-            data: this.dataCovid[name + type].slice(indexDate),
-          },
-        ],
-      };
-    },
-    plotBarChartWithMean(name, type) {
-      let fromDate = this.fromDate;
-      let indexDate = this.dataCovid["labels" + type].indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
-
-      // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
-      return {
-        labels: this.dataCovid["labels" + type].filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
-        }),
-        datasets: [
-          {
-            type: "line",
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "Media móvil de 7  días",
-            borderColor: "#dd4b39",
-            backgroundColor: "#dd4b39",
-            fill: false,
-            data: this.dataCovid[name + "Mean" + type].slice(indexDate - 6),
-          },
-          {
-            type: "bar",
-            label: this.title[type] + " diarios",
-            backgroundColor: this.backgroundColor[type],
-            fill: false,
-            data: this.dataCovid[name + type].slice(indexDate),
-          },
-        ],
-      };
-    },
-    plotDeis() {
-      let fromDate = this.fromDate;
-      let indexDate = this.dataCovid.deis.labels.indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
-
-      // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
-      return {
-        labels: this.dataCovid.deis.labels.filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
-        }),
-        datasets: [
-          {
-            type: "line",
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "Total muertes (media móvil de 7 días)",
-            borderColor: "#dd4b39",
-            backgroundColor: "#dd4b39",
-            fill: false,
-            data: this.dataCovid.deis.mediaMovil.slice(indexDate - 6),
-          },
-          {
-            type: "bar",
-            label: "Fallecidos confirmados",
-            backgroundColor: this.backgroundColor["Deaths"],
-            fill: false,
-            data: this.dataCovid.deis.confirmed.slice(indexDate),
-          },
-          {
-            type: "bar",
-            label: "Fallecidos sospechosos",
-            backgroundColor: this.colorsPasoAPaso[2],
-            fill: false,
-            data: this.dataCovid.deis.suspected.slice(indexDate),
-          },
-        ],
       };
     },
 
@@ -705,20 +594,6 @@ export default {
         options.hover = {
           mode: "index",
           intersect: false,
-        };
-      }
-      if (type == "Deis") {
-        options.scales = {
-          xAxes: [
-            {
-              stacked: true,
-            },
-          ],
-          yAxes: [
-            {
-              stacked: true,
-            },
-          ],
         };
       }
       if (type == "Pcr") {
