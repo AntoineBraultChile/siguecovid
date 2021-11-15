@@ -1,3 +1,4 @@
+require = require("esm")(module);
 const { routes } = require("./src/router/index.js");
 const path = require("path");
 const PrerenderSPAPlugin = require("prerender-spa-plugin");
