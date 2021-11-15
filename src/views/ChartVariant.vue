@@ -364,9 +364,17 @@ export default {
     let sumVariant = [];
     nameVariant.forEach((name) => {
       if (dicVariant[name] != undefined) {
-        this.variantChile.valuesForTheVariants[dicVariant[name]] = variantChile[name];
-        this.variantChile.proportionVariants[dicVariant[name]] = variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10);
-        sumVariant = sumArray(sumVariant, this.variantChile.valuesForTheVariants[dicVariant[name]]);
+        if (this.variantChile.valuesForTheVariants[dicVariant[name]] != undefined) {
+          this.variantChile.valuesForTheVariants[dicVariant[name]] = sumArray(this.variantChile.valuesForTheVariants[dicVariant[name]], variantChile[name]);
+          this.variantChile.proportionVariants[dicVariant[name]] = sumArray(
+            this.variantChile.proportionVariants[dicVariant[name]],
+            variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10)
+          );
+        } else {
+          this.variantChile.valuesForTheVariants[dicVariant[name]] = variantChile[name];
+          this.variantChile.proportionVariants[dicVariant[name]] = variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10);
+        }
+        sumVariant = sumArray(sumVariant, variantChile[name]);
       }
     });
 
