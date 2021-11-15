@@ -45,76 +45,19 @@
           <bar-chart :chartData="barChartVacunaPorEdad()" :options="options('vertical')"> </bar-chart>
         </div>
 
-        <div class="wrapper">
-          <title-graphic>
-            Personas con al menos una dosis por edad en Chile
-          </title-graphic>
-          <!-- <span style='font-size:1rem'> Estar parcialmente vacunado significa tener una dosis de Sinovac, Astra-Zeneca, Pfizer.</span> <br> -->
-          <update :labels="vacunaChile.labels"> </update>
-          <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
+        <!-- By age -->
+        <div class="wrapper" v-if="vacunaChile.labelsByAge.length > 0">
+          <chart-vaccine-by-age :vacunaChile="vacunaChile" :fromDate="fromDate" :pointRadius="pointRadius" :pointHoverRadius="pointHoverRadius" />
         </div>
 
-        <div class="wrapper">
-          <title-graphic>
-            Personas completamente vacunadas por edad en Chile
-          </title-graphic>
-          <!-- <span style='font-size:1rem'> Estar completamente vacunado significa tener dos dosis de Sinovac, Astra-Zeneca, Pfizer o una dosis de CanSino.</span> <br> -->
-          <update :labels="vacunaChile.labels"> </update>
-          <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
+        <!-- daily by vaccine type  -->
+        <div class="wrapper" v-if="vaccineType.labels.length > 0">
+          <chart-vaccine-by-type :data="vaccineType" :fromDate="fromDate" />
         </div>
 
+        <!-- Doughnut Chart proportion of vaccine type -->
         <div class="wrapper">
-          <title-graphic>
-            Personas con dosis de refuerzo por edad en Chile
-          </title-graphic>
-          <!-- <span style='font-size:1rem'> Estar completamente vacunado significa tener dos dosis de Sinovac, Astra-Zeneca, Pfizer o una dosis de CanSino.</span> <br> -->
-          <update :labels="vacunaChile.labels"> </update>
-          <line-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChileVaccineByAge('boostDosesByAgeGroup')" :options="options('vertical')"> </line-chart>
-        </div>
-
-        <div class="wrapper">
-          <title-graphic>
-            Personas parcialmente vacunadas cada día por tipo de vacuna en Chile
-          </title-graphic>
-          <update :labels="vaccineType.labels"> </update>
-          <bar-chart :chartData="renderChartTypeVaccine('first')" :options="optionsPorDia"> </bar-chart>
-        </div>
-
-        <div class="wrapper">
-          <title-graphic>
-            Personas completamente vacunadas cada día por tipo de vacuna en Chile
-          </title-graphic>
-          <update :labels="vaccineType.labels"> </update>
-          <bar-chart :chartData="renderChartTypeVaccine('second')" :options="optionsPorDia"> </bar-chart>
-        </div>
-
-        <div class="wrapper">
-          <title-graphic>
-            Dosis de refuerzo inyectados cada día por tipo de vacuna en Chile
-          </title-graphic>
-          <update :labels="vaccineType.labels"> </update>
-          <bar-chart :chartData="renderChartTypeVaccine('boost')" :options="optionsPorDia"> </bar-chart>
-        </div>
-
-        <div class="wrapper">
-          <title-graphic>
-            Proporción de cada tipo de vacuna utilizada en Chile
-          </title-graphic>
-          <span style="font-size:1rem">
-            Sólo se tienen en cuenta las personas completamente (dosis dosis o dosis única) vacunadas.
-          </span>
-          <br />
-          <update :labels="vaccineType.labels"> </update>
-          <doughnut-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut('second')" :options="optionsDoughnut"> </doughnut-chart>
-        </div>
-
-        <div class="wrapper">
-          <title-graphic>
-            Proporción de cada tipo de vacuna utilizada por la dosis de refuerzo en Chile
-          </title-graphic>
-          <br />
-          <update :labels="vaccineType.labels"> </update>
-          <doughnut-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartDoughnut('boost')" :options="optionsDoughnut"> </doughnut-chart>
+          <chart-proportion-vaccine :data="vaccineType" :fromDate="fromDate" />
         </div>
 
         <div class="wrapper">
@@ -184,7 +127,7 @@
 
 <script>
 import { derivate, sumArray, order } from "@/assets/mathFunctions";
-import DoughnutChart from "../components/DoughnutChart";
+// import DoughnutChart from "../components/DoughnutChart";
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
 import HorizontalBarChart from "../components/HorizontalBarChart";
@@ -194,6 +137,10 @@ import Indicators from "@/components/Indicators";
 import TitleGraphic from "@/components/TitleGraphic";
 import FooterIndicators from "@/components/FooterIndicators";
 import SlideBar from "../components/SlideBar";
+
+import ChartVaccineByAge from "@/components/ChartVaccineByAge";
+import ChartVaccineByType from "@/components/ChartVaccineByType";
+import ChartProportionVaccine from "@/components/ChartProportionVaccine";
 
 import * as d3 from "d3-fetch";
 
@@ -209,13 +156,16 @@ export default {
     "line-chart": LineChart,
     "bar-chart": BarChart,
     "horizontal-bar-chart": HorizontalBarChart,
-    "doughnut-chart": DoughnutChart,
+    // "doughnut-chart": DoughnutChart,
     "title-container": TitleContainer,
     "title-graphic": TitleGraphic,
     indicators: Indicators,
     "footer-indicators": FooterIndicators,
     update: Update,
     "slide-bar": SlideBar,
+    "chart-vaccine-by-age": ChartVaccineByAge,
+    "chart-vaccine-by-type": ChartVaccineByType,
+    "chart-proportion-vaccine": ChartProportionVaccine,
     // 'choose-date': ChooseDate
   },
   metaInfo() {
@@ -501,60 +451,6 @@ export default {
             hoverOffset: 4,
           },
         ],
-      };
-    },
-    renderChartDoughnut(dose) {
-      return {
-        // labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
-        labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
-        datasets: [
-          {
-            label: "",
-            data: this.vaccineType[dose + "Doses"].proportion,
-            backgroundColor: ["#eba434", "#82CFFD", "#f87979", "#93DB70", "#845EC2"],
-            hoverOffset: 4,
-          },
-        ],
-      };
-    },
-    renderChartTypeVaccine(doses) {
-      let indexDate = this.vaccineType.labels.indexOf(this.fromDate);
-      let datasets = [
-        {
-          label: "Pfizer",
-          backgroundColor: "#82CFFD",
-          data: this.vaccineType[doses + "Doses"]["Pfizer"].slice(indexDate),
-        },
-        {
-          label: "Sinovac",
-          backgroundColor: "#f87979",
-          data: this.vaccineType[doses + "Doses"]["Sinovac"].slice(indexDate),
-        },
-        {
-          label: "AstraZeneca",
-          backgroundColor: "#eba434",
-          data: this.vaccineType[doses + "Doses"]["AstraZeneca"].slice(indexDate),
-        },
-      ];
-      if (doses == "second") {
-        datasets.push(
-          {
-            label: "CanSino",
-            backgroundColor: "#93DB70",
-            data: this.vaccineType.secondDoses["CanSino"].slice(indexDate),
-          }
-          // {
-          //   label: "Janssen",
-          //   backgroundColor: "#845EC2",
-          //   data: this.vaccineType.secondDoses["Janssen"].slice(indexDate),
-          // }
-        );
-      }
-      return {
-        labels: this.vaccineType.labels.filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(this.fromDate, "DD-MM-YYYY");
-        }),
-        datasets: datasets,
       };
     },
     renderChartVacuna() {
