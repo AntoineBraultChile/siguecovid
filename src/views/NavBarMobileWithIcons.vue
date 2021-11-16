@@ -8,30 +8,17 @@
             Sigue
           </span>
           <span style="color:black;opacity:0.4;font-weight:300;">Covid </span>
-          <span style="color:black;font-weight:350;font-size:1.5rem;">
-            en Chile</span
-          >
+          <span style="color:black;font-weight:350;font-size:1.5rem;"> en Chile</span>
         </router-link>
       </div>
       <div class="bottom-bar" :class="{ 'fixed-nav-bar': fixedNavBar }">
-        <router-link to="/">
-          <font-awesome-icon class="icon" icon="home"
-        /></router-link>
-        <router-link to="/regions"
-          ><font-awesome-icon class="icon" icon="flag"
-        /></router-link>
-        <router-link to="/comunas"
-          ><font-awesome-icon class="icon" icon="map-marker"
-        /></router-link>
-        <router-link to="/edad">
-          <font-awesome-icon class="icon" icon="users"
-        /></router-link>
-        <router-link to="/vacuna"
-          ><font-awesome-icon class="icon" icon="syringe"
-        /></router-link>
-        <router-link to="/variantes"
-          ><font-awesome-icon class="icon" icon="dna"
-        /></router-link>
+        <router-link to="/"> <font-awesome-icon class="icon" icon="home"/></router-link>
+        <router-link to="/regions"><font-awesome-icon class="icon" icon="flag"/></router-link>
+        <router-link to="/comunas"><font-awesome-icon class="icon" icon="map-marker"/></router-link>
+        <router-link to="/edad"> <font-awesome-icon class="icon" icon="users"/></router-link>
+        <router-link to="/vacuna"><font-awesome-icon class="icon" icon="syringe"/></router-link>
+        <router-link to="/impacto"><font-awesome-icon class="icon" icon="fist-raised"/></router-link>
+        <router-link to="/variantes"><font-awesome-icon class="icon" icon="dna"/></router-link>
 
         <router-link to="/about">
           <font-awesome-icon class="icon" icon="envelope" />

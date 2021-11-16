@@ -27,7 +27,7 @@
           <line-chart :chartData="getChartVariant(variantChile.proportionVariants)" :options="chartOptions((percentage = false), (NoLegend = false), (max100 = true))"> </line-chart>
         </div>
 
-        <div class="wrapper">
+        <!-- <div class="wrapper">
           <title-graphic> Casos de la variante Delta detectados cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
           <bar-chart :chartData="getChart(variantChile.valuesForTheVariants.Delta, colorsVariant[3], 'line')" :options="chartOptions((percentage = false), (NoLegend = true))"> </bar-chart>
@@ -42,7 +42,7 @@
           <title-graphic> Porcentaje de casos detectados secuenciados cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
           <bar-chart :chartData="getChart(variantChile.proportionSequencedByCases, colorsVariant[7], 'line')" :options="chartOptions((percentage = true), (NoLegend = true))"> </bar-chart>
-        </div>
+        </div> -->
       </div>
       <spinner size="massive" v-else></spinner>
     </div>
@@ -92,7 +92,7 @@
 import { sumArray, derivate } from "@/assets/mathFunctions";
 // import DoughnutChart from "../components/DoughnutChart";
 import LineChart from "../components/LineChart";
-import BarChart from "../components/BarChart";
+// import BarChart from "../components/BarChart";
 // import HorizontalBarChart from "../components/HorizontalBarChart";
 import Update from "../components/Update";
 import TitleContainer from "@/components/TitleContainer";
@@ -113,7 +113,7 @@ export default {
   name: "ChartVacuna",
   components: {
     "line-chart": LineChart,
-    "bar-chart": BarChart,
+    // "bar-chart": BarChart,
     // "horizontal-bar-chart": HorizontalBarChart,
     // "doughnut-chart": DoughnutChart,
     "title-container": TitleContainer,

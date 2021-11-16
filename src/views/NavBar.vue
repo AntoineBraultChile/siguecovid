@@ -22,6 +22,8 @@
           <router-link to="/comunas">Por comuna</router-link>
           <router-link to="/edad">Por edad</router-link>
           <router-link to="/vacuna">Vacunación</router-link>
+          <router-link to="/impacto">Impacto</router-link>
+
           <router-link to="/variantes">Variantes</router-link>
 
           <router-link to="/about">Contacto</router-link>

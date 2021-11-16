@@ -30,6 +30,7 @@ import {
   faMapMarker,
   faSearch,
   faDna,
+  faFistRaised,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -46,6 +47,7 @@ library.add(faAngleDoubleDown);
 library.add(faMapMarker);
 library.add(faSearch);
 library.add(faDna);
+library.add(faFistRaised);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

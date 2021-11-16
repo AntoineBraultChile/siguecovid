@@ -27,7 +27,7 @@ module.exports = {
         // Required - The path to the webpack-outputted app to prerender.
         staticDir: path.join(__dirname, "dist"),
         // Required - Routes to render.
-        routes: ["/", "/about", "/regions", "/comunas", "/edad", "/vacuna", "/variantes"],
+        routes: ["/", "/about", "/regions", "/comunas", "/edad", "/vacuna", "/impacto", "/variantes"],
       }),
       // Ignore all locale files of moment.js
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

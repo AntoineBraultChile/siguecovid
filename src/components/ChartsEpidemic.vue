@@ -75,7 +75,7 @@
       </p>
     </box-container>
 
-    <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
+    <!-- <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <chart-incidence-adjusted-by-age
         :region="region"
         :fromDate="fromDate"
@@ -85,9 +85,9 @@
         :pointRadius="pointRadius"
         :colorsPasoAPaso="colorsPasoAPaso"
       />
-    </div>
+    </div> -->
 
-    <div class="graph" v-if="region == 'Chile'">
+    <!-- <div class="graph" v-if="region == 'Chile'">
       <chart-incidence-by-age
         :region="region"
         :fromDate="fromDate"
@@ -97,7 +97,19 @@
         :pointRadius="pointRadius"
         :colorsPasoAPaso="colorsPasoAPaso"
       />
-    </div>
+    </div> -->
+
+    <!-- <div class="graph" v-if="(region == 'Chile') & (dataCovid.ve.cases.vaccinated != undefined)">
+      <chart-vaccine-effectiveness
+        :region="region"
+        :fromDate="fromDate"
+        :title="title"
+        :dataCovid="dataCovid"
+        :backgroundColor="backgroundColor"
+        :pointRadius="pointRadius"
+        :colorsPasoAPaso="colorsPasoAPaso"
+      />
+    </div> -->
   </div>
 </template>
 
@@ -116,11 +128,11 @@ import Update from "../components/Update";
 import CasesChart from "@/components/CasesChart";
 import ChartUci from "@/components/ChartUCI";
 import ChartDeaths from "@/components/ChartDeaths";
-import ChartIncidenceAdjustedByAge from "@/components/ChartIncidenceAdjustedByAge";
-
-import ChartIncidenceByAge from "@/components/ChartIncidenceByAge";
-
 import IncidenceBarChart from "@/components/IncidenceBarChart";
+
+// import ChartIncidenceAdjustedByAge from "@/components/ChartIncidenceAdjustedByAge";
+// import ChartIncidenceByAge from "@/components/ChartIncidenceByAge";
+// import ChartVaccineEffectiveness from "@/components/ChartVaccineEffectiveness";
 
 import TitleGraphic from "../components/TitleGraphic";
 export default {
@@ -135,8 +147,9 @@ export default {
     "cases-chart": CasesChart,
     "chart-deaths": ChartDeaths,
     "chart-uci": ChartUci,
-    "chart-incidence-adjusted-by-age": ChartIncidenceAdjustedByAge,
-    "chart-incidence-by-age": ChartIncidenceByAge,
+    // "chart-incidence-adjusted-by-age": ChartIncidenceAdjustedByAge,
+    // "chart-incidence-by-age": ChartIncidenceByAge,
+    // "chart-vaccine-effectiveness": ChartVaccineEffectiveness,
   },
   data() {
     return {
