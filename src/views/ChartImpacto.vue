@@ -52,8 +52,16 @@
       />
     </div>
 
-
+    <div class="graph" v-if="dataCovid.newCases.labels.length > 0">
+  <chart-cases-deaths         
+  :fromDate="fromDate"
+        :dataCovid="dataCovid"
+        :backgroundColor="backgroundColor"
+        :pointRadius="pointRadius"
+        :colorsPasoAPaso="colorsPasoAPaso"/>
       </div>
+          </div>
+
       <spinner
         size='massive'
         v-else
@@ -102,6 +110,8 @@ dayjs.locale("es"); // use Spanish locale globally
 import ChartIncidenceByAge from "@/components/ChartIncidenceByAge";
 import ChartIncidenceAdjustedByAge from "@/components/ChartIncidenceAdjustedByAge";
 import ChartVaccineEffectiveness from "@/components/ChartVaccineEffectiveness";
+import ChartCasesDeaths from "@/components/ChartCasesDeaths"
+import { meanWeek } from '../assets/mathFunctions';
 
 export default {
   name: "ChartImpacto",
@@ -115,6 +125,7 @@ export default {
     "chart-incidence-adjusted-by-age": ChartIncidenceAdjustedByAge,
     "chart-incidence-by-age": ChartIncidenceByAge,
     "chart-vaccine-effectiveness": ChartVaccineEffectiveness,
+    "chart-cases-deaths":ChartCasesDeaths,
   },
   metaInfo() {
     return {
@@ -134,7 +145,9 @@ export default {
       dataCovid: {
         incidenceByVaccinalSchemeByAge:{'week':[], 'cases':{'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{}},'uci':{'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{}},'deaths':{'con esquema completo':{},'sin esquema completo':{},  'con dosis refuerzo > 14 dias':{}}},
         ve:{'cases':{}, 'uci':{}, 'deaths':{}},
-        incidenceVaccinalAjustedByAge : {'cases':{}, 'uci':{} ,'deaths': {}} 
+        incidenceVaccinalAjustedByAge : {'cases':{}, 'uci':{} ,'deaths': {}},
+        newCases: { labels: {}, values: {} },
+        deaths: { labels: {}, values: {} },
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -264,20 +277,30 @@ ve.forEach(d =>{
 this.dataCovid['ve'] = {'cases':veCases, 'uci':veUCI, 'deaths':veDeaths}
 
 
-// // Covid-19 cases en Chile
-// let cases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto5/TotalesNacionales.csv')
-// let newCases = cases.find(d => d.Fecha == "Casos nuevos totales")
-// let labels = Object.keys(newCases).slice(1).map(label => dayjs(label,'YYYY-MM-DD').format('DD-MM-YYYY'))
-// let values = Object.values(newCases).slice(1).map(value => Number(value))
-// this.dataCovid['newCases'] = {'labels':labels, 'values':values }
-// console.log(this.dataCovid['newCases'])
+// Covid-19 cases en Chile
+let cases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto5/TotalesNacionales.csv')
+let newCases = cases.find(d => d.Fecha == "Casos nuevos totales")
+let labelsCases = Object.keys(newCases).slice(1).map(label => dayjs(label,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6)
+let valuesCases = meanWeek(Object.values(newCases).slice(1).map(value => Number(value)))
+this.dataCovid['newCases'] = {'labels':labelsCases, 'values':valuesCases }
+console.log(this.dataCovid['newCases'])
 
-// // Covid-19 deaths from DEIS
-// let deaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
-// console.log(deaths)
-// let suspected = deaths.filter(d => d['Serie'] == 'sospechosos').slice(-1)[0]
-// let confirmed = deaths.filter(d => d['Serie'] == 'confirmados').slice(-1)[0]
-// console.log(suspected, confirmed)
+// Covid-19 deaths from DEIS
+let deaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
+let suspected = deaths.filter(d => d['Serie'] == 'sospechosos').slice(-1)[0]
+let confirmed = deaths.filter(d => d['Serie'] == 'confirmados').slice(-1)[0]
+
+let valuesDeaths = []
+labelsCases.forEach(label =>{
+  let labelFormated = dayjs(label, "DD-MM-YYYY").format("YYYY-MM-DD")
+  if (confirmed[labelFormated] == undefined){
+    valuesDeaths.push(undefined)
+  }else{
+    valuesDeaths.push(Number(confirmed[labelFormated])+Number(suspected[labelFormated]))
+  }
+})
+valuesDeaths = meanWeek(valuesDeaths).map(v=> -v*20)
+this.dataCovid['deaths'] = {labels: labelsCases, values: valuesDeaths}
 
 //     // function to generate list of months
 //     let generateListOfMonths = async (labels) => {
