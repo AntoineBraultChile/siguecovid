@@ -3,7 +3,7 @@
     <div class="containerSection">
       <box-container>
                   <title-container
-          titleName='Impacto de la campaña de vacunación en la epidemia de Covid-19 en Chile'
+          titleName='Impacto de la campaña de vacunación en la pandemia de Covid-19 en Chile'
           :update='false'/>
 
       <p class="two-columns">
@@ -15,7 +15,6 @@
       </box-container>
 
       <div id='block_graph'  v-if="dataCovid.ve.cases.vaccinated != undefined">
-
         <slide-bar
           v-if="fromMonth.length > 0"
           :listOfMonths='listOfMonths'
@@ -23,9 +22,8 @@
           v-on:newdate='updateCurrentDate'
         />
 
-         <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
+         <div class="graph" v-if="Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <chart-incidence-adjusted-by-age
-        :region="region"
         :fromDate="fromDate"
         :dataCovid="dataCovid"
         :backgroundColor="backgroundColor"
@@ -34,9 +32,8 @@
       />
     </div>
 
-    <div class="graph" v-if="region == 'Chile'">
+    <div class="graph" >
       <chart-incidence-by-age
-        :region="region"
         :fromDate="fromDate"
         :dataCovid="dataCovid"
         :backgroundColor="backgroundColor"
@@ -45,9 +42,8 @@
       />
     </div>
 
-    <div class="graph" v-if="(region == 'Chile') & (dataCovid.ve.cases.vaccinated != undefined)">
+    <div class="graph" v-if="dataCovid.ve.cases.vaccinated != undefined">
       <chart-vaccine-effectiveness
-        :region="region"
         :fromDate="fromDate"
         :dataCovid="dataCovid"
         :backgroundColor="backgroundColor"
@@ -191,7 +187,7 @@ export default {
   metaInfo() {
     return {
       title:
-        "Impacto de la campaña de vacunación en la epidemia de Covid-19 en Chile",
+        "Impacto de la campaña de vacunación en la pandemia de Covid-19 en Chile",
       meta: [
         {
           name: "description",
@@ -211,7 +207,6 @@ export default {
       fromDate: "01-02-2021",
       fromMonth: "",
       listOfMonths: [],
-      region:'Chile',
       pointRadius: 1.5,
       pointHoverRadius: 4,
       colorsPasoAPaso: {
@@ -260,9 +255,9 @@ export default {
 
   incidenceByAgeByVaccinalScheme.forEach(d => {
     if(d['grupo_edad']!='Total' & d['grupo_edad']!='06 - 11 años'){
-    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_casos'])
-    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_uci'])
-    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Number(d['incidencia_def'])
+    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Math.round(Number(d['incidencia_casos'])*100)/100
+    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Math.round(Number(d['incidencia_uci'])*100)/100
+    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Math.round(Number(d['incidencia_def'])*100)/100
     }
   })
   this.dataCovid.incidenceByVaccinalSchemeByAge["cases"] = incidenceCasesByVaccinalScheme
@@ -330,9 +325,9 @@ let veUCI = {'vaccinated':{},'boost':{}}
 let veDeaths = {'vaccinated':{},'boost':{}}
 
 ve.forEach(d =>{
-  veCases[d['vaccinal_status']][dicEpiWeek[d['week']]] = d['ve_cases']
-  veUCI[d['vaccinal_status']][dicEpiWeek[d['week']]] = d['ve_icu']
-  veDeaths[d['vaccinal_status']][dicEpiWeek[d['week']]] = d['ve_deaths']
+  veCases[d['vaccinal_status']][dicEpiWeek[d['week']]] = Math.round(d['ve_cases']*100)/100
+  veUCI[d['vaccinal_status']][dicEpiWeek[d['week']]] = Math.round(d['ve_icu']*100)/100
+  veDeaths[d['vaccinal_status']][dicEpiWeek[d['week']]] = Math.round(d['ve_deaths']*100)/100
 })
 this.dataCovid['ve'] = {'cases':veCases, 'uci':veUCI, 'deaths':veDeaths}
 

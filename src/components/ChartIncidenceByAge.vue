@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="ChartIncidenceyByAge">
-    <button-choice v-if="region == 'Chile'" :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
+    <button-choice :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
 
     <title-graphic v-if="picked == 'cases'"> Incidencia por estado de vacunación y grupo de edad </title-graphic>
     <title-graphic v-if="picked == 'uci'"> Incidencia de los ingresos a UCI por estado de vacunación y grupo de edad </title-graphic>
@@ -42,7 +42,7 @@ import ButtonChoice from "@/components/ButtonChoice";
 
 export default {
   name: "ChartIncidenceyByAge",
-  props: ["region", "fromDate", "title", "dataCovid", "backgroundColor", "pointRadius", "colorsPasoAPaso"],
+  props: ["fromDate", "title", "dataCovid", "backgroundColor", "pointRadius", "colorsPasoAPaso"],
   components: {
     "bar-chart": BarChart,
     "title-graphic": TitleGraphic,

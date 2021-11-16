@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="ChartVaccineEffectiveness">
-    <button-choice v-if="region == 'Chile'" :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
+    <button-choice :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
 
     <title-graphic v-if="picked == 'cases'"> Efectividad de las vacunas contra los casos en Chile</title-graphic>
     <title-graphic v-if="picked == 'uci'"> Efectividad de las vacunas contra el ingreso en UCI en Chile </title-graphic>
@@ -33,7 +33,7 @@ import ButtonChoice from "@/components/ButtonChoice";
 
 export default {
   name: "ChartVaccineEffectiveness",
-  props: ["region", "fromDate", "title", "dataCovid", "backgroundColor", "pointRadius", "colorsPasoAPaso"],
+  props: ["fromDate", "title", "dataCovid", "backgroundColor", "pointRadius", "colorsPasoAPaso"],
   components: {
     "line-chart": LineChart,
     update: Update,
