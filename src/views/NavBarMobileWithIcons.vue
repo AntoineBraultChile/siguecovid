@@ -8,7 +8,7 @@
             Sigue
           </span>
           <span style="color:black;opacity:0.4;font-weight:300;">Covid </span>
-          <span style="color:black;font-weight:350;font-size:1.5rem;"> en Chile</span>
+          <span style="color:black;font-weight:350;"> en Chile</span>
         </router-link>
       </div>
       <div class="bottom-bar" :class="{ 'fixed-nav-bar': fixedNavBar }">
