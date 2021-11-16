@@ -15,12 +15,12 @@
       </box-container>
 
       <div id='block_graph'  v-if="dataCovid.ve.cases.vaccinated != undefined">
-        <slide-bar
+      <!--   <slide-bar
           v-if="fromMonth.length > 0"
           :listOfMonths='listOfMonths'
           :fromMonth='fromMonth'
           v-on:newdate='updateCurrentDate'
-        />
+        /> -->
 
          <div class="graph" v-if="Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <chart-incidence-adjusted-by-age
@@ -85,80 +85,12 @@ Más información sobre el método de tramizaje utilizado para medir la efectivi
 <style src='../assets/chartChileAndRegion.css'></style>
 
 
-<style >
 
-h2{
-  font-weight: normal;
-}
-.box-container {
-  display: flex;
-  align-items: center;
-}
-.ChartImpacto {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.description {
-
-  font-size: 20px;
-  text-align: justify;
-  line-height: 150%;
-  padding: 0px 10px 0px 10px;
-}
-
-.ChartsEpidemic {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.horizontalBar {
-  width: 200px;
-  height: 4000px;
-}
-.graph {
-  width: 49.65%;
-  margin: 5px 0px 5px 0px;
-  box-shadow: 0px 0px 2px 2px #e8e8e8;
-  border-radius: 7px;
-  background-color: white;
-  padding: 0px 0px 10px 0px;
-}
-
-.two-columns {
-  display: inline-block;
-  column-count: 2;
-  font-size: 1.1rem;
-
-  text-align: justify;
-  line-height: 150%;
-  padding: 0px 10px 0px 10px;
-}
-
-@media all and (max-width: 1100px) {
-    .graph {
-    width: 100%;
-    margin: 5px 0px 5px 0px;
-  }
-
-  .two-columns {
-    column-count: 1;
-  }
-  .description {
-    font-size: 16px;
-  }
-}
-</style>
 
 <script>
-
 import TitleContainer from "@/components/TitleContainer";
 import FooterIndicators from "@/components/FooterIndicators";
-import SlideBar from "@/components/SlideBar";
+// import SlideBar from "@/components/SlideBar";
 import * as d3 from "d3-fetch";
 
 import * as dayjs from "dayjs";
@@ -177,7 +109,7 @@ export default {
     "title-container": TitleContainer,
     // 'vue-slider': VueSlider,
     // 'bar-chart':BarChart,
-    "slide-bar": SlideBar,
+    // "slide-bar": SlideBar,
     "footer-indicators": FooterIndicators,
 
     "chart-incidence-adjusted-by-age": ChartIncidenceAdjustedByAge,
@@ -325,12 +257,96 @@ let veUCI = {'vaccinated':{},'boost':{}}
 let veDeaths = {'vaccinated':{},'boost':{}}
 
 ve.forEach(d =>{
-  veCases[d['vaccinal_status']][dicEpiWeek[d['week']]] = Math.round(d['ve_cases']*100)/100
-  veUCI[d['vaccinal_status']][dicEpiWeek[d['week']]] = Math.round(d['ve_icu']*100)/100
-  veDeaths[d['vaccinal_status']][dicEpiWeek[d['week']]] = Math.round(d['ve_deaths']*100)/100
+  veCases[d['vaccinal_status']][dicEpiWeek[d['week']]] = {'mean':Math.round(d['ve_cases']*100)/100, 'lb':Math.round(d['ve_cases_lb']*100)/100, 'ub':Math.round(d['ve_cases_ub']*100)/100}
+  veUCI[d['vaccinal_status']][dicEpiWeek[d['week']]] =  {'mean':Math.round(d['ve_icu']*100)/100, 'lb':Math.round(d['ve_icu_lb']*100)/100, 'ub':Math.round(d['ve_icu_ub']*100)/100}
+  veDeaths[d['vaccinal_status']][dicEpiWeek[d['week']]] = {'mean':Math.round(d['ve_deaths']*100)/100, 'lb':Math.round(d['ve_deaths_lb']*100)/100, 'ub':Math.round(d['ve_deaths_ub']*100)/100}
 })
 this.dataCovid['ve'] = {'cases':veCases, 'uci':veUCI, 'deaths':veDeaths}
+
+
+//     // function to generate list of months
+//     let generateListOfMonths = async (labels) => {
+//       let currentDate = dayjs("08-2021", "MM-YYYY");
+//       let listOfMonths = [];
+//       while (currentDate < dayjs(labels[labels.length - 1], "DD-MM-YYYY")) {
+//         listOfMonths.push(currentDate.format("MMMM YYYY"));
+//         currentDate = dayjs(currentDate, "MM-YYYY").add(1, "M");
+//       }
+//       return listOfMonths;
+//     };
+//     this.listOfMonths = await generateListOfMonths(Object.keys(this.dataCovid.incidenceVaccinalAjustedByAge.cases['sin esquema completo']));
+
+// // update fromMonth
+// this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
 
 },
 };
 </script>
+<style >
+
+h2{
+  font-weight: normal;
+}
+.box-container {
+  display: flex;
+  align-items: center;
+}
+.ChartImpacto {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.description {
+
+  font-size: 20px;
+  text-align: justify;
+  line-height: 150%;
+  padding: 0px 10px 0px 10px;
+}
+
+.ChartsEpidemic {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.horizontalBar {
+  width: 200px;
+  height: 4000px;
+}
+.graph {
+  width: 49.65%;
+  margin: 5px 0px 5px 0px;
+  box-shadow: 0px 0px 2px 2px #e8e8e8;
+  border-radius: 7px;
+  background-color: white;
+  padding: 0px 0px 10px 0px;
+}
+
+.two-columns {
+  display: inline-block;
+  column-count: 2;
+  font-size: 1.1rem;
+
+  text-align: justify;
+  line-height: 150%;
+  padding: 0px 10px 0px 10px;
+}
+
+@media all and (max-width: 1100px) {
+    .graph {
+    width: 100%;
+    margin: 5px 0px 5px 0px;
+  }
+
+  .two-columns {
+    column-count: 1;
+  }
+  .description {
+    font-size: 16px;
+  }
+}
+</style>

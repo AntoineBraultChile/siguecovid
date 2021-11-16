@@ -62,8 +62,19 @@ export default {
       indexDate = indexDate > 0 ? indexDate : 0;
 
       let boostVE = [];
+      let boostVE_lb = [];
+      let boostVE_ub = [];
       labels.forEach((label) => {
-        boostVE.push(this.dataCovid.ve[type]["boost"][label]);
+        let ve = this.dataCovid.ve[type]["boost"][label];
+        if (ve != undefined) {
+          boostVE.push(ve.mean);
+          boostVE_lb.push(ve.lb);
+          boostVE_ub.push(ve.ub);
+        } else {
+          boostVE.push(undefined);
+          boostVE_lb.push(undefined);
+          boostVE_ub.push(undefined);
+        }
       });
 
       return {
@@ -79,8 +90,39 @@ export default {
             borderColor: this.colorsPasoAPaso[3],
             backgroundColor: this.colorsPasoAPaso[3],
             fill: false,
-            data: Object.values(this.dataCovid.ve[type]["vaccinated"]).slice(indexDate),
+            data: Object.values(this.dataCovid.ve[type]["vaccinated"])
+              .map((d) => d.mean)
+              .slice(indexDate),
           },
+          {
+            label: "Intervalo de confianza del 95%",
+            type: "line",
+            backgroundColor: "rgb(130,207,253,0.5)",
+            borderColor: "transparent",
+            pointRadius: 0,
+            fill: 0,
+            tension: 0,
+            data: Object.values(this.dataCovid.ve[type]["vaccinated"])
+              .map((d) => d.lb)
+              .slice(indexDate),
+            // yAxisID: "y",
+            // xAxisID: "x",
+          },
+          {
+            label: "upper",
+            type: "line",
+            backgroundColor: "rgb(130,207,253,0.5)",
+            borderColor: "transparent",
+            pointRadius: 0,
+            fill: 0,
+            tension: 0,
+            data: Object.values(this.dataCovid.ve[type]["vaccinated"])
+              .map((d) => d.ub)
+              .slice(indexDate),
+            // yAxisID: "y",
+            // xAxisID: "x",
+          },
+
           {
             type: "line",
             pointRadius: this.pointRadius,
@@ -91,6 +133,26 @@ export default {
             fill: false,
             data: boostVE.slice(indexDate),
           },
+          {
+            type: "line",
+            pointRadius: 0,
+            fill: 3,
+            tension: 0,
+            label: "Intervalo de confianza del 95%",
+            borderColor: "transparent",
+            backgroundColor: "rgb(235,164,52,0.5)",
+            data: boostVE_lb.slice(indexDate),
+          },
+          {
+            type: "line",
+            pointRadius: 0,
+            fill: 3,
+            tension: 0,
+            label: "upper",
+            borderColor: "transparent",
+            backgroundColor: "rgb(235,164,52,0.5)",
+            data: boostVE_ub.slice(indexDate),
+          },
         ],
       };
     },
@@ -100,14 +162,33 @@ export default {
           duration: 0,
         },
         legend: {
-          display: true,
+          labels: {
+            filter: function(item) {
+              // Logic to remove a particular legend item goes here
+              return !item.text.includes("upper");
+            },
+          },
         },
         tooltips: {
           mode: "index",
           intersect: false,
           callbacks: {
             label: function(tooltipItem, data) {
-              return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+              if (data.datasets[tooltipItem.datasetIndex].label != "upper") {
+                if (data.datasets[tooltipItem.datasetIndex].label == "Intervalo de confianza del 95%") {
+                  return (
+                    data.datasets[tooltipItem.datasetIndex].label +
+                    ": " +
+                    data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] +
+                    "%" +
+                    " - " +
+                    data.datasets[tooltipItem.datasetIndex + 1].data[tooltipItem.index] +
+                    "%"
+                  );
+                } else {
+                  return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+                }
+              }
             },
           },
         },
