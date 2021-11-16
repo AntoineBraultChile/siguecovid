@@ -170,7 +170,7 @@ export default {
       title: {
         IngresoUCI: "Media móvil 7 días de ingresos a UCI por Covid-19",
         Uci: "Personas en UCI por Covid-19",
-        Pcr: "Positividad y PCR en ",
+        Pcr: "Positividad y PCR ",
         Cases: "Nuevos casos diarios",
         Deaths: "Fallecidos confirmados por Covid-19 por fecha de notificación",
       },

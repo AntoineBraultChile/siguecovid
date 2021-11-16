@@ -264,6 +264,21 @@ ve.forEach(d =>{
 this.dataCovid['ve'] = {'cases':veCases, 'uci':veUCI, 'deaths':veDeaths}
 
 
+// // Covid-19 cases en Chile
+// let cases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto5/TotalesNacionales.csv')
+// let newCases = cases.find(d => d.Fecha == "Casos nuevos totales")
+// let labels = Object.keys(newCases).slice(1).map(label => dayjs(label,'YYYY-MM-DD').format('DD-MM-YYYY'))
+// let values = Object.values(newCases).slice(1).map(value => Number(value))
+// this.dataCovid['newCases'] = {'labels':labels, 'values':values }
+// console.log(this.dataCovid['newCases'])
+
+// // Covid-19 deaths from DEIS
+// let deaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
+// console.log(deaths)
+// let suspected = deaths.filter(d => d['Serie'] == 'sospechosos').slice(-1)[0]
+// let confirmed = deaths.filter(d => d['Serie'] == 'confirmados').slice(-1)[0]
+// console.log(suspected, confirmed)
+
 //     // function to generate list of months
 //     let generateListOfMonths = async (labels) => {
 //       let currentDate = dayjs("08-2021", "MM-YYYY");
@@ -330,7 +345,6 @@ h2{
   display: inline-block;
   column-count: 2;
   font-size: 1.1rem;
-
   text-align: justify;
   line-height: 150%;
   padding: 0px 10px 0px 10px;
