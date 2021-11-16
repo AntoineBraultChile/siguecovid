@@ -64,7 +64,7 @@
       </p>
     </box-container> -->
 
-    <box-container v-if="region == 'Chile'">
+    <!-- <box-container v-if="region == 'Chile'">
       <h2 id="description" style="font-size:1.5rem;">
         Impacto de la vacunación en la epidemia de Covid-19 en Chile
       </h2>
@@ -73,7 +73,7 @@
         haber sesgos significativos. De hecho, la cobertura de vacunación y las tasas de infección no son uniformes en toda la población. La situación económica, el lugar de residencia y los factores
         de riesgo de Covid-19 son variables importantes para medir adecuadamente la eficacia de la vacunación. Por el momento, sólo la estratificación por edad está disponible en los datos abiertos.
       </p>
-    </box-container>
+    </box-container> -->
 
     <!-- <div class="graph" v-if="region == 'Chile' && Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <chart-incidence-adjusted-by-age
