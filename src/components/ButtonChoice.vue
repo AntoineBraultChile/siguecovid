@@ -26,6 +26,7 @@ export default {
 <style lang="css" scoped>
 .tab-button {
   display: flex;
+  align-items: center;
   width: 100%;
   font-size: 1rem;
   padding: 6px 10px;
