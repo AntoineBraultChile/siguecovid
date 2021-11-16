@@ -7,7 +7,7 @@
     <title-graphic v-if="picked == 'deaths'"> Efectividad de las vacunas contra el fallecimiento en UCI en Chile </title-graphic>
     <!-- <br v-if="picked == 'cases' || picked == 'uci'" /> -->
 
-    <span style="font-size:1rem">La efectividad se estima por el método de tramizaje, teniendo en cuenta la edad como variable de confusión.</span>
+    <span style="font-size:1rem">La efectividad se estima por el método de tamizaje, teniendo en cuenta la edad como variable de confusión.</span>
 
     <br />
     <update :labels="Object.keys(dataCovid.ve.cases['vaccinated'])"> </update>
