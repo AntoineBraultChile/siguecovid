@@ -1,24 +1,23 @@
-
-.containerSection{
+.containerSection {
   /* width:80%; */
-  max-width:1400px;
-  padding:0px 10px 0px 10px;
+  max-width: 1400px;
+  padding: 0px 10px 0px 10px;
 
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction:column;
+  flex-direction: column;
 }
 
-#block_graph{
-  display:flex;
+#block_graph {
+  display: flex;
   align-items: stretch;
   justify-content: center;
-  width:100%;
-  flex-direction:row;
+  width: 100%;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  font-size:18px;
+  font-size: 18px;
   padding-bottom: 10px;
 }
 
@@ -29,19 +28,18 @@
 }
 } */
 @media all and (max-width: 1100px) {
-  .containerSection{
+  .containerSection {
     padding-left: 10px;
     padding-right: 10px;
-
   }
 
-  .containerSection{
-    width:100%;
+  .containerSection {
+    width: 100%;
   }
 
-  #block_graph{
-    width:100%;
-    padding:0px 0px 0px 0px;
-    font-size:1rem;
+  #block_graph {
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+    font-size: 1rem;
   }
 }

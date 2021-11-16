@@ -70,7 +70,7 @@
         </li>
 
                 <li>
-Más información sobre el método de tamizaje utilizado para medir la efectividad de las vacunas <a href='https://github.com/AntoineBraultChile/bayesian-screening-method' target="_blank"> aquí</a>.        
+Más información sobre el método de tamizaje utilizado para medir la efectividad de las vacunas <a href='https://github.com/AntoineBraultChile/bayesian-screening-method' target="_blank"> aquí</a> (en inglés). Para las explicaciones en español, puede consultar el <a href="https://github.com/jorgepacheco84/metodo_tamizaje" target="_blank" >repositorio de Jorge Pacheco</a>.         
 </li>
         <!-- <li> El número de muertes corresponde únicamente al número de muertes confirmadas por la prueba PCR. El <a href="https://deis.minsal.cl/">Departamento de Estadiscticas e Informacion de Salud</a>
           da el número de fallecidos por Covid-19 sospechosos. </li> -->

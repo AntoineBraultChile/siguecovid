@@ -76,11 +76,10 @@ Más información sobre el método de tramizaje utilizado para medir la efectivi
   </div>
 </template>
 
-
 <style src='../assets/chartChileAndRegion.css'></style>
 
 
-<style >
+<style lang="css" scoped>
 h2{
   font-weight: normal;
 }
@@ -96,7 +95,6 @@ h2{
   justify-content: center;
 }
 .description {
-
   font-size: 1.1rem;;
   text-align: justify;
   line-height: 150%;
