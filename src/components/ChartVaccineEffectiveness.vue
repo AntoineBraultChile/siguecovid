@@ -4,7 +4,7 @@
 
     <title-graphic v-if="picked == 'cases'"> Efectividad de las vacunas contra los casos en Chile</title-graphic>
     <title-graphic v-if="picked == 'uci'"> Efectividad de las vacunas contra el ingreso en UCI en Chile </title-graphic>
-    <title-graphic v-if="picked == 'deaths'"> Efectividad de las vacunas contra el fallecimiento en UCI en Chile </title-graphic>
+    <title-graphic v-if="picked == 'deaths'"> Efectividad de las vacunas contra el fallecimiento en Chile </title-graphic>
     <!-- <br v-if="picked == 'cases' || picked == 'uci'" /> -->
 
     <span style="font-size:1rem">La efectividad se estima por el método de tamizaje, teniendo en cuenta la edad como variable de confusión.</span>
@@ -101,7 +101,7 @@ export default {
             borderColor: "transparent",
             pointRadius: 0,
             fill: 0,
-            tension: 0,
+            // tension: 0,
             data: Object.values(this.dataCovid.ve[type]["vaccinated"])
               .map((d) => d.lb)
               .slice(indexDate),
@@ -115,7 +115,7 @@ export default {
             borderColor: "transparent",
             pointRadius: 0,
             fill: 0,
-            tension: 0,
+            // tension: 0,
             data: Object.values(this.dataCovid.ve[type]["vaccinated"])
               .map((d) => d.ub)
               .slice(indexDate),
@@ -137,7 +137,7 @@ export default {
             type: "line",
             pointRadius: 0,
             fill: 3,
-            tension: 0,
+            // tension: 0,
             label: "Intervalo de confianza del 95%",
             borderColor: "transparent",
             backgroundColor: "rgb(235,164,52,0.5)",
@@ -147,7 +147,7 @@ export default {
             type: "line",
             pointRadius: 0,
             fill: 3,
-            tension: 0,
+            // tension: 0,
             label: "upper",
             borderColor: "transparent",
             backgroundColor: "rgb(235,164,52,0.5)",
