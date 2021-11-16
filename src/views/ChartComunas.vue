@@ -495,6 +495,7 @@ export default {
     this.pasoAPaso["Calera"] = this.pasoAPaso["La Calera"];
     this.pasoAPaso["Llaillay"] = this.pasoAPaso["Llay-Llay"];
     this.pasoAPaso["Paiguano"] = this.pasoAPaso["Paihuano"];
+    this.pasoAPaso["Tome"] = this.pasoAPaso["Tomé"];
 
     // // Plan Paso a Paso en las comunas de Chile
     // let paso = await d3.csv(
