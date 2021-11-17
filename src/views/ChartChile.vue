@@ -634,6 +634,24 @@ export default {
       );
     });
 
+
+    // all deaths
+    let deaths = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsChileFrom2015.csv')
+    const years = ['2015','2016','2017','2018','2019','2020','2021']
+    let allDeathsChile={}
+    years.forEach(y =>{
+      allDeathsChile[y]={}
+    })
+    deaths.forEach(d => {
+      for(let y of years){
+        let label = dayjs(y+'-'+d['date'], 'YYYY-MM-DD').format('DD-MM-YYYY')
+        allDeathsChile[y][label] = Number(d[y])==0?undefined:Number(d[y])
+      }
+    })
+    console.log(allDeathsChile['2021'])
+    this.dataCovid.allDeathsChile = allDeathsChile
+    // console.log(allDeathsChile)
+
     // // ---------- incidence by vaccinated or non-vaccinated groups --------------------
     // let incidenceVaccinated = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto90/incidencia_en_vacunados.csv')
     // let numberWeekEpidemiological = incidenceVaccinated.length

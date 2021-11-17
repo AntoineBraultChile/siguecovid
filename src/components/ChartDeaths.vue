@@ -3,6 +3,7 @@
     <button-choice v-if="region == 'Chile'" :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
     <title-graphic v-if="picked == 'notification'"> {{ title["Deaths"] }} en {{ region }} </title-graphic>
     <title-graphic v-if="picked == 'fallecimiento'"> Muertes por Covid-19 en Chile por fecha de fallecimiento </title-graphic>
+    <title-graphic v-if="picked == 'all'"> Media móvil 7 días de muertes por todas las causas en Chile </title-graphic>
 
     <span v-if="picked == 'notification'" style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR o antigénico. </span>
     <span v-if="picked == 'fallecimiento'" style="font-size:1rem">A diferencia de las muertes sospechosas, las muertes confirmadas son las que se confirman mediante PCR o pruebas antigénicas. </span>
@@ -10,16 +11,20 @@
 
     <update v-if="picked == 'notification'" :labels="dataCovid.labelsDeaths"> </update>
     <update v-if="picked == 'fallecimiento'" :labels="dataCovid.deis.labels"> </update>
-
+    <update v-if="picked == 'all'" :labels="Object.keys(dataCovid.allDeathsChile['2021'])"> </update>
     <br v-if="(picked == 'notification') & (region == 'Chile')" />
     <br />
+    <br v-if="(picked == 'all') & (region == 'Chile')" />
 
     <bar-chart v-if="picked == 'notification'" :chartData="plotBarChartWithMean(region)" :options="chartOptions('Cases')"> </bar-chart>
     <bar-chart v-if="picked == 'fallecimiento'" :chartData="plotDeis()" :options="chartOptions('Deis')"> </bar-chart>
+    <bar-chart v-if="picked == 'all'" :chartData="plotAll()" :options="chartOptions('all')"> </bar-chart>
   </div>
 </template>
 
 <script>
+import { meanWeek } from "@/assets/mathFunctions";
+
 import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -49,7 +54,9 @@ export default {
       tabs: [
         { id: "notification", name: "Por fecha de notification" },
         { id: "fallecimiento", name: "Por fecha de fallecimiento" },
+        { id: "all", name: "Exceso de mortalidad" },
       ],
+      colors: ["#dd4b39", "#FFCD01", "#eba434", "#82CFFD", "#93DB70", "#232b2b", "#845EC2"],
     };
   },
   methods: {
@@ -79,7 +86,7 @@ export default {
           },
           {
             type: "bar",
-            label: this.title["Deaths"] + " diarios",
+            label: "Fallecidos diarios",
             backgroundColor: this.backgroundColor["Deaths"],
             fill: false,
             data: this.dataCovid[name + "Deaths"].slice(indexDate),
@@ -125,6 +132,25 @@ export default {
         ],
       };
     },
+    plotAll() {
+      const years = Object.keys(this.dataCovid.allDeathsChile);
+      let labels = Object.keys(this.dataCovid.allDeathsChile["2020"]).slice(6);
+      let datasets = [];
+      years.forEach((y, index) => {
+        let listDeaths = meanWeek(Object.values(this.dataCovid.allDeathsChile[y])).map((i) => Math.round(i));
+        datasets.push({
+          type: "line",
+          pointRadius: this.pointRadius,
+          pointHoverRadius: this.pointHoverRadius,
+          label: y,
+          borderColor: this.colors[index],
+          backgroundColor: this.colors[index],
+          fill: false,
+          data: listDeaths,
+        });
+      });
+      return { labels: labels, datasets: datasets };
+    },
     chartOptions(type) {
       let options = {
         animation: {
@@ -163,6 +189,19 @@ export default {
           yAxes: [
             {
               stacked: true,
+            },
+          ],
+        };
+      }
+      if (type == "all") {
+        options.scales = {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                parser: "DD-MM-YYYY",
+                unit: "month",
+              },
             },
           ],
         };
