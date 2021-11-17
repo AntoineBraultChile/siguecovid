@@ -7,9 +7,12 @@
     <span v-if="picked == 'notification'" style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR o antigénico. </span>
     <span v-if="picked == 'fallecimiento'" style="font-size:1rem">A diferencia de las muertes sospechosas, las muertes confirmadas son las que se confirman mediante PCR o pruebas antigénicas. </span>
     <br />
-    <br v-if="picked == 'notification'" />
+
     <update v-if="picked == 'notification'" :labels="dataCovid.labelsDeaths"> </update>
     <update v-if="picked == 'fallecimiento'" :labels="dataCovid.deis.labels"> </update>
+
+    <br v-if="(picked == 'notification') & (region == 'Chile')" />
+    <br />
 
     <bar-chart v-if="picked == 'notification'" :chartData="plotBarChartWithMean(region)" :options="chartOptions('Cases')"> </bar-chart>
     <bar-chart v-if="picked == 'fallecimiento'" :chartData="plotDeis()" :options="chartOptions('Deis')"> </bar-chart>
