@@ -39,10 +39,12 @@
           <bar-chart :chartData="renderChartVacunaPorDia()" :options="optionsPorDia"> </bar-chart>
         </div>
 
+        <!-- vaccination coverage by age  -->
         <div class="wrapper">
-          <title-graphic> Cobertura de vacunación por edad en Chile</title-graphic>
+          <chart-vaccination-coverage-by-age :vacunaChile="vacunaChile" :fromDate="fromDate" :pointRadius="pointRadius" :pointHoverRadius="pointHoverRadius" />
+          <!-- <title-graphic> Cobertura de vacunación por edad en Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
-          <bar-chart :chartData="barChartVacunaPorEdad()" :options="options('vertical')"> </bar-chart>
+          <bar-chart :chartData="barChartVacunaPorEdad()" :options="options('vertical')"> </bar-chart> -->
         </div>
 
         <!-- By age -->
@@ -141,6 +143,7 @@ import SlideBar from "../components/SlideBar";
 import ChartVaccineByAge from "@/components/ChartVaccineByAge";
 import ChartVaccineByType from "@/components/ChartVaccineByType";
 import ChartProportionVaccine from "@/components/ChartProportionVaccine";
+import ChartVaccinationCoverageByAge from "@/components/ChartVaccinationCoverageByAge";
 
 import * as d3 from "d3-fetch";
 
@@ -166,6 +169,7 @@ export default {
     "chart-vaccine-by-age": ChartVaccineByAge,
     "chart-vaccine-by-type": ChartVaccineByType,
     "chart-proportion-vaccine": ChartProportionVaccine,
+    "chart-vaccination-coverage-by-age": ChartVaccinationCoverageByAge,
     // 'choose-date': ChooseDate
   },
   metaInfo() {
