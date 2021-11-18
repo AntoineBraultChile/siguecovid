@@ -132,6 +132,25 @@ export default {
         "O’Higgins": 1000959,
         Maule: 1143012,
       },
+      dicRegions:{
+        Metropolitana: "Metropolitana de Santiago",
+        Aysén: "Aysén del General Carlos Ibáñez del Campo",
+        Antofagasta: "Antofagasta",
+        "Arica y Parinacota": "Arica y Parinacota",
+        Atacama: "Atacama",
+        Coquimbo: "Coquimbo",
+        Araucanía: "La Araucanía",
+        "Los Lagos": "Los Lagos",
+        "Los Ríos":  "Los Ríos",
+        Magallanes: "Magallanes y de la Antártica Chilena",
+        Tarapacá: "Tarapacá",
+        Valparaíso: "Valparaíso",
+        Ñuble: "Ñuble",
+        Biobío: "Biobío",
+        "O’Higgins": "Libertador General Bernardo O'Higgins",
+        Maule: "Maule",
+
+      },
       dataCovid: {
         labelsUci: [],
         labelsPcr: [],
@@ -497,6 +516,24 @@ casesComunas.forEach((comuna) => {
         )
       };
     });
+
+
+    // excess mortality by region
+    let response = await fetch('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsRegionsFrom2015.json')
+    let deathsR =  await response.json()
+    const regions = Object.keys(this.dicRegions)
+    const years = Object.keys(deathsR[this.dicRegions['Maule']])
+
+    let deathsRGoodName = {}
+    regions.forEach(r =>{
+      deathsRGoodName[r] = {}
+      years.forEach(y => {
+        deathsRGoodName[r][y] = {'labels':deathsR[this.dicRegions[r]][y].labels.map(d => dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6),
+         'values': meanWeek(deathsR[this.dicRegions[r]][y].values.map(i=> Number(i))).map(i => Math.round(i))}
+      });
+    //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
+    })
+    this.dataCovid.allDeaths = deathsRGoodName
   },
 };
 </script>

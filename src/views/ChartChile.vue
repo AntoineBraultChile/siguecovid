@@ -636,20 +636,30 @@ export default {
 
 
     // all deaths
-    let deaths = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsChileFrom2015.csv')
-    const years = ['2015','2016','2017','2018','2019','2020','2021']
-    let allDeathsChile={}
-    years.forEach(y =>{
-      allDeathsChile[y]={}
-    })
-    deaths.forEach(d => {
-      for(let y of years){
-        let label = dayjs(y+'-'+d['date'], 'YYYY-MM-DD').format('DD-MM-YYYY')
-        allDeathsChile[y][label] = Number(d[y])==0?undefined:Number(d[y])
-      }
-    })
-    console.log(allDeathsChile['2021'])
-    this.dataCovid.allDeathsChile = allDeathsChile
+    const response = await fetch('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsChileFrom2015.json')
+    const deaths = await response.json()
+    // const years = ['2015','2016','2017','2018','2019','2020','2021']
+    // let allDeathsChile={}
+    // years.forEach(y =>{
+    //   allDeathsChile[y]={}
+    // })
+    // deaths.forEach(d => {
+    //   for(let y of years){
+    //     let label = dayjs(y+'-'+d['date'], 'YYYY-MM-DD').format('DD-MM-YYYY')
+    //     allDeathsChile[y][label] = Number(d[y])==0?undefined:Number(d[y])
+    //   }
+    // })
+    const years = Object.keys(deaths['Chile'])
+
+  
+      let deathsGoodName = {'Chile':{}}
+      years.forEach(y => {
+        deathsGoodName['Chile'][y] = {'labels':deaths['Chile'][y].labels.map(d => dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6),
+         'values': meanWeek(deaths['Chile'][y].values.map(i=> Number(i))).map(i => Math.round(i))}
+      });
+    //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
+
+    this.dataCovid.allDeaths = deathsGoodName
     // console.log(allDeathsChile)
 
     // // ---------- incidence by vaccinated or non-vaccinated groups --------------------

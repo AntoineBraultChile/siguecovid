@@ -1,9 +1,12 @@
 <template lang="html">
   <div class="ChatDeaths">
     <button-choice v-if="region == 'Chile'" :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
+    <button-choice v-else :tabs="tabs2" :currentTab="picked" v-on:newtab="updatePicked" />
+
     <title-graphic v-if="picked == 'notification'"> {{ title["Deaths"] }} en {{ region }} </title-graphic>
     <title-graphic v-if="picked == 'fallecimiento'"> Muertes por Covid-19 en Chile por fecha de fallecimiento </title-graphic>
-    <title-graphic v-if="picked == 'all'"> Media móvil 7 días de muertes por todas las causas en Chile </title-graphic>
+    <title-graphic v-if="(picked == 'all') & (region == 'Chile')"> Media móvil 7 días de muertes por todas las causas en {{ region }} </title-graphic>
+    <title-graphic v-if="(picked == 'all') & (region != 'Chile')"> Media móvil 7 días de muertes por todas las causas en la región {{ region }} </title-graphic>
 
     <span v-if="picked == 'notification'" style="font-size:1rem">Son los fallecidos por Covid-19 confirmados con un test PCR o antigénico. </span>
     <span v-if="picked == 'fallecimiento'" style="font-size:1rem">A diferencia de las muertes sospechosas, las muertes confirmadas son las que se confirman mediante PCR o pruebas antigénicas. </span>
@@ -11,19 +14,19 @@
 
     <update v-if="picked == 'notification'" :labels="dataCovid.labelsDeaths"> </update>
     <update v-if="picked == 'fallecimiento'" :labels="dataCovid.deis.labels"> </update>
-    <update v-if="picked == 'all'" :labels="Object.keys(dataCovid.allDeathsChile['2021'])"> </update>
+    <update v-if="picked == 'all'" :labels="lastUpdateAllDeaths()"> </update>
     <br v-if="(picked == 'notification') & (region == 'Chile')" />
     <br />
     <br v-if="(picked == 'all') & (region == 'Chile')" />
 
     <bar-chart v-if="picked == 'notification'" :chartData="plotBarChartWithMean(region)" :options="chartOptions('Cases')"> </bar-chart>
     <bar-chart v-if="picked == 'fallecimiento'" :chartData="plotDeis()" :options="chartOptions('Deis')"> </bar-chart>
-    <bar-chart v-if="picked == 'all'" :chartData="plotAll()" :options="chartOptions('all')"> </bar-chart>
+    <bar-chart v-if="picked == 'all'" :chartData="plotAll(region)" :options="chartOptions('all')"> </bar-chart>
   </div>
 </template>
 
 <script>
-import { meanWeek } from "@/assets/mathFunctions";
+// import { meanWeek } from "@/assets/mathFunctions";
 
 import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -56,12 +59,27 @@ export default {
         { id: "fallecimiento", name: "Por fecha de fallecimiento" },
         { id: "all", name: "Exceso de mortalidad" },
       ],
+      tabs2: [
+        { id: "notification", name: "Por fecha de notification" },
+        { id: "all", name: "Exceso de mortalidad" },
+      ],
       colors: ["#dd4b39", "#FFCD01", "#eba434", "#82CFFD", "#93DB70", "#232b2b", "#845EC2"],
     };
   },
   methods: {
     updatePicked(payload) {
       this.picked = payload;
+    },
+    lastUpdateAllDeaths() {
+      let index = [];
+      let count = 0;
+      this.dataCovid.allDeaths[this.region]["2021"].values.forEach((v) => {
+        if (isNaN(v)) {
+          index.push(count);
+        }
+        count += 1;
+      });
+      return [this.dataCovid.allDeaths[this.region]["2021"].labels[index[7]]];
     },
     plotBarChartWithMean(name) {
       let fromDate = this.fromDate;
@@ -132,12 +150,12 @@ export default {
         ],
       };
     },
-    plotAll() {
-      const years = Object.keys(this.dataCovid.allDeathsChile);
-      let labels = Object.keys(this.dataCovid.allDeathsChile["2020"]).slice(6);
+    plotAll(region) {
+      const years = Object.keys(this.dataCovid.allDeaths[region]);
+      let labels = this.dataCovid.allDeaths[region]["2020"].labels;
       let datasets = [];
       years.forEach((y, index) => {
-        let listDeaths = meanWeek(Object.values(this.dataCovid.allDeathsChile[y])).map((i) => Math.round(i));
+        let listDeaths = this.dataCovid.allDeaths[region][y].values;
         datasets.push({
           type: "line",
           pointRadius: this.pointRadius,
@@ -199,7 +217,7 @@ export default {
             {
               type: "time",
               time: {
-                parser: "DD-MM-YYYY",
+                parser: "DD-MM",
                 unit: "month",
               },
             },
