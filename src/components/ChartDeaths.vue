@@ -79,7 +79,7 @@ export default {
         }
         count += 1;
       });
-      return [this.dataCovid.allDeaths[this.region]["2021"].labels[index[7]]];
+      return [this.dataCovid.allDeaths[this.region]["2021"].labels[index[7] - 1]];
     },
     plotBarChartWithMean(name) {
       let fromDate = this.fromDate;
