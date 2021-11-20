@@ -74,7 +74,7 @@ import SlideBar from "@/components/SlideBar";
 
 import RegionChoice from "@/components/RegionChoice";
 
-import { meanWeek, derivate, removeSenselessValues} from "@/assets/mathFunctions";
+import { meanWeek, derivate} from "@/assets/mathFunctions";
 
 import * as d3 from "d3-fetch";
 
@@ -256,7 +256,7 @@ export default {
               .slice(3)
               .map((i) => Number(i))
           );
-          dayCases = removeSenselessValues(dayCases,10);
+          // dayCases = removeSenselessValues(dayCases,100);
           this.$set(this.dataCovid, data[index].Region + type, dayCases);
           // chileValues = sumArray(chileValues,dayCases)
           if (mean == true) {
