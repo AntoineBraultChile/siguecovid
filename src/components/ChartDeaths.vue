@@ -15,9 +15,9 @@
     <update v-if="picked == 'notification'" :labels="dataCovid.labelsDeaths"> </update>
     <update v-if="picked == 'fallecimiento'" :labels="dataCovid.deis[region].labels"> </update>
     <update v-if="picked == 'all'" :labels="lastUpdateAllDeaths()"> </update>
-    <br v-if="(picked == 'notification') & (region == 'Chile')" />
+    <br v-if="picked == 'notification'" />
     <br />
-    <br v-if="(picked == 'all') & (region == 'Chile')" />
+    <br v-if="picked == 'all'" />
 
     <bar-chart v-if="picked == 'notification'" :chartData="plotBarChartWithMean(region)" :options="chartOptions('Cases')"> </bar-chart>
     <bar-chart v-if="picked == 'fallecimiento'" :chartData="plotDeis(region)" :options="chartOptions('Deis')"> </bar-chart>
