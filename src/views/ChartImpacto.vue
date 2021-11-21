@@ -293,7 +293,6 @@ this.dataCovid['newCases'] = {'labels':labelsCases, 'values':valuesCases }
 let deaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
 let suspected = deaths.filter(d => d['Serie'] == 'sospechosos').slice(-1)[0]
 let confirmed = deaths.filter(d => d['Serie'] == 'confirmados').slice(-1)[0]
-
 let valuesDeaths = []
 labelsCases.forEach(label =>{
   let labelFormated = dayjs(label, "DD-MM-YYYY").format("YYYY-MM-DD")

@@ -66,7 +66,7 @@ export default {
     },
     updateSaturday() {
       let saturday = dayjs(this.weekSundayDates[this.numberCurrentWeek], "DD-MM-YYYY")
-        .add(7, "d")
+        .add(6, "d")
         .format("DD-MM-YYYY");
       return saturday;
     },
