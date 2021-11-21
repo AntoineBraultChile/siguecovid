@@ -191,24 +191,29 @@ export default {
       k+=1
     }
 
-  let saturdaySemana = dicEpiWeek[Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])]
-  let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
+  let incidenceCasesByVaccinalScheme = {}
+  let incidenceUciByVaccinalScheme = { }
+  let incidenceDeathsByVaccinalScheme = {}
 
-  let incidenceCasesByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
-  let incidenceUciByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
-  let incidenceDeathsByVaccinalScheme = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
-
-  incidenceByAgeByVaccinalScheme.forEach(d => {
-    if(d['grupo_edad']!='Total' & d['grupo_edad']!='06 - 11 años'){
-    incidenceCasesByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Math.round(Number(d['incidencia_casos'])*100)/100
-    incidenceUciByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Math.round(Number(d['incidencia_uci'])*100)/100
-    incidenceDeathsByVaccinalScheme[d['estado_vacunacion']][d['grupo_edad']] = Math.round(Number(d['incidencia_def'])*100)/100
+  incidenceByAgeByVaccinalScheme.forEach(incidence => {
+      let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
+      let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
+      if(incidenceCasesByVaccinalScheme[sundaySemana] == undefined){
+        incidenceCasesByVaccinalScheme[sundaySemana] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
+        incidenceUciByVaccinalScheme[sundaySemana] = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
+        incidenceDeathsByVaccinalScheme[sundaySemana] = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
+      } else {
+        if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
+      incidenceCasesByVaccinalScheme[sundaySemana][incidence['estado_vacunacion']][incidence['grupo_edad']] = Math.round(Number(incidence['incidencia_casos'])*100)/100
+      incidenceUciByVaccinalScheme[sundaySemana][incidence['estado_vacunacion']][incidence['grupo_edad']] = Math.round(Number(incidence['incidencia_uci'])*100)/100
+      incidenceDeathsByVaccinalScheme[sundaySemana][incidence['estado_vacunacion']][incidence['grupo_edad']] = Math.round(Number(incidence['incidencia_def'])*100)/100
     }
+      }
   })
   this.dataCovid.incidenceByVaccinalSchemeByAge["cases"] = incidenceCasesByVaccinalScheme
   this.dataCovid.incidenceByVaccinalSchemeByAge["uci"] = incidenceUciByVaccinalScheme
   this.dataCovid.incidenceByVaccinalSchemeByAge["deaths"] = incidenceDeathsByVaccinalScheme
-  this.dataCovid.incidenceByVaccinalSchemeByAge['week'] = [sundaySemana, saturdaySemana]
+  // this.dataCovid.incidenceByVaccinalSchemeByAge['week'] = [sundaySemana, saturdaySemana]
   
   
     // --------------------------------   incidence cases, UCI, deaths by vaccination status ajusted by age ---------------------
