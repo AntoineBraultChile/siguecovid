@@ -151,6 +151,25 @@ export default {
         Maule: "Maule",
 
       },
+      dicRegions2:{
+        Metropolitana: "Metropolitana",
+        Aysen:"Aysén",
+        Antofagasta:"Antofagasta",
+       "Arica y Parinacota": "Arica y Parinacota",
+        Atacama: "Atacama",
+        Coquimbo:"Coquimbo",
+        "La Araucania": "Araucanía",
+        "Los Lagos": "Los Lagos",
+        "Los Rios": "Los Ríos",
+        "Magallanes y la Antartica":"Magallanes",
+        Tarapaca:"Tarapacá",
+        Valparaiso: "Valparaíso",
+       Nuble: "Ñuble",
+        Biobio:"Biobío",
+        "Del Libertador General Bernardo O’Higgins": "O’Higgins",
+        Maule: "Maule",
+
+      },
       dataCovid: {
         labelsUci: [],
         labelsPcr: [],
@@ -517,6 +536,24 @@ casesComunas.forEach((comuna) => {
       };
     });
 
+    // deis 
+    let deisConfirmed = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionConfirmedDeaths.csv')
+    let deisSuspected = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionSuspectedDeaths.csv')
+    this.dataCovid['deis'] = {
+    }
+
+    deisConfirmed.forEach((d,index) => {
+      let labels = Object.keys(d).slice(1).map(date => dayjs(date, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+      let confirmed =  Object.values(d).slice(1).map(i=> Number(i))
+      let suspected = Object.values(deisSuspected[index]).slice(1).map(i => Number(i))
+      let mediaMovil = meanWeek(sumArray(confirmed,suspected))
+      this.dataCovid.deis[this.dicRegions2[d['Region']]] ={
+        'labels': labels,
+        'confirmed': confirmed,
+        'suspected': suspected,
+        'mediaMovil':mediaMovil
+      }
+    })
 
     // excess mortality by region
     let response = await fetch('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsRegionsFrom2015.json')

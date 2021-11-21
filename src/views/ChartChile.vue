@@ -221,10 +221,12 @@ export default {
           fase4: [],
         },
         deis:{
-          labels:[],
-          confirmed:[],
-          suspected:[],
-          mediaMovil:[]
+          Chile:{
+            labels:[],
+            confirmed:[],
+            suspected:[],
+            mediaMovil:[]
+          }
         },
         CFR:{labels:[], values: [] },
       },
@@ -538,7 +540,7 @@ export default {
     }
   })
   let mediaMovilDeis = meanWeek(sumArray(deisConfirmed, deisSuspected)).map(d => Math.round(d))
-  this.dataCovid.deis = {'labels':deisLabels, 'confirmed': deisConfirmed, 'suspected': deisSuspected, 'mediaMovil': mediaMovilDeis}
+  this.dataCovid.deis = {'Chile':{'labels':deisLabels, 'confirmed': deisConfirmed, 'suspected': deisSuspected, 'mediaMovil': mediaMovilDeis}}
 
    // ingreso UCI en chile
     const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');
