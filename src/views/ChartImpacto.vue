@@ -286,8 +286,9 @@ this.dataCovid['ve'] = {'cases':veCases, 'uci':veUCI, 'deaths':veDeaths}
 let cases = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto5/TotalesNacionales.csv')
 let newCases = cases.find(d => d.Fecha == "Casos nuevos totales")
 let labelsCases = Object.keys(newCases).slice(1).map(label => dayjs(label,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6)
+let labelsCasesMeanWeek = labelsCases.slice(6)
 let valuesCases = meanWeek(Object.values(newCases).slice(1).map(value => Number(value)))
-this.dataCovid['newCases'] = {'labels':labelsCases, 'values':valuesCases }
+this.dataCovid['newCases'] = {'labels':labelsCasesMeanWeek, 'values':valuesCases }
 
 // Covid-19 deaths from DEIS
 let deaths = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')
@@ -303,7 +304,7 @@ labelsCases.forEach(label =>{
   }
 })
 valuesDeaths = meanWeek(valuesDeaths).map(v=> -v*20)
-this.dataCovid['deaths'] = {labels: labelsCases, values: valuesDeaths}
+this.dataCovid['deaths'] = {labels: labelsCasesMeanWeek, values: valuesDeaths}
 
 //     // function to generate list of months
 //     let generateListOfMonths = async (labels) => {
