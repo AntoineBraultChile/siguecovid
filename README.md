@@ -1,6 +1,6 @@
 # Sigue Covid en Chile
 
-Covid data visualizer in Chile : [siguecovid.cl](siguecovid.cl).
+Covid data visualizer in Chile : [siguecovid.cl](https://siguecovid.cl/).
 
 ## Project setup
 
