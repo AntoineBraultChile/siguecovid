@@ -569,7 +569,7 @@ export default {
 
 
     // plan paso a paso
-    let paso = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto74/paso_a_paso.csv");
+    let paso = await d3.csv("https://raw.githubusercontent.com/AntoineBraultChile/scrapping-covid-data-chile/main/output/planPasoAPaso24Noviembre2021.csv");
     let population = await d3.json("populationComunasChile.json");
     let pop = population["Poblacion 2021"];
     this.dataCovid.pasoAPaso.labels = Object.keys(paso[0])

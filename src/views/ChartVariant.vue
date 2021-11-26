@@ -328,7 +328,6 @@ export default {
     const response = await fetch("https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/EUClusters_data.json");
     const variant = await response.json();
     const variantChile = variant.countries["Chile"];
-    // console.log(variantChile);
 
     const totalSequences = variantChile.total_sequences;
     this.variantChile.totalSequences = totalSequences;
@@ -368,7 +367,7 @@ export default {
           this.variantChile.valuesForTheVariants[dicVariant[name]] = sumArray(this.variantChile.valuesForTheVariants[dicVariant[name]], variantChile[name]);
           this.variantChile.proportionVariants[dicVariant[name]] = sumArray(
             this.variantChile.proportionVariants[dicVariant[name]],
-            variantChile[name].map((number, index) => Math.round((number / totalSequences[index]) * 1000) / 10)
+            variantChile[name].map((number, index) => (number / totalSequences[index]) * 100)
           );
         } else {
           this.variantChile.valuesForTheVariants[dicVariant[name]] = variantChile[name];
@@ -377,7 +376,7 @@ export default {
         sumVariant = sumArray(sumVariant, variantChile[name]);
       }
     });
-
+    this.variantChile.proportionVariants["Delta"] = this.variantChile.proportionVariants["Delta"].map((d) => Math.round(d * 10) / 10);
     const otherVariants = sumArray(
       sumVariant.map((v) => -v),
       totalSequences
