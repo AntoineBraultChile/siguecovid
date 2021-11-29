@@ -22,7 +22,7 @@ export default {
   display: flex;
   text-align: left;
   justify-content: flex-end;
-  align-items: end;
+  align-items: flex-end;
   padding: 0px 5px 0px 5px;
   font-weight: normal;
   font-size: 0.9rem;
