@@ -27,18 +27,16 @@
           type='epidemic'
           region='Chile'
         />
-
         <slide-bar
-          v-if="labels.length > 0"
-          :labels='labels'
-          :date='[fromDate,beforeDate]'
+          v-if="fromMonth.length > 0"
+          :listOfMonths='listOfMonths'
+          :fromMonth='fromMonth'
           v-on:newdate='updateCurrentDate'
         />
 
         <charts-epidemic
           region="Chile"
           :fromDate="fromDate"
-          :beforeDate="beforeDate"
           :dataCovid="dataCovid"
         />
       </div>
@@ -117,7 +115,7 @@ import Indicators from "@/components/Indicators";
 import ChartsEpidemic from "@/components/epidemic/ChartsEpidemic";
 import TitleContainer from "@/components/TitleContainer";
 import FooterIndicators from "@/components/FooterIndicators";
-import SlideBar from "@/components/SlideBar2";
+import SlideBar from "@/components/SlideBar";
 import * as d3 from "d3-fetch";
 
 import * as dayjs from "dayjs";
@@ -233,18 +231,19 @@ export default {
         CFR:{labels:[], values: [] },
       },
       fromDate: "01-02-2021",
-      beforeDate:"",
-      labels:[],
+      fromMonth: "",
+      listOfMonths: [],
     };
   },
   methods: {
     updateCurrentDate(payload) {
-      this.fromDate = payload[0];
-      this.beforeDate = payload[1];
+      this.fromMonth = payload;
+      this.fromDate = dayjs(payload, "MMMM YYYY").format("01-MM-YYYY");
     },
   },
   async created() {
-
+    // fromDate 3 months before today
+    this.fromDate = dayjs().subtract(3, "month").format("01-MM-YYYY");
     // fetching data
     const getDataCsv = async (
       path,
@@ -268,9 +267,20 @@ export default {
       }
 
       if (initializeMonths == true) {
-        this.labels = this.dataCovid.labelsUci;
+        let currentDate = dayjs("04-2020", "MM-YYYY");
+        while (
+          currentDate <
+          dayjs(
+            this.dataCovid.labelsUci[this.dataCovid.labelsUci.length - 1],
+            "DD-MM-YYYY"
+          )
+        ) {
+          this.listOfMonths.push(
+            dayjs(currentDate, "MM-YYYY").format("MMMM YYYY")
+          );
+          currentDate = dayjs(currentDate, "MM-YYYY").add(1, "M");
+        }
       }
-
       let chileValues = []; // the sum of the regional time series
       for (let index = 0; index < data.length; index++) {
         // if we ask the derivative of the time serie (use to convert cumulative time serie to daily time serie)
@@ -463,8 +473,10 @@ export default {
 
       this.dataCovid.ChilePos = [...firstNullValues,...Pos];
 
-    this.beforeDate = this.labels.slice(-1)[0]
-    this.fromDate = dayjs(this.beforeDate, 'DD-MM-YYYY').subtract(3, "month").format('DD-MM-YYYY')
+
+
+      // update fromMonth
+      this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
     });
 
 

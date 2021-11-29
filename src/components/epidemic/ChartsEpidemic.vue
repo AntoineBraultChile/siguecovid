@@ -2,7 +2,7 @@
   <div class="ChartsEpidemic">
     <!-- Chart Cases -->
     <div class="graph" v-if="dataCovid.labelsCases.length > 0">
-      <cases-chart :region="region" :fromDate="fromDate" :beforeDate="beforeDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" />
+      <cases-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" />
     </div>
 
     <!-- Chart Positivity -->
@@ -137,7 +137,7 @@ import IncidenceBarChart from "@/components/epidemic/IncidenceBarChart";
 import TitleGraphic from "@/components/TitleGraphic";
 export default {
   name: "ChartsEpidemic",
-  props: ["region", "fromDate", "beforeDate", "dataCovid"],
+  props: ["region", "fromDate", "dataCovid"],
   components: {
     "line-chart": LineChart,
     "bar-chart": BarChart,

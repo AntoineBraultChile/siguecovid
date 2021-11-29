@@ -27,13 +27,15 @@ import "dayjs/locale/es"; // load on demand
 dayjs.locale("es"); // use Spanish locale globally
 
 import BarChart from "@/components/BarChart";
+// import LineChart from "../components/LineChart";
+// import RadioChoice from "@/components/RadioChoice";
 import Update from "@/components/Update";
 import TitleGraphic from "@/components/TitleGraphic";
 import ButtonChoice from "@/components/ButtonChoice";
 
 export default {
   name: "CasesChat",
-  props: ["region", "fromDate", "beforeDate", "title", "dataCovid", "backgroundColor", "pointRadius"],
+  props: ["region", "fromDate", "title", "dataCovid", "backgroundColor", "pointRadius"],
   components: {
     "bar-chart": BarChart,
     update: Update,
@@ -54,14 +56,12 @@ export default {
     plotBarChartWithMean(name) {
       let fromDate = this.fromDate;
       let indexDate = this.dataCovid["labelsCases"].indexOf(fromDate);
-      let indexBeforeDate = this.dataCovid["labelsCases"].indexOf(this.beforeDate);
       indexDate = indexDate > 0 ? indexDate : 0;
-      indexBeforeDate = indexBeforeDate > 0 ? indexBeforeDate : 0;
 
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       return {
         labels: this.dataCovid["labelsCases"].filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY") && dayjs(x, "DD-MM-YYYY") <= dayjs(this.beforeDate, "DD-MM-YYYY");
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
         }),
         datasets: [
           {
@@ -72,14 +72,14 @@ export default {
             borderColor: "#dd4b39",
             backgroundColor: "#dd4b39",
             fill: false,
-            data: this.dataCovid[name + "MeanCases"].slice(indexDate - 6, indexBeforeDate - 6),
+            data: this.dataCovid[name + "MeanCases"].slice(indexDate - 6),
           },
           {
             type: "bar",
             label: this.title["Cases"] + " diarios",
             backgroundColor: this.backgroundColor["Cases"],
             fill: false,
-            data: this.dataCovid[name + "Cases"].slice(indexDate, indexBeforeDate),
+            data: this.dataCovid[name + "Cases"].slice(indexDate),
           },
         ],
       };
