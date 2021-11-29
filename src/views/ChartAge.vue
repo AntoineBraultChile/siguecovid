@@ -578,6 +578,7 @@ export default {
       .map((d) => {
         return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
+      console.log(allLabels)
 
     // initialize value cases by age and group age and sum Male and Female
     for (let cases of dataCases) {
@@ -629,13 +630,20 @@ export default {
         //   dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 1 ||
         //   dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 5
         // ) 
-                // if monday or friday
+                // if monday
         if (dayjs(allLabels[ind], "DD-MM-YYYY").get("day") === 1) 
         {
           selectMondayAndFridayValues.push(value);
         }
       });
-      this.casesChile.values.push(
+      // this.casesChile.values.push(
+      //   derivate(selectMondayAndFridayValues).map((d) =>
+      //     Math.round(
+      //       (d / this.casesChile.agePopulation[indexCasesAge]) * 100000
+      //     )
+      //   )
+      // );
+            this.casesChile.values.push(
         derivate(selectMondayAndFridayValues).map((d) =>
           Math.round(
             (d / this.casesChile.agePopulation[indexCasesAge]) * 100000
@@ -647,14 +655,17 @@ export default {
     // fill labels only monday and friday
     allLabels.forEach((date) => {
       if (
-        dayjs(date, "DD-MM-YYYY").get("day") === 1
+        dayjs(date, "DD-MM-YYYY").get("day") === 1 
       ) {
         this.casesChile.labels.push(date);
       }
     });
 
+
     // because we compute a derivative each two days, we delete the first two date in labels
     this.casesChile.labels = this.casesChile.labels.slice(1);
+
+    console.log(this.casesChile)
 
     // create a dictionary between first day of each month in listOfMonths and first day of a month in casesChile.labels
     let dic = {};

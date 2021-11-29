@@ -67,7 +67,7 @@
 
 <script>
 import Indicators from "@/components/Indicators";
-import ChartsEpidemic from "@/components/ChartsEpidemic";
+import ChartsEpidemic from "@/components/epidemic/ChartsEpidemic";
 import TitleContainer from "@/components/TitleContainer";
 import FooterIndicators from "@/components/FooterIndicators";
 import SlideBar from "@/components/SlideBar";

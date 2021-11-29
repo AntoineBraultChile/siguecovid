@@ -42,9 +42,6 @@
         <!-- vaccination coverage by age  -->
         <div class="wrapper">
           <chart-vaccination-coverage-by-age :vacunaChile="vacunaChile" :fromDate="fromDate" :pointRadius="pointRadius" :pointHoverRadius="pointHoverRadius" />
-          <!-- <title-graphic> Cobertura de vacunación por edad en Chile</title-graphic>
-          <update :labels="vacunaChile.labels"> </update>
-          <bar-chart :chartData="barChartVacunaPorEdad()" :options="options('vertical')"> </bar-chart> -->
         </div>
 
         <!-- By age -->
@@ -140,10 +137,10 @@ import TitleGraphic from "@/components/TitleGraphic";
 import FooterIndicators from "@/components/FooterIndicators";
 import SlideBar from "../components/SlideBar";
 
-import ChartVaccineByAge from "@/components/ChartVaccineByAge";
-import ChartVaccineByType from "@/components/ChartVaccineByType";
-import ChartProportionVaccine from "@/components/ChartProportionVaccine";
-import ChartVaccinationCoverageByAge from "@/components/ChartVaccinationCoverageByAge";
+import ChartVaccineByAge from "@/components/vaccines/ChartVaccineByAge";
+import ChartVaccineByType from "@/components/vaccines/ChartVaccineByType";
+import ChartProportionVaccine from "@/components/vaccines/ChartProportionVaccine";
+import ChartVaccinationCoverageByAge from "@/components/vaccines/ChartVaccinationCoverageByAge";
 
 import * as d3 from "d3-fetch";
 

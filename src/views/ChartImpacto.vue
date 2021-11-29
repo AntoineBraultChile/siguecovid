@@ -107,10 +107,10 @@ dayjs.extend(customParseFormat);
 import "dayjs/locale/es"; // load on demand
 dayjs.locale("es"); // use Spanish locale globally
 
-import ChartIncidenceByAge from "@/components/ChartIncidenceByAge";
-import ChartIncidenceAdjustedByAge from "@/components/ChartIncidenceAdjustedByAge";
-import ChartVaccineEffectiveness from "@/components/ChartVaccineEffectiveness";
-import ChartCasesDeaths from "@/components/ChartCasesDeaths"
+import ChartIncidenceByAge from "@/components/impact/ChartIncidenceByAge";
+import ChartIncidenceAdjustedByAge from "@/components/impact/ChartIncidenceAdjustedByAge";
+import ChartVaccineEffectiveness from "@/components/impact/ChartVaccineEffectiveness";
+import ChartCasesDeaths from "@/components/impact/ChartCasesDeaths"
 import { meanWeek } from '../assets/mathFunctions';
 
 export default {
