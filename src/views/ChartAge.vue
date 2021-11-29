@@ -578,7 +578,6 @@ export default {
       .map((d) => {
         return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
-      console.log(allLabels)
 
     // initialize value cases by age and group age and sum Male and Female
     for (let cases of dataCases) {
@@ -665,7 +664,6 @@ export default {
     // because we compute a derivative each two days, we delete the first two date in labels
     this.casesChile.labels = this.casesChile.labels.slice(1);
 
-    console.log(this.casesChile)
 
     // create a dictionary between first day of each month in listOfMonths and first day of a month in casesChile.labels
     let dic = {};

@@ -657,8 +657,8 @@ export default {
       }
       // (d['Dosis']=='Primera' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
     });
-    this.vacunaRegions.firstDoses = sumArray(firstDoses, uniqueDoses);
-    this.vacunaRegions.secondDoses = sumArray(secondDoses, uniqueDoses);
+    this.vacunaRegions.firstDoses = sumArray(firstDoses, uniqueDoses).map((d) => Math.round(d * 100) / 100);
+    this.vacunaRegions.secondDoses = sumArray(secondDoses, uniqueDoses).map((d) => Math.round(d * 100) / 100);
 
     // order percentage vaccined by region
     let [labelsSort, firstDosesSort] = order(this.vacunaRegions.regionName, this.vacunaRegions.firstDoses);

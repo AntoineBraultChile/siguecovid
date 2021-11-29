@@ -405,7 +405,7 @@ export default {
         );
       }
       Pos = meanWeek(Pos.reverse()).map((d) => {
-        return Math.round(d * 10) / 10;
+        return Math.round(d * 100) / 100;
       });
       const firstNullValues = [null,null,null,null,null,null]
 
