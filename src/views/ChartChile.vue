@@ -24,6 +24,7 @@
           :positivity='dataCovid.ChilePos'
           :uci='dataCovid.ChileUci'
           :deaths='dataCovid.ChileTotalDeaths'
+          :deathsDeis = dataCovid.ChileTotalDeathsDEIS
           type='epidemic'
           region='Chile'
         />
@@ -198,6 +199,7 @@ export default {
         ChileCases: [],
         ChileDeaths: [],
         ChileTotalDeaths: [],
+        ChileTotalDeathsDEIS: [],
         ChileMeanCases: [],
         ChilePos: [],
         ChileAntigeno: [],
@@ -541,6 +543,11 @@ export default {
   })
   let mediaMovilDeis = meanWeek(sumArray(deisConfirmed, deisSuspected)).map(d => Math.round(d))
   this.dataCovid.deis = {'Chile':{'labels':deisLabels, 'confirmed': deisConfirmed, 'suspected': deisSuspected, 'mediaMovil': mediaMovilDeis}}
+
+  let deisConfirmedCumulative = deisConfirmed.reduce((tot,curent) => {return tot+curent})
+  let deisSuspectedCumulative = deisSuspected.reduce((tot,curent) => {return tot+curent})
+  this.dataCovid.ChileTotalDeathsDEIS = [deisConfirmedCumulative+ deisSuspectedCumulative]
+
 
    // ingreso UCI en chile
     const ingresoUCI = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto91/Ingresos_UCI.csv');

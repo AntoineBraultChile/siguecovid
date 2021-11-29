@@ -21,12 +21,13 @@
         v-if="dataCovid.labelsAntigeno.length > 0"
       >
 
-        <indicators
+        <indicators v-if="this.dataCovid.deis['Metropolitana'] != undefined"
           :labels="dataCovid['labelsCases']"
           :cases="dataCovid[currentRegion+'MeanCases']"
           :positivity="dataCovid[currentRegion+'Pos']"
           :uci="dataCovid[currentRegion+'Uci']"
           :deaths="dataCovid[currentRegion+'TotalDeaths']"
+          :deathsDeis="this.dataCovid.deis[currentRegion].total"
           type='epidemic'
           :region='currentRegion'
         />
@@ -198,6 +199,7 @@ export default {
           },
         },
         pasoAPaso: {},
+        deis:{}
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -412,6 +414,45 @@ export default {
       this.$set(this.dataCovid, region + "Pos", [...firstNullValues,...Pos]);
     }
 
+
+    // deis 
+    let deisConfirmed = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionConfirmedDeaths.csv')
+    let deisSuspected = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionSuspectedDeaths.csv')
+    this.dataCovid['deis'] = {
+    }
+
+    deisConfirmed.forEach((d,index) => {
+      let labels = Object.keys(d).slice(1).map(date => dayjs(date, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+      let confirmed =  Object.values(d).slice(1).map(i=> Number(i))
+      let suspected = Object.values(deisSuspected[index]).slice(1).map(i => Number(i))
+      let mediaMovil = meanWeek(sumArray(confirmed,suspected))
+      let total = [confirmed.reduce((tot,cur) => tot+cur)+suspected.reduce((tot,cur)=> tot+cur)]
+      this.dataCovid.deis[this.dicRegions2[d['Region']]] ={
+        'labels': labels,
+        'confirmed': confirmed,
+        'suspected': suspected,
+        'mediaMovil':mediaMovil,
+        'total': total
+      }
+    })
+
+    // excess mortality by region
+    let response = await fetch('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsRegionsFrom2015.json')
+    let deathsR =  await response.json()
+    const regions = Object.keys(this.dicRegions)
+    const years = Object.keys(deathsR[this.dicRegions['Maule']])
+
+    let deathsRGoodName = {}
+    regions.forEach(r =>{
+      deathsRGoodName[r] = {}
+      years.forEach(y => {
+        deathsRGoodName[r][y] = {'labels':deathsR[this.dicRegions[r]][y].labels.map(d => dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6),
+         'values': meanWeek(deathsR[this.dicRegions[r]][y].values.map(i=> Number(i))).map(i => Math.round(i))}
+      });
+    //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
+    })
+    this.dataCovid.allDeaths = deathsRGoodName
+    
     // function to delete accent
     function deleteAccent(string) {
       return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -536,41 +577,7 @@ casesComunas.forEach((comuna) => {
       };
     });
 
-    // deis 
-    let deisConfirmed = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionConfirmedDeaths.csv')
-    let deisSuspected = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionSuspectedDeaths.csv')
-    this.dataCovid['deis'] = {
-    }
 
-    deisConfirmed.forEach((d,index) => {
-      let labels = Object.keys(d).slice(1).map(date => dayjs(date, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-      let confirmed =  Object.values(d).slice(1).map(i=> Number(i))
-      let suspected = Object.values(deisSuspected[index]).slice(1).map(i => Number(i))
-      let mediaMovil = meanWeek(sumArray(confirmed,suspected))
-      this.dataCovid.deis[this.dicRegions2[d['Region']]] ={
-        'labels': labels,
-        'confirmed': confirmed,
-        'suspected': suspected,
-        'mediaMovil':mediaMovil
-      }
-    })
-
-    // excess mortality by region
-    let response = await fetch('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsRegionsFrom2015.json')
-    let deathsR =  await response.json()
-    const regions = Object.keys(this.dicRegions)
-    const years = Object.keys(deathsR[this.dicRegions['Maule']])
-
-    let deathsRGoodName = {}
-    regions.forEach(r =>{
-      deathsRGoodName[r] = {}
-      years.forEach(y => {
-        deathsRGoodName[r][y] = {'labels':deathsR[this.dicRegions[r]][y].labels.map(d => dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6),
-         'values': meanWeek(deathsR[this.dicRegions[r]][y].values.map(i=> Number(i))).map(i => Math.round(i))}
-      });
-    //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
-    })
-    this.dataCovid.allDeaths = deathsRGoodName
   },
 };
 </script>
