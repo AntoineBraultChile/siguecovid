@@ -493,6 +493,19 @@ export default {
             },
           ],
         };
+        options["tooltips"] = {
+          mode: "index",
+          intersect: true,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              if (tooltipItem.datasetIndex == 0) {
+                return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+              } else {
+                return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+              }
+            },
+          },
+        };
       }
       if (type == "Pcr" || type == "Cases" || type == "Deaths" || type == "Variant") {
         options.legend = { display: true };
