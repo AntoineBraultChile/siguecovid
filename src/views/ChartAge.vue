@@ -25,6 +25,8 @@
             :chartData="renderChileCases()"
             :options='optionsByAge(true,true,false, true)'
           > </line-chart>
+                    <signature/>
+
         </div>
         <div class='graphUci'>
           <title-graphic>Personas en UCI por Covid-19 por edad en Chile</title-graphic>
@@ -35,6 +37,8 @@
             :chartData="renderChileUciChart()"
             :options='optionsByAge(true,true,false,true)'
           > </line-chart>
+                    <signature/>
+
         </div>
 
         <div class='graphUci'>
@@ -46,6 +50,8 @@
             :chartData="renderChartDeathsByAge()"
             :options='optionsByAge(true,true,false,true)'
           > </line-chart>
+                    <signature/>
+
         </div>
         <div class='graphUci'>
           <title-graphic> Edad media de las personas en UCI y fallecidos por Covid-19 en Chile</title-graphic>
@@ -55,6 +61,8 @@
             :chartData="renderChartMeanAgeUciChile()"
             :options='optionsByAge(true,false,true,true)'
           > </line-chart>
+                    <signature/>
+
         </div>
         <div class='graphUci'>
           <title-graphic>Total fallecidos por Covid-19 por edad en Chile</title-graphic>
@@ -63,6 +71,8 @@
             :chartData="renderChileDeaths()"
             :options='optionsByAge(false,true,false)'
           > </bar-chart>
+                    <signature/>
+
         </div>
       </div>
       <spinner

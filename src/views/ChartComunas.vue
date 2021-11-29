@@ -11,7 +11,6 @@
           <title-graphic>Incidencia en la comuna de {{ currentComuna }}</title-graphic>
           <span style="font-size:1rem">Incidencia: número de casos en 7 días por cada 100.000 habitantes</span>
           <br />
-
           <update :labels="cases.labels"> </update>
 
           <div class="legend">
@@ -33,6 +32,7 @@
             </span>
           </div>
           <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
+          <signature />
         </div>
 
         <div class="graph" v-if="(positivity.labels.length > 0) & (pasoAPaso.Arica.dateChangePaso.length > 0)">
@@ -57,6 +57,7 @@
             </span>
           </div>
           <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)" />
+          <signature />
         </div>
         <div class="graph" v-if="cases.labels.length > 0">
           <title-graphic>Fallecidos semanal por Covid-19 en la comuna de {{ currentComuna }}</title-graphic>
@@ -64,11 +65,13 @@
           <br />
           <update :labels="deaths.labels"> </update>
           <bar-chart :chartData="ChartDeaths(currentComuna)" :options="options('deaths')"></bar-chart>
+          <signature />
         </div>
         <div class="graph" v-if="positivity.labels.length > 0">
           <title-graphic>Proporción de la población vacunada en la comuna de {{ currentComuna }}</title-graphic>
           <update :labels="firstDoses.labels"> </update>
           <line-chart :chartData="ChartVaccin(currentComuna)" :options="options('vaccine')" />
+          <signature />
         </div>
       </div>
       <spinner size="massive" v-else></spinner>

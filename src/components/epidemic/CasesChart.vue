@@ -15,6 +15,8 @@
     <update :labels="dataCovid.labelsCases"> </update>
     <bar-chart v-if="picked == 'diario'" :chartData="plotBarChartWithMean(region, 'Cases')" :options="chartOptions('Cases')"> </bar-chart>
     <bar-chart v-else :chartData="plotVariantions(this.dataCovid['labelsCases'].slice(5), this.dataCovid[region + 'MeanCases'])" :options="chartOptions('Variations')"> </bar-chart>
+          <signature />
+
     <!-- <radio-choice :picked="picked" v-on:newpicked="updatePicked" /> -->
   </div>
 </template>

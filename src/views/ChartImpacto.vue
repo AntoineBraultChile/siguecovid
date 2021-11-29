@@ -30,6 +30,8 @@
         :pointRadius="pointRadius"
         :colorsPasoAPaso="colorsPasoAPaso"
       />
+                <signature/>
+
     </div>
 
     <div class="graph" >
@@ -40,6 +42,8 @@
         :pointRadius="pointRadius"
         :colorsPasoAPaso="colorsPasoAPaso"
       />
+                <signature/>
+
     </div>
 
     <div class="graph" v-if="dataCovid.ve.cases.vaccinated != undefined">
@@ -50,6 +54,8 @@
         :pointRadius="pointRadius"
         :colorsPasoAPaso="colorsPasoAPaso"
       />
+                <signature/>
+
     </div>
 
     <div class="graph" v-if="dataCovid.newCases.labels.length > 0">
@@ -59,6 +65,8 @@
         :backgroundColor="backgroundColor"
         :pointRadius="pointRadius"
         :colorsPasoAPaso="colorsPasoAPaso"/>
+                  <signature/>
+
       </div>
           </div>
 

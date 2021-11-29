@@ -12,6 +12,9 @@ Vue.component("VueSlider", VueSlider);
 import Spinner from "vue-simple-spinner";
 Vue.component("spinner", Spinner);
 
+import Signature from "@/components/Signature.vue";
+Vue.component("signature", Signature);
+
 // // import 'bootstrap'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 

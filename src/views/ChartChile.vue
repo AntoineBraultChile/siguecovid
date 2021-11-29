@@ -40,6 +40,14 @@
           :fromDate="fromDate"
           :dataCovid="dataCovid"
         />
+      
+      <!-- <box-container>
+      <title-graphic> Mapa de la incidencia en Chile </title-graphic>
+      <map-chile />
+      <signature />
+      </box-container> -->
+
+
       </div>
       <spinner
         size='massive'
@@ -119,6 +127,9 @@ import FooterIndicators from "@/components/FooterIndicators";
 import SlideBar from "@/components/SlideBar";
 import * as d3 from "d3-fetch";
 
+// import MapChile from "@/components/maps/MapChile";
+
+
 import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -135,6 +146,8 @@ export default {
     // 'bar-chart':BarChart,
     "slide-bar": SlideBar,
     "footer-indicators": FooterIndicators,
+        // "map-chile": MapChile,
+
   },
   metaInfo() {
     return {

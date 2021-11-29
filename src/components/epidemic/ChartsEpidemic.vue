@@ -3,6 +3,7 @@
     <!-- Chart Cases -->
     <div class="graph" v-if="dataCovid.labelsCases.length > 0">
       <cases-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" />
+      <signature />
     </div>
 
     <!-- Chart Positivity -->
@@ -12,16 +13,19 @@
       <br />
       <update :labels="dataCovid.labelsPcr"> </update>
       <bar-chart :chartData="getChartPosPcr(region)" :options="chartOptions('Pcr')"> </bar-chart>
+      <signature />
     </div>
 
     <!-- Chart UCI -->
     <div class="graph" v-if="dataCovid.labelsUci.length > 0">
       <chart-uci :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" :colorsPasoAPaso="colorsPasoAPaso" />
+      <signature />
     </div>
 
     <!-- Chart Deaths -->
     <div class="graph" v-if="dataCovid.labelsDeaths.length > 0">
       <chart-deaths :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :pointRadius="pointRadius" :colorsPasoAPaso="colorsPasoAPaso" />
+      <signature />
     </div>
 
     <!-- Chart Vaccine -->
@@ -29,11 +33,13 @@
       <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
       <update :labels="dataCovid.labelsVaccine"> </update>
       <line-chart :chartData="getChartVaccine(region)" :options="chartOptions('Vaccine')"></line-chart>
+      <signature />
     </div>
 
     <!-- Chart Incidence by Region -->
     <div class="graph" v-if="dataCovid.incidence.lastUpdate.length > 0">
       <incidence-bar-chart :region="region" :fromDate="fromDate" :title="title" :dataCovid="dataCovid" :backgroundColor="backgroundColor" :colorsPasoAPaso="colorsPasoAPaso" />
+      <signature />
     </div>
 
     <!-- Case fatality rate -->
@@ -45,6 +51,7 @@
       <br />
       <update :labels="dataCovid.CFR.labels"> </update>
       <bar-chart :chartData="plotLine(this.dataCovid.CFR.labels, this.dataCovid.CFR.values, this.backgroundColor['Deaths'])" :options="chartOptions('CFR')"> </bar-chart>
+      <signature />
     </div>
 
     <!-- chart plan Paso a Paso  -->
@@ -52,7 +59,9 @@
       <title-graphic> Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
       <bar-chart :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>
+      <signature />
     </div>
+
     <!-- --------------------------------------------------------------------------------------------------------------------------------------- -->
     <!-- <box-container v-if="region == 'Chile'">
       <h2 id="description" style="font-size:1.5rem;">
@@ -589,5 +598,5 @@ export default {
   .two-columns {
     column-count: 1;
   }
-}</style
->641
+}
+</style>

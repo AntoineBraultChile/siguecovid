@@ -12,6 +12,11 @@
       </p>
 
       <p>
+        Los gráficos tienen licencia <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY</a>. Lo que significa que puede distribuir y adaptar los graficos incluso
+        comercialmente, siempre que le acrediten la creación original (<a href="siguecovid.cl">siguecovid.cl</a>).
+      </p>
+
+      <p>
         Si está interesado en visualizar los datos de Covid-19, existen otros visualizadores con indicadores complementarios a esta página web. En particular, recomiendo el visualizador del
         <a href="http://covid-19vis.cmm.uchile.cl/geo" target="_blank"> Centro de Modelamiento Matemático</a>
         y <a href="https://www.icovidchile.cl/" target="_blank">icovid</a>.

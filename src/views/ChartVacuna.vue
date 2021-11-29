@@ -31,38 +31,45 @@
           <title-graphic> Proporción de la población chilena vacunada</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
           <line-chart :chartData="renderChartVacuna()" :options="options('vertical')"> </line-chart>
+          <signature />
         </div>
 
         <div class="wrapper">
           <title-graphic> Número de personas vacunadas cada dia en Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
           <bar-chart :chartData="renderChartVacunaPorDia()" :options="optionsPorDia"> </bar-chart>
+          <signature />
         </div>
 
         <!-- vaccination coverage by age  -->
         <div class="wrapper">
           <chart-vaccination-coverage-by-age :vacunaChile="vacunaChile" :fromDate="fromDate" :pointRadius="pointRadius" :pointHoverRadius="pointHoverRadius" />
+          <signature />
         </div>
 
         <!-- By age -->
         <div class="wrapper" v-if="vacunaChile.labelsByAge.length > 0">
           <chart-vaccine-by-age :vacunaChile="vacunaChile" :fromDate="fromDate" :pointRadius="pointRadius" :pointHoverRadius="pointHoverRadius" />
+          <signature />
         </div>
 
         <!-- daily by vaccine type  -->
         <div class="wrapper" v-if="vaccineType.labels.length > 0">
           <chart-vaccine-by-type :data="vaccineType" :fromDate="fromDate" />
+          <signature />
         </div>
 
         <!-- Doughnut Chart proportion of vaccine type -->
         <div class="wrapper">
           <chart-proportion-vaccine :data="vaccineType" :fromDate="fromDate" />
+          <signature />
         </div>
 
         <div class="wrapper">
           <title-graphic> Proporción de población vacunada en las regiones de Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
           <horizontal-bar-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="options('horizontal')"> </horizontal-bar-chart>
+          <signature />
         </div>
       </div>
 

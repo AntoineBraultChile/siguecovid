@@ -19,12 +19,14 @@
           <title-graphic> Variantes secuenciadas cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
           <line-chart :chartData="getChartVariant(variantChile.valuesForTheVariants)" :options="chartOptions()"> </line-chart>
+          <signature type="variant" />
         </div>
 
         <div class="wrapper">
           <title-graphic> Proporción de cada variante secuenciada cada dos semanas en Chile</title-graphic>
           <update :labels="variantChile.labels"> </update>
           <line-chart :chartData="getChartVariant(variantChile.proportionVariants)" :options="chartOptions((percentage = false), (NoLegend = false), (max100 = true))"> </line-chart>
+          <signature type="variant" />
         </div>
 
         <!-- <div class="wrapper">
