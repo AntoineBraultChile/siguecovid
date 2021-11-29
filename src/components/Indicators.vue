@@ -54,10 +54,10 @@
           <div class="dosis indicator4" :class="colorsIndicator[3]" v-if="deaths.length > 0">
             <span>{{ numberToStringFormat(deaths.slice(-1)[0]) + text[3] }} </span>
             <span class="en24horas"> {{ numberToStringFormat(incrementLastDay(deaths)) }} en 24 horas </span>
-            <span style="font-size:1.1rem" v-if="type == 'epidemic' && deathsDeis.length > 0">{{ numberToStringFormat(deathsDeis[0]) + " total de fallecidos" }} </span>
+            <!-- <span style="font-size:1.1rem" v-if="type == 'epidemic' && deathsDeis.length > 0">{{ numberToStringFormat(deathsDeis[0]) + " total de fallecidos" }} </span> -->
 
-            <span class="legend" v-if="type == 'epidemic'">
-              Los fallecidos confirmados tuvieron un test positivo. El total de fallecidos tiene en cuenta las muertes sospechosas de Covid-19.
+            <span class="legend" v-if="type == 'epidemic' && deathsDeis.length > 0">
+              Los fallecidos confirmados tuvieron un test positivo. El total de fallecidos tenido en cuenta las muertes sospechosas de Covid-19 es de {{ numberToStringFormat(deathsDeis[0]) }}.
             </span>
           </div>
 

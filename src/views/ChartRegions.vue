@@ -18,7 +18,7 @@
 
       <div
         id='block_graph'
-        v-if="dataCovid.labelsAntigeno.length > 0"
+        v-if="this.dataCovid.deis['Metropolitana'] != undefined"
       >
 
         <indicators v-if="this.dataCovid.deis['Metropolitana'] != undefined"
@@ -452,7 +452,7 @@ export default {
     //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
     })
     this.dataCovid.allDeaths = deathsRGoodName
-    
+
     // function to delete accent
     function deleteAccent(string) {
       return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
