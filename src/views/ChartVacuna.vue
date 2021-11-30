@@ -391,7 +391,7 @@ export default {
         },
         tooltips: {
           mode: "index",
-          intersect: true,
+          intersect: false,
           callbacks: {
             label: function(tooltipItem, data) {
               return data.datasets[tooltipItem.datasetIndex].label + " (" + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%)";
@@ -484,8 +484,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "Al menos una dosis",
             borderColor: "#82CFFD",
-            backgroundColor: "#82CFFD",
-            fill: false,
+            backgroundColor: "rgb(130,207,253,0.5)",
+            fill: 1,
             data: this.vacunaChile["primera dosis"].slice(indexDate),
           },
           {
@@ -493,8 +493,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "Completamente vacunado",
             borderColor: "#eba434",
-            backgroundColor: "#eba434",
-            fill: false,
+            backgroundColor: "rgb(235,164,52,0.5)",
+            fill: 2,
             data: this.vacunaChile["segunda dosis"].slice(indexDate),
           },
           {
@@ -502,8 +502,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "Dosis de refuerzo",
             borderColor: "#232b2b",
-            backgroundColor: "#232b2b",
-            fill: false,
+            backgroundColor: "rgb(35,43,43,0.5)",
+            fill: true,
             data: this.vacunaChile["Dosis de refuerzo"].slice(indexDate),
           },
         ],

@@ -65,8 +65,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "",
             borderColor: "#82CFFD",
-            backgroundColor: "#82CFFD",
-            fill: false,
+            backgroundColor: "rgb(130,207,253,0.5)",
+            fill: true,
             data: values.slice(indexDate),
           },
         ],
@@ -102,7 +102,7 @@ export default {
           ],
         },
         tooltips: {
-          intersect: true,
+          intersect: false,
           mode: "index",
           callbacks: {
             label: function(tooltipItem, data) {
@@ -122,7 +122,7 @@ export default {
       if (type == "proportion") {
         opt["tooltips"] = {
           mode: "index",
-          intersect: true,
+          intersect: false,
           callbacks: {
             label: function(tooltipItem, data) {
               return data.datasets[tooltipItem.datasetIndex].label + " " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";

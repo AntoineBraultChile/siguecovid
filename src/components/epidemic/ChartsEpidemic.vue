@@ -170,11 +170,23 @@ export default {
         3: "#82CFFD",
         4: "#93DB70",
       },
+      colorsPasoAPasoTransparent: {
+        1: "rgb(221,75,57,0.5)",
+        2: "rgb(235,164,52,0.5)",
+        3: "rgb(130,207,253,0.5)",
+        4: "rgb(147,219,112,0.5)",
+      },
       backgroundColor: {
         Uci: "#dd4b39",
         Pcr: "#82CFFD",
         Cases: "#93DB70",
         Deaths: "#232b2b",
+      },
+      backgroundColorTransparent: {
+        Uci: "rgb(221,75,57,0.5)",
+        Pcr: "rgb(130,207,253,0.5)",
+        Cases: "rgb(147,219,112,0.5)",
+        Deaths: "rgb(35,43,43,0.5)",
       },
       title: {
         IngresoUCI: "Media móvil 7 días de ingresos a UCI por Covid-19",
@@ -268,8 +280,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "Al menos una dosis",
             borderColor: this.colorsPasoAPaso[3],
-            backgroundColor: this.colorsPasoAPaso[3],
-            fill: false,
+            backgroundColor: this.colorsPasoAPasoTransparent[3],
+            fill: 1,
             data: this.dataCovid[region + "Vaccine"].firstDoses.slice(indexDate),
           },
           {
@@ -278,8 +290,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "Completamente vacunado",
             borderColor: this.colorsPasoAPaso[2],
-            backgroundColor: this.colorsPasoAPaso[2],
-            fill: false,
+            backgroundColor: this.colorsPasoAPasoTransparent[2],
+            fill: 2,
             data: this.dataCovid[region + "Vaccine"].secondDoses.slice(indexDate),
           },
           {
@@ -288,8 +300,8 @@ export default {
             pointHoverRadius: this.pointHoverRadius,
             label: "Dosis de refuerzo",
             borderColor: this.backgroundColor["Deaths"],
-            backgroundColor: this.backgroundColor["Deaths"],
-            fill: false,
+            backgroundColor: this.backgroundColorTransparent["Deaths"],
+            fill: true,
             data: this.dataCovid[region + "Vaccine"].boostDoses.slice(indexDate),
           },
         ],
@@ -412,9 +424,13 @@ export default {
         };
       }
       if (type == "Vaccine") {
-        options.tooltips["callbacks"] = {
-          label: function(tooltipItem, data) {
-            return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+        options.tooltips = {
+          mode: "index",
+          intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+            },
           },
         };
         options.scales.yAxes[0].ticks = {
