@@ -71,6 +71,11 @@
           <horizontal-bar-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="options('horizontal')"> </horizontal-bar-chart>
           <signature />
         </div>
+
+        <div class="wrapper" v-if="vacunaChile.paseMovilidad.labels.length > 0">
+          <chart-pase-movilidad :vacunaChile="vacunaChile" :fromDate="fromDate" :pointRadius="pointRadius" :pointHoverRadius="pointHoverRadius" />
+          <signature />
+        </div>
       </div>
 
       <spinner size="massive" v-else></spinner>
@@ -148,12 +153,15 @@ import ChartVaccineByAge from "@/components/vaccines/ChartVaccineByAge";
 import ChartVaccineByType from "@/components/vaccines/ChartVaccineByType";
 import ChartProportionVaccine from "@/components/vaccines/ChartProportionVaccine";
 import ChartVaccinationCoverageByAge from "@/components/vaccines/ChartVaccinationCoverageByAge";
+import ChartPaseMovilidad from "@/components/vaccines/ChartPaseMovilidad";
 
 import * as d3 from "d3-fetch";
 
 import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
+var isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
+dayjs.extend(isSameOrAfter);
 import "dayjs/locale/es"; // load on demand
 dayjs.locale("es"); // use Spanish locale globally
 
@@ -174,6 +182,7 @@ export default {
     "chart-vaccine-by-type": ChartVaccineByType,
     "chart-proportion-vaccine": ChartProportionVaccine,
     "chart-vaccination-coverage-by-age": ChartVaccinationCoverageByAge,
+    "chart-pase-movilidad": ChartPaseMovilidad,
     // 'choose-date': ChooseDate
   },
   metaInfo() {
@@ -265,6 +274,7 @@ export default {
           70: 1804002,
           300: 1544008,
         },
+        adultPopulation: 15200840,
         firstDosesByAgeGroup: {
           12: [],
           18: [],
@@ -305,6 +315,7 @@ export default {
           70: [],
           300: [],
         },
+        paseMovilidad: { labels: [], absolute: [], proportion: [] },
       },
       fromDate: "01-02-2021",
       listOfMonths: [],
@@ -907,6 +918,99 @@ export default {
       this.vaccineType.boostDoses.proportion[3],
       this.vaccineType.boostDoses.proportion[1],
     ];
+
+    // compute number of people with pase de movilidad mayor de 45 años en Chile
+    // const ageLimitBoost = 45;
+    let delayShotPase = 14;
+    const ageLimitPase = 18;
+    const ageLimitBoost = 45;
+    const validityPase = 6; // months
+    const dateStart = "2021-05-26";
+    const dateBoost = "2021-12-01";
+
+    function vaccinatedWith14days(ageLimit) {
+      // compute all people 18 year old or older with vaccines
+      let peopleVaccinatedWith14days = {};
+      secondDosesByAge.forEach((el, index) => {
+        let age = Number(el["Edad"]);
+        if (age >= ageLimit) {
+          const labelsElement = Object.keys(el).slice(1);
+          labelsElement.forEach((d) => {
+            const labelWith14days = dayjs(d, "YYYY-MM-DD")
+              .add(delayShotPase, "day")
+              .format("DD-MM-YYYY");
+            if (peopleVaccinatedWith14days[labelWith14days] == undefined) {
+              peopleVaccinatedWith14days[labelWith14days] = Number(el[d]) + Number(uniqueDosesByAge[index][d]);
+            } else {
+              peopleVaccinatedWith14days[labelWith14days] += Number(el[d]) + Number(uniqueDosesByAge[index][d]);
+            }
+          });
+        }
+      });
+      const cumulativeSum = ((sum) => (value) => (sum += value))(0);
+      let valueCumulative = Object.values(peopleVaccinatedWith14days).map(cumulativeSum);
+      Object.keys(peopleVaccinatedWith14days).forEach((d, index) => {
+        peopleVaccinatedWith14days[d] = valueCumulative[index];
+      });
+      return peopleVaccinatedWith14days;
+    }
+
+    let adultVaccinatedWith14days = vaccinatedWith14days(ageLimitPase);
+    let moreThan45yearsWith14days = vaccinatedWith14days(ageLimitBoost);
+
+    const labelsVaccination = Object.keys(adultVaccinatedWith14days);
+
+    // people with age >= ageLimitBoost
+    let peopleWithBoost14days = {};
+    boostDosesByAge.forEach((el) => {
+      let age = Number(el["Edad"]);
+      if (age >= ageLimitBoost) {
+        const labelsElement = Object.keys(el).slice(1);
+        labelsElement.forEach((d) => {
+          const labelWith14days = dayjs(d, "YYYY-MM-DD")
+            .add(delayShotPase, "day")
+            .format("DD-MM-YYYY");
+          if (peopleWithBoost14days[labelWith14days] == undefined) {
+            peopleWithBoost14days[labelWith14days] = Number(el[d]);
+          } else {
+            peopleWithBoost14days[labelWith14days] += Number(el[d]);
+          }
+        });
+      }
+    });
+    const cumulativeSum = ((sum) => (value) => (sum += value))(0);
+    let valueCumulative = Object.values(peopleWithBoost14days).map(cumulativeSum);
+    Object.keys(peopleWithBoost14days).forEach((d, index) => {
+      peopleWithBoost14days[d] = valueCumulative[index];
+    });
+
+    // people lossing pase
+    let peopleLossingPase = {};
+    labelsVaccination.forEach((d) => {
+      let sixMonthsBefore = dayjs(d, "DD-MM-YYYY")
+        .add(-validityPase, "month")
+        .format("DD-MM-YYYY");
+      if (moreThan45yearsWith14days[sixMonthsBefore] != undefined) {
+        peopleLossingPase[d] = peopleWithBoost14days[d] + adultVaccinatedWith14days[d] - moreThan45yearsWith14days[sixMonthsBefore];
+      }
+    });
+
+    // people with pase en Chile
+    let peopleWithPase = {};
+    labelsVaccination.forEach((d) => {
+      if (dayjs(d, "DD-MM-YYYY").isSameOrAfter(dateStart) && dayjs(d, "DD-MM-YYYY").isBefore(dateBoost)) {
+        peopleWithPase[d] = adultVaccinatedWith14days[d];
+      } else if (dayjs(d, "DD-MM-YYYY").isSameOrAfter(dateBoost)) {
+        peopleWithPase[d] = peopleLossingPase[d];
+      }
+    });
+    let proportion = Object.values(peopleWithPase).map((val) => Math.round((val / this.vacunaChile.adultPopulation) * 1000) / 10);
+
+    this.vacunaChile.paseMovilidad = {
+      labels: Object.keys(peopleWithPase),
+      absolute: Object.values(peopleWithPase),
+      proportion: proportion,
+    };
   },
 };
 </script>
