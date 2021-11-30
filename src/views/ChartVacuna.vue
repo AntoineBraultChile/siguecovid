@@ -60,12 +60,12 @@
         </div>
 
         <!-- Doughnut Chart proportion of vaccine type -->
-        <div class="wrapper">
+        <div class="wrapper" v-if="vaccineType.labels.length > 0">
           <chart-proportion-vaccine :data="vaccineType" :fromDate="fromDate" />
           <signature />
         </div>
 
-        <div class="wrapper">
+        <div class="wrapper" v-if="vacunaChile.labelsByAge.length > 0">
           <title-graphic> Proporción de población vacunada en las regiones de Chile</title-graphic>
           <update :labels="vacunaChile.labels"> </update>
           <horizontal-bar-chart v-if="vacunaChile.labelsByAge.length > 0" :chartData="renderChartVacunaPorRegion()" :options="options('horizontal')"> </horizontal-bar-chart>
