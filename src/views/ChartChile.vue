@@ -233,6 +233,7 @@ export default {
           fase2: [],
           fase3: [],
           fase4: [],
+          fase5:[],
         },
         deis:{
           Chile:{
@@ -601,6 +602,8 @@ export default {
     let fase2 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
     let fase3 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
     let fase4 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
+        let fase5 = new Array(this.dataCovid.pasoAPaso.labels.length).fill(0);
+
     paso.forEach((comuna) => {
       let comunaName = comuna["comuna_residencia"];
       let comunaValuesPasoAPaso = Object.values(comuna).slice(5);
@@ -614,6 +617,8 @@ export default {
             fase3[Number(index)] += pop[comunaName];
           } else if (value === "4") {
             fase4[Number(index)] += pop[comunaName];
+          }else if (value ==="5"){
+            fase5[Number(index)] += pop[comunaName];
           }
         });
       }
@@ -623,7 +628,7 @@ export default {
       return (
         Math.round(
           (value /
-            (fase1[index] + fase2[index] + fase3[index] + fase4[index])) *
+            (fase1[index] + fase2[index] + fase3[index] + fase4[index]+ fase5[index])) *
             1000
         ) / 10
       );
@@ -632,7 +637,7 @@ export default {
       return (
         Math.round(
           (value /
-            (fase1[index] + fase2[index] + fase3[index] + fase4[index])) *
+            (fase1[index] + fase2[index] + fase3[index] + fase4[index]+fase5[index])) *
             1000
         ) / 10
       );
@@ -641,7 +646,7 @@ export default {
       return (
         Math.round(
           (value /
-            (fase1[index] + fase2[index] + fase3[index] + fase4[index])) *
+            (fase1[index] + fase2[index] + fase3[index] + fase4[index]+fase5[index])) *
             1000
         ) / 10
       );
@@ -650,7 +655,16 @@ export default {
       return (
         Math.round(
           (value /
-            (fase1[index] + fase2[index] + fase3[index] + fase4[index])) *
+            (fase1[index] + fase2[index] + fase3[index] + fase4[index]+fase5[index])) *
+            1000
+        ) / 10
+      );
+    });
+        this.dataCovid.pasoAPaso["fase5"] = fase5.map((value, index) => {
+      return (
+        Math.round(
+          (value /
+            (fase1[index] + fase2[index] + fase3[index] + fase4[index]+fase5[index])) *
             1000
         ) / 10
       );

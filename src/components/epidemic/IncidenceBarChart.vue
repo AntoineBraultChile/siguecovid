@@ -19,7 +19,7 @@
     <span v-else style="font-size:1rem">Variación de la incidencia corresponde a la incidencia de hoy menos la incidencia 7 días atras</span>
     <br />
     <update :labels="dataCovid.incidence.lastUpdate"> </update>
-    <div class="legend" v-if="!(region == 'Chile')">
+    <div class="legend" v-if="!(region == 'Chile') && picked == 'diario'">
       <span class="label">
         <div class="rectangle red"></div>
         <span>Fase 1</span>
@@ -29,12 +29,16 @@
         <span>Fase 2</span>
       </span>
       <span class="label">
-        <div class="rectangle blue"></div>
+        <div class="rectangle yellow"></div>
         <span>Fase 3</span>
       </span>
       <span class="label">
-        <div class="rectangle green"></div>
+        <div class="rectangle blue"></div>
         <span>Fase 4</span>
+      </span>
+      <span class="label">
+        <div class="rectangle green"></div>
+        <span>Fase 5</span>
       </span>
     </div>
     <!-- <horizontal-bar-chart v-if="picked == 'diario'" :height="500" :chartData="getChartIncidence(region)" :options="options" />
@@ -162,6 +166,9 @@ export default {
 }
 .orange {
   background-color: #eba434;
+}
+.yellow {
+  background-color: rgb(235, 216, 45);
 }
 .blue {
   background-color: #82cffd;

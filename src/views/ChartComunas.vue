@@ -12,7 +12,6 @@
           <span style="font-size:1rem">Incidencia: número de casos en 7 días por cada 100.000 habitantes</span>
           <br />
           <update :labels="cases.labels"> </update>
-
           <div class="legend">
             <span class="label">
               <div class="rectangle red"></div>
@@ -23,12 +22,16 @@
               <span>Fase 2</span>
             </span>
             <span class="label">
-              <div class="rectangle blue"></div>
+              <div class="rectangle yellow"></div>
               <span>Fase 3</span>
             </span>
             <span class="label">
-              <div class="rectangle green"></div>
+              <div class="rectangle blue"></div>
               <span>Fase 4</span>
+            </span>
+            <span class="label">
+              <div class="rectangle green"></div>
+              <span>Fase 5</span>
             </span>
           </div>
           <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
@@ -48,12 +51,16 @@
               <span>Fase 2</span>
             </span>
             <span class="label">
-              <div class="rectangle blue"></div>
+              <div class="rectangle yellow"></div>
               <span>Fase 3</span>
             </span>
             <span class="label">
-              <div class="rectangle green"></div>
+              <div class="rectangle blue"></div>
               <span>Fase 4</span>
+            </span>
+            <span class="label">
+              <div class="rectangle green"></div>
+              <span>Fase 5</span>
             </span>
           </div>
           <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)" />
@@ -131,7 +138,7 @@ export default {
         Deaths: "#232b2b",
       },
       // colorsPaso : {'Fase 1':'rgb(221,75,57,0.1)', 'Fase 2': 'rgb( 235, 164, 52, 0.1)', 'Fase 3': 'rgb(130,207,253,0.1)','Fase 4':'rgb(147,219,112,0.1)'},
-      colorsPaso: ["rgb(221,75,57,0.1)", "rgb( 235, 164, 52, 0.1)", "rgb(130,207,253,0.1)", "rgb(147,219,112,0.1)"],
+      colorsPaso: ["rgb(221,75,57,0.1)", "rgb( 235, 164, 52, 0.1)", "rgb(235, 216, 45, 0.3)", "rgb(130,207,253,0.1)", "rgb(147,219,112,0.1)"],
       fromDate: "01-02-2021",
       fromMonth: "",
       listOfMonths: [],
@@ -672,6 +679,9 @@ export default {
 }
 .orange {
   background-color: rgb(235, 164, 52, 0.3);
+}
+.yellow {
+  background-color: rgb(235, 216, 45, 0.3);
 }
 .blue {
   background-color: rgb(130, 207, 253, 0.3);

@@ -167,14 +167,16 @@ export default {
       colorsPasoAPaso: {
         1: "#dd4b39",
         2: "#eba434",
-        3: "#82CFFD",
-        4: "#93DB70",
+        3: "rgb(235, 216, 45)",
+        4: "#82CFFD",
+        5: "#93DB70",
       },
       colorsPasoAPasoTransparent: {
         1: "rgb(221,75,57,0.5)",
         2: "rgb(235,164,52,0.5)",
-        3: "rgb(130,207,253,0.5)",
-        4: "rgb(147,219,112,0.5)",
+        3: "rgb(235, 216, 45,0.5)",
+        4: "rgb(130,207,253,0.5)",
+        5: "rgb(147,219,112,0.5)",
       },
       backgroundColor: {
         Uci: "#dd4b39",
@@ -279,8 +281,8 @@ export default {
             pointRadius: this.pointRadius,
             pointHoverRadius: this.pointHoverRadius,
             label: "Al menos una dosis",
-            borderColor: this.colorsPasoAPaso[3],
-            backgroundColor: this.colorsPasoAPasoTransparent[3],
+            borderColor: this.colorsPasoAPaso[4],
+            backgroundColor: this.colorsPasoAPasoTransparent[4],
             fill: 1,
             data: this.dataCovid[region + "Vaccine"].firstDoses.slice(indexDate),
           },
@@ -313,7 +315,7 @@ export default {
       indexDate = indexDate > 0 ? indexDate : 0;
       // let indexDateMean = this.dataCovidChile['labelsMean'+type].indexOf(fromDate)
       let datasets = [];
-      let labels = ["Fase 1", "Fase 2", "Fase 3", "Fase 4"];
+      let labels = ["Fase 1", "Fase 2", "Fase 3", "Fase 4", "Fase 5"];
       let pasos = Object.keys(this.colorsPasoAPaso);
       pasos.forEach((paso, index) => {
         datasets.push({
