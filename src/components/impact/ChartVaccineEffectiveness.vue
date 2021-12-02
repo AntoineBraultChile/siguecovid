@@ -56,10 +56,7 @@ export default {
       this.picked = payload;
     },
     plotVE(type) {
-      let fromDate = this.fromDate;
       let labels = Object.keys(this.dataCovid.ve[type]["vaccinated"]);
-      let indexDate = labels.indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
 
       let boostVE = [];
       let boostVE_lb = [];
@@ -78,9 +75,7 @@ export default {
       });
 
       return {
-        labels: labels.filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
-        }),
+        labels: labels,
         datasets: [
           {
             type: "line",
@@ -90,9 +85,7 @@ export default {
             borderColor: this.colorsPasoAPaso[3],
             backgroundColor: this.colorsPasoAPaso[3],
             fill: false,
-            data: Object.values(this.dataCovid.ve[type]["vaccinated"])
-              .map((d) => d.mean)
-              .slice(indexDate),
+            data: Object.values(this.dataCovid.ve[type]["vaccinated"]).map((d) => d.mean),
           },
           {
             label: "Intervalo de confianza del 95%",
@@ -102,9 +95,7 @@ export default {
             pointRadius: 0,
             fill: 0,
             // tension: 0,
-            data: Object.values(this.dataCovid.ve[type]["vaccinated"])
-              .map((d) => d.lb)
-              .slice(indexDate),
+            data: Object.values(this.dataCovid.ve[type]["vaccinated"]).map((d) => d.lb),
             // yAxisID: "y",
             // xAxisID: "x",
           },
@@ -116,9 +107,7 @@ export default {
             pointRadius: 0,
             fill: 0,
             // tension: 0,
-            data: Object.values(this.dataCovid.ve[type]["vaccinated"])
-              .map((d) => d.ub)
-              .slice(indexDate),
+            data: Object.values(this.dataCovid.ve[type]["vaccinated"]).map((d) => d.ub),
             // yAxisID: "y",
             // xAxisID: "x",
           },
@@ -131,7 +120,7 @@ export default {
             borderColor: this.colorsPasoAPaso[2],
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
-            data: boostVE.slice(indexDate),
+            data: boostVE,
           },
           {
             type: "line",
@@ -141,7 +130,7 @@ export default {
             label: "Intervalo de confianza del 95%",
             borderColor: "transparent",
             backgroundColor: "rgb(235,164,52,0.5)",
-            data: boostVE_lb.slice(indexDate),
+            data: boostVE_lb,
           },
           {
             type: "line",
@@ -151,7 +140,7 @@ export default {
             label: "upper",
             borderColor: "transparent",
             backgroundColor: "rgb(235,164,52,0.5)",
-            data: boostVE_ub.slice(indexDate),
+            data: boostVE_ub,
           },
         ],
       };

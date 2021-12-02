@@ -58,15 +58,9 @@ export default {
       this.picked = payload;
     },
     plotIncidenceVaccinalByAge(type) {
-      let fromDate = this.fromDate;
       let labels = Object.keys(this.dataCovid.incidenceVaccinalAjustedByAge[type]["sin esquema completo"]);
-      let indexDate = labels.indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
-
       return {
-        labels: labels.filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
-        }),
+        labels: labels,
         datasets: [
           {
             type: "line",
@@ -76,7 +70,7 @@ export default {
             borderColor: this.colorsPasoAPaso[1],
             backgroundColor: this.colorsPasoAPaso[1],
             fill: false,
-            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["sin esquema completo"]).slice(indexDate),
+            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["sin esquema completo"]),
           },
           {
             type: "line",
@@ -86,7 +80,7 @@ export default {
             borderColor: this.colorsPasoAPaso[3],
             backgroundColor: this.colorsPasoAPaso[3],
             fill: false,
-            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["con esquema completo"]).slice(indexDate),
+            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["con esquema completo"]),
           },
           {
             type: "line",
@@ -96,7 +90,7 @@ export default {
             borderColor: this.colorsPasoAPaso[2],
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
-            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["con dosis refuerzo > 14 dias"]).slice(indexDate),
+            data: Object.values(this.dataCovid.incidenceVaccinalAjustedByAge[type]["con dosis refuerzo > 14 dias"]),
           },
         ],
       };

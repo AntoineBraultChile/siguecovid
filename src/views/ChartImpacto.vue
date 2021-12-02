@@ -187,7 +187,7 @@ export default {
     this.fromDate = dayjs().subtract(3, "month").format("01-MM-YYYY");
 
   // --------------------------------   incidence by vaccinated or non-vaccinated groups and by age ---------------------
-  let incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  const incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
   let numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
   // console.log(incidenceByAgeByVaccinalScheme)
     // dictionary between epidemiological week and date in 2021
@@ -225,7 +225,7 @@ export default {
   
   
     // --------------------------------   incidence cases, UCI, deaths by vaccination status ajusted by age ---------------------
-  // let incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  //  incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
   // console.log(incidenceByAgeByVaccinalScheme)
   const firstEpidemiologicalWeek = Number(incidenceByAgeByVaccinalScheme[0]['semana_epidemiologica'])
   const lastEpidemiologicalWeek = Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])
@@ -236,11 +236,13 @@ export default {
   // console.log(listWeek)
 
   const vaccinalStatus = ['con esquema completo','sin esquema completo','con dosis refuerzo > 14 dias']
-  const ageGroup = ['12 - 20 años', '21 - 30 años', '31 - 40 años', '41 - 50 años', '61 - 70 años', '61 - 70 años', '80 años o más']
+  const ageGroup = ['12 - 20 años', '21 - 30 años', '31 - 40 años', '41 - 50 años','51 - 60 años', '61 - 70 años', '71 - 80 años' ,'80 años o más']
+
   let incidenceAjustedCases = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{}}
   let incidenceAjustedUCI = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{}}
-  let incidenceAjustedDeaths = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{}}
+  let incidenceAjustedDeaths = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{}} 
   for (let v of vaccinalStatus){
+
     for (let w of listWeek){
       let data = incidenceByAgeByVaccinalScheme.filter(obj =>  {return obj['semana_epidemiologica'] === w && obj['estado_vacunacion'] === v})
       let dataRef = incidenceByAgeByVaccinalScheme.filter(obj =>  {return obj['semana_epidemiologica'] === w && obj['estado_vacunacion'] === 'sin esquema completo'})
@@ -258,9 +260,9 @@ export default {
           let dataAge = data.find(obj => obj.grupo_edad === a)
           let dataAgeRef = dataRef.find(obj => obj.grupo_edad === a)
           if (Number(dataAge['poblacion']) > 5000){
-            incidenceCases += Number(dataAge['incidencia_casos']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
-            incidenceUCI += Number(dataAge['incidencia_uci']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
-            incidenceDeaths += Number(dataAge['incidencia_def']) *  Number(dataAgeRef['poblacion']) / totalPopulationRef
+            incidenceCases += Number(dataAge['incidencia_casos']) *  Number(dataAgeRef['poblacion']) / Number(totalPopulationRef)
+            incidenceUCI += Number(dataAge['incidencia_uci']) *  Number(dataAgeRef['poblacion']) / Number(totalPopulationRef)
+            incidenceDeaths += Number(dataAge['incidencia_def']) *  Number(dataAgeRef['poblacion']) / Number(totalPopulationRef)
           }
         }
         incidenceAjustedCases[v][dicEpiWeek[w]] = Math.round(incidenceCases*100)/100
