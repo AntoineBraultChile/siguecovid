@@ -81,7 +81,7 @@ export default {
     renderChartDoughnut(dose) {
       return {
         // labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
-        labels: dose === "boost" ? ["AstraZeneca", "Pfizer", "Sinovac"] : ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
+        labels: dose === "boost" ? ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"] : ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
         datasets: [
           {
             label: "",

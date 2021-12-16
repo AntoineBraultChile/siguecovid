@@ -454,7 +454,7 @@ export default {
           borderColor: this.casesChile.colors[indx],
           backgroundColor: this.casesChile.colors[indx],
           fill: false,
-          data: d.slice(indexDate - 1),
+          data: d.slice(indexDate),
           // data:d
         });
       });
@@ -609,6 +609,7 @@ export default {
         );
       }
     }
+
     // group time serie by age two by two
     let casesByTenYears = [];
     for (let i = 0; i < this.casesChile.values.length - 1; i += 2) {
@@ -616,10 +617,12 @@ export default {
         sumArray(this.casesChile.values[i], this.casesChile.values[i + 1])
       );
     }
-    casesByTenYears.slice(-1)[0] = sumArray(
-      casesByTenYears.slice(-1)[0],
-      this.casesChile.values.slice(-1)[0]
-    );
+    let cases80Older = this.casesChile.values.slice(-1)[0]
+    let cases7079old = casesByTenYears.slice(-1)[0]
+
+    casesByTenYears.pop()
+    casesByTenYears.push(cases80Older.map((d,i) => {return cases7079old[i]+d}))
+      
     this.casesChile.values = casesByTenYears;
 
     // create age group 10 20 30 40 50 60 70 80 200(max age)
