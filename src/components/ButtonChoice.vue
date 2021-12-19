@@ -38,7 +38,7 @@ export default {
   background: #f0f0f0;
   color: #2c3e50;
 }
-.tab-button:hover {
+.tab-button:hover:not(.active) {
   background: #e0e0e0;
   background: #f8f8f8;
 }

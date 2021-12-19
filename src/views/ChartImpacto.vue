@@ -22,6 +22,8 @@
           v-on:newdate='updateCurrentDate'
         /> -->
 
+        
+
          <div class="graph" v-if="Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
       <chart-incidence-adjusted-by-age
         :fromDate="fromDate"
@@ -31,6 +33,17 @@
         :colorsPasoAPaso="colorsPasoAPaso"
       />
                 <signature/>
+
+    </div>
+         <div class="graph" v-if="Object.keys(dataCovid.incidenceTimeByAge.cases).length > 0">
+
+    <chart-incidence-time-by-age  :fromDate="fromDate"
+        :dataCovid="dataCovid"
+        :backgroundColor="backgroundColor"
+        :pointRadius="pointRadius"
+        :colorsPasoAPaso="colorsPasoAPaso"
+      />
+                      <signature/>
 
     </div>
 
@@ -116,6 +129,7 @@ import "dayjs/locale/es"; // load on demand
 dayjs.locale("es"); // use Spanish locale globally
 
 import ChartIncidenceByAge from "@/components/impact/ChartIncidenceByAge";
+import ChartIncidenceTimeByAge from "@/components/impact/ChartIncidenceTimeByAge"
 import ChartIncidenceAdjustedByAge from "@/components/impact/ChartIncidenceAdjustedByAge";
 import ChartVaccineEffectiveness from "@/components/impact/ChartVaccineEffectiveness";
 import ChartCasesDeaths from "@/components/impact/ChartCasesDeaths"
@@ -132,6 +146,7 @@ export default {
 
     "chart-incidence-adjusted-by-age": ChartIncidenceAdjustedByAge,
     "chart-incidence-by-age": ChartIncidenceByAge,
+    "chart-incidence-time-by-age":ChartIncidenceTimeByAge,
     "chart-vaccine-effectiveness": ChartVaccineEffectiveness,
     "chart-cases-deaths":ChartCasesDeaths,
   },
@@ -154,6 +169,7 @@ export default {
         incidenceByVaccinalSchemeByAge:{'week':[], 'cases':{'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{}},'uci':{'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{}},'deaths':{'con esquema completo':{},'sin esquema completo':{},  'con dosis refuerzo > 14 dias':{}}},
         ve:{'cases':{}, 'uci':{}, 'deaths':{}},
         incidenceVaccinalAjustedByAge : {'cases':{}, 'uci':{} ,'deaths': {}},
+        incidenceTimeByAge: {'cases':{}, 'uci':{} ,'deaths': {}},
         newCases: { labels: {}, values: {} },
         deaths: { labels: {}, values: {} },
       },
@@ -203,6 +219,7 @@ export default {
   let incidenceUciByVaccinalScheme = { }
   let incidenceDeathsByVaccinalScheme = {}
 
+
   incidenceByAgeByVaccinalScheme.forEach(incidence => {
       let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
       let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
@@ -210,6 +227,7 @@ export default {
         incidenceCasesByVaccinalScheme[sundaySemana] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
         incidenceUciByVaccinalScheme[sundaySemana] = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
         incidenceDeathsByVaccinalScheme[sundaySemana] = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{} }
+
       } else {
         if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
       incidenceCasesByVaccinalScheme[sundaySemana][incidence['estado_vacunacion']][incidence['grupo_edad']] = Math.round(Number(incidence['incidencia_casos'])*100)/100
@@ -223,6 +241,36 @@ export default {
   this.dataCovid.incidenceByVaccinalSchemeByAge["deaths"] = incidenceDeathsByVaccinalScheme
   // this.dataCovid.incidenceByVaccinalSchemeByAge['week'] = [sundaySemana, saturdaySemana]
   
+
+  //---------------------------    incidence by vaccinal scheme time by age     ----------------------------------------------------
+  let incidenceCasesTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+  let incidenceUciTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+  let incidenceDeathsTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+
+
+  incidenceByAgeByVaccinalScheme.forEach(incidence => {
+      let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
+      let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
+      if(incidence['grupo_edad'] != 'Total' & incidence['grupo_edad']!='06 - 11 años'){
+      if(incidenceCasesTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']]== undefined){
+        incidenceCasesTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
+        incidenceUciTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
+        incidenceDeathsTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
+
+      } else {
+        // if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
+      incidenceCasesTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][sundaySemana] = Math.round(Number(incidence['incidencia_casos'])*100)/100
+      incidenceUciTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][sundaySemana] = Math.round(Number(incidence['incidencia_uci'])*100)/100
+      incidenceDeathsTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][sundaySemana] = Math.round(Number(incidence['incidencia_def'])*100)/100
+      }
+      
+      }
+  })
+  this.dataCovid.incidenceTimeByAge["cases"] = incidenceCasesTimeByAge
+  this.dataCovid.incidenceTimeByAge["uci"] = incidenceUciTimeByAge
+  this.dataCovid.incidenceTimeByAge["deaths"] = incidenceDeathsTimeByAge
+
+  // -------------------------------------------------------------------------------------------
   
     // --------------------------------   incidence cases, UCI, deaths by vaccination status ajusted by age ---------------------
   //  incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
