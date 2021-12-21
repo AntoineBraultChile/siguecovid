@@ -227,6 +227,8 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0.1rem;
+  padding: 0.1rem;
 }
 li:hover:not(.activeage) {
   /* color: #82cffd; */
