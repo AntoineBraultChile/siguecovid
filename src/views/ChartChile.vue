@@ -586,7 +586,7 @@ export default {
       }
       })
     // mediaMovilDeis.forEach((_,index)=> CFR.unshift(mediaMovilDeis[mediaMovilDeis.length-index-1-delayCaseDeaths]/this.dataCovid.ChileMeanCases[this.dataCovid.ChileMeanCases.length-index-1]*100))
-    this.dataCovid.CFR = {labels:labelsCFR, values: CFR }
+    this.dataCovid.CFR = {labels:labelsCFR.sort((a, b) => (dayjs(a,'DD-MM-YYYY').isAfter(dayjs(b, 'DD-MM-YYYY')) ? 1 : -1)), values: CFR }
 
 
     // plan paso a paso
