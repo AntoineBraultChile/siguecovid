@@ -58,6 +58,19 @@
                 <signature/>
 
     </div>
+        <div class="graph" >
+      <chart-ratio-by-age
+        :fromDate="fromDate"
+        :dataCovid="dataCovid"
+        :backgroundColor="backgroundColor"
+        :pointRadius="pointRadius"
+        :colorsPasoAPaso="colorsPasoAPaso"
+      />
+                <signature/>
+
+    </div>
+
+    
 
     <div class="graph" v-if="dataCovid.ve.cases.vaccinated != undefined">
       <chart-vaccine-effectiveness
@@ -133,6 +146,7 @@ import ChartIncidenceTimeByAge from "@/components/impact/ChartIncidenceTimeByAge
 import ChartIncidenceAdjustedByAge from "@/components/impact/ChartIncidenceAdjustedByAge";
 import ChartVaccineEffectiveness from "@/components/impact/ChartVaccineEffectiveness";
 import ChartCasesDeaths from "@/components/impact/ChartCasesDeaths"
+import ChartRatioByAge from "@/components/impact/ChartRatioByAge"
 import { meanWeek } from '../assets/mathFunctions';
 
 export default {
@@ -149,6 +163,7 @@ export default {
     "chart-incidence-time-by-age":ChartIncidenceTimeByAge,
     "chart-vaccine-effectiveness": ChartVaccineEffectiveness,
     "chart-cases-deaths":ChartCasesDeaths,
+    "chart-ratio-by-age":ChartRatioByAge,
   },
   metaInfo() {
     return {
@@ -170,6 +185,7 @@ export default {
         ve:{'cases':{}, 'uci':{}, 'deaths':{}},
         incidenceVaccinalAjustedByAge : {'cases':{}, 'uci':{} ,'deaths': {}},
         incidenceTimeByAge: {'cases':{}, 'uci':{} ,'deaths': {}},
+        ratioVaccinatedByAge:{'population':{},'cases':{}, 'uci':{} ,'deaths': {}},
         newCases: { labels: {}, values: {} },
         deaths: { labels: {}, values: {} },
       },
@@ -325,6 +341,56 @@ export default {
     }
   }
 this.dataCovid.incidenceVaccinalAjustedByAge = {'cases':incidenceAjustedCases, 'uci':incidenceAjustedUCI ,'deaths': incidenceAjustedDeaths} 
+
+// ------------------------------ ratio vaccinated by age ----------------------------------------
+// let ratioVaccinatedByAge = {}
+// let ratioCasesByAge = {}
+// let ratioUCIByAge = {}
+// let ratioDeathsByAge = {}
+
+let ratioVaccinatedByAge = {"population":{}, "cases":{}, "uci":{},"deaths":{}}
+
+incidenceByAgeByVaccinalScheme.forEach(incidence => {
+      let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
+      let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
+      if(ratioVaccinatedByAge['population'][sundaySemana] == undefined){
+        ratioVaccinatedByAge['population'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['cases'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['uci'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['deaths'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+
+      }  
+        if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
+        // let total = Number(incidence['poblacion'])+Number(incidence['casos_confirmados'])+Number(incidence['casos_uci'])+Number(incidence['casos_def'])
+      ratioVaccinatedByAge['population'][sundaySemana][incidence['grupo_edad']][incidence['estado_vacunacion']] = Number(incidence['poblacion'])
+      ratioVaccinatedByAge['cases'][sundaySemana][incidence['grupo_edad']][incidence['estado_vacunacion']] = Number(incidence['casos_confirmados'])
+      ratioVaccinatedByAge['uci'][sundaySemana][incidence['grupo_edad']][incidence['estado_vacunacion']] = Number(incidence['casos_uci'])
+      ratioVaccinatedByAge['deaths'][sundaySemana][incidence['grupo_edad']][incidence['estado_vacunacion']] =Number(incidence['casos_def'])
+    }
+      
+  })
+
+  for (let cat of Object.keys(ratioVaccinatedByAge)){
+    for (let week of Object.keys(ratioVaccinatedByAge[cat])){
+      for (let age of Object.keys(ratioVaccinatedByAge[cat][week])){
+        let total = Object.values(ratioVaccinatedByAge[cat][week][age]).reduce((ac,val)=> ac+val, 0)
+        for (let state of Object.keys(ratioVaccinatedByAge[cat][week][age])){
+          // console.log(ratioVaccinatedByAge[cat][week][age])
+          // console.log(ratioVaccinatedByAge[cat][week][age].reduce((ac,val)=> ac+val, 0))
+          ratioVaccinatedByAge[cat][week][age][state] = Math.round(ratioVaccinatedByAge[cat][week][age][state]/total*1000)/10
+          // console.log(ratioVaccinatedByAge[cat][week][age][state])
+        }
+
+      }
+    }
+  }
+
+
+  this.dataCovid.ratioVaccinatedByAge = ratioVaccinatedByAge
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 //  vaccine effectivness
 let ve = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/bayesian-screening-method/main/output/estimation-VE-by-week.csv')

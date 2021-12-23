@@ -1,24 +1,15 @@
 <template lang="html">
-  <div class="ChartIncidenceByAge">
+  <div class="ChartRatioByAge">
     <button-choice :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
 
-    <title-graphic v-if="picked == 'cases'"> Incidencia por estado de vacunación y grupo de edad </title-graphic>
-    <title-graphic v-if="picked == 'uci'"> Incidencia de los ingresos a UCI por estado de vacunación y grupo de edad </title-graphic>
-    <title-graphic v-if="picked == 'deaths'"> Incidencia de fallecidos por estado de vacunación y grupo de edad en Chile </title-graphic>
-    <!-- <br v-if="picked == 'cases' || picked == 'uci'" /> -->
-
-    <span v-if="picked == 'cases'" style="font-size:1rem">Número de casos detectados entre el {{ updateWeek }} y el {{ updateSaturday }} por cada 100.000 personas en cada grupo.</span>
-    <span v-if="picked == 'uci'" style="font-size:1rem">
-      Número de personas que ingresaron a UCI por Covid-19 entre el {{ updateWeek }} y el {{ updateSaturday }} por cada 100.000 personas en cada grupo.
-    </span>
-    <span v-if="picked == 'deaths'" style="font-size:1rem"
-      >Número de personas fallecidas por Covid-19 entre el {{ updateWeek }} y el {{ updateSaturday }} por cada 100.000 personas en cada grupo.
-    </span>
+    <title-graphic>
+      Proporción de personas vacunadas en la población, en los casos, en la UCI y en las muertes entre {{ updateWeek }} y {{ updateSaturday }} en el grupo de edad {{ picked }}</title-graphic
+    >
 
     <br />
-    <bar-chart v-if="picked == 'cases'" :chartData="plotVaccinalSchemeByAge('cases', updateWeek)" :options="chartOptions()"></bar-chart>
-    <bar-chart v-if="picked == 'uci'" :chartData="plotVaccinalSchemeByAge('uci', updateWeek)" :options="chartOptions()"></bar-chart>
-    <bar-chart v-if="picked == 'deaths'" :chartData="plotVaccinalSchemeByAge('deaths', updateWeek)" :options="chartOptions()"></bar-chart>
+    <bar-chart :chartData="plotVaccinalSchemeByAge(picked, updateWeek)" :options="chartOptions()"></bar-chart>
+    <!-- <bar-chart v-if="picked == 'uci'" :chartData="plotVaccinalSchemeByAge('uci', updateWeek)" :options="chartOptions()"></bar-chart>
+    <bar-chart v-if="picked == 'deaths'" :chartData="plotVaccinalSchemeByAge('deaths', updateWeek)" :options="chartOptions()"></bar-chart> -->
     <div class="slidecontainer">
       <input type="range" :min="0" :max="weekSundayDates.length - 1" v-model="numberCurrentWeek" class="slider" id="myRange" />
     </div>
@@ -39,7 +30,7 @@ import TitleGraphic from "@/components/TitleGraphic";
 import ButtonChoice from "@/components/ButtonChoice";
 
 export default {
-  name: "ChartIncidenceByAge",
+  name: "ChartRatioByAge",
   props: ["fromDate", "title", "dataCovid", "backgroundColor", "pointRadius", "colorsPasoAPaso"],
   components: {
     "bar-chart": BarChart,
@@ -49,11 +40,16 @@ export default {
   },
   data() {
     return {
-      picked: "cases",
+      picked: "12 - 20 años",
       tabs: [
-        { id: "cases", name: "Casos" },
-        { id: "uci", name: "UCI" },
-        { id: "deaths", name: "Fallecidos" },
+        { id: "12 - 20 años", name: "12 - 20 años" },
+        { id: "21 - 30 años", name: "21 - 30 años" },
+        { id: "31 - 40 años", name: "31 - 40 años" },
+        { id: "41 - 50 años", name: "41 - 50 años" },
+        { id: "51 - 60 años", name: "51 - 60 años" },
+        { id: "61 - 70 años", name: "61 - 70 años" },
+        { id: "71 - 80 años", name: "71 - 80 años" },
+        { id: "80 años o más", name: "80 años o más" },
       ],
       weekSundayDates: [],
       currentWeek: "",
@@ -75,12 +71,19 @@ export default {
     updatePicked(payload) {
       this.picked = payload;
     },
-    plotVaccinalSchemeByAge(type, week) {
-      const labels = Object.keys(this.dataCovid.incidenceByVaccinalSchemeByAge[type][week]["con esquema completo"]);
-      const vaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type][week]["con esquema completo"]);
-      const nonVaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type][week]["sin esquema completo"]);
-      const boostedVaccinated = Object.values(this.dataCovid.incidenceByVaccinalSchemeByAge[type][week]["con dosis refuerzo > 14 dias"]);
-
+    plotVaccinalSchemeByAge(age, week) {
+      //   const labels = Object.keys(this.dataCovid.ratioVaccinatedByAge);
+      const labels = ["Población", "Casos", "UCI", "Fallecidos"];
+      const esquema = Object.keys(this.dataCovid.ratioVaccinatedByAge["population"][week][age]);
+      let values = [];
+      esquema.forEach((e) => {
+        values.push([
+          this.dataCovid.ratioVaccinatedByAge["population"][week][age][e],
+          this.dataCovid.ratioVaccinatedByAge["cases"][week][age][e],
+          this.dataCovid.ratioVaccinatedByAge["uci"][week][age][e],
+          this.dataCovid.ratioVaccinatedByAge["deaths"][week][age][e],
+        ]);
+      });
       return {
         labels: labels,
         datasets: [
@@ -92,7 +95,7 @@ export default {
             borderColor: this.colorsPasoAPaso[1],
             backgroundColor: this.colorsPasoAPaso[1],
             fill: false,
-            data: nonVaccinated,
+            data: values[0],
           },
           {
             type: "bar",
@@ -102,7 +105,7 @@ export default {
             borderColor: this.colorsPasoAPaso[3],
             backgroundColor: this.colorsPasoAPaso[3],
             fill: false,
-            data: vaccinated,
+            data: values[1],
           },
 
           {
@@ -113,7 +116,7 @@ export default {
             borderColor: this.colorsPasoAPaso[2],
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
-            data: boostedVaccinated,
+            data: values[2],
           },
         ],
       };
@@ -130,6 +133,11 @@ export default {
         tooltips: {
           mode: "index",
           intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return data.datasets[tooltipItem.datasetIndex].label + ": " + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + "%";
+            },
+          },
         },
         hover: {
           mode: "index",
@@ -143,9 +151,19 @@ export default {
         scales: {
           yAxes: [
             {
+              stacked: true,
               ticks: {
+                max: 100,
                 beginAtZero: true,
+                callback: function(tick) {
+                  return tick.toString() + "%";
+                },
               },
+            },
+          ],
+          xAxes: [
+            {
+              stacked: true,
             },
           ],
         },
@@ -156,7 +174,7 @@ export default {
     },
   },
   async created() {
-    this.weekSundayDates = Object.keys(this.dataCovid.incidenceByVaccinalSchemeByAge["cases"]);
+    this.weekSundayDates = Object.keys(this.dataCovid.ratioVaccinatedByAge["population"]);
     this.currentWeek = this.weekSundayDates.slice(-1)[0];
     this.numberCurrentWeek = this.weekSundayDates.indexOf(this.currentWeek);
   },
