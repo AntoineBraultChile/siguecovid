@@ -40,8 +40,9 @@ export default {
   },
   data() {
     return {
-      picked: "12 - 20 años",
+      picked: "80 años o más",
       tabs: [
+        // { id: "Total", name: "Total" },
         { id: "12 - 20 años", name: "12 - 20 años" },
         { id: "21 - 30 años", name: "21 - 30 años" },
         { id: "31 - 40 años", name: "31 - 40 años" },

@@ -354,13 +354,13 @@ incidenceByAgeByVaccinalScheme.forEach(incidence => {
       let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
       let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
       if(ratioVaccinatedByAge['population'][sundaySemana] == undefined){
-        ratioVaccinatedByAge['population'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-        ratioVaccinatedByAge['cases'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-        ratioVaccinatedByAge['uci'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-        ratioVaccinatedByAge['deaths'][sundaySemana] = { '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['population'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['cases'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['uci'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['deaths'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
 
       }  
-        if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
+        if(incidence['grupo_edad']!='06 - 11 años'){
         // let total = Number(incidence['poblacion'])+Number(incidence['casos_confirmados'])+Number(incidence['casos_uci'])+Number(incidence['casos_def'])
       ratioVaccinatedByAge['population'][sundaySemana][incidence['grupo_edad']][incidence['estado_vacunacion']] = Number(incidence['poblacion'])
       ratioVaccinatedByAge['cases'][sundaySemana][incidence['grupo_edad']][incidence['estado_vacunacion']] = Number(incidence['casos_confirmados'])
