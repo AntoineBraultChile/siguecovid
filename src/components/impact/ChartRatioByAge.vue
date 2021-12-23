@@ -2,9 +2,7 @@
   <div class="ChartRatioByAge">
     <button-choice :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
 
-    <title-graphic>
-      Proporción de personas vacunadas en la población, en los casos, en la UCI y en las muertes entre {{ updateWeek }} y {{ updateSaturday }} en el grupo de edad {{ picked }}</title-graphic
-    >
+    <title-graphic> Proporción de personas vacunadas en cada categoria entre el {{ updateWeek }} y el {{ updateSaturday }} en el grupo de edad {{ picked }}</title-graphic>
 
     <br />
     <bar-chart :chartData="plotVaccinalSchemeByAge(picked, updateWeek)" :options="chartOptions()"></bar-chart>
@@ -74,7 +72,7 @@ export default {
     },
     plotVaccinalSchemeByAge(age, week) {
       //   const labels = Object.keys(this.dataCovid.ratioVaccinatedByAge);
-      const labels = ["Población", "Casos", "UCI", "Fallecidos"];
+      const labels = ["Población", "Casos", "Ingresos en UCI", "Fallecidos por Covid-19"];
       const esquema = Object.keys(this.dataCovid.ratioVaccinatedByAge["population"][week][age]);
       let values = [];
       esquema.forEach((e) => {

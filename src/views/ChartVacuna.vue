@@ -914,8 +914,9 @@ export default {
     });
     this.vaccineType.boostDoses.proportion = [
       this.vaccineType.boostDoses.proportion[0],
-      this.vaccineType.boostDoses.proportion[2],
       this.vaccineType.boostDoses.proportion[3],
+
+      this.vaccineType.boostDoses.proportion[2],
       this.vaccineType.boostDoses.proportion[1],
     ];
 
