@@ -29,7 +29,7 @@ export default {
   align-items: center;
   width: 100%;
   font-size: 1rem;
-  padding: 6px 10px;
+  padding: 6px 5px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   border: 1px solid #f0f0f0;

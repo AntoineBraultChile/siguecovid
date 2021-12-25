@@ -222,6 +222,7 @@ export default {
   const incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
   let numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
   // console.log(incidenceByAgeByVaccinalScheme)
+  // console.log(incidenceByAgeByVaccinalScheme)
     // dictionary between epidemiological week and date in 2021
     // each epidemiogical week start sunday and finish saturday
     let dicEpiWeek = {1:'09-01-2021'}
@@ -263,24 +264,23 @@ export default {
   let incidenceUciTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
   let incidenceDeathsTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
 
-
   incidenceByAgeByVaccinalScheme.forEach(incidence => {
       let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
-      let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
+      // let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
       if(incidence['grupo_edad'] != 'Total' & incidence['grupo_edad']!='06 - 11 años'){
       if(incidenceCasesTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']]== undefined){
         incidenceCasesTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
         incidenceUciTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
         incidenceDeathsTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
 
-      } else {
+      } 
         // if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
-      incidenceCasesTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][sundaySemana] = Math.round(Number(incidence['incidencia_casos'])*100)/100
-      incidenceUciTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][sundaySemana] = Math.round(Number(incidence['incidencia_uci'])*100)/100
-      incidenceDeathsTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][sundaySemana] = Math.round(Number(incidence['incidencia_def'])*100)/100
+      incidenceCasesTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][saturdaySemana] = Math.round(Number(incidence['incidencia_casos'])*100)/100
+      incidenceUciTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][saturdaySemana] = Math.round(Number(incidence['incidencia_uci'])*100)/100
+      incidenceDeathsTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][saturdaySemana] = Math.round(Number(incidence['incidencia_def'])*100)/100
       }
       
-      }
+      
   })
   this.dataCovid.incidenceTimeByAge["cases"] = incidenceCasesTimeByAge
   this.dataCovid.incidenceTimeByAge["uci"] = incidenceUciTimeByAge

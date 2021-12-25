@@ -152,6 +152,7 @@ export default {
         "rgba(36,129,156,1.0)",
         "rgba(160,82,45,1)",
         "rgba(132,94,194,1.0)",
+        "rgba(160,139,74,1.0)",
         "rgba(35,43,43,1.0)",
       ],
       colorsVariantTransparent: [
@@ -163,6 +164,7 @@ export default {
         "rgba(36,129,156,1)",
         "rgba(160,82,45,1)",
         "rgba(132,94,194,1)",
+        "rgba(160,139,74)",
         "rgba(35,43,43,1)",
       ],
       variantChile: {
@@ -358,6 +360,7 @@ export default {
       "21G (Lambda)": "Lambda",
       "21F (Iota)": "Iota",
       "21H (Mu)": "Mu",
+      "21K (Omicron)": "Omicron",
     };
 
     const nameVariant = Object.keys(variantChile).slice(2);
