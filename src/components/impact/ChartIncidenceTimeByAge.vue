@@ -108,7 +108,7 @@ export default {
             borderColor: this.colorsPasoAPaso[2],
             backgroundColor: this.colorsPasoAPaso[2],
             fill: false,
-            data: [undefined, undefined, undefined, ...Object.values(this.dataCovid.incidenceTimeByAge[type][age]["con dosis refuerzo > 14 dias"])],
+            data: [undefined, undefined, undefined, undefined, ...Object.values(this.dataCovid.incidenceTimeByAge[type][age]["con dosis refuerzo > 14 dias"])],
           },
         ],
       };
