@@ -2,7 +2,8 @@
   <div class="ChartRatioByAge">
     <button-choice :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
 
-    <title-graphic> Proporción de personas vacunadas en cada categoria entre el {{ updateWeek }} y el {{ updateSaturday }} en el grupo de edad {{ picked }}</title-graphic>
+    <title-graphic v-if="picked != 'Total'"> Proporción de personas vacunadas en cada categoria entre el {{ updateWeek }} y el {{ updateSaturday }} en el grupo de edad {{ picked }}</title-graphic>
+    <title-graphic v-else> Proporción de personas vacunadas en cada categoria entre el {{ updateWeek }} y el {{ updateSaturday }}</title-graphic>
 
     <br />
     <bar-chart :chartData="plotVaccinalSchemeByAge(picked, updateWeek)" :options="chartOptions()"></bar-chart>
@@ -38,9 +39,11 @@ export default {
   },
   data() {
     return {
-      picked: "80 años o más",
+      // picked: "80 años o más",
+      picked: "Total",
+
       tabs: [
-        // { id: "Total", name: "Total" },
+        { id: "Total", name: "Total" },
         { id: "12 - 20 años", name: "12-20 años" },
         { id: "21 - 30 años", name: "21-30 años" },
         { id: "31 - 40 años", name: "31-40 años" },
