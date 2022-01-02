@@ -4,19 +4,22 @@
 
     <title-graphic v-if="picked == 'uci'"> {{ title["Uci"] }} en {{ region }} </title-graphic>
     <title-graphic v-if="(picked == 'ingresoUCI') & (region == 'Chile')"> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
+    <title-graphic v-if="(picked == 'vmi') & (region == 'Chile')"> Pacientes Covid-19 en UCI por estado de gravedad </title-graphic>
 
     <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
     <br />
     <update v-if="picked == 'uci'" :labels="dataCovid.labelsUci"> </update>
     <update v-if="(picked == 'ingresoUCI') & (region == 'Chile')" :labels="dataCovid.labelsIngresoUCI"> </update>
+    <update v-if="(picked == 'vmi') & (region == 'Chile')" :labels="dataCovid.vm.labels"> </update>
 
     <bar-chart v-if="picked == 'uci'" :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
     <bar-chart
       v-if="(picked == 'ingresoUCI') & (region == 'Chile')"
-      :chartData="plotLine(dataCovid.labelsIngresoUCI, dataCovid['ChileIngresoUCI'], this.colorsPasoAPaso[1])"
+      :chartData="plotLine(dataCovid.labelsIngresoUCI, dataCovid['ChileIngresoUCI'], this.colorsPasoAPaso[1], 'line')"
       :options="chartOptions('IngresoUCI')"
     >
     </bar-chart>
+    <bar-chart v-if="(picked == 'vmi') & (region == 'Chile')" :chartData="plotVm()" :options="chartOptions('VM')"> </bar-chart>
   </div>
 </template>
 
@@ -49,6 +52,7 @@ export default {
       tabs: [
         { id: "uci", name: "UCI" },
         { id: "ingresoUCI", name: "Ingresos a UCI" },
+        { id: "vmi", name: "UCI por estado" },
       ],
     };
   },
@@ -75,7 +79,7 @@ export default {
         ],
       };
     },
-    plotLine(labels, values, color) {
+    plotLine(labels, values, color, type) {
       let fromDate = this.fromDate;
       let indexDate = labels.indexOf(fromDate);
       indexDate = indexDate > 0 ? indexDate : 0;
@@ -86,7 +90,7 @@ export default {
         }),
         datasets: [
           {
-            type: "line",
+            type: type,
             pointRadius: this.pointRadius,
             pointHoverRadius: this.pointHoverRadius,
             label: "",
@@ -94,6 +98,50 @@ export default {
             backgroundColor: color,
             fill: false,
             data: values.slice(indexDate),
+          },
+        ],
+      };
+    },
+    plotVm() {
+      let fromDate = this.fromDate;
+      const labels = this.dataCovid.vm.labels;
+      let indexDate = labels.indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+      return {
+        labels: labels.filter((x) => {
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+        }),
+        datasets: [
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Ventilación mecánica invasiva",
+            borderColor: "#250740",
+            backgroundColor: "#250740",
+            fill: false,
+            data: this.dataCovid.vm.vmi.slice(indexDate),
+          },
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Ventilación mecánica no invasiva",
+            borderColor: "#750227",
+            backgroundColor: "#750227",
+            fill: false,
+            data: this.dataCovid.vm.vmNotI.slice(indexDate),
+          },
+
+          {
+            type: "bar",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Sin ventilación mecánica",
+            borderColor: this.colorsPasoAPaso[1],
+            backgroundColor: this.colorsPasoAPaso[1],
+            fill: false,
+            data: this.dataCovid.vm.noVm.slice(indexDate),
           },
         ],
       };
@@ -137,7 +185,24 @@ export default {
           },
         ];
       }
-      if (type == "Cases") {
+      if (type == "VM") {
+        options.scales = {
+          yAxes: [
+            {
+              stacked: true,
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+          xAxes: [
+            {
+              stacked: true,
+            },
+          ],
+        };
+      }
+      if (type == "Cases" || type == "VM") {
         options.legend = { display: true };
       }
       return options;

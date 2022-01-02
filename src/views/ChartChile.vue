@@ -244,6 +244,7 @@ export default {
             total:[],
           }
         },
+        vm:{},
         CFR:{labels:[], values: [] },
       },
       fromDate: "01-02-2021",
@@ -568,6 +569,21 @@ export default {
 
     this.dataCovid.labelsIngresoUCI = Object.keys(ingresoUCI[0]).slice(1).map(d =>   dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY"))
     this.dataCovid.ChileIngresoUCI = Object.values(ingresoUCI[0]).slice(1).map(i =>  Math.round(Number(i)))
+
+    // mecanical ventilation
+    const vm = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto30/PacientesVMI.csv')
+    console.log(vm)
+    const vmi = vm[0] // invasive mecanical ventilation
+    const noVm = vm[1] // not in mecanical ventilation
+    const vmNotI = vm[2] // mecanical ventilation not invasive
+
+    this.dataCovid.vm = {
+      'labels': Object.keys(vmi).slice(1).map(d=> dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')),  
+      'vmi': Object.values(vmi).slice(1).map(i=>Number(i)),
+      'noVm': Object.values(noVm).slice(1).map(i=>Number(i)),
+      'vmNotI': Object.values(vmNotI).slice(1).map(i=>Number(i))
+    }
+
 
     // Case fatality rate in Chile
     let CFR = []
