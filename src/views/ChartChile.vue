@@ -572,7 +572,7 @@ export default {
 
     // mecanical ventilation
     const vm = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto30/PacientesVMI.csv')
-    console.log(vm)
+
     const vmi = vm[0] // invasive mecanical ventilation
     const noVm = vm[1] // not in mecanical ventilation
     const vmNotI = vm[2] // mecanical ventilation not invasive

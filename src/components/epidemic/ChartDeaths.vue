@@ -150,8 +150,8 @@ export default {
       };
     },
     plotAll(region) {
-      const years = Object.keys(this.dataCovid.allDeaths[region]);
-      let labels = this.dataCovid.allDeaths[region]["2020"].labels;
+      const years = Object.keys(this.dataCovid.allDeaths[region]).slice(1);
+      let labels = this.dataCovid.allDeaths[region]["2022"].labels;
       let datasets = [];
       years.forEach((y, index) => {
         let listDeaths = this.dataCovid.allDeaths[region][y].values;
