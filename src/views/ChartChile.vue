@@ -244,7 +244,7 @@ export default {
             total:[],
           }
         },
-        vm:{},
+        vm:{labels:[], vmi:[]},
         CFR:{labels:[], values: [] },
       },
       fromDate: "01-02-2021",
@@ -428,6 +428,9 @@ export default {
           return Math.round(d);
         })
       );
+      
+
+
       // this.dataCovid.incidence.Chile.regionName
       this.dataCovid.incidence.lastUpdate.push(
         this.dataCovid["labelsCases"][this.dataCovid["labelsCases"].length - 1]
@@ -456,6 +459,16 @@ export default {
           incidence - incidenceWeekDayBefore
         );
       });
+
+
+      // mean UCI 
+      // this.dataCovid['ChileMeanUci'] = meanWeek(this.dataCovid.ChileUci).map(i=> Math.round(i))
+      // this.dataCovid['labelsMeanUci'] = this.dataCovid.labelsUci.slice(6)
+      // const diff = this.dataCovid['ChileMeanCases'].length - this.dataCovid['ChileMeanUci'].length
+      // for (let i = 0; i < diff; i++){
+      //   this.dataCovid['ChileMeanUci'].unshift(undefined)
+      // }
+
 
       // test Antigeno
       let antigeno = [];

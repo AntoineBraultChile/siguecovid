@@ -28,6 +28,20 @@
       <signature />
     </div>
 
+    <!-- Chart Cases Uci deaths -->
+    <div class="graph" v-if="dataCovid.labelsDeaths.length > 0">
+      <chart-cases-uci-deaths
+        :region="region"
+        :fromDate="fromDate"
+        :title="title"
+        :dataCovid="dataCovid"
+        :backgroundColor="backgroundColor"
+        :pointRadius="pointRadius"
+        :colorsPasoAPaso="colorsPasoAPaso"
+      />
+      <signature />
+    </div>
+
     <!-- Chart Vaccine -->
     <div class="graph" v-if="dataCovid.labelsVaccine.length > 0">
       <title-graphic> Proporción de la población vacunada en {{ region }}</title-graphic>
@@ -138,6 +152,7 @@ import CasesChart from "@/components/epidemic/CasesChart";
 import ChartUci from "@/components/epidemic/ChartUCI";
 import ChartDeaths from "@/components/epidemic/ChartDeaths";
 import IncidenceBarChart from "@/components/epidemic/IncidenceBarChart";
+import ChartCasesUciDeaths from "@/components/epidemic/ChartCasesUciDeaths";
 
 // import ChartIncidenceAdjustedByAge from "@/components/ChartIncidenceAdjustedByAge";
 // import ChartIncidenceByAge from "@/components/ChartIncidenceByAge";
@@ -159,6 +174,7 @@ export default {
     // "chart-incidence-adjusted-by-age": ChartIncidenceAdjustedByAge,
     // "chart-incidence-by-age": ChartIncidenceByAge,
     // "chart-vaccine-effectiveness": ChartVaccineEffectiveness,
+    "chart-cases-uci-deaths": ChartCasesUciDeaths,
   },
   data() {
     return {
