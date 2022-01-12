@@ -77,7 +77,7 @@ export default {
           pointHoverRadius: this.pointHoverRadius,
           yAxisID: "Muertos",
 
-          label: "Muertos (media móvil de 7  días)",
+          label: "Fallecidos (media móvil de 7  días)",
           borderColor: this.backgroundColor["Deaths"],
           backgroundColor: this.backgroundColor["Deaths"],
           fill: false,
@@ -134,12 +134,18 @@ export default {
               id: "UCI",
               type: "linear",
               position: "right",
+              ticks: {
+                beginAtZero: true,
+              },
               // stacked: true,
             },
             {
               id: "Muertos",
               type: "linear",
               position: "right",
+              ticks: {
+                beginAtZero: true,
+              },
               // stacked: true,
             },
           ],

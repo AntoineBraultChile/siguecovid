@@ -86,7 +86,7 @@ export default {
         }
       );
       return {
-        labels: ["6-11 años", "12-17 años", "18-29 años", "30-39 años", "40-49 años", "50-59 años", "60-69 años", ">= 70 años"],
+        labels: ["3-5 años", "6-11 años", "12-17 años", "18-29 años", "30-39 años", "40-49 años", "50-59 años", "60-69 años", ">= 70 años"],
         datasets: datasets,
       };
     },

@@ -265,6 +265,7 @@ export default {
         "total segunda dosis": "",
         labelsByAge: [],
         populationByAge: {
+          6: 727115, // 2 to 5
           12: 1549683, // 6 to 11
           18: 1495162, // 12 to 17
           30: 3614461, // 18 to 39
@@ -276,6 +277,7 @@ export default {
         },
         adultPopulation: 15200840,
         firstDosesByAgeGroup: {
+          6: [],
           12: [],
           18: [],
           30: [],
@@ -286,6 +288,7 @@ export default {
           300: [],
         },
         secondDosesByAgeGroup: {
+          6: [],
           12: [],
           18: [],
           30: [],
@@ -296,6 +299,7 @@ export default {
           300: [],
         },
         uniqueDosesByAgeGroup: {
+          6: [],
           12: [],
           18: [],
           30: [],
@@ -306,6 +310,7 @@ export default {
           300: [],
         },
         boostDosesByAgeGroup: {
+          6: [],
           12: [],
           18: [],
           30: [],
@@ -438,40 +443,7 @@ export default {
       this.fromMonth = payload;
       this.fromDate = dayjs(payload, "MMMM YYYY").format("01-MM-YYYY");
     },
-    barChartVacunaPorEdad() {
-      let atLeastOneDose = [];
-      let completeVaccination = [];
-      let boost = [];
-      Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((age) => {
-        atLeastOneDose.push(this.vacunaChile.firstDosesByAgeGroup[age].slice(-1)[0]);
-        completeVaccination.push(this.vacunaChile.secondDosesByAgeGroup[age].slice(-1)[0]);
-        boost.push(this.vacunaChile.boostDosesByAgeGroup[age].slice(-1)[0]);
-      });
 
-      return {
-        labels: ["6-11 años", "12-17 años", "18-29 años", "30-39 años", "40-49 años", "50-59 años", "60-69 años", ">= 70 años"],
-        datasets: [
-          {
-            label: "Al menos una dosis",
-            data: atLeastOneDose,
-            backgroundColor: "#82CFFD",
-            hoverOffset: 4,
-          },
-          {
-            label: "Completamente vacunado",
-            data: completeVaccination,
-            backgroundColor: "#eba434",
-            hoverOffset: 4,
-          },
-          {
-            label: "Dosis de refuerzo",
-            data: boost,
-            backgroundColor: "#232b2b",
-            hoverOffset: 4,
-          },
-        ],
-      };
-    },
     renderChartVacuna() {
       let indexDate = this.vacunaChile.labels.indexOf(this.fromDate);
       return {
@@ -554,91 +526,6 @@ export default {
             label: "Dosis de refuerzo",
             backgroundColor: "#232b2b",
             data: this.vacunaRegions.boostDoses,
-          },
-        ],
-      };
-    },
-    renderChileVaccineByAge(dosesType) {
-      let indexDate = this.vacunaChile.labelsByAge.indexOf(this.fromDate);
-
-      return {
-        labels: this.vacunaChile.labelsByAge.filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(this.fromDate, "DD-MM-YYYY");
-        }),
-        datasets: [
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "6-11",
-            borderColor: "#D2E6EE",
-            backgroundColor: "#D2E6EE",
-            fill: false,
-            data: this.vacunaChile[dosesType]["12"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "12-17",
-
-            borderColor: "#82CFFD",
-            backgroundColor: "#82CFFD",
-            fill: false,
-            data: this.vacunaChile[dosesType]["18"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "18-29",
-
-            borderColor: "#FFCD01",
-            backgroundColor: "#FFCD01",
-            fill: false,
-            data: this.vacunaChile[dosesType]["30"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "30-39",
-            borderColor: "#eba434",
-            backgroundColor: "#eba434",
-            fill: false,
-            data: this.vacunaChile[dosesType]["40"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "40-49",
-            borderColor: "#93DB70",
-            backgroundColor: "#93DB70",
-            fill: false,
-            data: this.vacunaChile[dosesType]["50"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "50-59",
-            borderColor: "#f87979",
-            backgroundColor: "#f87979",
-            fill: false,
-            data: this.vacunaChile[dosesType]["60"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "60-69",
-            borderColor: "#845EC2",
-            backgroundColor: "#845EC2",
-            fill: false,
-            data: this.vacunaChile[dosesType]["70"].slice(indexDate),
-          },
-          {
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: ">=70",
-            borderColor: "#232b2b",
-            backgroundColor: "#232b2b",
-            fill: false,
-            data: this.vacunaChile[dosesType]["300"].slice(indexDate),
           },
         ],
       };
@@ -757,7 +644,10 @@ export default {
         return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
       });
     // let ageGroup = ["12"];
-    let ageGroup = ["6"];
+    // let ageGroup = ["6"];
+    let ageGroup = ["3"];
+
+    // console.log(firstDosesByAge);
 
     Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((d) => ageGroup.push(d));
 
