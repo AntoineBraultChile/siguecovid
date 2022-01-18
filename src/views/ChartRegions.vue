@@ -539,6 +539,8 @@ casesComunas.forEach((comuna) => {
     let boostDoses = {};
 
     vaccine.forEach((region) => {
+      if(region['Region']!=''){
+
       if (region["Dosis"] == "Primera") {
         firstDoses[region["Region"]] = Object.values(region)
           .slice(2)
@@ -556,9 +558,13 @@ casesComunas.forEach((comuna) => {
           .slice(2)
           .map((i) => Number(i));
       }
+      }
     });
+ 
 
     Object.keys(firstDoses).forEach((region) => {
+            console.log(region)
+
       const firstValues = firstDoses[region];
       const uniqueValues = uniqueDoses[region];
       const secondValues = secondDoses[region];

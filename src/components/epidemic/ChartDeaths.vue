@@ -73,13 +73,13 @@ export default {
     lastUpdateAllDeaths() {
       let index = [];
       let count = 0;
-      this.dataCovid.allDeaths[this.region]["2021"].values.forEach((v) => {
+      this.dataCovid.allDeaths[this.region]["2022"].values.forEach((v) => {
         if (isNaN(v)) {
           index.push(count);
         }
         count += 1;
       });
-      return [this.dataCovid.allDeaths[this.region]["2021"].labels[index[7] - 1]];
+      return [this.dataCovid.allDeaths[this.region]["2022"].labels[index[0] - 1]];
     },
     plotBarChartWithMean(name) {
       let fromDate = this.fromDate;

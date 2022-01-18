@@ -25,7 +25,7 @@
         
 
          <div class="graph" v-if="Object.keys(dataCovid.incidenceVaccinalAjustedByAge.cases).length > 0">
-      <chart-incidence-adjusted-by-age
+      <chart-incidence-adjusted-by-age 
         :fromDate="fromDate"
         :dataCovid="dataCovid"
         :backgroundColor="backgroundColor"
@@ -33,7 +33,6 @@
         :colorsPasoAPaso="colorsPasoAPaso"
       />
                 <signature/>
-
     </div>
          <div class="graph" v-if="Object.keys(dataCovid.incidenceTimeByAge.cases).length > 0">
 
@@ -220,17 +219,27 @@ export default {
 
   // --------------------------------   incidence by vaccinated or non-vaccinated groups and by age ---------------------
   const incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
-  let numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
+
+// let numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
+  // console.log(numberWeekEpidemiological)
+  // const numberWeek2021 = 21
+  // const numberWeeks2022 = numberWeekEpidemiological - numberWeek2021
+  // console.log(numberWeeks2022)
+
   // console.log(incidenceByAgeByVaccinalScheme)
   // console.log(incidenceByAgeByVaccinalScheme)
     // dictionary between epidemiological week and date in 2021
     // each epidemiogical week start sunday and finish saturday
-    let dicEpiWeek = {1:'09-01-2021'}
-    let k = 1
-    while(k < numberWeekEpidemiological){
-      dicEpiWeek[k+1] = dayjs(dicEpiWeek[k], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
+    let dicEpiWeek = {2:'16-01-2021'}
+    let k = 2
+    // let numWeek = k % 52
+    while(k < 60){
+      dicEpiWeek[(k+1)%52] = dayjs(dicEpiWeek[k%52], "DD-MM-YYYY").add(7, "d").format("DD-MM-YYYY")
       k+=1
     }
+    // console.log(dicEpiWeek)
+
+    
 
   let incidenceCasesByVaccinalScheme = {}
   let incidenceUciByVaccinalScheme = { }
@@ -260,10 +269,9 @@ export default {
   
 
   //---------------------------    incidence by vaccinal scheme time by age     ----------------------------------------------------
-  let incidenceCasesTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-  let incidenceUciTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-  let incidenceDeathsTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-
+  let incidenceCasesTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
+  let incidenceUciTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
+  let incidenceDeathsTimeByAge =  {'6 - 11 años':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
   incidenceByAgeByVaccinalScheme.forEach(incidence => {
       let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
       // let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
@@ -272,7 +280,6 @@ export default {
         incidenceCasesTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
         incidenceUciTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
         incidenceDeathsTimeByAge[incidence['grupo_edad']] = {'con esquema completo':{},'sin esquema completo':{}, 'con dosis refuerzo > 14 dias':{} }
-
       } 
         // if(incidence['grupo_edad']!='Total' & incidence['grupo_edad']!='06 - 11 años'){
       incidenceCasesTimeByAge[incidence['grupo_edad']][incidence['estado_vacunacion']][saturdaySemana] = Math.round(Number(incidence['incidencia_casos'])*100)/100
@@ -288,19 +295,25 @@ export default {
 
   // -------------------------------------------------------------------------------------------
   
-    // --------------------------------   incidence cases, UCI, deaths by vaccination status ajusted by age ---------------------
+    // --------------------------------   incidence cases, UCI, deaths by vaccination status adjusted by age ---------------------
   //  incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
   // console.log(incidenceByAgeByVaccinalScheme)
-  const firstEpidemiologicalWeek = Number(incidenceByAgeByVaccinalScheme[0]['semana_epidemiologica'])
-  const lastEpidemiologicalWeek = Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])
+  // const firstEpidemiologicalWeek = Number(incidenceByAgeByVaccinalScheme[0]['semana_epidemiologica'])
+  // const lastEpidemiologicalWeek = Number(incidenceByAgeByVaccinalScheme.slice(-1)[0]['semana_epidemiologica'])
   let listWeek = []
-  for (let i = firstEpidemiologicalWeek ;i <= lastEpidemiologicalWeek; i++){
-    listWeek.push(String(i))
+  // for (let i = firstEpidemiologicalWeek ;i <= lastEpidemiologicalWeek; i++){
+  //   listWeek.push(String(i))
+  // }
+incidenceByAgeByVaccinalScheme.forEach(d=>{
+  if(!listWeek.includes(d['semana_epidemiologica'])){
+listWeek.push(d['semana_epidemiologica'])
   }
+})
+
   // console.log(listWeek)
 
   const vaccinalStatus = ['con esquema completo','sin esquema completo','con dosis refuerzo > 14 dias']
-  const ageGroup = ['6 - 11 años', '12 - 20 años', '21 - 30 años', '31 - 40 años', '41 - 50 años','51 - 60 años', '61 - 70 años', '71 - 80 años' ,'80 años o más']
+  const ageGroup = ['6 - 11 años', '12 - 20 años', '21 - 30 años', '31 - 40 años', '41 - 50 años','51 - 60 años', '61 - 70 años', '71 - 80 años' ,'81 años o más']
 
   let incidenceAjustedCases = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{}}
   let incidenceAjustedUCI = {'con esquema completo':{},'sin esquema completo':{},'con dosis refuerzo > 14 dias':{}}
@@ -354,10 +367,10 @@ incidenceByAgeByVaccinalScheme.forEach(incidence => {
       let saturdaySemana = dicEpiWeek[Number(incidence['semana_epidemiologica'])]
       let sundaySemana = dayjs(saturdaySemana, "DD-MM-YYYY").add(-6, "d").format("DD-MM-YYYY")
       if(ratioVaccinatedByAge['population'][sundaySemana] == undefined){
-        ratioVaccinatedByAge['population'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-        ratioVaccinatedByAge['cases'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-        ratioVaccinatedByAge['uci'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
-        ratioVaccinatedByAge['deaths'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'80 años o más' :{}}
+        ratioVaccinatedByAge['population'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
+        ratioVaccinatedByAge['cases'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
+        ratioVaccinatedByAge['uci'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
+        ratioVaccinatedByAge['deaths'][sundaySemana] = {'Total':{}, '12 - 20 años':{}, '21 - 30 años':{}, '31 - 40 años':{}, '41 - 50 años':{},'51 - 60 años':{}, '61 - 70 años':{}, '71 - 80 años':{} ,'81 años o más' :{}}
 
       }  
         if(incidence['grupo_edad']!='06 - 11 años'){
