@@ -4,6 +4,7 @@
 
     <title-graphic v-if="picked == 'second'"> Proporción de cada tipo de vacuna utilizada en Chile </title-graphic>
     <title-graphic v-if="picked == 'third'"> Proporción de cada tipo de vacuna utilizada por la dosis de refuerzo en Chile</title-graphic>
+    <title-graphic v-if="picked == 'fourth'"> Proporción de cada tipo de vacuna utilizada por la cuarta dosis en Chile</title-graphic>
 
     <span v-if="picked == 'second'" style="font-size:1rem">
       Sólo se tienen en cuenta las personas completamente (dosis dosis o dosis única) vacunadas.
@@ -13,6 +14,7 @@
     <update :labels="data.labels"> </update>
     <doughnut-chart v-if="picked == 'second'" :chartData="renderChartDoughnut('second')" :options="options"> </doughnut-chart>
     <doughnut-chart v-if="picked == 'third'" :chartData="renderChartDoughnut('boost')" :options="options"> </doughnut-chart>
+    <doughnut-chart v-if="picked == 'fourth'" :chartData="renderChartDoughnut('fourth')" :options="options"> </doughnut-chart>
   </div>
 </template>
 
@@ -48,6 +50,7 @@ export default {
       tabs: [
         { id: "second", name: "Completamente vacunados" },
         { id: "third", name: "Dosis de refuerzo" },
+        { id: "fourth", name: "Cuarta dosis" },
       ],
 
       options: {

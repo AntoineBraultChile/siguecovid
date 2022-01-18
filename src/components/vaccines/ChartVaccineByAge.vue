@@ -5,12 +5,14 @@
     <title-graphic v-if="picked == 'first'"> Personas con al menos una dosis por edad en Chile</title-graphic>
     <title-graphic v-if="picked == 'second'"> Personas completamente vacunadas por edad en Chile </title-graphic>
     <title-graphic v-if="picked == 'third'"> Personas con dosis de refuerzo por edad en Chile</title-graphic>
+    <title-graphic v-if="picked == 'fourth'"> Personas con cuarta dosis por edad en Chile</title-graphic>
 
     <!-- <span style='font-size:1rem'> Estar parcialmente vacunado significa tener una dosis de Sinovac, Astra-Zeneca, Pfizer.</span> <br> -->
     <update :labels="vacunaChile.labels"> </update>
     <line-chart v-if="picked == 'first'" :chartData="renderChileVaccineByAge('firstDosesByAgeGroup')" :options="options()"> </line-chart>
     <line-chart v-if="picked == 'second'" :chartData="renderChileVaccineByAge('secondDosesByAgeGroup')" :options="options()"> </line-chart>
     <line-chart v-if="picked == 'third'" :chartData="renderChileVaccineByAge('boostDosesByAgeGroup')" :options="options()"> </line-chart>
+    <line-chart v-if="picked == 'fourth'" :chartData="renderChileVaccineByAge('fourthDosesByAgeGroup')" :options="options()"> </line-chart>
   </div>
 </template>
 
@@ -45,6 +47,7 @@ export default {
         { id: "first", name: "Al menos una dosis" },
         { id: "second", name: "Completamente vacunados" },
         { id: "third", name: "Dosis de refuerzo" },
+        { id: "fourth", name: "Cuarta dosis" },
       ],
     };
   },

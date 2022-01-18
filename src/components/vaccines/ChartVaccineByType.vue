@@ -5,12 +5,14 @@
     <title-graphic v-if="picked == 'first'"> Personas partialmente vacunadas cada por tipo de vacuna día en Chile</title-graphic>
     <title-graphic v-if="picked == 'second'"> Personas completamente vacunadas cada día por tipo de vacuna en Chile </title-graphic>
     <title-graphic v-if="picked == 'third'"> Dosis de refuerzo inyectados cada día por tipo de vacuna en Chile</title-graphic>
+    <title-graphic v-if="picked == 'fourth'"> Cuarta dosis inyectados cada día por tipo de vacuna en Chile</title-graphic>
 
     <!-- <span style='font-size:1rem'> Estar parcialmente vacunado significa tener una dosis de Sinovac, Astra-Zeneca, Pfizer.</span> <br> -->
     <update :labels="data.labels"> </update>
     <bar-chart v-if="picked == 'first'" :chartData="renderChartTypeVaccine('first')" :options="options"> </bar-chart>
     <bar-chart v-if="picked == 'second'" :chartData="renderChartTypeVaccine('second')" :options="options"> </bar-chart>
     <bar-chart v-if="picked == 'third'" :chartData="renderChartTypeVaccine('boost')" :options="options"> </bar-chart>
+    <bar-chart v-if="picked == 'fourth'" :chartData="renderChartTypeVaccine('fourth')" :options="options"> </bar-chart>
   </div>
 </template>
 
@@ -45,6 +47,7 @@ export default {
         { id: "first", name: "Al menos una dosis" },
         { id: "second", name: "Completamente vacunados" },
         { id: "third", name: "Dosis de refuerzo" },
+        { id: "fourth", name: "Cuarta dosis" },
       ],
       options: {
         animation: {

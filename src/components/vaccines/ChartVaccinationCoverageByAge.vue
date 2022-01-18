@@ -53,35 +53,51 @@ export default {
       let atLeastOneDose = [];
       let completeVaccination = [];
       let boost = [];
+      let fourth = [];
       Object.keys(this.vacunaChile.firstDosesByAgeGroup).forEach((age) => {
         atLeastOneDose.push(this.vacunaChile.firstDosesByAgeGroup[age].slice(-1)[0]);
         completeVaccination.push(this.vacunaChile.secondDosesByAgeGroup[age].slice(-1)[0]);
         boost.push(this.vacunaChile.boostDosesByAgeGroup[age].slice(-1)[0]);
+        fourth.push(this.vacunaChile.fourthDosesByAgeGroup[age].slice(-1)[0]);
       });
       let datasets = [];
       if (type == "absolute") {
         atLeastOneDose = atLeastOneDose.map((v, i) => Math.round((v * Object.values(this.vacunaChile.populationByAge)[i]) / 100));
         completeVaccination = completeVaccination.map((v, i) => Math.round((v * Object.values(this.vacunaChile.populationByAge)[i]) / 100));
         boost = boost.map((v, i) => Math.round((v * Object.values(this.vacunaChile.populationByAge)[i]) / 100));
+        fourth = fourth.map((v, i) => Math.round((v * Object.values(this.vacunaChile.populationByAge)[i]) / 100));
         datasets.push({ label: "Población total", data: Object.values(this.vacunaChile.populationByAge), backgroundColor: "#D2E6EE", hoverOffset: 4 });
       }
       datasets.push(
         {
           label: "Al menos una dosis",
           data: atLeastOneDose,
+          borderColor: "#82CFFD",
           backgroundColor: "#82CFFD",
           hoverOffset: 4,
         },
         {
           label: "Completamente vacunado",
           data: completeVaccination,
+          borderColor: "#eba434",
           backgroundColor: "#eba434",
           hoverOffset: 4,
         },
         {
           label: "Dosis de refuerzo",
           data: boost,
+          borderColor: "#232b2b",
+
           backgroundColor: "#232b2b",
+          hoverOffset: 4,
+        },
+        {
+          label: "Cuara dosis",
+          data: fourth,
+          borderColor: "#f87979",
+
+          backgroundColor: "#f87979",
+
           hoverOffset: 4,
         }
       );

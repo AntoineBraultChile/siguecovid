@@ -22,6 +22,8 @@
           :deaths="vacunaChile['total segunda dosis']"
           :propRefuerzo="vacunaChile['Dosis de refuerzo']"
           :refuerzo="vacunaChile['total dosis de refuerzo']"
+          :propFourth="vacunaChile['Cuarta dosis']"
+          :fourth="vacunaChile['total cuarta dosis']"
           :colors="colorsIndicator"
           type="vaccin"
         />
@@ -229,6 +231,7 @@ export default {
           CanSino: [],
           proportion: [],
         },
+        fourthDoses: { Pfizer: [], Sinovac: [], AstraZeneca: [], CanSino: [], proportion: [] },
       },
       vacunaRegions: {
         regionName: [],
@@ -310,6 +313,17 @@ export default {
           300: [],
         },
         boostDosesByAgeGroup: {
+          6: [],
+          12: [],
+          18: [],
+          30: [],
+          40: [],
+          50: [],
+          60: [],
+          70: [],
+          300: [],
+        },
+        fourthDosesByAgeGroup: {
           6: [],
           12: [],
           18: [],
@@ -478,6 +492,15 @@ export default {
             fill: true,
             data: this.vacunaChile["Dosis de refuerzo"].slice(indexDate),
           },
+          {
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Cuarta dosis",
+            borderColor: "#f87979",
+            backgroundColor: "rgb(248,	121,	121,0.5)",
+            fill: true,
+            data: this.vacunaChile["Cuarta dosis"].slice(indexDate),
+          },
         ],
       };
     },
@@ -493,17 +516,26 @@ export default {
           {
             label: "Primera dosis",
             backgroundColor: "#82CFFD",
+            borderColor: "#82CFFD",
             data: this.vacunaChile["primera dosis por dia"].slice(indexDate),
           },
           {
             label: "Ùnica o segunda dosis",
             backgroundColor: "#eba434",
+            borderColor: "#eba434",
             data: this.vacunaChile["segunda dosis por dia"].slice(indexDate),
           },
           {
             label: "Dosis de refuerzo",
             backgroundColor: "#232b2b",
+            borderColor: "#232b2b",
             data: this.vacunaChile["Dosis de refuerzo por dia"].slice(indexDate),
+          },
+          {
+            label: "Cuarta dosis",
+            backgroundColor: "#f87979",
+            borderColor: "#f87979",
+            data: this.vacunaChile["Cuarta dosis por dia"].slice(indexDate),
           },
         ],
       };
@@ -527,6 +559,11 @@ export default {
             backgroundColor: "#232b2b",
             data: this.vacunaRegions.boostDoses,
           },
+          {
+            label: "Cuarta dosis",
+            backgroundColor: "#f87979",
+            data: this.vacunaRegions.fourthDoses,
+          },
         ],
       };
     },
@@ -547,7 +584,7 @@ export default {
     let uniqueDoses = [];
 
     let boostDoses = [];
-
+    let fourthDoses = [];
     data.forEach((d) => {
       !this.vacunaRegions.regionName.includes(d["Region"]) ? this.vacunaRegions.regionName.push(d["Region"]) : "";
       let value = Math.round((Object.values(d).slice(-1)[0] / this.populationChile[d["Region"]]) * 1000) / 10;
@@ -559,6 +596,8 @@ export default {
         uniqueDoses.push(value);
       } else if (d["Dosis"] == "Refuerzo") {
         boostDoses.push(value);
+      } else if (d["Dosis"] == "Cuarta") {
+        fourthDoses.push(value);
       }
       // (d['Dosis']=='Primera' )?this.vacunaRegions.firstDoses.push(value):this.vacunaRegions.secondDoses.push(value);
     });
@@ -569,15 +608,18 @@ export default {
     let [labelsSort, firstDosesSort] = order(this.vacunaRegions.regionName, this.vacunaRegions.firstDoses);
     let secondDosesSort = [];
     let boostDosesSort = [];
+    let fourthDosesSort = [];
     firstDosesSort.forEach((value) => {
       let index = this.vacunaRegions.firstDoses.indexOf(value);
       secondDosesSort.push(this.vacunaRegions.secondDoses[index]);
       boostDosesSort.push(boostDoses[index]);
+      fourthDosesSort.push(fourthDoses[index]);
     });
     this.vacunaRegions.regionName = labelsSort;
     this.vacunaRegions.firstDoses = firstDosesSort;
     this.vacunaRegions.secondDoses = secondDosesSort;
     this.vacunaRegions.boostDoses = boostDosesSort;
+    this.vacunaRegions.fourthDoses = fourthDosesSort;
 
     // time serie vacuna Chile
     this.vacunaChile.labels = Object.keys(data[0])
@@ -589,6 +631,7 @@ export default {
     let secondDosesChile = [];
     let uniqueDosesChile = [];
     let boostDosesChile = [];
+    let fourthDosesChile = [];
 
     Object.values(data[0])
       .slice(2)
@@ -614,9 +657,17 @@ export default {
       .forEach((d) => {
         boostDosesChile.push(d);
       });
+    Object.values(data[4])
+      .slice(2)
+      .map((i) => Number(i))
+      .forEach((d) => {
+        fourthDosesChile.push(d);
+      });
+
     this.vacunaChile["primera dosis"] = sumArray(firstDosesChile, uniqueDosesChile).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
     this.vacunaChile["segunda dosis"] = sumArray(secondDosesChile, uniqueDosesChile).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
     this.vacunaChile["Dosis de refuerzo"] = boostDosesChile.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+    this.vacunaChile["Cuarta dosis"] = fourthDosesChile.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
 
     this.vacunaChile["total primera dosis"] = sumArray(firstDosesChile, uniqueDosesChile)
       .slice(1)
@@ -626,10 +677,12 @@ export default {
       .slice(-2);
 
     this.vacunaChile["total dosis de refuerzo"] = boostDosesChile.slice(1).slice(-2);
+    this.vacunaChile["total cuarta dosis"] = fourthDosesChile.slice(1).slice(-2);
 
     this.vacunaChile["primera dosis por dia"] = derivate(firstDosesChile);
     this.vacunaChile["segunda dosis por dia"] = derivate(sumArray(secondDosesChile, uniqueDosesChile));
     this.vacunaChile["Dosis de refuerzo por dia"] = derivate(boostDosesChile);
+    this.vacunaChile["Cuarta dosis por dia"] = derivate(fourthDosesChile);
 
     // feching data vaccination by age in chile
     const [firstDosesByAge, secondDosesByAge, uniqueDosesByAge] = await Promise.all([
@@ -690,6 +743,10 @@ export default {
     const boostDosesByAge = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_Refuerzo.csv");
     getVaccinByAge(boostDosesByAge, "boostDosesByAgeGroup");
 
+    // fouth doses
+    const fourthDosesByAge = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto78/vacunados_edad_fecha_Cuarta.csv");
+    getVaccinByAge(fourthDosesByAge, "fourthDosesByAgeGroup");
+
     // function to generate list of months
     let generateListOfMonths = async (labels) => {
       let currentDate = dayjs("02-2021", "MM-YYYY");
@@ -708,6 +765,7 @@ export default {
     let vaccineTypeSecondDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_2daDosis.csv");
     let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
     let vaccineTypeBoost = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_Refuerzo.csv");
+    let vaccineTypeFourth = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_4taDosis.csv");
 
     const dicVac = {
       "Campaña SARS-CoV-2 (AstraZeneca)": "AstraZeneca",
@@ -786,6 +844,21 @@ export default {
       );
     });
 
+    vaccineTypeFourth.forEach((d) => {
+      this.vaccineType.fourthDoses[dicVac[d["Fabricante"]]] = Object.values(d)
+        .slice(1)
+        .map((i) => {
+          return Number(i);
+        });
+
+      this.vaccineType.fourthDoses.proportion.push(
+        Object.values(d)
+          .slice(1)
+          .map((i) => Number(i))
+          .reduce((total, element) => total + element)
+      );
+    });
+
     let sum = this.vaccineType.firstDoses.proportion.reduce((total, element) => {
       return total + element;
     });
@@ -805,9 +878,18 @@ export default {
     this.vaccineType.boostDoses.proportion = [
       this.vaccineType.boostDoses.proportion[0],
       this.vaccineType.boostDoses.proportion[3],
-
       this.vaccineType.boostDoses.proportion[2],
       this.vaccineType.boostDoses.proportion[1],
+    ];
+
+    this.vaccineType.fourthDoses.proportion = this.vaccineType.fourthDoses.proportion.map((d) => {
+      return Math.round((d / sum) * 1000) / 10;
+    });
+    this.vaccineType.fourthDoses.proportion = [
+      this.vaccineType.fourthDoses.proportion[0],
+      this.vaccineType.fourthDoses.proportion[3],
+      this.vaccineType.fourthDoses.proportion[2],
+      this.vaccineType.fourthDoses.proportion[1],
     ];
 
     // // compute number of people with pase de movilidad mayor de 45 años en Chile

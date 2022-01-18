@@ -33,6 +33,11 @@
             <span> {{ numberToStringFormat(propRefuerzo.slice(-1)[0]) + "% de la población con una dosis de refuerzo" }} </span>
             <span class="en24horas"> {{ incrementLastDay(propRefuerzo) }} en 24 horas </span>
           </div>
+
+          <div class="dosis indicator2 red" v-if="type == 'vaccin'">
+            <span> {{ numberToStringFormat(propFourth.slice(-1)[0]) + "% de la población con una cuarta dosis" }} </span>
+            <span class="en24horas"> {{ incrementLastDay(propFourth) }} en 24 horas </span>
+          </div>
         </div>
 
         <div class="optionDosis">
@@ -65,6 +70,11 @@
             <span> {{ numberToStringFormat(refuerzo.slice(-1)[0]) + " personas con una dosis de refuerzo" }} </span>
             <span class="en24horas"> {{ numberToStringFormat(incrementLastDay(refuerzo)) }} en 24 horas </span>
           </div>
+
+          <div class="dosis indicator2 red" v-if="type == 'vaccin'">
+            <span> {{ numberToStringFormat(fourth.slice(-1)[0]) + " personas con una cuarta dosis" }} </span>
+            <span class="en24horas"> {{ incrementLastDay(fourth) }} en 24 horas </span>
+          </div>
         </div>
       </div>
     </box-container>
@@ -85,6 +95,8 @@ export default {
     deathsDeis: { type: Array },
     propRefuerzo: { type: Array },
     refuerzo: { type: Array },
+    propFourth: { type: Array },
+    fourth: { type: Array },
     colors: {
       type: Array,
       default: function() {
