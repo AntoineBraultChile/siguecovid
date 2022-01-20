@@ -51,7 +51,7 @@ export default {
         { id: "51 - 60 años", name: "51-60 años" },
         { id: "61 - 70 años", name: "61-70 años" },
         { id: "71 - 80 años", name: "71-80 años" },
-        { id: "81 años o más", name: "81 años o más" },
+        { id: "80 años o más", name: "80 años o más" },
       ],
       weekSundayDates: [],
       currentWeek: "",

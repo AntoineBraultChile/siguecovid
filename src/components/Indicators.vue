@@ -9,7 +9,7 @@
 
       <div class="container-indicators">
         <div class="optionDosis">
-          <div class="dosis indicator1" :class="colorsIndicator[0]" v-if="cases.length > 0">
+          <div class="dosis indicator1" :class="colorsIndicator[0]" v-if="(cases.length > 0) & (type == 'epidemic')">
             <span>{{ numberToStringFormat(cases.slice(-1)[0]) + text[0] }} </span>
             <span class="en24horas">
               <font-awesome-icon v-if="incrementLastDay(cases) < 0 && type == 'epidemic'" icon="angle-double-down" class="fa-fw" color="green" style="font-size:1.1rem" title="Está bajando" />
@@ -41,7 +41,7 @@
         </div>
 
         <div class="optionDosis">
-          <div class="dosis indicator3" :class="colorsIndicator[2]" v-if="uci.length > 0">
+          <div class="dosis indicator3" :class="colorsIndicator[2]" v-if="(uci.length > 0) & (type == 'epidemic')">
             <span> {{ numberToStringFormat(uci.slice(-1)[0]) + text[2] }}</span>
             <span class="en24horas">
               <font-awesome-icon v-if="incrementLastDay(uci) < 0 && type == 'epidemic'" icon="angle-double-down" class="fa-fw" color="green" style="font-size:1.1rem" title="Está bajando" />
@@ -238,12 +238,12 @@ span {
   .dosis.indicator1,
   .dosis.indicator3 {
     width: 50%;
-    margin: 5px 5px 5px 5px;
+    margin: 2px 2px 2px 2px;
   }
   .dosis.indicator2,
   .dosis.indicator4 {
     width: 50%;
-    margin: 5px 5px 5px 5px;
+    margin: 2px 2px 2px 2px;
   }
   .optionDosis {
     width: 100%;

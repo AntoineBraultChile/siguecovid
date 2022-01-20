@@ -523,6 +523,8 @@ export default {
     let secondDoses = [];
     let uniqueDoses = [];
     let boostDoses = [];
+        let fourthDoses = [];
+
 
     vaccine.forEach((region) => {
       if (region["Region"] == "Total") {
@@ -542,9 +544,14 @@ export default {
           boostDoses = Object.values(region)
             .slice(2)
             .map((i) => Number(i));
-        }
+        } else if (region["Dosis"] == "Cuarta"){
+          fourthDoses = Object.values(region)
+            .slice(2)
+            .map((i) => Number(i));
+        } 
       }
     });
+
     this.dataCovid.ChileVaccine.firstDoses = sumArray(
       firstDoses,
       uniqueDoses
@@ -556,6 +563,7 @@ export default {
     ).map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
 
     this.dataCovid.ChileVaccine.boostDoses = boostDoses.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
+    this.dataCovid.ChileVaccine.fourthDoses = fourthDoses.map((d) => Math.round((d / this.populationChile["Total"]) * 1000) / 10);
 
   // fetching DEIS deaths in Chile
   let deis = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto37/Defunciones_deis.csv')

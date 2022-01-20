@@ -322,6 +322,16 @@ export default {
             fill: true,
             data: this.dataCovid[region + "Vaccine"].boostDoses.slice(indexDate),
           },
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Cuarta dosis",
+            borderColor: this.backgroundColor["Uci"],
+            backgroundColor: this.backgroundColorTransparent["Uci"],
+            fill: true,
+            data: this.dataCovid[region + "Vaccine"].fourthDoses.slice(indexDate),
+          },
         ],
       };
     },

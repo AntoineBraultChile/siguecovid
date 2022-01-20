@@ -537,6 +537,7 @@ casesComunas.forEach((comuna) => {
     let secondDoses = {};
     let uniqueDoses = {};
     let boostDoses = {};
+    let fourthDoses = {};
 
     vaccine.forEach((region) => {
       if(region['Region']!=''){
@@ -557,18 +558,23 @@ casesComunas.forEach((comuna) => {
         boostDoses[region["Region"]] = Object.values(region)
           .slice(2)
           .map((i) => Number(i));
+      }else if (region["Dosis"] == "Cuarta") {
+        fourthDoses[region["Region"]] = Object.values(region)
+          .slice(2)
+          .map((i) => Number(i));
       }
       }
     });
  
 
     Object.keys(firstDoses).forEach((region) => {
-            console.log(region)
 
       const firstValues = firstDoses[region];
       const uniqueValues = uniqueDoses[region];
       const secondValues = secondDoses[region];
       const boostValues = boostDoses[region];
+      const fourthValues = fourthDoses[region];
+
 
       this.dataCovid[region + "Vaccine"] = {
         firstDoses: sumArray(firstValues, uniqueValues).map(
@@ -579,7 +585,10 @@ casesComunas.forEach((comuna) => {
         ),
         boostDoses: boostValues.map(
           (d) => Math.round((d / this.populationChile[region]) * 1000) / 10
-        )
+        ),
+        fourthDoses:fourthValues.map(
+          (d) => Math.round((d / this.populationChile[region]) * 1000) / 10
+        ),
       };
     });
 
