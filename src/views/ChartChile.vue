@@ -15,7 +15,7 @@
 
       <div
         id='block_graph'
-        v-if="dataCovid.deis.Chile.total.length > 0"
+        v-if="dataCovid.vm.labels.length > 0"
       >
         <indicators
           v-if="dataCovid.deis.Chile.total.length > 0"
@@ -246,6 +246,7 @@ export default {
         },
         vm:{labels:[], vmi:[]},
         CFR:{labels:[], values: [] },
+        hospitalization:{labels:[]}
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -509,6 +510,11 @@ export default {
       this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
     });
 
+    const hospitalization = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto24/CamasHospital_Diario.csv')
+    this.dataCovid['hospitalization'] = {'labels': Object.keys(hospitalization[0]).slice(1).map(d => dayjs(d, 'YYYY-MM-DD').format('DD-MM-YYYY'))}
+    hospitalization.forEach(d=>{
+      this.dataCovid.hospitalization[d['Tipo de cama']] = Object.values(d).slice(1).map(i => Number(i))
+    })
 
 
     // fetching vaccine by region

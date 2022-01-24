@@ -4,22 +4,28 @@
 
     <title-graphic v-if="picked == 'uci'"> {{ title["Uci"] }} en {{ region }} </title-graphic>
     <title-graphic v-if="(picked == 'ingresoUCI') & (region == 'Chile')"> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
-    <title-graphic v-if="(picked == 'vmi') & (region == 'Chile')"> Pacientes Covid-19 en UCI por estado de gravedad </title-graphic>
+    <title-graphic v-if="(picked == 'hospitalization') & (region == 'Chile')"> Pacientes en hospitalización con diagnóstico Covid-19 en {{ region }} </title-graphic>
 
-    <span style="font-size:1rem"> La UCI es la sigla de unidad de cuidados intensivos.</span>
+    <!-- <title-graphic v-if="(picked == 'vmi') & (region == 'Chile')"> Pacientes Covid-19 en UCI por estado de gravedad </title-graphic> -->
+
+    <span style="font-size:1rem" v-if="(picked == 'hospitalization') & (region == 'Chile')"> La UCI es la sigla de unidad de cuidados intensivos y UTI la sigla de unidad de terapia intenisva.</span>
+    <span style="font-size:1rem" v-else> La UCI es la sigla de unidad de cuidados intensivos.</span>
+
     <br />
-    <update v-if="picked == 'uci'" :labels="dataCovid.labelsUci"> </update>
-    <update v-if="(picked == 'ingresoUCI') & (region == 'Chile')" :labels="dataCovid.labelsIngresoUCI"> </update>
-    <update v-if="(picked == 'vmi') & (region == 'Chile')" :labels="dataCovid.vm.labels"> </update>
 
-    <bar-chart v-if="picked == 'uci'" :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
+    <update v-if="(picked == 'uci') & (region == 'Chile')" :labels="dataCovid.vm.labels"> </update>
+    <update v-if="(picked == 'uci') & (region != 'Chile')" :labels="dataCovid.labelsUci"> </update>
+    <update v-if="(picked == 'ingresoUCI') & (region == 'Chile')" :labels="dataCovid.labelsIngresoUCI"> </update>
+
+    <bar-chart v-if="(picked == 'uci') & (region == 'Chile')" :chartData="plotVm()" :options="chartOptions('VM')"> </bar-chart>
+    <bar-chart v-if="(picked == 'uci') & (region != 'Chile')" :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
     <bar-chart
       v-if="(picked == 'ingresoUCI') & (region == 'Chile')"
       :chartData="plotLine(dataCovid.labelsIngresoUCI, dataCovid['ChileIngresoUCI'], this.colorsPasoAPaso[1], 'line')"
       :options="chartOptions('IngresoUCI')"
     >
     </bar-chart>
-    <bar-chart v-if="(picked == 'vmi') & (region == 'Chile')" :chartData="plotVm()" :options="chartOptions('VM')"> </bar-chart>
+    <bar-chart v-if="(picked == 'hospitalization') & (region == 'Chile')" :chartData="plotHospi()" :options="chartOptions('Hospi')"> </bar-chart>
   </div>
 </template>
 
@@ -52,7 +58,8 @@ export default {
       tabs: [
         { id: "uci", name: "UCI" },
         { id: "ingresoUCI", name: "Ingresos a UCI" },
-        { id: "vmi", name: "UCI por estado" },
+        { id: "hospitalization", name: "Hospitalizados" },
+        // { id: "vmi", name: "UCI por estado" },
       ],
     };
   },
@@ -100,6 +107,34 @@ export default {
             data: values.slice(indexDate),
           },
         ],
+      };
+    },
+    plotHospi() {
+      let fromDate = this.fromDate;
+      const labels = this.dataCovid.hospitalization.labels;
+      let indexDate = labels.indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+      const colors = { Basica: "#250740", Media: "#750227", UCI: this.colorsPasoAPaso[1], UTI: this.colorsPasoAPaso[2] };
+
+      let datasets = [];
+      const typeOfHospi = Object.keys(this.dataCovid.hospitalization).slice(1);
+      typeOfHospi.forEach((t) => {
+        datasets.push({
+          type: "line",
+          pointRadius: this.pointRadius,
+          pointHoverRadius: this.pointHoverRadius,
+          label: t,
+          borderColor: colors[t],
+          backgroundColor: colors[t],
+          fill: false,
+          data: this.dataCovid.hospitalization[t].slice(indexDate),
+        });
+      });
+      return {
+        labels: labels.filter((x) => {
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+        }),
+        datasets: datasets,
       };
     },
     plotVm() {
@@ -174,7 +209,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       };
-      if (type == "IngresoUCI") {
+      if (type == "IngresoUCI" || type == "Hospi") {
         options.scales["xAxes"] = [
           {
             type: "time",
@@ -202,7 +237,7 @@ export default {
           ],
         };
       }
-      if (type == "Cases" || type == "VM") {
+      if (type == "Cases" || type == "VM" || type == "Hospi") {
         options.legend = { display: true };
       }
       return options;
