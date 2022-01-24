@@ -16,6 +16,7 @@
     <update v-if="(picked == 'uci') & (region == 'Chile')" :labels="dataCovid.vm.labels"> </update>
     <update v-if="(picked == 'uci') & (region != 'Chile')" :labels="dataCovid.labelsUci"> </update>
     <update v-if="(picked == 'ingresoUCI') & (region == 'Chile')" :labels="dataCovid.labelsIngresoUCI"> </update>
+    <update v-if="(picked == 'hospitalization') & (region == 'Chile')" :labels="dataCovid.hospitalization.labels"> </update>
 
     <bar-chart v-if="(picked == 'uci') & (region == 'Chile')" :chartData="plotVm()" :options="chartOptions('VM')"> </bar-chart>
     <bar-chart v-if="(picked == 'uci') & (region != 'Chile')" :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
