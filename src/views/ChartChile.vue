@@ -134,6 +134,7 @@ import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 import "dayjs/locale/es"; // load on demand
+// import { meanWeek } from '../assets/mathFunctions';
 dayjs.locale("es"); // use Spanish locale globally
 
 export default {
@@ -246,7 +247,8 @@ export default {
         },
         vm:{labels:[], vmi:[]},
         CFR:{labels:[], values: [] },
-        hospitalization:{labels:[]}
+        hospitalization:{labels:[]},
+        casesAcc:{Chile:{labels:[],values:[], late:[],meanWeek:[]}}
       },
       fromDate: "01-02-2021",
       fromMonth: "",
@@ -509,6 +511,22 @@ export default {
       // update fromMonth
       this.fromMonth = dayjs(this.fromDate, "01-MM-YYYY").format("MMMM YYYY");
     });
+
+    const casesAcc = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv')
+    this.dataCovid['casesAcc'] = {'labels':Object.keys(casesAcc[0]).slice(4).map(d => dayjs(d, 'YYYY-MM-DD').format('DD-MM-YYYY'))}
+    casesAcc.forEach(d=>{
+      if(d['Region']=='Total'){
+      let region = d['Region'] == 'Total'? 'Chile':d['Region'] 
+      let values = derivate(Object.values(d).slice(3).map(i=>Number(i)))
+      let mean = meanWeek(values).map(i => Math.round(i))
+      this.dataCovid.casesAcc[region] = {
+      'values':values,
+      'late':values.map((v,i)=> {return v-this.dataCovid['ChileCases'][i]}),
+      'meanWeek':mean,
+      'variation':derivate(mean)
+      }
+      }
+    })
 
     const hospitalization = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto24/CamasHospital_Diario.csv')
     this.dataCovid['hospitalization'] = {'labels': Object.keys(hospitalization[0]).slice(1).map(d => dayjs(d, 'YYYY-MM-DD').format('DD-MM-YYYY'))}

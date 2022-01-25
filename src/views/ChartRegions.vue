@@ -190,6 +190,8 @@ export default {
           firstDoses: [],
           secondDoses: [],
         },
+        casesAcc:{Metropolitana:{labels:[],values:[], late:[],meanWeek:[]}},
+
         incidence: {
           lastUpdate: [],
           Metropolitana: {
@@ -414,6 +416,20 @@ export default {
       this.$set(this.dataCovid, region + "Pos", [...firstNullValues,...Pos]);
     }
 
+    // cases con retrado
+      const casesAcc = await d3.csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/CasosTotalesCumulativo.csv')
+    this.dataCovid['casesAcc'] = {'labels':Object.keys(casesAcc[0]).slice(4).map(d => dayjs(d, 'YYYY-MM-DD').format('DD-MM-YYYY'))}
+    casesAcc.forEach(d=>{
+      let region = d['Region'] == 'Total'? 'Chile':d['Region'] 
+      let values = derivate(Object.values(d).slice(3).map(i=>Number(i)))
+      let mean = meanWeek(values).map(i => Math.round(i))
+      this.dataCovid.casesAcc[region] = {
+      'values':values,
+      'late':values.map((v,i)=> {return v-this.dataCovid[d['Region']+'Cases'][i]}),
+      'meanWeek':mean,
+      'variation':derivate(mean)
+      }
+    })
 
     // deis 
     let deisConfirmed = await d3.csv('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deisRegionConfirmedDeaths.csv')
