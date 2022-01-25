@@ -20,8 +20,9 @@
       <input type="checkbox" id="checkbox" v-model="checked" />
       <label for="checkbox" style="font-size:0.9rem;text-align:right">Variación</label>
     </div>
-    <title-graphic v-if="picked == 'diario'"> {{ title["Cases"] }} en {{ region }} </title-graphic>
-    <title-graphic v-if="picked == 'late'"> Nuevos casos y casos notificados con retraso en {{ region }} </title-graphic>
+
+    <title-graphic v-if="picked == 'diario'"> {{ checked ? "Variación semanal de los nuevos casos detectados" : title["Cases"] }} en {{ region }} </title-graphic>
+    <title-graphic v-if="picked == 'late'"> {{ checked ? "Variación semanal de los nuevos casos " : "Nuevos casos " }} y casos notificados con retraso en {{ region }} </title-graphic>
 
     <!-- <title-graphic v-else> Variación semanal de los nuevos casos detectados en {{ region }} </title-graphic> -->
     <span style="font-size:1rem" v-if="picked == 'diario'">Casos detectados en las últimas 24h por PCR o prueba antigénica. </span>
@@ -238,8 +239,8 @@ export default {
 <style lang="css" scoped>
 .withVar {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
-  margin: 10px 10px -25px 1px;
+  margin: 5px 10px -20px 1px;
 }
 </style>
