@@ -3,30 +3,34 @@
     <button-choice v-if="region == 'Chile'" :tabs="tabs" :currentTab="picked" v-on:newtab="updatePicked" />
 
     <title-graphic v-if="picked == 'uci'"> {{ title["Uci"] }} en {{ region }} </title-graphic>
-    <title-graphic v-if="(picked == 'ingresoUCI') & (region == 'Chile')"> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic>
+    <!-- <title-graphic v-if="(picked == 'ingresoUCI') & (region == 'Chile')"> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic> -->
     <title-graphic v-if="(picked == 'hospitalization') & (region == 'Chile')"> Pacientes en hospitalización con diagnóstico Covid-19 en {{ region }} </title-graphic>
+    <title-graphic v-if="(picked == 'ingresoHospi') & (region == 'Chile')"> Media móvil 7 días de los ingresos hospilatarios de pacientes Covid-19 en {{ region }} </title-graphic>
 
     <!-- <title-graphic v-if="(picked == 'vmi') & (region == 'Chile')"> Pacientes Covid-19 en UCI por estado de gravedad </title-graphic> -->
 
     <span style="font-size:1rem" v-if="(picked == 'hospitalization') & (region == 'Chile')"> La UCI es la sigla de unidad de cuidados intensivos y UTI la sigla de unidad de terapia intenisva.</span>
-    <span style="font-size:1rem" v-else> La UCI es la sigla de unidad de cuidados intensivos.</span>
+    <span style="font-size:1rem" v-if="(picked != 'hospitalization') & (picked != 'ingresoHospi')"> La UCI es la sigla de unidad de cuidados intensivos.</span>
 
     <br />
 
     <update v-if="(picked == 'uci') & (region == 'Chile')" :labels="dataCovid.vm.labels"> </update>
     <update v-if="(picked == 'uci') & (region != 'Chile')" :labels="dataCovid.labelsUci"> </update>
-    <update v-if="(picked == 'ingresoUCI') & (region == 'Chile')" :labels="dataCovid.labelsIngresoUCI"> </update>
+    <!-- <update v-if="(picked == 'ingresoUCI') & (region == 'Chile')" :labels="dataCovid.labelsIngresoUCI"> </update> -->
     <update v-if="(picked == 'hospitalization') & (region == 'Chile')" :labels="dataCovid.hospitalization.labels"> </update>
+    <update v-if="(picked == 'ingresoHospi') & (region == 'Chile')" :labels="dataCovid.ingresoHospi.labels"> </update>
 
     <bar-chart v-if="(picked == 'uci') & (region == 'Chile')" :chartData="plotVm()" :options="chartOptions('VM')"> </bar-chart>
     <bar-chart v-if="(picked == 'uci') & (region != 'Chile')" :chartData="plotBar(region, 'Uci')" :options="chartOptions('Uci')"> </bar-chart>
-    <bar-chart
+    <!-- <bar-chart
       v-if="(picked == 'ingresoUCI') & (region == 'Chile')"
       :chartData="plotLine(dataCovid.labelsIngresoUCI, dataCovid['ChileIngresoUCI'], this.colorsPasoAPaso[1], 'line')"
       :options="chartOptions('IngresoUCI')"
     >
-    </bar-chart>
+    </bar-chart> -->
+
     <bar-chart v-if="(picked == 'hospitalization') & (region == 'Chile')" :chartData="plotHospi()" :options="chartOptions('Hospi')"> </bar-chart>
+    <bar-chart v-if="(picked == 'ingresoHospi') & (region == 'Chile')" :chartData="plotIngresosHospi()" :options="chartOptions('Hospi')"> </bar-chart>
   </div>
 </template>
 
@@ -58,8 +62,10 @@ export default {
       picked: "uci",
       tabs: [
         { id: "uci", name: "UCI" },
-        { id: "ingresoUCI", name: "Ingresos a UCI" },
         { id: "hospitalization", name: "Hospitalizados" },
+        // { id: "ingresoUCI", name: "Ingresos UCI" },
+
+        { id: "ingresoHospi", name: "Ingresos Hospitalarios" },
         // { id: "vmi", name: "UCI por estado" },
       ],
     };
@@ -87,29 +93,29 @@ export default {
         ],
       };
     },
-    plotLine(labels, values, color, type) {
-      let fromDate = this.fromDate;
-      let indexDate = labels.indexOf(fromDate);
-      indexDate = indexDate > 0 ? indexDate : 0;
+    // plotLine(labels, values, color, type) {
+    //   let fromDate = this.fromDate;
+    //   let indexDate = labels.indexOf(fromDate);
+    //   indexDate = indexDate > 0 ? indexDate : 0;
 
-      return {
-        labels: labels.filter((x) => {
-          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
-        }),
-        datasets: [
-          {
-            type: type,
-            pointRadius: this.pointRadius,
-            pointHoverRadius: this.pointHoverRadius,
-            label: "",
-            borderColor: color,
-            backgroundColor: color,
-            fill: false,
-            data: values.slice(indexDate),
-          },
-        ],
-      };
-    },
+    //   return {
+    //     labels: labels.filter((x) => {
+    //       return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+    //     }),
+    //     datasets: [
+    //       {
+    //         type: type,
+    //         pointRadius: this.pointRadius,
+    //         pointHoverRadius: this.pointHoverRadius,
+    //         label: "",
+    //         borderColor: color,
+    //         backgroundColor: color,
+    //         fill: false,
+    //         data: values.slice(indexDate),
+    //       },
+    //     ],
+    //   };
+    // },
     plotHospi() {
       let fromDate = this.fromDate;
       const labels = this.dataCovid.hospitalization.labels;
@@ -178,6 +184,39 @@ export default {
             backgroundColor: this.colorsPasoAPaso[1],
             fill: false,
             data: this.dataCovid.vm.noVm.slice(indexDate),
+          },
+        ],
+      };
+    },
+    plotIngresosHospi() {
+      let fromDate = this.fromDate;
+      const labels = this.dataCovid.ingresoHospi.labels;
+      let indexDate = labels.indexOf(fromDate);
+      indexDate = indexDate > 0 ? indexDate : 0;
+      return {
+        labels: labels.filter((x) => {
+          return dayjs(x, "DD-MM-YYYY") >= dayjs(fromDate, "DD-MM-YYYY");
+        }),
+        datasets: [
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Ingresos en UCI (media móvil 7 días)",
+            borderColor: this.colorsPasoAPaso[1],
+            backgroundColor: this.colorsPasoAPaso[1],
+            fill: false,
+            data: this.dataCovid.ingresoHospi.uci.slice(indexDate),
+          },
+          {
+            type: "line",
+            pointRadius: this.pointRadius,
+            pointHoverRadius: this.pointHoverRadius,
+            label: "Ingresos hospitalatarios (media móvil 7 días)",
+            borderColor: "#250740",
+            backgroundColor: "#250740",
+            fill: false,
+            data: this.dataCovid.ingresoHospi.hospi.slice(indexDate),
           },
         ],
       };
