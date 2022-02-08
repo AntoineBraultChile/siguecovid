@@ -5,7 +5,7 @@
     <title-graphic v-if="picked == 'uci'"> {{ title["Uci"] }} en {{ region }} </title-graphic>
     <!-- <title-graphic v-if="(picked == 'ingresoUCI') & (region == 'Chile')"> {{ title["IngresoUCI"] }} en {{ region }} </title-graphic> -->
     <title-graphic v-if="(picked == 'hospitalization') & (region == 'Chile')"> Pacientes en hospitalización con diagnóstico Covid-19 en {{ region }} </title-graphic>
-    <title-graphic v-if="(picked == 'ingresoHospi') & (region == 'Chile')"> Media móvil 7 días de los ingresos hospilatarios de pacientes Covid-19 en {{ region }} </title-graphic>
+    <title-graphic v-if="(picked == 'ingresoHospi') & (region == 'Chile')"> Ingresos hospilatarios de pacientes Covid-19 en {{ region }} </title-graphic>
 
     <!-- <title-graphic v-if="(picked == 'vmi') & (region == 'Chile')"> Pacientes Covid-19 en UCI por estado de gravedad </title-graphic> -->
 

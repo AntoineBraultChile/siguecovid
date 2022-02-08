@@ -489,7 +489,7 @@ export default {
             label: "Dosis de refuerzo",
             borderColor: "#232b2b",
             backgroundColor: "rgb(35,43,43,0.5)",
-            fill: true,
+            fill: 3,
             data: this.vacunaChile["Dosis de refuerzo"].slice(indexDate),
           },
           {

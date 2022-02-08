@@ -34,7 +34,7 @@
       />
                 <signature/>
     </div>
-         <div class="graph" v-if="Object.keys(dataCovid.incidenceTimeByAge.cases).length > 0 & false">
+         <div class="graph" v-if="Object.keys(dataCovid.incidenceTimeByAge.cases).length > 0">
 
     <chart-incidence-time-by-age  :fromDate="fromDate"
         :dataCovid="dataCovid"
