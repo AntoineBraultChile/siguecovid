@@ -2,6 +2,19 @@
   <div class="about">
     <div class="aboutMe">
       <h1 id="slogan">Contacto</h1>
+      <h2>Donación</h2>
+      <p>
+        Sigue Covid es un sitio web gratuito. Pero tiene un coste de mantenimiento, especialmente para el servidor que aloja el sitio. Puede ayudar a financiarlo haciendo una transferencia. Gracias
+        por su apoyo.
+      </p>
+      <div style="border:solid rgb(235,164,52,0.2) 2px;border-radius:10px;background:rgb(235,164,52,0.2); padding:10px">
+        Antoine Brault<br />
+        27.049.232-0 <br />
+        Cuenta Corriente 00-170-09577-00<br />
+        Banco De Chile - Edwards<br />
+        abrault@dim.uchile.cl
+      </div>
+
       <h2>Información sobre Sigue Covid</h2>
       <p>
         Sigue Covid permite una visualización sencilla y clara sobre el estado de la pandemia de Covid-19 y el progreso de la vacunación en Chile. Los datos epidemiológicos proceden del

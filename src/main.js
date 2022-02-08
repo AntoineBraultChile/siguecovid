@@ -15,6 +15,9 @@ Vue.component("spinner", Spinner);
 import Signature from "@/components/Signature.vue";
 Vue.component("signature", Signature);
 
+import Apoyo from "@/components/Apoyo.vue";
+Vue.component("apoyo", Apoyo);
+
 // // import 'bootstrap'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 

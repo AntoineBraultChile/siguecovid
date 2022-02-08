@@ -8,6 +8,8 @@
           :update='false'
         />
       </box-container>
+      
+      <apoyo/>
 
       <region-choice
         :currentRegion='currentRegion'

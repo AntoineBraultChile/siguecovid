@@ -10,8 +10,14 @@
           basado en <a
             href="https://www.minciencia.gob.cl/covid19/"
             target='_blank'
-          >datos del Ministerio de Ciencia</a>. Puede seguir la cuenta de Twitter <a href='https://twitter.com/datos_19' target='_blank'> @datos_19</a> para obtener un análisis periódico de las cifras de la pandemia.</p>
+          >datos del Ministerio de Ciencia</a>. Puede seguir la cuenta de Twitter <a href='https://twitter.com/datos_19' target='_blank'> @datos_19</a> para obtener un análisis periódico de las cifras de la pandemia.
+          </p>
       </box-container>
+      <apoyo/>
+
+      <!-- <box-container style="border:solid rgb(66,133,244,0.1) 2px;border-radius:10px;background-color:rgb(66,133,244,0.1)">
+          <p style='font-size:1.2rem;font-weight:bold'>Puede apoyar Sigue Covid y los costes del servidor haciendo una <router-link to="/about"> donación </router-link> </p>
+        </box-container> -->
 
       <div
         id='block_graph'
@@ -110,6 +116,8 @@ h2{
   padding: 0px 10px 0px 10px;
 }
 
+
+
 /* @media all and (max-width: 1100px) {
   .description {
     font-size: 16px;
@@ -134,6 +142,8 @@ import * as dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 import "dayjs/locale/es"; // load on demand
+import BoxContainer from '../components/BoxContainer.vue';
+// import ButtonChoice from '../components/ButtonChoice.vue';
 // import { meanWeek } from '../assets/mathFunctions';
 dayjs.locale("es"); // use Spanish locale globally
 
@@ -147,6 +157,8 @@ export default {
     // 'bar-chart':BarChart,
     "slide-bar": SlideBar,
     "footer-indicators": FooterIndicators,
+    "box-container":BoxContainer,
+    // "button-choice": ButtonChoice,
         // "map-chile": MapChile,
 
   },

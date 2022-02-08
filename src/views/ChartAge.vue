@@ -2,9 +2,10 @@
   <div class="ChartAge">
     <div class="containerSection">
       <box-container>
-
         <title-container titleName='La pandemia de Covid-19 por edad en Chile' />
       </box-container>
+
+      <apoyo/>
 
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0"> -->
       <div
@@ -713,7 +714,7 @@ export default {
 </script>
 
 
-  <style scoped>
+  <style lang="css" scoped>
 .ChartAge {
   display: flex;
   flex-direction: column;

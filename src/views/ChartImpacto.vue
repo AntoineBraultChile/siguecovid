@@ -13,6 +13,8 @@
       </p>
       
       </box-container>
+            <apoyo/>
+
 
       <div id='block_graph'  v-if="dataCovid.ve.cases.vaccinated != undefined ">
       <!--   <slide-bar

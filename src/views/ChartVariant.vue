@@ -11,6 +11,7 @@
           las dos semanas anteriores.
         </p>
       </box-container>
+      <apoyo />
 
       <div id="block_graph" v-if="variantChile.labels.length > 0 && listOfMonths.length > 0">
         <slide-bar :listOfMonths="listOfMonths" :fromMonth="fromMonth" v-on:newdate="updateCurrentDate" />
