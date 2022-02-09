@@ -92,7 +92,7 @@ export default {
           hoverOffset: 4,
         },
         {
-          label: "Cuara dosis",
+          label: "Cuarta dosis",
           data: fourth,
           borderColor: "#f87979",
 

@@ -12,6 +12,7 @@
         <box-container style='flex-direction:row; justify-content:space-evenly'>
       <twitter/><apoyo/> 
 </box-container>
+
       <region-choice
         :currentRegion='currentRegion'
         :regionName='regionName'
