@@ -5,8 +5,9 @@
         <title-container titleName='La pandemia de Covid-19 por edad en Chile' />
       </box-container>
 
-      <apoyo/>
-
+        <box-container style='flex-direction:row; justify-content:space-evenly'>
+      <twitter/><apoyo/> 
+</box-container>
       <!-- <div id='block_graph' class='d-flex flex-row flex-wrap justify-content-between' v-if="uciChile.labels.length > 0"> -->
       <div
         id='block_graph'

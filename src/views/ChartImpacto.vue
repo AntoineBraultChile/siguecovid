@@ -13,8 +13,9 @@
       </p>
       
       </box-container>
-            <apoyo/>
-
+        <box-container style='flex-direction:row; justify-content:space-evenly'>
+      <twitter/><apoyo/> 
+</box-container>
 
       <div id='block_graph'  v-if="dataCovid.ve.cases.vaccinated != undefined ">
       <!--   <slide-bar

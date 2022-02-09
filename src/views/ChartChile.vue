@@ -10,11 +10,13 @@
           basado en <a
             href="https://www.minciencia.gob.cl/covid19/"
             target='_blank'
-          >datos del Ministerio de Ciencia</a>. Puede seguir la cuenta de Twitter <a href='https://twitter.com/datos_19' target='_blank'> @datos_19</a> para obtener un análisis periódico de las cifras de la pandemia.
+          >datos del Ministerio de Ciencia</a>.
           </p>
       </box-container>
-      <apoyo/>
 
+        <box-container style='flex-direction:row; justify-content:space-evenly'>
+      <twitter/><apoyo/> 
+</box-container>
       <!-- <box-container style="border:solid rgb(66,133,244,0.1) 2px;border-radius:10px;background-color:rgb(66,133,244,0.1)">
           <p style='font-size:1.2rem;font-weight:bold'>Puede apoyar Sigue Covid y los costes del servidor haciendo una <router-link to="/about"> donación </router-link> </p>
         </box-container> -->
