@@ -2,7 +2,7 @@
   <div class="about">
     <div class="aboutMe">
       <h1 id="slogan">Contacto</h1>
-      <h2>Donación</h2>
+      <!-- <h2>Donación</h2>
       <p>
         Sigue Covid es un sitio web gratuito. Pero tiene un coste de mantenimiento, especialmente para el servidor que aloja el sitio. Puede ayudar a financiarlo haciendo una transferencia. Gracias
         por su apoyo.
@@ -13,7 +13,7 @@
         Cuenta Corriente 00-170-09577-00<br />
         Banco De Chile - Edwards<br />
         abrault@dim.uchile.cl
-      </div>
+      </div> -->
 
       <h2>Información sobre Sigue Covid</h2>
       <p>

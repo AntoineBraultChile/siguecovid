@@ -10,7 +10,8 @@
       </box-container>
 
         <box-container style='flex-direction:row; justify-content:space-evenly'>
-      <twitter/><apoyo/> 
+      <twitter/>
+      <!-- <apoyo/>  -->
 </box-container>
 
       <region-choice

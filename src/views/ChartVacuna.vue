@@ -12,7 +12,11 @@
           dosis de CanSino.
         </p>
       </box-container>
-      <box-container style="flex-direction:row; justify-content:space-evenly"> <twitter /><apoyo /> </box-container>
+      <box-container style="flex-direction:row; justify-content:space-evenly">
+        <twitter />
+
+        <!-- <apoyo />  -->
+      </box-container>
       <div id="block_graph" v-if="vacunaChile.labels.length > 0 && listOfMonths.length > 0">
         <indicators
           :labels="vacunaChile.labels"
