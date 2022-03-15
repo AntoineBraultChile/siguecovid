@@ -11,6 +11,7 @@
         haber sesgos significativos. De hecho, la cobertura de vacunación y las tasas de infección no son uniformes en toda la población. La situación económica, el lugar de residencia y los factores
         de riesgo de Covid-19 son variables importantes para medir adecuadamente la eficacia de la vacunación. Por el momento, sólo la estratificación por edad está disponible en los datos abiertos.
       </p>
+
       
       </box-container>
         <box-container style='flex-direction:row; justify-content:space-evenly'>
@@ -371,6 +372,8 @@ listWeek.push(d['semana_epidemiologica'])
     }
   }
 this.dataCovid.incidenceVaccinalAjustedByAge = {'cases':incidenceAjustedCases, 'uci':incidenceAjustedUCI ,'deaths': incidenceAjustedDeaths} 
+
+
 
 // ------------------------------ ratio vaccinated by age ----------------------------------------
 // let ratioVaccinatedByAge = {}

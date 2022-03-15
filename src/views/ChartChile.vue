@@ -774,7 +774,8 @@ export default {
     // all deaths
     const response = await fetch('https://raw.githubusercontent.com/AntoineBraultChile/deathsChile/main/output/deathsChileFrom2015.json')
     const deaths = await response.json()
-    // const years = ['2015','2016','2017','2018','2019','2020','2021']
+
+// const years = ['2015','2016','2017','2018','2019','2020','2021']
     // let allDeathsChile={}
     // years.forEach(y =>{
     //   allDeathsChile[y]={}
@@ -786,12 +787,21 @@ export default {
     //   }
     // })
     const years = Object.keys(deaths['Chile'])
-
   
       let deathsGoodName = {'Chile':{}}
       years.forEach(y => {
+        let february29 = deaths['Chile'][y].values[59]
+        let deathsValues = deaths['Chile'][y].values.map(i=> Number(i))
+        let meanValues = []
+        if (isNaN(february29)){
+          deathsValues.splice(59,1)
+          meanValues = meanWeek(deathsValues).map(i => Math.round(i))
+          meanValues.splice(59-6,0,NaN)
+        } else {
+          meanValues = meanWeek(deathsValues).map(i => Math.round(i))
+        }
         deathsGoodName['Chile'][y] = {'labels':deaths['Chile'][y].labels.map(d => dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6),
-         'values': meanWeek(deaths['Chile'][y].values.map(i=> Number(i))).map(i => Math.round(i))}
+         'values': meanValues}
       });
     //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
 
