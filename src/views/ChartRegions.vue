@@ -467,8 +467,19 @@ export default {
     regions.forEach(r =>{
       deathsRGoodName[r] = {}
       years.forEach(y => {
+        let february29 = deathsR[this.dicRegions[r]][y].values.values[59]
+        let deathsValues = deathsR[this.dicRegions[r]][y].values.map(i=> Number(i))
+        let meanValues = []
+        if (isNaN(february29)){
+          deathsValues.splice(59,1)
+          meanValues = meanWeek(deathsValues).map(i => Math.round(i))
+          meanValues.splice(59-6,0,NaN)
+        } else {
+          meanValues = meanWeek(deathsValues).map(i => Math.round(i))
+        }
+
         deathsRGoodName[r][y] = {'labels':deathsR[this.dicRegions[r]][y].labels.map(d => dayjs(d,'YYYY-MM-DD').format('DD-MM-YYYY')).slice(6),
-         'values': meanWeek(deathsR[this.dicRegions[r]][y].values.map(i=> Number(i))).map(i => Math.round(i))}
+         'values':meanValues}
       });
     //  deathsRGoodName[r] = deathsR[this.dicRegions[r]]
     })
