@@ -68,8 +68,8 @@
       <signature />
     </div>
 
-    <!-- chart plan Paso a Paso  -->
-    <div class="graph" v-if="region == 'Chile'">
+    <!-- chart plan Paso a Paso -->
+    <div class="graph" v-if="(region == 'Chile') & false">
       <title-graphic> Proporción de la población chilena en las diferentes fases del plan Paso a Paso</title-graphic>
       <update :labels="dataCovid.pasoAPaso.labels"> </update>
       <bar-chart :chartData="getChartPasoAPaso()" :options="chartOptions('Paso')"></bar-chart>

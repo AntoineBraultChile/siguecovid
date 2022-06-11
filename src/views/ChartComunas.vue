@@ -17,7 +17,7 @@
           <span style="font-size:1rem">Incidencia: número de casos en 7 días por cada 100.000 habitantes</span>
           <br />
           <update :labels="cases.labels"> </update>
-          <div class="legend">
+          <!-- <div class="legend">
             <span class="label">
               <div class="rectangle red"></div>
               <span>Fase 1</span>
@@ -38,7 +38,7 @@
               <div class="rectangle green"></div>
               <span>Fase 5</span>
             </span>
-          </div>
+          </div> -->
           <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
           <signature />
         </div>
@@ -46,7 +46,7 @@
         <div class="graph" v-if="(positivity.labels.length > 0) & (pasoAPaso.Arica.dateChangePaso.length > 0)">
           <title-graphic>Positividad semanal de los test PCR en la comuna de {{ currentComuna }}</title-graphic>
           <update :labels="positivity.labels"> </update>
-          <div class="legend">
+          <!-- <div class="legend">
             <span class="label">
               <div class="rectangle red"></div>
               <span>Fase 1</span>
@@ -67,7 +67,7 @@
               <div class="rectangle green"></div>
               <span>Fase 5</span>
             </span>
-          </div>
+          </div> -->
           <line-chart :chartData="ChartPositivity(currentComuna)" :options="options('positivity', currentComuna)" />
           <signature />
         </div>
@@ -346,27 +346,27 @@ export default {
       if (type == "deaths") {
         opt.scales.xAxes[0]["offset"] = true;
       }
-      if (type == "cases" || type == "positivity") {
-        let annotations = [];
-        let dateChangePaso = this.pasoAPaso[comuna].dateChangePaso;
-        dateChangePaso.forEach((date, index) => {
-          if (index != dateChangePaso.length - 1) {
-            annotations.push({
-              drawTime: "beforeDatasetsDraw",
-              type: "box",
-              xScaleID: "x-axis-0",
-              // yScaleID: 'y-axis-1',
-              xMin: dateChangePaso[index],
-              xMax: dateChangePaso[index + 1],
-              backgroundColor: this.colorsPaso[this.pasoAPaso[comuna].numeroDelPaso[index] - 1],
-              //borderColor: 'rgb(255, 0, 0)',
-              borderWidth: 1,
-            });
-          }
-        });
-        opt.annotation = { annotations: annotations };
-        // console.log(annotations)
-      }
+      // if (type == "cases" || type == "positivity") {
+      //   let annotations = [];
+      //   let dateChangePaso = this.pasoAPaso[comuna].dateChangePaso;
+      //   dateChangePaso.forEach((date, index) => {
+      //     if (index != dateChangePaso.length - 1) {
+      //       annotations.push({
+      //         drawTime: "beforeDatasetsDraw",
+      //         type: "box",
+      //         xScaleID: "x-axis-0",
+      //         // yScaleID: 'y-axis-1',
+      //         xMin: dateChangePaso[index],
+      //         xMax: dateChangePaso[index + 1],
+      //         backgroundColor: this.colorsPaso[this.pasoAPaso[comuna].numeroDelPaso[index] - 1],
+      //         //borderColor: 'rgb(255, 0, 0)',
+      //         borderWidth: 1,
+      //       });
+      //     }
+      //   });
+      //   opt.annotation = { annotations: annotations };
+      //   // console.log(annotations)
+      // }
       return opt;
     },
   },

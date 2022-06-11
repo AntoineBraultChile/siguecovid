@@ -156,6 +156,7 @@ export default {
         "rgba(160,82,45,1)",
         "rgba(132,94,194,1.0)",
         "rgba(160,139,74,1.0)",
+        "rgba(54, 165, 75, 1)",
         "rgba(35,43,43,1.0)",
       ],
       colorsVariantTransparent: [
@@ -168,6 +169,7 @@ export default {
         "rgba(160,82,45,1)",
         "rgba(132,94,194,1)",
         "rgba(160,139,74)",
+        "rgba(54, 165, 75)",
         "rgba(35,43,43,1)",
       ],
       variantChile: {
@@ -359,11 +361,15 @@ export default {
       "21A (Delta)": "Delta",
       "21I (Delta)": "Delta",
       "21J (Delta)": "Delta",
-      "21C (Epsilon)": "Epsilon",
+      // "21C (Epsilon)": "Epsilon",
       "21G (Lambda)": "Lambda",
-      "21F (Iota)": "Iota",
-      "21H (Mu)": "Mu",
-      "21K (Omicron)": "Omicron",
+      // "21F (Iota)": "Iota",
+      // "21H (Mu)": "Mu",
+      "21K (Omicron)": "Omicron BA.1",
+      "21L (Omicron)": "Omicron BA.2",
+      "22A (Omicron)": "Omicron BA.4",
+      "22B (Omicron)": "Omicron BA.5",
+      "22C (Omicron)": "Omicron BA.2.12.1",
     };
 
     const nameVariant = Object.keys(variantChile).slice(2);

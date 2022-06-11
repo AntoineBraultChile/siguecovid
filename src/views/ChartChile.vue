@@ -384,11 +384,17 @@ export default {
 
     requests().then((data) => {
       // deaths
+      // console.log(data[2][0])
+      // let deaths = data[2][0]
+      // let deathsTot = data[2][16]
+      // deaths['2022-03-22'] = "0"
+      // deathsTot['2022-03-22'] = '0'
       this.dataCovid["labelsDeaths"] = Object.keys(data[2][0])
         .slice(3 + 1)
         .map((d) => {
           return dayjs(d, "YYYY-MM-DD").format("DD-MM-YYYY");
         });
+
       this.dataCovid.ChileTotalDeaths = Object.values(data[2][16])
         .slice(3)
         .map((i) => Number(i));
