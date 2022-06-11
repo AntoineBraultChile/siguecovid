@@ -232,10 +232,18 @@ export default {
           Pfizer: [],
           Sinovac: [],
           AstraZeneca: [],
-          CanSino: [],
+          Moderna: [],
+          // CanSino: [],
           proportion: [],
         },
-        fourthDoses: { Pfizer: [], Sinovac: [], AstraZeneca: [], CanSino: [], proportion: [] },
+        fourthDoses: {
+          Pfizer: [],
+          Sinovac: [],
+          AstraZeneca: [],
+          Moderna: [],
+          //  CanSino: [],
+          proportion: [],
+        },
       },
       vacunaRegions: {
         regionName: [],
@@ -770,11 +778,14 @@ export default {
     let vaccineTypeUniqueDoses = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_UnicaDosis.csv");
     let vaccineTypeBoost = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_Refuerzo.csv");
     let vaccineTypeFourth = await d3.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto83/vacunacion_fabricantes_4taDosis.csv");
+    console.log(vaccineTypeFirstDoses);
+    console.log(vaccineTypeBoost);
 
     const dicVac = {
       "Campaña SARS-CoV-2 (AstraZeneca)": "AstraZeneca",
       CanSino: "CanSino",
-      // "Campaña SARS-CoV-2 (Janssen)": "Janssen",
+      "Campaña SARS-CoV-2 (Janssen)": "Janssen",
+      "Campaña SARS-CoV-2 (Moderna)": "Moderna",
       "Campaña SARS-CoV-2 (Pfizer)": "Pfizer",
       "Campaña SARS-CoV-2 (Sinovac)": "Sinovac",
     };
@@ -834,33 +845,37 @@ export default {
     });
 
     vaccineTypeBoost.forEach((d) => {
-      this.vaccineType.boostDoses[dicVac[d["Fabricante"]]] = Object.values(d)
-        .slice(1)
-        .map((i) => {
-          return Number(i);
-        });
-
-      this.vaccineType.boostDoses.proportion.push(
-        Object.values(d)
+      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "Campaña SARS-CoV-2 (Janssen)") {
+        this.vaccineType.boostDoses[dicVac[d["Fabricante"]]] = Object.values(d)
           .slice(1)
-          .map((i) => Number(i))
-          .reduce((total, element) => total + element)
-      );
+          .map((i) => {
+            return Number(i);
+          });
+
+        this.vaccineType.boostDoses.proportion.push(
+          Object.values(d)
+            .slice(1)
+            .map((i) => Number(i))
+            .reduce((total, element) => total + element)
+        );
+      }
     });
 
     vaccineTypeFourth.forEach((d) => {
-      this.vaccineType.fourthDoses[dicVac[d["Fabricante"]]] = Object.values(d)
-        .slice(1)
-        .map((i) => {
-          return Number(i);
-        });
-
-      this.vaccineType.fourthDoses.proportion.push(
-        Object.values(d)
+      if (d["Fabricante"] != "CanSino" && d["Fabricante"] != "Campaña SARS-CoV-2 (Janssen)") {
+        this.vaccineType.fourthDoses[dicVac[d["Fabricante"]]] = Object.values(d)
           .slice(1)
-          .map((i) => Number(i))
-          .reduce((total, element) => total + element)
-      );
+          .map((i) => {
+            return Number(i);
+          });
+
+        this.vaccineType.fourthDoses.proportion.push(
+          Object.values(d)
+            .slice(1)
+            .map((i) => Number(i))
+            .reduce((total, element) => total + element)
+        );
+      }
     });
 
     let sum = this.vaccineType.firstDoses.proportion.reduce((total, element) => {
@@ -879,22 +894,22 @@ export default {
     this.vaccineType.boostDoses.proportion = this.vaccineType.boostDoses.proportion.map((d) => {
       return Math.round((d / sum) * 1000) / 10;
     });
-    this.vaccineType.boostDoses.proportion = [
-      this.vaccineType.boostDoses.proportion[0],
-      this.vaccineType.boostDoses.proportion[3],
-      this.vaccineType.boostDoses.proportion[2],
-      this.vaccineType.boostDoses.proportion[1],
-    ];
+    // this.vaccineType.boostDoses.proportion = [
+    //   this.vaccineType.boostDoses.proportion[0],
+    //   this.vaccineType.boostDoses.proportion[3],
+    //   this.vaccineType.boostDoses.proportion[2],
+    //   this.vaccineType.boostDoses.proportion[1],
+    // ];
 
     this.vaccineType.fourthDoses.proportion = this.vaccineType.fourthDoses.proportion.map((d) => {
       return Math.round((d / sum) * 1000) / 10;
     });
-    this.vaccineType.fourthDoses.proportion = [
-      this.vaccineType.fourthDoses.proportion[0],
-      this.vaccineType.fourthDoses.proportion[3],
-      this.vaccineType.fourthDoses.proportion[2],
-      this.vaccineType.fourthDoses.proportion[1],
-    ];
+    // this.vaccineType.fourthDoses.proportion = [
+    //   this.vaccineType.fourthDoses.proportion[0],
+    //   this.vaccineType.fourthDoses.proportion[3],
+    //   this.vaccineType.fourthDoses.proportion[2],
+    //   this.vaccineType.fourthDoses.proportion[1],
+    // ];
 
     // // compute number of people with pase de movilidad mayor de 45 años en Chile
     // // const ageLimitBoost = 45;

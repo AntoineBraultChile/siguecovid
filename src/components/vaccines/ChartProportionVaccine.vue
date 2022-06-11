@@ -84,12 +84,12 @@ export default {
     renderChartDoughnut(dose) {
       return {
         // labels: ["AstraZeneca", "Pfizer", "Sinovac", "CanSino", "Janssen"],
-        labels: dose === "boost" ? ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"] : ["AstraZeneca", "Pfizer", "Sinovac", "CanSino"],
+        labels: dose === "second" ? ["AstraZeneca", "Moderna", "Pfizer", "Sinovac", "Cansino"] : ["AstraZeneca", "Moderna", "Pfizer", "Sinovac"],
         datasets: [
           {
             label: "",
             data: this.data[dose + "Doses"].proportion,
-            backgroundColor: ["#eba434", "#82CFFD", "#f87979", "#93DB70", "#845EC2"],
+            backgroundColor: dose === "second" ? ["#eba434", "#82CFFD", "#f87979", "#93DB70", "#845EC2"] : ["#eba434", "#82CFFD", "#f87979", "#93DB70"],
             hoverOffset: 4,
           },
         ],

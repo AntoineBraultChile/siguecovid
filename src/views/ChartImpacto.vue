@@ -227,6 +227,7 @@ export default {
 
   // --------------------------------   incidence by vaccinated or non-vaccinated groups and by age ---------------------
   const incidenceByAgeByVaccinalScheme = await d3.dsv(',', 'https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto89/incidencia_en_vacunados_edad.csv')
+  console.log(incidenceByAgeByVaccinalScheme)
   // let numberWeekEpidemiological = incidenceByAgeByVaccinalScheme.length
   // console.log(numberWeekEpidemiological)
   // const numberWeek2021 = 21

@@ -42,8 +42,10 @@
 
       <h2>Quién soy</h2>
       <p>
-        Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile. Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl. Estoy abierto a sus comentarios y
-        observaciones para mejorar la página web.
+        Soy investigador en matemáticas aplicadas y me interesan los datos de Covid-19. Puede ponerse en contacto conmigo directamente siguiendo la página de
+        <a href="https://twitter.com/datos_19" target="_blank">Twitter</a>.
+        <!-- Me llamo Antoine Brault y soy investigador en matemáticas aplicadas en Chile. Puede ponerse en contacto conmigo por correo electronico abrault@dim.uchile.cl.  -->
+        Estoy abierto a sus comentarios y observaciones para mejorar la página web.
       </p>
     </div>
   </div>

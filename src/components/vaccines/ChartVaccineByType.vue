@@ -87,25 +87,36 @@ export default {
       let datasets = [
         {
           label: "Pfizer",
-          backgroundColor: "#82CFFD",
+          backgroundColor: "#f87979",
+          borderColor: "#f87979",
           data: this.data[doses + "Doses"]["Pfizer"].slice(indexDate),
         },
         {
           label: "Sinovac",
-          backgroundColor: "#f87979",
+          backgroundColor: "#93DB70",
+          borderColor: "#93DB70",
           data: this.data[doses + "Doses"]["Sinovac"].slice(indexDate),
         },
         {
           label: "AstraZeneca",
           backgroundColor: "#eba434",
+          borderColor: "#eba434",
           data: this.data[doses + "Doses"]["AstraZeneca"].slice(indexDate),
+        },
+        {
+          label: "Moderna",
+          backgroundColor: "#82CFFD",
+          borderColor: "#82CFFD",
+          data: this.data[doses + "Doses"]["Moderna"].slice(indexDate),
         },
       ];
       if (doses == "second") {
         datasets.push(
           {
             label: "CanSino",
-            backgroundColor: "#93DB70",
+            backgroundColor: "#845EC2",
+            borderColor: "#845EC2",
+
             data: this.data.secondDoses["CanSino"].slice(indexDate),
           }
           // {
