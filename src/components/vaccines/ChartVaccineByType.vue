@@ -116,7 +116,6 @@ export default {
             label: "CanSino",
             backgroundColor: "#845EC2",
             borderColor: "#845EC2",
-
             data: this.data.secondDoses["CanSino"].slice(indexDate),
           }
           // {

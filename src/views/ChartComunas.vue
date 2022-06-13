@@ -39,7 +39,7 @@
               <span>Fase 5</span>
             </span>
           </div> -->
-          <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases', currentComuna)" />
+          <line-chart :chartData="ChartIncidence(currentComuna)" :options="options('cases')" />
           <signature />
         </div>
 
@@ -291,7 +291,7 @@ export default {
         ],
       };
     },
-    options(type, comuna) {
+    options(type) {
       let opt = {
         animation: {
           duration: 0,
